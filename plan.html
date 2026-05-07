@@ -574,10 +574,23 @@ function renderNode(m, level) {
   toggle.type = "button";
   toggle.className = hasKids ? "toggle" : "toggle placeholder";
   toggle.setAttribute("aria-label", hasKids ? "Åpne/lukke" : "");
-  toggle.addEventListener("click", () => {
-    if (!hasKids) return;
-    node.classList.toggle("open");
-  });
+toggle.addEventListener("click", () => {
+  if (!hasKids) return;
+
+  const parent = node.parentElement; // enten .children eller #menu
+  const willOpen = !node.classList.contains("open");
+
+  // Hvis vi skal åpne: lukk alle søsken på samme nivå først
+  if (willOpen && parent) {
+    Array.from(parent.children).forEach(el => {
+      if (el !== node && el.classList && el.classList.contains("node")) {
+        el.classList.remove("open");
+      }
+    });
+  }
+
+  node.classList.toggle("open");
+});
 
   const a = document.createElement("a");
   a.href = `#${anchorId}`;
