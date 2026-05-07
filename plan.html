@@ -94,6 +94,41 @@
 const params = new URLSearchParams(window.location.search);
   const id = params.get("id");
 
+fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json")
+    .then(res => res.json())
+    .then(maal => {
+      const meny = document.getElementById("menu");
+      const innhold = document.getElementById("innhold");
+
+      meny.innerHTML = "";
+      innhold.innerHTML = "";
+
+      // Filtrer mål som hører til valgt plan
+      const maalForPlan = maal.filter(m => m.maalPlan === id || m.planId === id);
+
+      // Bygg meny + seksjoner
+      maalForPlan.forEach((m, index) => {
+        const anchorId = `maal-${index + 1}`;
+
+        // Venstremeny-lenke
+        const a = document.createElement("a");
+        a.href = `#${anchorId}`;
+        a.innerText = m.maalNavn || "(uten navn)";
+        meny.appendChild(a);
+
+        // Seksjon i innhold
+        const section = document.createElement("section");
+        section.id = anchorId;
+        section.innerHTML = `<h2>${m.maalNavn || "(uten navn)"}</h2>`;
+        innhold.appendChild(section);
+      });
+
+      // Hvis ingen mål
+      if (maalForPlan.length === 0) {
+        innhold.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
+      }
+    });
+
   fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json")
     .then(res => res.json())
     .then(planer => {
