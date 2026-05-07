@@ -95,3 +95,131 @@
   }
 
   function renderNodeFactory(children) {
+    const collator = new Intl.Collator("nb", { sensitivity: "base" });
+
+    // Sorter alle "barnelister" alfabetisk én gang
+    for (const arr of children.values()) {
+      arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
+    }
+
+    function renderNode(m, level) {
+      const anchorId = ensureSection(m);
+
+      const node = document.createElement("div");
+      node.className = `node level-${Math.min(level, 3)}`;
+
+      // Nivå 0 skal alltid være åpent
+      if (level === 0) node.classList.add("open");
+
+      const row = document.createElement("div");
+      row.className = `row level-${Math.min(level, 3)}`;
+
+      const kids = children.get(m.maalID) || [];
+      const hasKids = (level !== 0) && (kids.length > 0);
+
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = hasKids ? "toggle" : "toggle placeholder";
+      toggle.setAttribute("aria-label", hasKids ? "Åpne/lukke" : "");
+
+      toggle.addEventListener("click", () => {
+        if (!hasKids) return;
+
+        const parent = node.parentElement; // .children eller #menu
+        const willOpen = !node.classList.contains("open");
+
+        // Bare én åpen pr nivå: lukk søsken hvis vi åpner
+        if (willOpen && parent) {
+          Array.from(parent.children).forEach(el => {
+            if (el !== node && el.classList && el.classList.contains("node")) {
+              el.classList.remove("open");
+            }
+          });
+        }
+        node.classList.toggle("open");
+      });
+
+      const link = document.createElement("a");
+      link.href = `#${anchorId}`;
+      link.innerText = m.maalNavn || "(uten navn)";
+      link.addEventListener("click", () => {
+        if (window.matchMedia("(max-width: 768px)").matches) {
+          sidebar.classList.remove("open");
+        }
+      });
+
+      row.appendChild(toggle);
+      row.appendChild(link);
+      node.appendChild(row);
+
+      const childWrap = document.createElement("div");
+      childWrap.className = "children";
+      node.appendChild(childWrap);
+
+      kids.forEach(k => childWrap.appendChild(renderNode(k, level + 1)));
+
+      return node;
+    }
+
+    return renderNode;
+  }
+
+  async function init() {
+    // Hvis ingen id: vis enkel beskjed (du kan senere gjøre dette om til planliste)
+    if (!planId) {
+      titleEl.innerText = "Velg en plan";
+      contentEl.innerHTML = "<p>Åpne en plan fra oversikten (index.html) slik at URL-en inneholder <code>?id=...</code>.</p>";
+      return;
+    }
+
+    // Sett tittel
+    fetch(URL_PLAN)
+      .then(r => r.json())
+      .then(planer => {
+        const plan = planer.find(p => p.planID === planId);
+        titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
+      });
+
+    // Bygg meny + innhold
+    const maal = await fetch(URL_MAAL).then(r => r.json());
+
+    const maalForPlan = maal
+      .filter(m => m.maalPlan === planId)
+      .filter(m => m.maalPlan);
+
+    menuEl.innerHTML = "";
+    contentEl.innerHTML = "";
+
+    if (maalForPlan.length === 0) {
+      contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
+      return;
+    }
+
+    const byId = new Map(maalForPlan.map(m => [m.maalID, m]));
+
+    // children: parentId -> [barn]
+    const children = new Map();
+    function addChild(parentId, child) {
+      if (!children.has(parentId)) children.set(parentId, []);
+      children.get(parentId).push(child);
+    }
+
+    maalForPlan.forEach(m => {
+      const parentId = m.maalOverordnet;
+      if (parentId && byId.has(parentId)) addChild(parentId, m);
+      else addChild(null, m);
+    });
+
+    const renderNode = renderNodeFactory(children);
+
+    // Render toppnivå
+    (children.get(null) || []).forEach(m => {
+      menuEl.appendChild(renderNode(m, 0));
+    });
+
+    // Start scroll-spy når seksjoner finnes
+    setupScrollSpy();
+  }
+
+  init();
+})();
