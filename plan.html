@@ -302,6 +302,51 @@ body { color: var(--blue-900); }
   margin: 0 0 10px 0 !important;
 }
 
+/* Utnytt bredden: mindre innvendig luft i sidebar */
+.sidebar{
+  width: 240px !important;
+  padding: 10px 8px !important; /* før: typisk 16px */
+}
+
+/* Mindre luft rundt overskrift */
+.sidebar h3{
+  margin: 0 0 8px 0 !important;
+  font-size: 14px;
+}
+
+/* Tettere menyliste */
+#menu a{
+  padding: 5px 6px !important;  /* før: ofte 6px 8px */
+  margin: 0 0 3px 0 !important; /* før: 4–6px */
+  line-height: 1.15 !important;
+  font-size: 13px;              /* litt mindre, men fortsatt lesbart */
+  border-radius: 6px;
+}
+
+/* Toggle tar mindre plass */
+#menu .toggle{
+  width: 18px !important;
+  height: 18px !important;
+  border-radius: 6px;
+}
+#menu .row{
+  gap: 4px !important; /* før: ofte 6px */
+}
+
+/* Hierarki med minimal breddebruk */
+#menu .row.level-2{ padding-left: 8px !important; }
+#menu .row.level-3{ padding-left: 16px !important; }
+
+#menu .row.level-2,
+#menu .row.level-3{
+  border-left: 2px solid #e6e8ee; /* eller din lyse blå */
+}
+
+#menu a.active{
+  border-left: 4px solid #0072bb; /* din blå */
+  padding-left: 4px !important;   /* kompenser for border */
+}
+
   </style>
 </head>
 
