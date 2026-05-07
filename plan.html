@@ -80,7 +80,7 @@
     </div>
 
     <div class="content">
-      <h1>Plan</h1>
+      <h1 id="tittel">Plan</h1>
       (innhold kommer)
     </div>
 
@@ -90,6 +90,16 @@
     function toggleMenu() {
       document.getElementById("sidebar").classList.toggle("open");
     }
+    
+const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
+
+  fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json")
+    .then(res => res.json())
+    .then(planer => {
+      const plan = planer.find(p => p.planID === id);
+      document.getElementById("tittel").innerText = plan ? plan.planNavn : "Plan ikke funnet";
+    });
   </script>
 
 </body>
