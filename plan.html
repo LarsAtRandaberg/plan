@@ -282,6 +282,13 @@ fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.jso
     }
 
     // 6) Render toppnivå
+    // Sortering: alfabetisk (norsk) på maalNavn
+const collator = new Intl.Collator("nb", { sensitivity: "base" });
+
+for (const [parentId, arr] of children.entries()) {
+  arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
+}
+
     (children.get(null) || []).forEach(m => renderNode(m, 0));
 
     // 7) Start scroll-spy
