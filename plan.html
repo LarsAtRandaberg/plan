@@ -156,8 +156,9 @@
 
     /* Nivå 0: alltid åpent + ingen toggle */
     #menu .node.level-0 > .children{ display:block; }
-    #menu .node.level-0 .toggle{ display:none; }
-    #menu .node.level-0 .row{ gap:0; }
+    #menu .node.level-0 > .row .toggle { display: none; }
+    #menu .node.level-0 > .row { gap: 0; }
+
 
     /* MOBIL */
     @media (max-width: 768px){
