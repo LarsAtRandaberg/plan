@@ -177,6 +177,28 @@
       }
       .sidebar.open{ left:0; }
     }
+    /* Tydelig, men lett toggle-ikon */
+#menu .toggle {
+  width: 16px;
+  height: 16px;
+  font-size: 12px;
+  color: var(--blue-800);
+  opacity: 0.9;
+}
+
+#menu .toggle::before {
+  content: "▸";
+}
+
+#menu .node.open > .row .toggle::before {
+  content: "▾";
+}
+
+/* Litt mer “klikkflate” uten å stjele plass visuelt */
+#menu .toggle {
+  padding: 0;
+}
+
   </style>
 </head>
 
