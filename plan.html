@@ -276,6 +276,32 @@ body { color: var(--blue-900); }
   padding-left: 0 !important;
   border-left: 0 !important;
 }
+    /* Nivå 0 skal alltid være åpent */
+#menu .row.level-0 + .children {
+  display: block !important;
+}
+
+/* Fjern toggle-knappen på nivå 0 (spar plass) */
+#menu .row.level-0 .toggle {
+  display: none !important;
+}
+
+/* Når toggle fjernes: fjern gapet som toggle normalt tar */
+#menu .row.level-0 {
+  gap: 0 !important;
+}
+    
+/* Mindre luft i venstremenyen */
+.sidebar {
+  padding-left: 8px !important;
+  padding-right: 8px !important;
+}
+
+/* Mindre luft på "Innhold"-overskriften */
+.sidebar h3 {
+  margin: 0 0 10px 0 !important;
+}
+
   </style>
 </head>
 
@@ -424,7 +450,7 @@ function renderNode(m, level) {
   row.className = `row level-${Math.min(level, 3)}`;
 
   const kids = (children.get(m.maalID) || []);
-  const hasKids = kids.length > 0;
+  const hasKids = (level !== 0) && (kids.length > 0);
 
   const toggle = document.createElement("button");
   toggle.type = "button";
