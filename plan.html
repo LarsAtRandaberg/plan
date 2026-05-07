@@ -394,7 +394,32 @@ body { color: var(--blue-900); }
   border-left-width: 3px !important;
   padding-left: 5px !important; /* kompenser for border */
 }
-``
+/* --- OVERRIDES: entydig innrykk per nivå --- */
+
+/* Ikke la children-containeren gi innrykk (hindrer dobbel/rotete innrykk) */
+#menu .children{
+  margin-left: 0 !important;
+  padding-left: 0 !important;
+  border-left: 0 !important;
+}
+
+/* Nivå 0 og 1: ingen innrykk (slik du ønsket mellom 1–2 etter din definisjon) */
+#menu .row.level-0{ padding-left: 0 !important; }
+#menu .row.level-1{ padding-left: 0 !important; }
+
+/* Nivå 2 og 3: moderat innrykk (ALLTID økende) */
+#menu .row.level-2{ padding-left: 10px !important; }
+#menu .row.level-3{ padding-left: 20px !important; }
+
+/* Hvis du vil beholde en diskret hierarkilinje uten å spise plass: legg den på row */
+#menu .row.level-2,
+#menu .row.level-3{
+  border-left: 1px solid #c9e7fa !important;  /* fra fargekartet ditt */
+}
+
+/* Stram gapet litt (plassbesparelse uten rot) */
+#menu .row{ gap: 3px !important; }
+#menu .toggle{ width: 16px !important; height: 16px !important; }
   </style>
 </head>
 
