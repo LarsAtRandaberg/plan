@@ -140,37 +140,109 @@
   </div>
 
   <script>
-    function toggleMenu() {
-      document.getElementById("sidebar").classList.toggle("open");
-    }
+  function toggleMenu() {
+    document.getElementById("sidebar").classList.toggle("open");
+  }
 
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get("id");
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get("id");
 
-    // Hent mål og bygg venstremeny + innhold
-    fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json")
-      .then(res => res.json())
-      .then(maal => {
-        const meny = document.getElementById("menu");
-        const innhold = document.getElementById("innhold");
+  function safeId(text) {
+    return String(text || "")
+      .toLowerCase()
+      .replace(/[^a-z0-9\-]/g, "-")
+      .replace(/\-+/g, "-")
+      .replace(/^\-|\-$/g, "");
+  }
 
-        meny.innerHTML = "";
-        innhold.innerHTML = "";
+  function setActiveLink(activeSectionId) {
+    document.querySelectorAll("#menu a").forEach(a => {
+      const isActive = a.getAttribute("href") === `#${activeSectionId}`;
+      a.classList.toggle("active", isActive);
+      if (isActive) {
+        a.setAttribute("aria-current", "true");
+      } else {
+        a.removeAttribute("aria-current");
+      }
+    });
+  }
 
-        // Filtrer: mål som hører til valgt plan
-        const maalForPlan = maal
-          .filter(m => m.maalPlan === id)
-          .filter(m => m.maalPlan); // fjerner null
+  function setupScrollSpy() {
+    const sections = Array.from(document.querySelectorAll("main section[id]"));
+    if (sections.length === 0) return;
 
-        maalForPlan.forEach((m, index) => {
-          const anchorId = `maal-${index + 1}`;
+    const observer = new IntersectionObserver((entries) => {
+      // Velg den øverste synlige seksjonen
+      const visible = entries
+        .filter(e => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-          // Venstremeny-lenke
-          const a = document.createElement("a");
-          a.href = `#${anchorId}`;
-          a.innerText = m.maalNavn || "(uten navn)";
-          meny.appendChild(a);
+      if (visible.length > 0) {
+        setActiveLink(visible[0].target.id);
+      }
+    }, {
+      root: null,
+      // Trigger litt før seksjonen er helt øverst, så markering føles riktig
+      rootMargin: "0px 0px -70% 0px",
+      threshold: 0.01
+    });
 
-          // Seksjon i innhold
-          const section = document.createElement("section");
-          section.id = anchorId;
+    sections.forEach(s => observer.observe(s));
+    setActiveLink(sections[0].id);
+  }
+
+  // Hent mål og bygg venstremeny + innhold
+  fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json")
+    .then(res => res.json())
+    .then(maal => {
+      const meny = document.getElementById("menu");
+      const innhold = document.getElementById("innhold");
+
+      meny.innerHTML = "";
+      innhold.innerHTML = "";
+
+      // Filtrer: mål som hører til valgt plan
+      const maalForPlan = maal
+        .filter(m => m.maalPlan === id)
+        .filter(m => m.maalPlan);
+
+      maalForPlan.forEach((m) => {
+        // Stabil ID (bruker maalID)
+        const anchorId = `maal-${safeId(m.maalID)}`;
+
+        // Menylenke
+        const a = document.createElement("a");
+        a.href = `#${anchorId}`;
+        a.innerText = m.maalNavn || "(uten navn)";
+        a.addEventListener("click", () => {
+          // Lukk meny på mobil når man navigerer
+          if (window.matchMedia("(max-width: 768px)").matches) {
+            document.getElementById("sidebar").classList.remove("open");
+          }
+        });
+        meny.appendChild(a);
+
+        // Seksjon i innhold
+        const section = document.createElement("section");
+        section.id = anchorId;
+        section.innerHTML = `<h2>${m.maalNavn || "(uten navn)"}</h2>`;
+        innhold.appendChild(section);
+      });
+
+      if (maalForPlan.length === 0) {
+        innhold.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
+        return;
+      }
+
+      // Start scroll-spy etter at seksjoner finnes i DOM
+      setupScrollSpy();
+    });
+
+  // Hent plan og sett tittel
+  fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json")
+    .then(res => res.json())
+    .then(planer => {
+      const plan = planer.find(p => p.planID === id);
+      document.getElementById("tittel").innerText = plan ? plan.planNavn : "Plan ikke funnet";
+    });
+</script>
