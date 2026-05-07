@@ -114,7 +114,20 @@
   background: #e8f0ff;
   font-weight: 600;
 }
+/* Hierarki i venstremeny */
+#menu .menu-item {
+  display: block;
+}
 
+#menu .level-0 { padding-left: 0; }
+#menu .level-1 { padding-left: 14px; }
+#menu .level-2 { padding-left: 28px; }
+#menu .level-3 { padding-left: 42px; }
+
+/* En tynn “guideline” gjør hierarki lettere å lese */
+#menu .level-1, #menu .level-2, #menu .level-3 {
+  border-left: 2px solid #eee;
+}
   </style>
 </head>
 
@@ -192,51 +205,83 @@
   }
 
   // Hent mål og bygg venstremeny + innhold
-  fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json")
-    .then(res => res.json())
-    .then(maal => {
-      const meny = document.getElementById("menu");
-      const innhold = document.getElementById("innhold");
+  // Hent mål og bygg venstremeny (hierarki) + innhold
+fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json")
+  .then(res => res.json())
+  .then(maal => {
+    const meny = document.getElementById("menu");
+    const innhold = document.getElementById("innhold");
 
-      meny.innerHTML = "";
-      innhold.innerHTML = "";
+    meny.innerHTML = "";
+    innhold.innerHTML = "";
 
-      // Filtrer: mål som hører til valgt plan
-      const maalForPlan = maal
-        .filter(m => m.maalPlan === id)
-        .filter(m => m.maalPlan);
+    // 1) Filtrer til valgt plan
+    const maalForPlan = maal
+      .filter(m => m.maalPlan === id)
+      .filter(m => m.maalPlan);
 
-      maalForPlan.forEach((m) => {
-        // Stabil ID (bruker maalID)
-        const anchorId = `maal-${safeId(m.maalID)}`;
+    if (maalForPlan.length === 0) {
+      innhold.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
+      return;
+    }
 
-        // Menylenke
-        const a = document.createElement("a");
-        a.href = `#${anchorId}`;
-        a.innerText = m.maalNavn || "(uten navn)";
-        a.addEventListener("click", () => {
-          // Lukk meny på mobil når man navigerer
-          if (window.matchMedia("(max-width: 768px)").matches) {
-            document.getElementById("sidebar").classList.remove("open");
-          }
-        });
-        meny.appendChild(a);
+    // 2) Index på maalID -> mål
+    const byId = new Map(maalForPlan.map(m => [m.maalID, m]));
 
-        // Seksjon i innhold
-        const section = document.createElement("section");
-        section.id = anchorId;
-        section.innerHTML = `<h2>${m.maalNavn || "(uten navn)"}</h2>`;
-        innhold.appendChild(section);
+    // 3) Bygg children-liste pr forelder
+    const children = new Map();
+    function addChild(parentId, child) {
+      if (!children.has(parentId)) children.set(parentId, []);
+      children.get(parentId).push(child);
+    }
+
+    maalForPlan.forEach(m => {
+      const parentId = m.maalOverordnet;
+      if (parentId && byId.has(parentId)) addChild(parentId, m);
+      else addChild(null, m);
+    });
+
+    // 4) Lag seksjoner i innholdet (én per mål)
+    function ensureSection(m) {
+      const anchorId = `maal-${safeId(m.maalID)}`;
+      if (document.getElementById(anchorId)) return anchorId;
+
+      const section = document.createElement("section");
+      section.id = anchorId;
+      section.innerHTML = `<h2>${m.maalNavn || "(uten navn)"}</h2>`;
+      innhold.appendChild(section);
+      return anchorId;
+    }
+
+    // 5) Bygg hierarkisk meny (rekursivt)
+    function renderNode(m, level) {
+      const anchorId = ensureSection(m);
+
+      const wrap = document.createElement("div");
+      wrap.className = `menu-item level-${Math.min(level, 3)}`;
+
+      const a = document.createElement("a");
+      a.href = `#${anchorId}`;
+      a.innerText = m.maalNavn || "(uten navn)";
+
+      a.addEventListener("click", () => {
+        if (window.matchMedia("(max-width: 768px)").matches) {
+          document.getElementById("sidebar").classList.remove("open");
+        }
       });
 
-      if (maalForPlan.length === 0) {
-        innhold.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
-        return;
-      }
+      wrap.appendChild(a);
+      meny.appendChild(wrap);
 
-      // Start scroll-spy etter at seksjoner finnes i DOM
-      setupScrollSpy();
-    });
+      (children.get(m.maalID) || []).forEach(k => renderNode(k, level + 1));
+    }
+
+    // 6) Render toppnivå
+    (children.get(null) || []).forEach(m => renderNode(m, 0));
+
+    // 7) Start scroll-spy
+    setupScrollSpy();
+  });
 
   // Hent plan og sett tittel
   fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json")
