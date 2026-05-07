@@ -183,6 +183,93 @@
 #menu .toggle.placeholder {
   visibility: hidden;
 }
+    /* Fargevariabler fra fargekart */
+:root{
+  --blue-900:#00223a;
+  --blue-800:#003b61;
+  --blue-600:#0072bb;
+  --blue-300:#7ccef4;
+  --blue-200:#c9e7fa;
+  --blue-100:#e6f5fe;
+
+  --green-900:#144835;
+  --green-800:#005228;
+  --green-600:#7fb129;
+  --green-400:#d7dc53;
+  --green-200:#f6ef99;
+  --green-100:#fffeda;
+}
+
+/* Bruk mørk blå som standard “tekst” */
+body { color: var(--blue-900); }
+
+/* Topbar (kan justeres senere) */
+.topbar{
+  border-bottom: 1px solid var(--blue-200);
+  background: white;
+}
+
+/* Menylenker */
+#menu a{
+  display:block;
+  padding:6px 8px;
+  margin:0 0 4px 0;
+  border-radius:6px;
+  text-decoration:none;
+  color: var(--blue-800);
+}
+
+/* Hover */
+#menu a:hover{
+  background: var(--blue-100);
+}
+
+/* Aktiv (scroll-spy) */
+#menu a.active{
+  background: var(--blue-200);
+  color: var(--blue-900);
+  font-weight: 600;
+  border-left: 4px solid var(--blue-600);
+  padding-left: 6px; /* fordi vi får border-left */
+}
+
+/* Nivå-følelse via typografi/farge, ikke mye innrykk */
+#menu .row.level-0 a{
+  font-weight:700;
+  color: var(--green-800);
+}
+
+#menu .row.level-1 a{
+  font-weight:600;
+  color: var(--blue-800);
+}
+
+/* Nivå 2+ får liten innrykk + subtil linje */
+#menu .row.level-2{
+  padding-left: 10px;
+  border-left: 2px solid var(--blue-200);
+}
+
+#menu .row.level-2 a,
+#menu .row.level-3 a{
+  font-weight:400;
+  color: var(--blue-800);
+}
+
+/* Nivå 3 litt mer, men fortsatt moderat */
+#menu .row.level-3{
+  padding-left: 20px;
+  border-left: 2px solid var(--blue-200);
+}
+
+/* Toggle: diskret, bruker blå */
+#menu .toggle{
+  color: var(--blue-800);
+}
+#menu .toggle:hover{
+  background: var(--blue-100);
+}
+
   </style>
 </head>
 
