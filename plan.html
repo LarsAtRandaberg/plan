@@ -133,6 +133,56 @@
 #menu .level-1 { padding-left: 14px; border-left: 2px solid #eee; }
 #menu .level-2 { padding-left: 28px; border-left: 2px solid #eee; }
 #menu .level-3 { padding-left: 42px; border-left: 2px solid #eee; }
+    /* Tree/accordion */
+#menu .node {
+  display: block;
+}
+
+#menu .row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+#menu .toggle {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 6px;
+  line-height: 1;
+}
+
+#menu .toggle:hover {
+  background: #f2f2f2;
+}
+
+#menu .toggle::before {
+  content: "▸";
+  display: inline-block;
+  transform: translateY(-1px);
+}
+
+#menu .node.open > .row .toggle::before {
+  content: "▾";
+}
+
+#menu .children {
+  display: none;
+  margin-left: 14px;
+  padding-left: 12px;
+  border-left: 2px solid #eee;
+}
+
+#menu .node.open > .children {
+  display: block;
+}
+
+/* Når node ikke har barn: skjul toggle-knappen visuelt, men hold “plass” */
+#menu .toggle.placeholder {
+  visibility: hidden;
+}
   </style>
 </head>
 
@@ -183,6 +233,17 @@
         a.removeAttribute("aria-current");
       }
     });
+    
+// Auto-åpne alle foreldre-noder for aktiv seksjon
+const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
+if (activeLink) {
+  let el = activeLink.closest(".node");
+  while (el) {
+    el.classList.add("open");
+    el = el.parentElement ? el.parentElement.closest(".node") : null;
+  }
+}
+
   }
 
   function setupScrollSpy() {
@@ -259,27 +320,56 @@ fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.jso
     }
 
     // 5) Bygg hierarkisk meny (rekursivt)
-    function renderNode(m, level) {
-      const anchorId = ensureSection(m);
+function renderNode(m, level) {
+  const anchorId = ensureSection(m);
 
-      const wrap = document.createElement("div");
-      wrap.className = `menu-item level-${Math.min(level, 3)}`;
+  const node = document.createElement("div");
+  node.className = "node";
+  node.dataset.anchor = anchorId; // brukes for auto-åpning ved scroll-spy
 
-      const a = document.createElement("a");
-      a.href = `#${anchorId}`;
-      a.innerText = m.maalNavn || "(uten navn)";
+  const row = document.createElement("div");
+  row.className = `row level-${Math.min(level, 3)}`;
 
-      a.addEventListener("click", () => {
-        if (window.matchMedia("(max-width: 768px)").matches) {
-          document.getElementById("sidebar").classList.remove("open");
-        }
-      });
+  const kids = (children.get(m.maalID) || []);
+  const hasKids = kids.length > 0;
 
-      wrap.appendChild(a);
-      meny.appendChild(wrap);
+  const toggle = document.createElement("button");
+  toggle.type = "button";
+  toggle.className = hasKids ? "toggle" : "toggle placeholder";
+  toggle.setAttribute("aria-label", hasKids ? "Åpne/lukke" : "");
+  toggle.addEventListener("click", () => {
+    if (!hasKids) return;
+    node.classList.toggle("open");
+  });
 
-      (children.get(m.maalID) || []).forEach(k => renderNode(k, level + 1));
+  const a = document.createElement("a");
+  a.href = `#${anchorId}`;
+  a.innerText = m.maalNavn || "(uten navn)";
+
+  a.addEventListener("click", () => {
+    // Lukk meny på mobil når man navigerer
+    if (window.matchMedia("(max-width: 768px)").matches) {
+      document.getElementById("sidebar").classList.remove("open");
     }
+  });
+
+  row.appendChild(toggle);
+  row.appendChild(a);
+  node.appendChild(row);
+
+  const childWrap = document.createElement("div");
+  childWrap.className = "children";
+  node.appendChild(childWrap);
+
+  // Standard: åpne toppnivå på desktop, lukket på mobil
+  const desktop = !window.matchMedia("(max-width: 768px)").matches;
+  if (desktop && level === 0 && hasKids) node.classList.add("open");
+
+  // Render barn inn i childWrap
+  kids.forEach(k => childWrap.appendChild(renderNode(k, level + 1)));
+
+  return node;
+}
 
     // 6) Render toppnivå
     // Sortering: alfabetisk (norsk) på maalNavn
@@ -289,7 +379,9 @@ for (const [parentId, arr] of children.entries()) {
   arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
 }
 
-    (children.get(null) || []).forEach(m => renderNode(m, 0));
+    (children.get(null) || []).forEach(m => {
+  meny.appendChild(renderNode(m, 0));
+});
 
     // 7) Start scroll-spy
     setupScrollSpy();
