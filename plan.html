@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -6,432 +7,186 @@
   <title>Plan</title>
 
   <style>
-    body { margin: 0; font-family: system-ui, Arial; }
+    :root{
+      /* Randaberg fargekart */
+      --blue-900:#00223a;
+      --blue-800:#003b61;
+      --blue-600:#0072bb;
+      --blue-200:#c9e7fa;
+      --blue-100:#e6f5fe;
 
-    /* TOPP */
-    .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 12px 16px;
-      border-bottom: 1px solid #ddd;
-      position: sticky;
-      top: 0;
-      background: white;
-      z-index: 100;
+      --green-800:#005228;
+
+      --line: var(--blue-200);
+      --hover: var(--blue-100);
+      --activeBg: var(--blue-200);
+      --activeBorder: var(--blue-600);
     }
 
-    .menu-btn {
-      font-size: 20px;
-      cursor: pointer;
-      display: none;
-      user-select: none;
+    body{
+      margin:0;
+      font-family: system-ui, Arial, sans-serif;
+      color: var(--blue-900);
+      background:#fff;
+    }
+
+    /* TOPP */
+    .topbar{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:12px 16px;
+      border-bottom:1px solid var(--line);
+      position:sticky;
+      top:0;
+      background:#fff;
+      z-index:100;
+    }
+
+    .menu-btn{
+      font-size:20px;
+      cursor:pointer;
+      display:none;
+      user-select:none;
     }
 
     /* LAYOUT */
-    .layout {
-      display: flex;
-      min-height: calc(100vh - 56px);
+    .layout{
+      display:flex;
+      min-height:calc(100vh - 56px);
     }
 
-    /* VENSTREMENY */
-    .sidebar {
-      width: 260px;
-      border-right: 1px solid #ddd;
-      padding: 16px;
-      position: sticky;
-      top: 56px; /* omtrent høyden på .topbar */
-      height: calc(100vh - 56px);
-      overflow-y: auto;
-      background: white;
+    /* SIDEBAR */
+    .sidebar{
+      width:240px;
+      border-right:1px solid var(--line);
+      padding:10px 8px;
+      position:sticky;
+      top:56px;
+      height:calc(100vh - 56px);
+      overflow-y:auto;
+      background:#fff;
+      z-index:90;
     }
 
-    .sidebar a {
-      display: block;
-      margin-bottom: 8px;
-      text-decoration: none;
-      color: #000;
-      padding: 6px 8px;
-      border-radius: 6px;
-    }
-
-    .sidebar a:hover {
-      background: #f2f2f2;
+    .sidebar h3{
+      margin:0 0 8px 0;
+      font-size:14px;
+      color: var(--blue-800);
     }
 
     /* INNHOLD */
-    .content {
-      flex: 1;
-      padding: 24px;
+    .content{
+      flex:1;
+      padding:24px;
     }
 
-    section {
-      margin-bottom: 18px;
+    section{
+      margin-bottom:18px;
     }
+
+    /* MENY: grunnstil */
+    #menu a{
+      display:block;
+      padding:4px 6px;
+      margin:0 0 2px 0;
+      border-radius:6px;
+      text-decoration:none;
+      color: var(--blue-800);
+      line-height:1.12;
+      font-size:13px;
+    }
+
+    #menu a:hover{
+      background: var(--hover);
+    }
+
+    #menu a.active{
+      background: var(--activeBg);
+      color: var(--blue-900);
+      font-weight:600;
+      border-left:3px solid var(--activeBorder);
+      padding-left:5px; /* kompenser for border */
+    }
+
+    /* Tree/accordion */
+    #menu .node{ display:block; }
+    #menu .row{
+      display:flex;
+      align-items:center;
+      gap:3px;
+    }
+
+    /* Toggle tar minst mulig plass */
+    #menu .toggle{
+      width:16px;
+      height:16px;
+      border:0;
+      background:none;
+      cursor:pointer;
+      border-radius:4px;
+      line-height:1;
+      color: var(--blue-800);
+    }
+    #menu .toggle:hover{ background: var(--hover); }
+    #menu .toggle::before{ content:"▸"; }
+    #menu .node.open > .row .toggle::before{ content:"▾"; }
+    #menu .toggle.placeholder{ visibility:hidden; }
+
+    /* Children: ingen innrykk her (innrykk styres kun av level på .row) */
+    #menu .children{
+      display:none;
+      margin:0;
+      padding:0;
+      border:0;
+    }
+    #menu .node.open > .children{ display:block; }
+
+    /* Entydig innrykk per nivå (ALDRI dobbel innrykk) */
+    #menu .row.level-0{ padding-left:0; }
+    #menu .row.level-1{ padding-left:0; }
+    #menu .row.level-2{ padding-left:10px; border-left:1px solid var(--line); }
+    #menu .row.level-3{ padding-left:20px; border-left:1px solid var(--line); }
+
+    /* Typografi per nivå (hierarki uten å bruke masse innrykk) */
+    #menu .row.level-0 a{ font-weight:700; color: var(--green-800); }
+    #menu .row.level-1 a{ font-weight:600; color: var(--blue-800); }
+    #menu .row.level-2 a,
+    #menu .row.level-3 a{ font-weight:400; color: var(--blue-800); }
+
+    /* Nivå 0: alltid åpent + ingen toggle */
+    #menu .node.level-0 > .children{ display:block; }
+    #menu .node.level-0 .toggle{ display:none; }
+    #menu .node.level-0 .row{ gap:0; }
 
     /* MOBIL */
-    @media (max-width: 768px) {
-      .menu-btn {
-        display: block; /* <-- rettet (var .-btn hos deg) */
-      }
+    @media (max-width: 768px){
+      .menu-btn{ display:block; }
+      .layout{ display:block; }
 
-      .layout {
-        display: block;
+      .sidebar{
+        position:fixed;
+        left:-280px;
+        top:0;
+        height:100%;
+        width:240px;
+        z-index:200;
+        transition:left 0.25s;
+        box-shadow:0 10px 30px rgba(0,0,0,.12);
+        border-right:1px solid var(--line);
       }
-
-      .sidebar {
-        position: fixed;
-        left: -280px;
-        top: 0;
-        height: 100%;
-        width: 260px;
-        z-index: 200;
-        transition: left 0.3s;
-        box-shadow: 0 10px 30px rgba(0,0,0,.12);
-      }
-
-      .sidebar.open {
-        left: 0;
-      }
+      .sidebar.open{ left:0; }
     }
-    
-#menu a {
-  display: block;
-  padding: 6px 8px;
-  margin: 0 0 6px 0;
-  border-radius: 6px;
-  text-decoration: none;
-  color: #111;
-  line-height: 1.2;
-}
-
-#menu a:hover {
-  background: #f2f2f2;
-}
-
-/* Scroll-spy: aktiv lenke */
-#menu a.active {
-  background: #e8f0ff;
-  font-weight: 600;
-}
-/* Hierarki i venstremeny */
-#menu .menu-item {
-  display: block;
-}
-
-#menu .level-0 { padding-left: 0; }
-#menu .level-1 { padding-left: 14px; }
-#menu .level-2 { padding-left: 28px; }
-#menu .level-3 { padding-left: 42px; }
-
-/* En tynn “guideline” gjør hierarki lettere å lese */
-#menu .level-1, #menu .level-2, #menu .level-3 {
-  border-left: 2px solid #eee;
-}
-    #menu .menu-item { display: block; }
-#menu .level-0 { padding-left: 0; }
-#menu .level-1 { padding-left: 14px; border-left: 2px solid #eee; }
-#menu .level-2 { padding-left: 28px; border-left: 2px solid #eee; }
-#menu .level-3 { padding-left: 42px; border-left: 2px solid #eee; }
-    /* Tree/accordion */
-#menu .node {
-  display: block;
-}
-
-#menu .row {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-#menu .toggle {
-  width: 22px;
-  height: 22px;
-  border: 0;
-  background: none;
-  cursor: pointer;
-  border-radius: 6px;
-  line-height: 1;
-}
-
-#menu .toggle:hover {
-  background: #f2f2f2;
-}
-
-#menu .toggle::before {
-  content: "▸";
-  display: inline-block;
-  transform: translateY(-1px);
-}
-
-#menu .node.open > .row .toggle::before {
-  content: "▾";
-}
-
-#menu .children {
-  display: none;
-  margin-left: 14px;
-  padding-left: 12px;
-  border-left: 2px solid #eee;
-}
-
-#menu .node.open > .children {
-  display: block;
-}
-
-/* Når node ikke har barn: skjul toggle-knappen visuelt, men hold “plass” */
-#menu .toggle.placeholder {
-  visibility: hidden;
-}
-    /* Fargevariabler fra fargekart */
-:root{
-  --blue-900:#00223a;
-  --blue-800:#003b61;
-  --blue-600:#0072bb;
-  --blue-300:#7ccef4;
-  --blue-200:#c9e7fa;
-  --blue-100:#e6f5fe;
-
-  --green-900:#144835;
-  --green-800:#005228;
-  --green-600:#7fb129;
-  --green-400:#d7dc53;
-  --green-200:#f6ef99;
-  --green-100:#fffeda;
-}
-
-/* Bruk mørk blå som standard “tekst” */
-body { color: var(--blue-900); }
-
-/* Topbar (kan justeres senere) */
-.topbar{
-  border-bottom: 1px solid var(--blue-200);
-  background: white;
-}
-
-/* Menylenker */
-#menu a{
-  display:block;
-  padding:6px 8px;
-  margin:0 0 4px 0;
-  border-radius:6px;
-  text-decoration:none;
-  color: var(--blue-800);
-}
-
-/* Hover */
-#menu a:hover{
-  background: var(--blue-100);
-}
-
-/* Aktiv (scroll-spy) */
-#menu a.active{
-  background: var(--blue-200);
-  color: var(--blue-900);
-  font-weight: 600;
-  border-left: 4px solid var(--blue-600);
-  padding-left: 6px; /* fordi vi får border-left */
-}
-
-/* Nivå-følelse via typografi/farge, ikke mye innrykk */
-#menu .row.level-0 a{
-  font-weight:700;
-  color: var(--green-800);
-}
-
-#menu .row.level-1 a{
-  font-weight:600;
-  color: var(--blue-800);
-}
-
-/* Nivå 2+ får liten innrykk + subtil linje */
-#menu .row.level-2{
-  padding-left: 10px;
-  border-left: 2px solid var(--blue-200);
-}
-
-#menu .row.level-2 a,
-#menu .row.level-3 a{
-  font-weight:400;
-  color: var(--blue-800);
-}
-
-/* Nivå 3 litt mer, men fortsatt moderat */
-#menu .row.level-3{
-  padding-left: 20px;
-  border-left: 2px solid var(--blue-200);
-}
-
-/* Toggle: diskret, bruker blå */
-#menu .toggle{
-  color: var(--blue-800);
-}
-#menu .toggle:hover{
-  background: var(--blue-100);
-}
-/* Null innrykk mellom nivå 1 og nivå 2:
-   Slår av innrykket på children-containeren som ligger rett etter row.level-1 */
-#menu .row.level-0 + .children {
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  border-left: 0 !important;
-}
-    /* Nivå 0 skal alltid være åpent */
-#menu .row.level-0 + .children {
-  display: block !important;
-}
-
-/* Fjern toggle-knappen på nivå 0 (spar plass) */
-#menu .row.level-0 .toggle {
-  display: none !important;
-}
-
-/* Når toggle fjernes: fjern gapet som toggle normalt tar */
-#menu .row.level-0 {
-  gap: 0 !important;
-}
-    
-/* Mindre luft i venstremenyen */
-.sidebar {
-  padding-left: 8px !important;
-  padding-right: 8px !important;
-}
-
-/* Mindre luft på "Innhold"-overskriften */
-.sidebar h3 {
-  margin: 0 0 10px 0 !important;
-}
-
-/* Utnytt bredden: mindre innvendig luft i sidebar */
-.sidebar{
-  width: 240px !important;
-  padding: 10px 8px !important; /* før: typisk 16px */
-}
-
-/* Mindre luft rundt overskrift */
-.sidebar h3{
-  margin: 0 0 8px 0 !important;
-  font-size: 14px;
-}
-
-/* Tettere menyliste */
-#menu a{
-  padding: 5px 6px !important;  /* før: ofte 6px 8px */
-  margin: 0 0 3px 0 !important; /* før: 4–6px */
-  line-height: 1.15 !important;
-  font-size: 13px;              /* litt mindre, men fortsatt lesbart */
-  border-radius: 6px;
-}
-
-/* Toggle tar mindre plass */
-#menu .toggle{
-  width: 18px !important;
-  height: 18px !important;
-  border-radius: 6px;
-}
-#menu .row{
-  gap: 4px !important; /* før: ofte 6px */
-}
-
-/* Hierarki med minimal breddebruk */
-#menu .row.level-2{ padding-left: 8px !important; }
-#menu .row.level-3{ padding-left: 16px !important; }
-
-#menu .row.level-2,
-#menu .row.level-3{
-  border-left: 2px solid #e6e8ee; /* eller din lyse blå */
-}
-
-#menu a.active{
-  border-left: 4px solid #0072bb; /* din blå */
-  padding-left: 4px !important;   /* kompenser for border */
-}
-/* 1) Stram inn meny-elementene (høyde og luft) */
-#menu a{
-  padding: 4px 6px !important;
-  margin: 0 0 2px 0 !important;
-  line-height: 1.12 !important;
-  font-size: 13px !important;
-}
-
-/* 2) Toggle/pil tar mindre plass */
-#menu .toggle{
-  width: 16px !important;
-  height: 16px !important;
-  border-radius: 4px !important;
-}
-
-#menu .row{
-  gap: 3px !important; /* var typisk 6px */
-}
-
-/* 3) Kutt innrykk: mindre per nivå */
-#menu .row.level-2{
-  padding-left: 6px !important;
-}
-
-#menu .row.level-3{
-  padding-left: 12px !important;
-}
-
-/* 4) Gjør guideline mindre “plassen spises”:
-      - kun én tynn linje
-      - ikke ekstra padding/margin i children */
-#menu .children{
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  border-left: 0 !important;
-}
-
-/* Hvis du ønsker linje: legg den på radnivå (tar mindre plass visuelt) */
-#menu .row.level-2,
-#menu .row.level-3{
-  border-left: 1px solid #c9e7fa; /* fra paletten din */
-}
-
-/* 5) Aktiv-lenke: ikke “stjel” bredde med stor venstrekant */
-#menu a.active{
-  border-left-width: 3px !important;
-  padding-left: 5px !important; /* kompenser for border */
-}
-/* --- OVERRIDES: entydig innrykk per nivå --- */
-
-/* Ikke la children-containeren gi innrykk (hindrer dobbel/rotete innrykk) */
-#menu .children{
-  margin-left: 0 !important;
-  padding-left: 0 !important;
-  border-left: 0 !important;
-}
-
-/* Nivå 0 og 1: ingen innrykk (slik du ønsket mellom 1–2 etter din definisjon) */
-#menu .row.level-0{ padding-left: 0 !important; }
-#menu .row.level-1{ padding-left: 0 !important; }
-
-/* Nivå 2 og 3: moderat innrykk (ALLTID økende) */
-#menu .row.level-2{ padding-left: 10px !important; }
-#menu .row.level-3{ padding-left: 20px !important; }
-
-/* Hvis du vil beholde en diskret hierarkilinje uten å spise plass: legg den på row */
-#menu .row.level-2,
-#menu .row.level-3{
-  border-left: 1px solid #c9e7fa !important;  /* fra fargekartet ditt */
-}
-
-/* Stram gapet litt (plassbesparelse uten rot) */
-#menu .row{ gap: 3px !important; }
-#menu .toggle{ width: 16px !important; height: 16px !important; }
   </style>
 </head>
 
 <body>
-
   <div class="topbar">
     <div>PlanPortal</div>
-    <div class="menu-btn" onclick="toggleMenu()">☰</div>
+    <div class="menu-btn" id="menuBtn">☰</div>
   </div>
 
   <div class="layout">
-
     <aside class="sidebar" id="sidebar">
       <h3>Innhold</h3>
       <div id="menu"></div>
@@ -441,216 +196,228 @@ body { color: var(--blue-900); }
       <h1 id="tittel">Plan</h1>
       <div id="innhold"></div>
     </main>
-
   </div>
 
   <script>
-  function toggleMenu() {
-    document.getElementById("sidebar").classList.toggle("open");
-  }
+    (function () {
+      const sidebar = document.getElementById("sidebar");
+      const menuBtn = document.getElementById("menuBtn");
+      const menuEl = document.getElementById("menu");
+      const contentEl = document.getElementById("innhold");
+      const titleEl = document.getElementById("tittel");
 
-  const params = new URLSearchParams(window.location.search);
-  const id = params.get("id");
+      const params = new URLSearchParams(window.location.search);
+      const planId = params.get("id");
 
-  function safeId(text) {
-    return String(text || "")
-      .toLowerCase()
-      .replace(/[^a-z0-9\-]/g, "-")
-      .replace(/\-+/g, "-")
-      .replace(/^\-|\-$/g, "");
-  }
+      const URL_PLAN = "https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json";
+      const URL_MAAL = "https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json";
 
-  function setActiveLink(activeSectionId) {
-  // 1) Marker aktiv lenke
-  document.querySelectorAll("#menu a").forEach(a => {
-    const isActive = a.getAttribute("href") === `#${activeSectionId}`;
-    a.classList.toggle("active", isActive);
-    if (isActive) a.setAttribute("aria-current", "true");
-    else a.removeAttribute("aria-current");
-  });
+      menuBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+      });
 
-  // 2) Finn lenken som er aktiv
-  const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
-  if (!activeLink) return;
-
-  // 3) Bygg "sti" (aktiv node + alle foreldre-noder opp til rot)
-  const path = [];
-  let node = activeLink.closest(".node");
-  while (node) {
-    path.push(node);
-    const parent = node.parentElement;            // .children eller #menu
-    node = parent ? parent.closest(".node") : null;
-  }
-  const pathSet = new Set(path);
-
-  // 4) Lukk alle åpne noder som IKKE er i aktiv sti
-  document.querySelectorAll("#menu .node.open").forEach(n => {
-    if (!pathSet.has(n)) n.classList.remove("open");
-  });
-
-  // 5) Åpne aktiv sti (så aktiv lenke alltid er synlig)
-  path.forEach(n => n.classList.add("open"));
-}
-
-  function setupScrollSpy() {
-    const sections = Array.from(document.querySelectorAll("main section[id]"));
-    if (sections.length === 0) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      // Velg den øverste synlige seksjonen
-      const visible = entries
-        .filter(e => e.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
-      if (visible.length > 0) {
-        setActiveLink(visible[0].target.id);
+      function safeId(text) {
+        return String(text || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9\-]/g, "-")
+          .replace(/\-+/g, "-")
+          .replace(/^\-|\-$/g, "");
       }
-    }, {
-      root: null,
-      // Trigger litt før seksjonen er helt øverst, så markering føles riktig
-      rootMargin: "0px 0px -70% 0px",
-      threshold: 0.01
-    });
 
-    sections.forEach(s => observer.observe(s));
-    setActiveLink(sections[0].id);
-  }
+      function setActiveLink(activeSectionId) {
+        // Marker aktiv lenke
+        document.querySelectorAll("#menu a").forEach(a => {
+          const isActive = a.getAttribute("href") === `#${activeSectionId}`;
+          a.classList.toggle("active", isActive);
+          if (isActive) a.setAttribute("aria-current", "true");
+          else a.removeAttribute("aria-current");
+        });
 
-  // Hent mål og bygg venstremeny + innhold
-  // Hent mål og bygg venstremeny (hierarki) + innhold
-fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json")
-  .then(res => res.json())
-  .then(maal => {
-    const meny = document.getElementById("menu");
-    const innhold = document.getElementById("innhold");
+        // Hold kun aktiv sti åpen (så scroll ikke åpner "alt")
+        const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
+        if (!activeLink) return;
 
-    meny.innerHTML = "";
-    innhold.innerHTML = "";
+        const path = [];
+        let node = activeLink.closest(".node");
 
-    // 1) Filtrer til valgt plan
-    const maalForPlan = maal
-      .filter(m => m.maalPlan === id)
-      .filter(m => m.maalPlan);
+        while (node) {
+          path.push(node);
+          const parent = node.parentElement;              // .children eller #menu
+          node = parent ? parent.closest(".node") : null;
+        }
 
-    if (maalForPlan.length === 0) {
-      innhold.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
-      return;
-    }
+        const pathSet = new Set(path);
 
-    // 2) Index på maalID -> mål
-    const byId = new Map(maalForPlan.map(m => [m.maalID, m]));
+        // Lukk alle åpne som ikke er i aktiv sti (men aldri nivå 0)
+        document.querySelectorAll("#menu .node.open").forEach(n => {
+          if (n.classList.contains("level-0")) return;
+          if (!pathSet.has(n)) n.classList.remove("open");
+        });
 
-    // 3) Bygg children-liste pr forelder
-    const children = new Map();
-    function addChild(parentId, child) {
-      if (!children.has(parentId)) children.set(parentId, []);
-      children.get(parentId).push(child);
-    }
-
-    maalForPlan.forEach(m => {
-      const parentId = m.maalOverordnet;
-      if (parentId && byId.has(parentId)) addChild(parentId, m);
-      else addChild(null, m);
-    });
-
-    // 4) Lag seksjoner i innholdet (én per mål)
-    function ensureSection(m) {
-      const anchorId = `maal-${safeId(m.maalID)}`;
-      if (document.getElementById(anchorId)) return anchorId;
-
-      const section = document.createElement("section");
-      section.id = anchorId;
-      section.innerHTML = `<h2>${m.maalNavn || "(uten navn)"}</h2>`;
-      innhold.appendChild(section);
-      return anchorId;
-    }
-
-    // 5) Bygg hierarkisk meny (rekursivt)
-function renderNode(m, level) {
-  const anchorId = ensureSection(m);
-
-  const node = document.createElement("div");
-  node.className = "node";
-  node.dataset.anchor = anchorId; // brukes for auto-åpning ved scroll-spy
-
-  const row = document.createElement("div");
-  row.className = `row level-${Math.min(level, 3)}`;
-
-  const kids = (children.get(m.maalID) || []);
-  const hasKids = (level !== 0) && (kids.length > 0);
-
-  const toggle = document.createElement("button");
-  toggle.type = "button";
-  toggle.className = hasKids ? "toggle" : "toggle placeholder";
-  toggle.setAttribute("aria-label", hasKids ? "Åpne/lukke" : "");
-toggle.addEventListener("click", () => {
-  if (!hasKids) return;
-
-  const parent = node.parentElement; // enten .children eller #menu
-  const willOpen = !node.classList.contains("open");
-
-  // Hvis vi skal åpne: lukk alle søsken på samme nivå først
-  if (willOpen && parent) {
-    Array.from(parent.children).forEach(el => {
-      if (el !== node && el.classList && el.classList.contains("node")) {
-        el.classList.remove("open");
+        // Åpne aktiv sti
+        path.forEach(n => n.classList.add("open"));
       }
-    });
-  }
 
-  node.classList.toggle("open");
-});
+      function setupScrollSpy() {
+        const sections = Array.from(document.querySelectorAll("main section[id]"));
+        if (sections.length === 0) return;
 
-  const a = document.createElement("a");
-  a.href = `#${anchorId}`;
-  a.innerText = m.maalNavn || "(uten navn)";
+        const observer = new IntersectionObserver((entries) => {
+          const visible = entries
+            .filter(e => e.isIntersecting)
+            .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-  a.addEventListener("click", () => {
-    // Lukk meny på mobil når man navigerer
-    if (window.matchMedia("(max-width: 768px)").matches) {
-      document.getElementById("sidebar").classList.remove("open");
-    }
-  });
+          if (visible.length > 0) setActiveLink(visible[0].target.id);
+        }, {
+          root: null,
+          rootMargin: "0px 0px -70% 0px",
+          threshold: 0.01
+        });
 
-  row.appendChild(toggle);
-  row.appendChild(a);
-  node.appendChild(row);
+        sections.forEach(s => observer.observe(s));
+        setActiveLink(sections[0].id);
+      }
 
-  const childWrap = document.createElement("div");
-  childWrap.className = "children";
-  node.appendChild(childWrap);
+      function ensureSection(m) {
+        const anchorId = `maal-${safeId(m.maalID)}`;
+        if (document.getElementById(anchorId)) return anchorId;
 
-  // Standard: åpne toppnivå på desktop, lukket på mobil
-  const desktop = !window.matchMedia("(max-width: 768px)").matches;
-  if (desktop && level === 0 && hasKids) node.classList.add("open");
+        const section = document.createElement("section");
+        section.id = anchorId;
+        section.innerHTML = `<h2>${m.maalNavn || "(uten navn)"}</h2>`;
+        contentEl.appendChild(section);
+        return anchorId;
+      }
 
-  // Render barn inn i childWrap
-  kids.forEach(k => childWrap.appendChild(renderNode(k, level + 1)));
+      function renderNodeFactory(children) {
+        const collator = new Intl.Collator("nb", { sensitivity: "base" });
 
-  return node;
-}
+        // Sorter alle "barnelister" alfabetisk én gang
+        for (const arr of children.values()) {
+          arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
+        }
 
-    // 6) Render toppnivå
-    // Sortering: alfabetisk (norsk) på maalNavn
-const collator = new Intl.Collator("nb", { sensitivity: "base" });
+        function renderNode(m, level) {
+          const anchorId = ensureSection(m);
 
-for (const [parentId, arr] of children.entries()) {
-  arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
-}
+          const node = document.createElement("div");
+          node.className = `node level-${Math.min(level, 3)}`;
 
-    (children.get(null) || []).forEach(m => {
-  meny.appendChild(renderNode(m, 0));
-});
+          // Nivå 0 skal alltid være åpent
+          if (level === 0) node.classList.add("open");
 
-    // 7) Start scroll-spy
-    setupScrollSpy();
-  });
+          const row = document.createElement("div");
+          row.className = `row level-${Math.min(level, 3)}`;
 
-  // Hent plan og sett tittel
-  fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json")
-    .then(res => res.json())
-    .then(planer => {
-      const plan = planer.find(p => p.planID === id);
-      document.getElementById("tittel").innerText = plan ? plan.planNavn : "Plan ikke funnet";
-    });
-</script>
+          const kids = children.get(m.maalID) || [];
+          const hasKids = (level !== 0) && (kids.length > 0);
+
+          const toggle = document.createElement("button");
+          toggle.type = "button";
+          toggle.className = hasKids ? "toggle" : "toggle placeholder";
+          toggle.setAttribute("aria-label", hasKids ? "Åpne/lukke" : "");
+
+          toggle.addEventListener("click", () => {
+            if (!hasKids) return;
+
+            const parent = node.parentElement; // .children eller #menu
+            const willOpen = !node.classList.contains("open");
+
+            // Bare én åpen pr nivå: lukk søsken hvis vi åpner
+            if (willOpen && parent) {
+              Array.from(parent.children).forEach(el => {
+                if (el !== node && el.classList && el.classList.contains("node")) {
+                  el.classList.remove("open");
+                }
+              });
+            }
+            node.classList.toggle("open");
+          });
+
+          const link = document.createElement("a");
+          link.href = `#${anchorId}`;
+          link.innerText = m.maalNavn || "(uten navn)";
+          link.addEventListener("click", () => {
+            if (window.matchMedia("(max-width: 768px)").matches) {
+              sidebar.classList.remove("open");
+            }
+          });
+
+          row.appendChild(toggle);
+          row.appendChild(link);
+          node.appendChild(row);
+
+          const childWrap = document.createElement("div");
+          childWrap.className = "children";
+          node.appendChild(childWrap);
+
+          kids.forEach(k => childWrap.appendChild(renderNode(k, level + 1)));
+
+          return node;
+        }
+
+        return renderNode;
+      }
+
+      async function init() {
+        // Hvis ingen id: vis enkel beskjed (du kan senere gjøre dette om til planliste)
+        if (!planId) {
+          titleEl.innerText = "Velg en plan";
+          contentEl.innerHTML = "<p>Åpne en plan fra oversikten (index.html) slik at URL-en inneholder <code>?id=...</code>.</p>";
+          return;
+        }
+
+        // Sett tittel
+        fetch(URL_PLAN)
+          .then(r => r.json())
+          .then(planer => {
+            const plan = planer.find(p => p.planID === planId);
+            titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
+          });
+
+        // Bygg meny + innhold
+        const maal = await fetch(URL_MAAL).then(r => r.json());
+
+        const maalForPlan = maal
+          .filter(m => m.maalPlan === planId)
+          .filter(m => m.maalPlan);
+
+        menuEl.innerHTML = "";
+        contentEl.innerHTML = "";
+
+        if (maalForPlan.length === 0) {
+          contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
+          return;
+        }
+
+        const byId = new Map(maalForPlan.map(m => [m.maalID, m]));
+
+        // children: parentId -> [barn]
+        const children = new Map();
+        function addChild(parentId, child) {
+          if (!children.has(parentId)) children.set(parentId, []);
+          children.get(parentId).push(child);
+        }
+
+        maalForPlan.forEach(m => {
+          const parentId = m.maalOverordnet;
+          if (parentId && byId.has(parentId)) addChild(parentId, m);
+          else addChild(null, m);
+        });
+
+        const renderNode = renderNodeFactory(children);
+
+        // Render toppnivå
+        (children.get(null) || []).forEach(m => {
+          menuEl.appendChild(renderNode(m, 0));
+        });
+
+        // Start scroll-spy når seksjoner finnes
+        setupScrollSpy();
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
