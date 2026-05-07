@@ -461,27 +461,36 @@ body { color: var(--blue-900); }
   }
 
   function setActiveLink(activeSectionId) {
-    document.querySelectorAll("#menu a").forEach(a => {
-      const isActive = a.getAttribute("href") === `#${activeSectionId}`;
-      a.classList.toggle("active", isActive);
-      if (isActive) {
-        a.setAttribute("aria-current", "true");
-      } else {
-        a.removeAttribute("aria-current");
-      }
-    });
-    
-// Auto-åpne alle foreldre-noder for aktiv seksjon
-const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
-if (activeLink) {
-  let el = activeLink.closest(".node");
-  while (el) {
-    el.classList.add("open");
-    el = el.parentElement ? el.parentElement.closest(".node") : null;
-  }
-}
+  // 1) Marker aktiv lenke
+  document.querySelectorAll("#menu a").forEach(a => {
+    const isActive = a.getAttribute("href") === `#${activeSectionId}`;
+    a.classList.toggle("active", isActive);
+    if (isActive) a.setAttribute("aria-current", "true");
+    else a.removeAttribute("aria-current");
+  });
 
+  // 2) Finn lenken som er aktiv
+  const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
+  if (!activeLink) return;
+
+  // 3) Bygg "sti" (aktiv node + alle foreldre-noder opp til rot)
+  const path = [];
+  let node = activeLink.closest(".node");
+  while (node) {
+    path.push(node);
+    const parent = node.parentElement;            // .children eller #menu
+    node = parent ? parent.closest(".node") : null;
   }
+  const pathSet = new Set(path);
+
+  // 4) Lukk alle åpne noder som IKKE er i aktiv sti
+  document.querySelectorAll("#menu .node.open").forEach(n => {
+    if (!pathSet.has(n)) n.classList.remove("open");
+  });
+
+  // 5) Åpne aktiv sti (så aktiv lenke alltid er synlig)
+  path.forEach(n => n.classList.add("open"));
+}
 
   function setupScrollSpy() {
     const sections = Array.from(document.querySelectorAll("main section[id]"));
