@@ -18,7 +18,7 @@ fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.jso
 
     data.forEach(plan => {
       const div = document.createElement("div");
-      div.innerText = plan.plan;
+      div.innerText = plan.planNavn;
       container.appendChild(div);
     });
   });
