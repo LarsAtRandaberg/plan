@@ -423,6 +423,7 @@
         wrapper.style.width        = (origW + 20) + "px";
         wrapper.style.maxWidth     = "99%";
         wrapper.style.margin       = "0 auto";
+        wrapper.style.border = "none";
         wrapper.style.height       = (iframeH - FOOTER_PX) + "px";
 
         const iframe = document.createElement("iframe");
