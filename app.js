@@ -133,3 +133,114 @@
     // Sorter alfabetisk (NB)
     const collator = new Intl.Collator("nb", { sensitivity: "base" });
     for (const arr of children.values()) {
+      arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
+    }
+
+    function renderNode(goal, level) {
+      const anchorId = ensureSection(goal);
+
+      const node = document.createElement("div");
+      node.className = `node level-${Math.min(level, 3)}`;
+
+      // Nivå 0 skal alltid være åpent
+      if (level === 0) node.classList.add("open");
+
+      const row = document.createElement("div");
+      row.className = `row level-${Math.min(level, 3)}`;
+
+      const kids = children.get(goal.maalID) || [];
+      const hasKids = (level !== 0) && kids.length > 0;
+
+      const toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = hasKids ? "toggle" : "toggle placeholder";
+      toggle.setAttribute("aria-label", hasKids ? "Åpne/lukke" : "");
+
+      toggle.addEventListener("click", () => {
+        if (!hasKids) return;
+
+        const parent = node.parentElement; // .children eller #menu
+        const willOpen = !node.classList.contains("open");
+
+        // Lukk søsken på samme nivå når vi åpner
+        if (willOpen && parent) {
+          Array.from(parent.children).forEach(el => {
+            if (el !== node && el.classList && el.classList.contains("node")) {
+              el.classList.remove("open");
+            }
+          });
+        }
+        node.classList.toggle("open");
+      });
+
+      const link = document.createElement("a");
+      link.href = `#${anchorId}`;
+      link.innerText = goal.maalNavn || "(uten navn)";
+      link.addEventListener("click", () => {
+        // Lukk meny på mobil etter navigasjon
+        if (window.matchMedia("(max-width: 768px)").matches) {
+          sidebar?.classList.remove("open");
+        }
+      });
+
+      row.appendChild(toggle);
+      row.appendChild(link);
+      node.appendChild(row);
+
+      const childWrap = document.createElement("div");
+      childWrap.className = "children";
+      node.appendChild(childWrap);
+
+      kids.forEach(k => childWrap.appendChild(renderNode(k, level + 1)));
+      return node;
+    }
+
+    // Render toppnivå
+    (children.get(null) || []).forEach(g => {
+      menuEl.appendChild(renderNode(g, 0));
+    });
+  }
+
+  async function init() {
+    // Nullstill flater
+    menuEl.innerHTML = "";
+    contentEl.innerHTML = "";
+
+    // Hent data
+    const [planer, maal] = await Promise.all([
+      fetch(URL_PLAN, { cache: "no-store" }).then(r => r.json()),
+      fetch(URL_MAAL, { cache: "no-store" }).then(r => r.json())
+    ]);
+
+    // Sett plan-tittel
+    const plan = planer.find(p => p.planID === planId);
+    titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
+
+    // Filtrer mål for plan
+    const goalsForPlan = maal.filter(m => m.maalPlan === planId);
+
+    if (goalsForPlan.length === 0) {
+      contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
+      return;
+    }
+
+    // Bygg meny + innhold
+    renderTree(goalsForPlan);
+
+    // Scroll-spy
+    setupScrollSpy();
+
+    // Hvis hash peker på mål, prøv å scrolle dit etter at DOM er bygget
+    if (location.hash && document.querySelector(location.hash)) {
+      document.querySelector(location.hash).scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+
+  init().catch(err => {
+    titleEl.innerText = "Feil";
+    contentEl.innerHTML = "<p>Det oppstod en feil ved lasting av data.</p>";
+    // Valgfritt: logg for debugging
+    console.error(err);
+  });
+})();
+``
