@@ -166,12 +166,26 @@
 
   async function init() {
     // Hvis ingen id: vis enkel beskjed (du kan senere gjøre dette om til planliste)
-    if (!planId) {
-      titleEl.innerText = "Velg en plan";
-      contentEl.innerHTML = "<p>Åpne en plan fra oversikten (index.html) slik at URL-en inneholder <code>?id=...</code>.</p>";
-      return;
-    }
+if (!planId) {
+  // LISTE-MODUS: vis planliste i hovedflate og bruk sidebar som navigasjon
+  titleEl.innerText = "Planer";
+  document.getElementById("sidebarTitle").innerText = "Planer";
+  menuEl.innerHTML = "";
+  contentEl.innerHTML = "<p>Velg en plan i listen.</p>";
 
+  const planer = await fetch(URL_PLAN).then(r => r.json());
+
+  // Bygg liste i sidebar
+  planer.forEach(p => {
+    const a = document.createElement("a");
+    a.href = `?id=${encodeURIComponent(p.planID)}`;
+    a.innerText = p.planNavn || "(uten navn)";
+    menuEl.appendChild(a);
+  });
+
+  // I liste-modus trenger vi ikke scroll-spy eller mål
+  return;
+}
     // Sett tittel
     fetch(URL_PLAN)
       .then(r => r.json())
