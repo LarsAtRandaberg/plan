@@ -331,119 +331,156 @@
     (children.get(null) || []).forEach((g) => menuEl.appendChild(renderNode(g, 0)));
   }
 
-  // =========================
-  // Innholdsblokker per mål
-  // =========================
-  function renderInnhold(innhold, planId) {
-    const radene = innhold
-      .filter((r) => r.innholdPlan === planId)
-      .sort((a, b) => a.visningsrekkefølge - b.visningsrekkefølge);
+// =========================
+// Innholdsblokker per mål
+// =========================
+function renderInnhold(innhold, planId) {
+  const radene = innhold
+    .filter((r) => r.innholdPlan === planId)
+    .sort((a, b) => a.visningsrekkefølge - b.visningsrekkefølge);
 
-    radene.forEach((rad) => {
-      const anchorId = `maal-${safeId(rad.innholdMaal)}`;
-      const section  = document.getElementById(anchorId);
-      if (!section) return;
+  radene.forEach((rad) => {
+    const anchorId = "maal-" + safeId(rad.innholdMaal);
+    const section  = document.getElementById(anchorId);
+    if (!section) return;
 
-      const blokk = document.createElement("div");
-      blokk.className = "innhold-blokk";
+    const blokk = document.createElement("div");
+    blokk.className = "innhold-blokk";
 
-      // Badge
-      const badgeClass = {
-        "Tekst":      "badge-tekst",
-        "PBI-rapport":"badge-pbi",
-        "Bilde":      "badge-bilde",
-        "Vedlegg":    "badge-vedlegg",
-        "Kombinert":  "badge-tekst",
-      }[rad.innholdstype] || "badge-tekst";
+    const badgeClass = {
+      "Tekst":       "badge-tekst",
+      "PBI-rapport": "badge-pbi",
+      "Bilde":       "badge-bilde",
+      "Vedlegg":     "badge-vedlegg",
+      "Kombinert":   "badge-tekst",
+    }[rad.innholdstype] || "badge-tekst";
 
-      const badgeIcon = {
-        "Tekst":      "ti-align-left",
-        "PBI-rapport":"ti-chart-bar",
-        "Bilde":      "ti-photo",
-        "Vedlegg":    "ti-file-description",
-        "Kombinert":  "ti-layout-grid",
-      }[rad.innholdstype] || "ti-file";
+    const badgeIcon = {
+      "Tekst":       "ti-align-left",
+      "PBI-rapport": "ti-chart-bar",
+      "Bilde":       "ti-photo",
+      "Vedlegg":     "ti-file-description",
+      "Kombinert":   "ti-layout-grid",
+    }[rad.innholdstype] || "ti-file";
 
-      const badge = document.createElement("div");
-      badge.className = `card-type-badge ${badgeClass}`;
-      badge.innerHTML = `<i class="ti ${badgeIcon}" aria-hidden="true" style="font-size:11px"></i> ${rad.innholdstype || "Tekst"}`;
-      blokk.appendChild(badge);
+    const badge = document.createElement("div");
+    badge.className = "card-type-badge " + badgeClass;
+    const badgeI = document.createElement("i");
+    badgeI.className = "ti " + badgeIcon;
+    badgeI.setAttribute("aria-hidden", "true");
+    badgeI.style.fontSize = "11px";
+    badge.appendChild(badgeI);
+    badge.appendChild(document.createTextNode(" " + (rad.innholdstype || "Tekst")));
+    blokk.appendChild(badge);
 
-      if (rad.overskrift) {
-        const h3 = document.createElement("h3");
-        h3.textContent = rad.overskrift;
-        blokk.appendChild(h3);
+    if (rad.overskrift) {
+      const h3 = document.createElement("h3");
+      h3.textContent = rad.overskrift;
+      blokk.appendChild(h3);
+    }
+
+    if (rad.brodtekst) {
+      const p = document.createElement("p");
+      p.textContent = rad.brodtekst;
+      blokk.appendChild(p);
+    }
+
+    if (rad.bildeUrl) {
+      const img = document.createElement("img");
+      img.src       = rad.bildeUrl;
+      img.alt       = rad.bildeAltTekst || "";
+      img.className = "innhold-bilde";
+      blokk.appendChild(img);
+    }
+
+    if (rad.pbiEmbed) {
+      const FOOTER_PX = 32;
+      const tmp = document.createElement("div");
+      tmp.innerHTML = rad.pbiEmbed;
+      const srcIframe = tmp.querySelector("iframe");
+
+      if (srcIframe) {
+        const iframeH = parseFloat(srcIframe.getAttribute("height")) || 400;
+        const src     = srcIframe.getAttribute("src") || "";
+
+        const pbiHeader = document.createElement("div");
+        pbiHeader.className = "innhold-pbi-header";
+
+        const pbiIcon = document.createElement("i");
+        pbiIcon.className = "ti ti-chart-bar";
+        pbiIcon.setAttribute("aria-hidden", "true");
+
+        const pbiSpan = document.createElement("span");
+        pbiSpan.appendChild(pbiIcon);
+        pbiSpan.appendChild(document.createTextNode(rad.overskrift || "Power BI-rapport"));
+
+        const pbiLink = document.createElement("a");
+        pbiLink.href   = src;
+        pbiLink.target = "_blank";
+        pbiLink.rel    = "noopener";
+        pbiLink.setAttribute("aria-label", "Åpne i nytt vindu");
+        pbiLink.style.color = "var(--green-600)";
+        const extIcon = document.createElement("i");
+        extIcon.className = "ti ti-external-link";
+        pbiLink.appendChild(extIcon);
+
+        pbiHeader.appendChild(pbiSpan);
+        pbiHeader.appendChild(pbiLink);
+        blokk.appendChild(pbiHeader);
+
+        const wrapper = document.createElement("div");
+        wrapper.style.overflow     = "hidden";
+        wrapper.style.borderRadius = "0 0 8px 8px";
+        wrapper.style.width        = "100%";
+        wrapper.style.height       = (iframeH - FOOTER_PX) + "px";
+
+        srcIframe.setAttribute("width",  "100%");
+        srcIframe.setAttribute("height", String(iframeH + FOOTER_PX));
+        srcIframe.style.border  = "none";
+        srcIframe.style.display = "block";
+
+        wrapper.appendChild(srcIframe);
+        blokk.appendChild(wrapper);
       }
+    }
 
-      if (rad.brodtekst) {
-        const p = document.createElement("p");
-        p.textContent = rad.brodtekst;
-        blokk.appendChild(p);
-      }
+    if (rad.vedleggUrl) {
+      const a = document.createElement("a");
+      a.href      = rad.vedleggUrl;
+      a.className = "innhold-vedlegg";
+      a.target    = "_blank";
+      a.rel       = "noopener";
 
-      if (rad.bildeUrl) {
-        const img = document.createElement("img");
-        img.src       = rad.bildeUrl;
-        img.alt       = rad.bildeAltTekst || "";
-        img.className = "innhold-bilde";
-        blokk.appendChild(img);
-      }
+      const vIcon = document.createElement("div");
+      vIcon.className = "innhold-vedlegg-icon";
+      const vI = document.createElement("i");
+      vI.className = "ti ti-file-type-pdf";
+      vI.setAttribute("aria-hidden", "true");
+      vIcon.appendChild(vI);
 
-      if (rad.pbiEmbed) {
-        const FOOTER_PX = 32;
+      const vInfo = document.createElement("div");
+      vInfo.className = "innhold-vedlegg-info";
+      const vName = document.createElement("div");
+      vName.className   = "innhold-vedlegg-name";
+      vName.textContent = rad.vedleggEtikett || "Last ned vedlegg";
+      vInfo.appendChild(vName);
 
-        const tmp = document.createElement("div");
-        tmp.innerHTML = rad.pbiEmbed;
-        const srcIframe = tmp.querySelector("iframe");
+      const vArrow = document.createElement("div");
+      vArrow.className = "vedlegg-arrow";
+      const vArrowI = document.createElement("i");
+      vArrowI.className = "ti ti-download";
+      vArrowI.setAttribute("aria-hidden", "true");
+      vArrow.appendChild(vArrowI);
 
-        if (srcIframe) {
-          const iframeH = parseFloat(srcIframe.getAttribute("height")) || 400;
-          const src     = srcIframe.getAttribute("src");
+      a.appendChild(vIcon);
+      a.appendChild(vInfo);
+      a.appendChild(vArrow);
+      blokk.appendChild(a);
+    }
 
-          const pbiHeader = document.createElement("div");
-          pbiHeader.className = "innhold-pbi-header";
-          pbiHeader.innerHTML = `
-            <span><i class="ti ti-chart-bar" aria-hidden="true"></i>${rad.overskrift || "Power BI-rapport"}</span>
-            <a href="${src}" target="_blank" rel="noopener" aria-label="Åpne i nytt vindu" style="color:var(--green-600)">
-              <i class="ti ti-external-link"></i>
-            </a>`;
-          blokk.appendChild(pbiHeader);
-
-          const wrapper = document.createElement("div");
-          wrapper.style.overflow     = "hidden";
-          wrapper.style.borderRadius = "0 0 8px 8px";
-          wrapper.style.width        = "100%";
-          wrapper.style.height       = `${iframeH - FOOTER_PX}px`;
-
-          srcIframe.setAttribute("width",  "100%");
-          srcIframe.setAttribute("height", String(iframeH + FOOTER_PX));
-          srcIframe.style.border  = "none";
-          srcIframe.style.display = "block";
-
-          wrapper.appendChild(srcIframe);
-          blokk.appendChild(wrapper);
-        }
-      }
-      }
-
-      if (rad.vedleggUrl) {
-        const a = document.createElement("a");
-        a.href      = rad.vedleggUrl;
-        a.className = "innhold-vedlegg";
-        a.target    = "_blank";
-        a.rel       = "noopener";
-        a.innerHTML = `
-          <div class="innhold-vedlegg-icon"><i class="ti ti-file-type-pdf" aria-hidden="true"></i></div>
-          <div class="innhold-vedlegg-info">
-            <div class="innhold-vedlegg-name">${rad.vedleggEtikett || "Last ned vedlegg"}</div>
-          </div>
-          <div class="vedlegg-arrow"><i class="ti ti-download" aria-hidden="true"></i></div>`;
-        blokk.appendChild(a);
-      }
-
-      section.appendChild(blokk);
-    });
-  }
+    section.appendChild(blokk);
+  });
+}
 
   // =========================
   // Navigasjon (uten full reload)
