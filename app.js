@@ -425,7 +425,7 @@
           const wrapper = document.createElement("div");
           wrapper.style.overflow = "hidden";
           wrapper.style.borderRadius = "0 0 8px 8px";
-          wrapper.style.width = origW + "px";
+          wrapper.style.width = (origW+20) + "px";
           wrapper.style.maxWidth = "100%";
           wrapper.style.height = (iframeH - FOOTER_PX) + "px";
 
