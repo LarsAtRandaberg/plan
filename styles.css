@@ -215,16 +215,36 @@ section{
 /*---------------------------------------
   TOPPMENY (dropdown)
 ---------------------------------------*/
+.brand{
+  display:flex;
+  align-items:center;
+}
+
 .brand-link{
   text-decoration:none;
   color: var(--blue-900);
   font-weight:700;
+  display:flex;
+  align-items:center;
+  gap:8px;
 }
 
 .brand-link:hover{
   background: var(--blue-200);
   border-radius: 6px;
   padding: 6px 8px;
+}
+
+.brand-logo{
+  height:40px;
+  width:auto;
+  object-fit:contain;
+}
+
+@media (max-width: 768px){
+  .brand-logo{
+    height:32px;
+  }
 }
 
 .topnav{
