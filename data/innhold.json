@@ -25,6 +25,8 @@
     "vedleggUrl": null,
     "vedleggEtikett": null,
     "innholdstype": "PBI-rapport",
+    "innholdBredde": 980,
+    "innholdHøyde": 500,
     "visningsrekkefølge": 2
   },
   {
