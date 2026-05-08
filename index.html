@@ -3,44 +3,47 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PlanPortal</title>
-
+  <title>PlanPortal – Randaberg kommune</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
   <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
-  
+
 <div class="topbar">
   <div class="brand">
     <a class="brand-link" href="./">
-      <div class="brand-text">
-        <div>Randaberg</div>
-        <div>kommune</div>
-      </div>
-      <img src="EPSHovedlogo_Våpen_PNG.png" alt="Randaberg kommune logo" class="brand-logo">
+      <img src="EPSHovedlogo_Våpen_PNG.png" alt="Randaberg kommune" class="brand-logo">
+      <span class="brand-name">Randaberg kommune</span>
     </a>
   </div>
-
-  <nav class="topnav" id="topnav" aria-label="Planvelger">
-    <!-- fylles automatisk av app.js -->
-  </nav>
-
-  <button type="button" class="menu-btn" id="menuBtn" aria-label="Åpne innholdsmeny">☰</button>
+  <nav class="topnav" id="topnav" aria-label="Planvelger"></nav>
+  <button type="button" class="menu-btn" id="menuBtn" aria-label="Åpne innholdsmeny">
+    <i class="ti ti-menu-2" aria-hidden="true"></i>
+  </button>
 </div>
 
-
-  <div class="layout">
-    <aside class="sidebar" id="sidebar">
-      <h3 id="sidebarTitle">Innhold</h3>
-      <div id="menu"></div>
-    </aside>
-
-    <main class="content">
-      <h1 id="tittel">PlanPortal</h1>
-      <div id="innhold"></div>
-    </main>
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-label" id="tittel">Laster...</div>
+    <h1 class="hero-title" id="hero-tittel"></h1>
+    <div class="hero-meta">
+      <span class="hero-stat">
+        <i class="ti ti-target" aria-hidden="true"></i>
+        <span id="hero-maal-count">–</span> mål
+      </span>
+    </div>
   </div>
+</div>
 
-  <script src="app.js"></script>
+<div class="layout">
+  <aside class="sidebar" id="sidebar">
+    <div id="menu"></div>
+  </aside>
+  <main class="content">
+    <div id="innhold"></div>
+  </main>
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>
