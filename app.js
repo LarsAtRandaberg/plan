@@ -1,15 +1,9 @@
-(() => {(() => ===============================
-  // KONFIG
-  // ===============================
-  const DEFAULT_PLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a"; // Kommuneplanens samfunnsdel
+(() => {
+  const DEFAULT_PLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
 
-  // Bruk samme origin for GitHub Pages (robust)
   const URL_PLAN = "data/plan.json";
   const URL_MAAL = "data/maal.json";
 
-  // ===============================
-  // DOM
-  // ===============================
   const sidebar = document.getElementById("sidebar");
   const menuBtn = document.getElementById("menuBtn");
   const sidebarTitle = document.getElementById("sidebarTitle");
@@ -19,33 +13,20 @@
 
   if (!menuEl || !contentEl || !titleEl) return;
 
-  // Mobil: åpne/lukke sidebar
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
   }
 
-  // ===============================
-  // URL / PLAN-ID
-  // ===============================
   const params = new URLSearchParams(location.search);
-  const originalId = params.get("id");
-  let currentPlanId = originalId || DEFAULT_PLAN_ID;
+  const explicitId = params.get("id");
+  let currentPlanId = explicitId || DEFAULT_PLAN_ID;
 
-  // Hvis id mangler: skriv default i adresselinjen uten reload, behold hash
-  if (!originalId) {
-    history.replaceState(
-      null,
-      "",
-      `?id=${encodeURIComponent(DEFAULT_PLAN_ID)}${location.hash}`
-    );
+  if (!explicitId) {
+    history.replaceState(null, "", `?id=${encodeURIComponent(DEFAULT_PLAN_ID)}${location.hash}`);
   }
 
-  // Sidebar-tittel i planmodus
   if (sidebarTitle) sidebarTitle.innerText = "Innhold";
 
-  // ===============================
-  // HJELPERE
-  // ===============================
   function safeId(text) {
     return String(text || "")
       .toLowerCase()
@@ -70,7 +51,6 @@
     return anchorId;
   }
 
-  // Marker aktiv lenke + hold kun aktiv sti åpen (hindrer “alt åpner seg”)
   function setActiveLink(activeSectionId) {
     document.querySelectorAll("#menu a").forEach(a => {
       const isActive = a.getAttribute("href") === `#${activeSectionId}`;
@@ -86,7 +66,7 @@
     let node = activeLink.closest(".node");
     while (node) {
       path.push(node);
-      const parent = node.parentElement; // .children eller #menu
+      const parent = node.parentElement;
       node = parent ? parent.closest(".node") : null;
     }
     const pathSet = new Set(path);
@@ -98,10 +78,7 @@
 
     path.forEach(n => n.classList.add("open"));
 
-    // Hold aktiv lenke synlig i sidebaren (nice-to-have)
-    try {
-      activeLink.scrollIntoView({ block: "nearest" });
-    } catch (_) {}
+    try { activeLink.scrollIntoView({ block: "nearest" }); } catch (_) {}
   }
 
   function setupScrollSpy() {
@@ -114,33 +91,11 @@
         .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
       if (visible.length > 0) setActiveLink(visible[0].target.id);
-    }, {
-      root: null,
-      rootMargin: "0px 0px -70% 0px",
-      threshold: 0.01
-    });
+    }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
 
     sections.forEach(s => observer.observe(s));
     setActiveLink(sections[0].id);
   }
-
-  // Bytt plan (brukes av toppmeny senere)
-  function navigateToPlan(planId, hash = "") {
-    currentPlanId = planId;
-    history.pushState(null, "", `?id=${encodeURIComponent(planId)}${hash}`);
-    render(); // re-render uten full refresh
-  }
-
-  // Gjør funksjonen tilgjengelig globalt (toppen kan kalle den senere)
-  window.PlanPortal = {
-    navigateToPlan
-  };
-
-  // ===============================
-  // DATA + RENDER
-  // ===============================
-  let plans = [];
-  let goals = [];
 
   function buildTree(goalsForPlan) {
     const byId = new Map(goalsForPlan.map(g => [g.maalID, g]));
@@ -167,7 +122,7 @@
 
       const node = document.createElement("div");
       node.className = `node level-${Math.min(level, 3)}`;
-      if (level === 0) node.classList.add("open"); // nivå 0 alltid åpent
+      if (level === 0) node.classList.add("open");
 
       const row = document.createElement("div");
       row.className = `row level-${Math.min(level, 3)}`;
@@ -178,15 +133,13 @@
       const toggle = document.createElement("button");
       toggle.type = "button";
       toggle.className = hasKids ? "toggle" : "toggle placeholder";
-      toggle.setAttribute("aria-label", hasKids ? "Åpne/lukke" : "");
 
       toggle.addEventListener("click", () => {
         if (!hasKids) return;
 
-        const parent = node.parentElement; // .children eller #menu
+        const parent = node.parentElement;
         const willOpen = !node.classList.contains("open");
 
-        // Kun én åpen pr nivå: lukk søsken hvis vi åpner
         if (willOpen && parent) {
           Array.from(parent.children).forEach(el => {
             if (el !== node && el.classList && el.classList.contains("node")) {
@@ -218,42 +171,33 @@
       return node;
     }
 
-    (children.get(null) || []).forEach(g => {
-      menuEl.appendChild(renderNode(g, 0));
-    });
-  }
-
-  function render() {
-    clearUI();
-
-    const plan = plans.find(p => p.planID === currentPlanId);
-    titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
-
-    const goalsForPlan = goals.filter(m => m.maalPlan === currentPlanId);
-
-    if (goalsForPlan.length === 0) {
-      contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
-      return;
-    }
-
-    buildTree(goalsForPlan);
-    setupScrollSpy();
-
-    // Hvis det ligger en hash i URL: scroll til den (etter at DOM er bygget)
-    if (location.hash && document.querySelector(location.hash)) {
-      document.querySelector(location.hash).scrollIntoView({ behavior: "smooth", block: "start" });
-    }
+    (children.get(null) || []).forEach(g => menuEl.appendChild(renderNode(g, 0)));
   }
 
   async function init() {
     try {
-      const [p, m] = await Promise.all([
+      const [plans, goals] = await Promise.all([
         fetch(URL_PLAN, { cache: "no-store" }).then(r => r.json()),
         fetch(URL_MAAL, { cache: "no-store" }).then(r => r.json())
       ]);
-      plans = p;
-      goals = m;
-      render();
+
+      clearUI();
+
+      const plan = plans.find(p => p.planID === currentPlanId);
+      titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
+
+      const goalsForPlan = goals.filter(m => m.maalPlan === currentPlanId);
+      if (goalsForPlan.length === 0) {
+        contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
+        return;
+      }
+
+      buildTree(goalsForPlan);
+      setupScrollSpy();
+
+      if (location.hash && document.querySelector(location.hash)) {
+        document.querySelector(location.hash).scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     } catch (e) {
       titleEl.innerText = "Feil";
       contentEl.innerHTML = "<p>Det oppstod en feil ved lasting av data.</p>";
@@ -261,12 +205,12 @@
     }
   }
 
-  // Håndter back/forward i nettleser
   window.addEventListener("popstate", () => {
     const p = new URLSearchParams(location.search);
     currentPlanId = p.get("id") || DEFAULT_PLAN_ID;
-    render();
+    init();
   });
 
   init();
 })();
+``
