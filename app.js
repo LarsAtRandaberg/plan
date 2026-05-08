@@ -3,27 +3,25 @@
   // Konfig
   // =========================
   const DEFAULT_PLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
-  const URL_PLAN = "data/plan.json";
-  const URL_MAAL = "data/maal.json";
+  const URL_PLAN    = "data/plan.json";
+  const URL_MAAL    = "data/maal.json";
   const URL_INNHOLD = "data/innhold.json";
 
   // =========================
   // DOM
   // =========================
-  const topbar = document.querySelector(".topbar");
-  const topnav = document.getElementById("topnav");
-
-  const sidebar = document.getElementById("sidebar");
-  const menuBtn = document.getElementById("menuBtn");
-  const sidebarTitle = document.getElementById("sidebarTitle");
-
-  const menuEl = document.getElementById("menu");
+  const topbar   = document.querySelector(".topbar");
+  const topnav   = document.getElementById("topnav");
+  const sidebar  = document.getElementById("sidebar");
+  const menuBtn  = document.getElementById("menuBtn");
+  const menuEl   = document.getElementById("menu");
   const contentEl = document.getElementById("innhold");
-  const titleEl = document.getElementById("tittel");
+  const titleEl  = document.getElementById("tittel");
+  const heroTittelEl    = document.getElementById("hero-tittel");
+  const heroMaalCountEl = document.getElementById("hero-maal-count");
 
   if (!menuEl || !contentEl || !titleEl) return;
 
-  // Mobil: åpne/lukke venstremeny
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
   }
@@ -35,31 +33,21 @@
   const explicitId = params.get("id");
   let currentPlanId = explicitId || DEFAULT_PLAN_ID;
 
-  // Hvis id mangler: sett default i URL uten reload (behold hash)
   if (!explicitId) {
-    history.replaceState(
-      null,
-      "",
-      `?id=${encodeURIComponent(DEFAULT_PLAN_ID)}${location.hash}`
-    );
+    history.replaceState(null, "", `?id=${encodeURIComponent(DEFAULT_PLAN_ID)}${location.hash}`);
   }
-
-  if (sidebarTitle) sidebarTitle.textContent = "Innhold";
 
   // =========================
   // Hide/show topbar ved scroll
   // =========================
   (() => {
     if (!topbar) return;
-
     let lastY = window.scrollY;
     let ticking = false;
 
     function onScroll() {
-      const y = window.scrollY;
+      const y     = window.scrollY;
       const delta = y - lastY;
-
-      // Ikke skjul toppmenyen når en dropdown er åpen
       const dropdownOpen = document.querySelector(".dropdown.open");
 
       if (!dropdownOpen && delta > 6 && y > 80) {
@@ -72,16 +60,9 @@
       ticking = false;
     }
 
-    window.addEventListener(
-      "scroll",
-      () => {
-        if (!ticking) {
-          window.requestAnimationFrame(onScroll);
-          ticking = true;
-        }
-      },
-      { passive: true }
-    );
+    window.addEventListener("scroll", () => {
+      if (!ticking) { window.requestAnimationFrame(onScroll); ticking = true; }
+    }, { passive: true });
   })();
 
   // =========================
@@ -96,7 +77,7 @@
   }
 
   function clearUI() {
-    menuEl.innerHTML = "";
+    menuEl.innerHTML   = "";
     contentEl.innerHTML = "";
   }
 
@@ -104,9 +85,9 @@
     const anchorId = `maal-${safeId(goal.maalID)}`;
     if (document.getElementById(anchorId)) return anchorId;
 
-    const section = document.createElement("section");
-    section.id = anchorId;
-    const heading = document.createElement("h2");
+    const section  = document.createElement("section");
+    section.id     = anchorId;
+    const heading  = document.createElement("h2");
     heading.textContent = goal.maalNavn || "(uten navn)";
     section.appendChild(heading);
     contentEl.appendChild(section);
@@ -124,10 +105,8 @@
     const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
     if (!activeLink) return;
 
-    // Åpne bare aktiv sti (så ikke "alt åpner seg")
     const path = [];
     let node = activeLink.closest(".node");
-
     while (node) {
       path.push(node);
       const parent = node.parentElement;
@@ -135,17 +114,13 @@
     }
 
     const pathSet = new Set(path);
-
     document.querySelectorAll("#menu .node.open").forEach((n) => {
       if (n.classList.contains("level-0")) return;
       if (!pathSet.has(n)) n.classList.remove("open");
     });
-
     path.forEach((n) => n.classList.add("open"));
 
-    try {
-      activeLink.scrollIntoView({ block: "nearest" });
-    } catch (_) {}
+    try { activeLink.scrollIntoView({ block: "nearest" }); } catch (_) {}
   }
 
   function setupScrollSpy() {
@@ -157,7 +132,6 @@
         const visible = entries
           .filter((e) => e.isIntersecting)
           .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-
         if (visible.length > 0) setActiveLink(visible[0].target.id);
       },
       { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0.01 }
@@ -173,14 +147,11 @@
   function updateKommuneplanButtonState() {
     const btn = document.getElementById("btnKommuneplan");
     if (!btn) return;
-
     const isDefault = currentPlanId === DEFAULT_PLAN_ID;
-
     btn.classList.toggle("is-selected", isDefault);
-    btn.classList.toggle("is-disabled", isDefault);
-
+    btn.classList.toggle("is-disabled",  isDefault);
     if (isDefault) btn.setAttribute("aria-current", "page");
-    else btn.removeAttribute("aria-current");
+    else           btn.removeAttribute("aria-current");
   }
 
   // =========================
@@ -211,7 +182,6 @@
     if (!topnav) return;
     topnav.innerHTML = "";
 
-    // Gruppér pr planTyper
     const groups = new Map();
     plans.forEach((p) => {
       const key = p.planTyper;
@@ -219,27 +189,22 @@
       groups.get(key).push(p);
     });
 
-    // Stabil rekkefølge: sortér typekoder
     const typeKeys = Array.from(groups.keys()).sort((a, b) => a - b);
-
-    // Sortér planer alfabetisk inne i hver type
     const collator = new Intl.Collator("nb", { sensitivity: "base" });
     typeKeys.forEach((k) => {
       groups.get(k).sort((a, b) => collator.compare(a.planNavn || "", b.planNavn || ""));
     });
 
     typeKeys.forEach((typeKey) => {
-      const dd = document.createElement("div");
+      const dd  = document.createElement("div");
       dd.className = "dropdown";
 
       const btn = document.createElement("button");
-      btn.type = "button";
+      btn.type  = "button";
       btn.className = "dropbtn";
       btn.setAttribute("aria-haspopup", "true");
       btn.setAttribute("aria-expanded", "false");
       btn.textContent = planTypeLabel(typeKey);
-
-      // Kommuneplanen-knappen (for state)
       if (typeKey === 701100000) btn.id = "btnKommuneplan";
 
       const menu = document.createElement("div");
@@ -249,30 +214,22 @@
         const a = document.createElement("a");
         a.href = `?id=${encodeURIComponent(p.planID)}`;
         a.textContent = p.planNavn || "(uten navn)";
-
-        // Naviger uten full reload
         a.addEventListener("click", (e) => {
           e.preventDefault();
           navigateToPlan(p.planID);
           dd.classList.remove("open");
           btn.setAttribute("aria-expanded", "false");
         });
-
         menu.appendChild(a);
       });
 
       btn.addEventListener("click", (e) => {
         e.stopPropagation();
-
-        // Lukk andre åpne dropdowns
         document.querySelectorAll(".dropdown.open").forEach((x) => {
           if (x !== dd) x.classList.remove("open");
         });
-
         dd.classList.toggle("open");
         btn.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
-
-        // Når bruker åpner dropdown: sørg for at topbar er synlig
         topbar?.classList.remove("is-hidden");
       });
 
@@ -281,7 +238,6 @@
       topnav.appendChild(dd);
     });
 
-    // Nå finnes btnKommuneplan i DOM
     updateKommuneplanButtonState();
   }
 
@@ -290,7 +246,6 @@
   // =========================
   function buildTree(goalsForPlan) {
     const byId = new Map(goalsForPlan.map((g) => [g.maalID, g]));
-
     const children = new Map();
     const addChild = (parentId, child) => {
       if (!children.has(parentId)) children.set(parentId, []);
@@ -303,7 +258,6 @@
       else addChild(null, g);
     });
 
-    // Sortér alfabetisk
     const collator = new Intl.Collator("nb", { sensitivity: "base" });
     for (const arr of children.values()) {
       arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
@@ -319,20 +273,17 @@
       const row = document.createElement("div");
       row.className = `row level-${Math.min(level, 3)}`;
 
-      const kids = children.get(goal.maalID) || [];
+      const kids    = children.get(goal.maalID) || [];
       const hasKids = level !== 0 && kids.length > 0;
 
       const toggle = document.createElement("button");
-      toggle.type = "button";
+      toggle.type      = "button";
       toggle.className = hasKids ? "toggle" : "toggle placeholder";
 
       toggle.addEventListener("click", () => {
         if (!hasKids) return;
-
-        const parent = node.parentElement;
+        const parent   = node.parentElement;
         const willOpen = !node.classList.contains("open");
-
-        // Kun én åpen pr nivå
         if (willOpen && parent) {
           Array.from(parent.children).forEach((el) => {
             if (el !== node && el.classList && el.classList.contains("node")) {
@@ -345,7 +296,19 @@
 
       const a = document.createElement("a");
       a.href = `#${anchorId}`;
-      a.textContent = goal.maalNavn || "(uten navn)";
+
+      // Ikon fra maalIkon-feltet (hvis det finnes)
+      if (goal.maalIkon) {
+        const icon = document.createElement("i");
+        icon.className = `ti ${goal.maalIkon}`;
+        icon.setAttribute("aria-hidden", "true");
+        icon.style.marginRight = "5px";
+        icon.style.fontSize    = "13px";
+        a.appendChild(icon);
+      }
+
+      a.appendChild(document.createTextNode(goal.maalNavn || "(uten navn)"));
+
       a.addEventListener("click", () => {
         if (window.matchMedia("(max-width: 768px)").matches) {
           sidebar?.classList.remove("open");
@@ -368,71 +331,109 @@
   }
 
   // =========================
+  // Innholdsblokker per mål
+  // =========================
+  function renderInnhold(innhold, planId) {
+    const radene = innhold
+      .filter((r) => r.innholdPlan === planId)
+      .sort((a, b) => a.visningsrekkefølge - b.visningsrekkefølge);
+
+    radene.forEach((rad) => {
+      const anchorId = `maal-${safeId(rad.innholdMaal)}`;
+      const section  = document.getElementById(anchorId);
+      if (!section) return;
+
+      const blokk = document.createElement("div");
+      blokk.className = "innhold-blokk";
+
+      // Badge
+      const badgeClass = {
+        "Tekst":      "badge-tekst",
+        "PBI-rapport":"badge-pbi",
+        "Bilde":      "badge-bilde",
+        "Vedlegg":    "badge-vedlegg",
+        "Kombinert":  "badge-tekst",
+      }[rad.innholdstype] || "badge-tekst";
+
+      const badgeIcon = {
+        "Tekst":      "ti-align-left",
+        "PBI-rapport":"ti-chart-bar",
+        "Bilde":      "ti-photo",
+        "Vedlegg":    "ti-file-description",
+        "Kombinert":  "ti-layout-grid",
+      }[rad.innholdstype] || "ti-file";
+
+      const badge = document.createElement("div");
+      badge.className = `card-type-badge ${badgeClass}`;
+      badge.innerHTML = `<i class="ti ${badgeIcon}" aria-hidden="true" style="font-size:11px"></i> ${rad.innholdstype || "Tekst"}`;
+      blokk.appendChild(badge);
+
+      if (rad.overskrift) {
+        const h3 = document.createElement("h3");
+        h3.textContent = rad.overskrift;
+        blokk.appendChild(h3);
+      }
+
+      if (rad.brodtekst) {
+        const p = document.createElement("p");
+        p.textContent = rad.brodtekst;
+        blokk.appendChild(p);
+      }
+
+      if (rad.bildeUrl) {
+        const img = document.createElement("img");
+        img.src       = rad.bildeUrl;
+        img.alt       = rad.bildeAltTekst || "";
+        img.className = "innhold-bilde";
+        blokk.appendChild(img);
+      }
+
+      if (rad.pbiUrl) {
+        const pbiHeader = document.createElement("div");
+        pbiHeader.className = "innhold-pbi-header";
+        pbiHeader.innerHTML = `
+          <span><i class="ti ti-chart-bar" aria-hidden="true"></i>${rad.overskrift || "Power BI-rapport"}</span>
+          <a href="${rad.pbiUrl}" target="_blank" rel="noopener" aria-label="Åpne i nytt vindu" style="color:var(--green-600)">
+            <i class="ti ti-external-link"></i>
+          </a>`;
+        blokk.appendChild(pbiHeader);
+
+        const iframe = document.createElement("iframe");
+        iframe.src           = rad.pbiUrl;
+        iframe.className     = "innhold-pbi";
+        iframe.allowFullscreen = true;
+        iframe.title         = rad.overskrift || "Power BI-rapport";
+        blokk.appendChild(iframe);
+      }
+
+      if (rad.vedleggUrl) {
+        const a = document.createElement("a");
+        a.href      = rad.vedleggUrl;
+        a.className = "innhold-vedlegg";
+        a.target    = "_blank";
+        a.rel       = "noopener";
+        a.innerHTML = `
+          <div class="innhold-vedlegg-icon"><i class="ti ti-file-type-pdf" aria-hidden="true"></i></div>
+          <div class="innhold-vedlegg-info">
+            <div class="innhold-vedlegg-name">${rad.vedleggEtikett || "Last ned vedlegg"}</div>
+          </div>
+          <div class="vedlegg-arrow"><i class="ti ti-download" aria-hidden="true"></i></div>`;
+        blokk.appendChild(a);
+      }
+
+      section.appendChild(blokk);
+    });
+  }
+
+  // =========================
   // Navigasjon (uten full reload)
   // =========================
   function navigateToPlan(planId) {
     currentPlanId = planId;
     updateKommuneplanButtonState();
     history.pushState(null, "", `?id=${encodeURIComponent(planId)}${location.hash || ""}`);
-    init(); // re-render
+    init();
   }
-// =========================
-// Innholdsblokker per mål
-// =========================
-function renderInnhold(innhold, planId) {
-  const radene = innhold
-    .filter((r) => r.innholdPlan === planId)
-    .sort((a, b) => a.visningsrekkefølge - b.visningsrekkefølge);
-
-  radene.forEach((rad) => {
-    const anchorId = `maal-${safeId(rad.innholdMaal)}`;
-    const section = document.getElementById(anchorId);
-    if (!section) return;
-
-    const blokk = document.createElement("div");
-    blokk.className = "innhold-blokk";
-
-    if (rad.overskrift) {
-      const h3 = document.createElement("h3");
-      h3.textContent = rad.overskrift;
-      blokk.appendChild(h3);
-    }
-
-    if (rad.brodtekst) {
-      const p = document.createElement("p");
-      p.textContent = rad.brodtekst;
-      blokk.appendChild(p);
-    }
-
-    if (rad.bildeUrl) {
-      const img = document.createElement("img");
-      img.src = rad.bildeUrl;
-      img.alt = rad.bildeAltTekst || "";
-      img.className = "innhold-bilde";
-      blokk.appendChild(img);
-    }
-
-    if (rad.pbiUrl) {
-      const iframe = document.createElement("iframe");
-      iframe.src = rad.pbiUrl;
-      iframe.className = "innhold-pbi";
-      iframe.allowFullscreen = true;
-      blokk.appendChild(iframe);
-    }
-
-    if (rad.vedleggUrl) {
-      const a = document.createElement("a");
-      a.href = rad.vedleggUrl;
-      a.textContent = rad.vedleggEtikett || "Last ned vedlegg";
-      a.className = "innhold-vedlegg";
-      a.target = "_blank";
-      a.rel = "noopener";
-      blokk.appendChild(a);
-    }
-
-    section.appendChild(blokk);
-  });
-}
 
   // =========================
   // Init
@@ -440,37 +441,40 @@ function renderInnhold(innhold, planId) {
   async function init() {
     try {
       const [plans, goals, innhold] = await Promise.all([
-        fetch(URL_PLAN, { cache: "no-store" }).then((r) => r.json()),
-        fetch(URL_MAAL, { cache: "no-store" }).then((r) => r.json()),
+        fetch(URL_PLAN,    { cache: "no-store" }).then((r) => r.json()),
+        fetch(URL_MAAL,    { cache: "no-store" }).then((r) => r.json()),
         fetch(URL_INNHOLD, { cache: "no-store" }).then((r) => r.json()),
       ]);
 
       buildTopMenu(plans);
       attachDropdownListener();
-
       clearUI();
 
       const plan = plans.find((p) => p.planID === currentPlanId);
       titleEl.textContent = plan ? plan.planNavn : "Plan ikke funnet";
 
       const goalsForPlan = goals.filter((m) => m.maalPlan === currentPlanId);
+
       if (goalsForPlan.length === 0) {
         contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
         return;
       }
+
+      // Hero
+      const rootGoal = goalsForPlan.find((g) => !g.maalOverordnet);
+      if (heroTittelEl)    heroTittelEl.textContent    = rootGoal ? rootGoal.maalNavn : "";
+      if (heroMaalCountEl) heroMaalCountEl.textContent = goalsForPlan.length;
 
       buildTree(goalsForPlan);
       renderInnhold(innhold, currentPlanId);
       setupScrollSpy();
 
       if (location.hash) {
-        const hashElement = document.getElementById(location.hash.substring(1));
-        if (hashElement) {
-          hashElement.scrollIntoView({ behavior: "smooth", block: "start" });
-        }
+        const el = document.getElementById(location.hash.substring(1));
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     } catch (e) {
-      titleEl.textContent = "Feil";
+      titleEl.textContent  = "Feil";
       contentEl.innerHTML = "<p>Det oppstod en feil ved lasting av data.</p>";
       console.error(e);
     }
