@@ -12,6 +12,8 @@
   --activeBorder: var(--blue-600);
 }
 
+*{ box-sizing: border-box; }
+
 body{
   margin:0;
   font-family: system-ui, Arial, sans-serif;
@@ -70,7 +72,9 @@ section{
   margin-bottom:18px;
 }
 
-/* menylenker */
+/*---------------------------------------
+  MENYLENKER (generelt)
+---------------------------------------*/
 #menu a{
   display:block;
   padding:4px 6px;
@@ -78,3 +82,123 @@ section{
   border-radius:6px;
   text-decoration:none;
   color: var(--blue-800);
+  line-height:1.12;
+  font-size:13px;
+}
+
+#menu a:hover{
+  background: var(--hover);
+}
+
+#menu a.active{
+  background: var(--activeBg);
+  color: var(--blue-900);
+  font-weight:600;
+  border-left:3px solid var(--activeBorder);
+  padding-left:5px; /* kompenser for border */
+}
+
+/*---------------------------------------
+  TREE / ACCORDION STRUKTUR
+---------------------------------------*/
+#menu .node{ display:block; }
+
+#menu .row{
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+
+/* Toggle (trekant) */
+#menu .toggle{
+  width:16px;
+  height:16px;
+  border:0;
+  background:none;
+  cursor:pointer;
+  border-radius:4px;
+  line-height:1;
+  color: var(--blue-800);
+  font-size:12px;
+  opacity:0.9;
+  padding:0;
+}
+
+#menu .toggle:hover{
+  background: var(--hover);
+}
+
+#menu .toggle::before{
+  content:"▸";
+}
+
+#menu .node.open > .row .toggle::before{
+  content:"▾";
+}
+
+/* For noder uten barn: fjern toggle helt (unngår “bokser”) */
+#menu .toggle.placeholder{
+  display:none;
+}
+
+/* Children container: ingen egen innrykk her – innrykk styres av level på .row */
+#menu .children{
+  display:none;
+  margin:0;
+  padding:0;
+  border:0;
+}
+
+#menu .node.open > .children{
+  display:block;
+}
+
+/*---------------------------------------
+  ENTydig innrykk per nivå
+  (dette er der /plan/ ofte blir “feil”)
+---------------------------------------*/
+#menu .row.level-0{ padding-left:0; }
+#menu .row.level-1{ padding-left:10px; border-left:1px solid var(--line); }
+#menu .row.level-2{ padding-left:20px; border-left:1px solid var(--line); }
+#menu .row.level-3{ padding-left:30px; border-left:1px solid var(--line); }
+
+/* Typografi per nivå */
+#menu .row.level-0 a{ font-weight:700; color: var(--green-800); }
+#menu .row.level-1 a{ font-weight:600; color: var(--blue-800); }
+#menu .row.level-2 a,
+#menu .row.level-3 a{ font-weight:400; color: var(--blue-800); }
+
+/* Nivå 0: alltid åpent, ingen toggle (kun direkte rad!) */
+#menu .node.level-0 > .children{
+  display:block;
+}
+
+#menu .node.level-0 > .row .toggle{
+  display:none;
+}
+
+#menu .node.level-0 > .row{
+  gap:0;
+}
+
+/*---------------------------------------
+  MOBIL
+---------------------------------------*/
+@media (max-width: 768px){
+  .menu-btn{ display:block; }
+  .layout{ display:block; }
+
+  .sidebar{
+    position:fixed;
+    left:-280px;
+    top:0;
+    height:100%;
+    width:240px;
+    z-index:200;
+    transition:left 0.25s;
+    box-shadow:0 10px 30px rgba(0,0,0,.12);
+    border-right:1px solid var(--line);
+  }
+
+  .sidebar.open{ left:0; }
+}
