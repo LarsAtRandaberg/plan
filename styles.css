@@ -497,9 +497,6 @@ section h2 {
   align-items: center;
   justify-content: space-between;
   padding: 10px 14px;
-  border: 0.5px solid var(--line);
-  border-bottom: none;
-  border-radius: 8px 8px 0 0;
   background: #fff;
 }
 
