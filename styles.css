@@ -288,3 +288,16 @@ section{
 .topbar{
   box-shadow: 0 1px 0 rgba(0,0,0,0.04);
 }
+/* Valgt/aktiv plan i toppmenyen *//* Valgt.topnav .is-selected {
+  background: var(--blue-200);
+  border: 1px solid var(--blue-200);
+  color: var(--blue-900);
+  font-weight: 600;
+}
+
+/* Inaktiv (ikke klikkbar) når du allerede er på samme plan */
+.topnav .is-disabled {
+  pointer-events: none;
+  opacity: 0.75;
+  cursor: default;
+}
