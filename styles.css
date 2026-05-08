@@ -202,3 +202,68 @@ section{
 
   .sidebar.open{ left:0; }
 }
+/* =========================/*PMENY (dropdown)
+   ========================= */
+.brand-link{
+  text-decoration:none;
+  color: var(--blue-900);
+  font-weight:700;
+}
+
+.topnav{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.dropdown{
+  position:relative;
+}
+
+.dropbtn{
+  font: inherit;
+  color: var(--blue-800);
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.dropbtn:hover{
+  background: var(--hover);
+}
+
+.dropdown-menu{
+  display:none;
+  position:absolute;
+  left:0;
+  top: calc(100% + 6px);
+  min-width:260px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:8px;
+  box-shadow:0 10px 30px rgba(0,0,0,.10);
+  padding:6px;
+  z-index:300;
+}
+
+.dropdown.open .dropdown-menu{
+  display:block;
+}
+
+.dropdown-menu a{
+  display:block;
+  padding:8px 10px;
+  border-radius:6px;
+  color: var(--blue-800);
+  text-decoration:none;
+  font-size:13px;
+  line-height:1.2;
+}
+
+.dropdown-menu a:hover{
+  background: var(--hover);
+}
+
