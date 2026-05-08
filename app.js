@@ -255,7 +255,7 @@ function buildTopMenu(plans) {
         fetch(URL_PLAN, { cache: "no-store" }).then(r => r.json()),
         fetch(URL_MAAL, { cache: "no-store" }).then(r => r.json())
       ]);
-
+buildTopMenu(plans);
       clearUI();
 
       const plan = plans.find(p => p.planID === currentPlanId);
