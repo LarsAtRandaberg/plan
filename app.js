@@ -173,7 +173,82 @@
 
     (children.get(null) || []).forEach(g => menuEl.appendChild(renderNode(g, 0)));
   }
+function planTypeLabel(planTyper) {
+  const labels = {
+    701100000: "Kommuneplanen",
+    701100001: "Strategier",
+    701100002: "Handlings- og økonomiplaner"
+  };
+  return labels[planTyper] || `Plantype ${planTyper}`;
+}
 
+function buildTopMenu(plans) {
+  const topnav = document.getElementById("topnav");
+  if (!topnav) return;
+
+  topnav.innerHTML = "";
+
+  // Gruppér planer per planTyper
+  const groups = new Map();
+  plans.forEach(p => {
+    const key = p.planTyper;
+    if (!groups.has(key)) groups.set(key, []);
+    groups.get(key).push(p);
+  });
+
+  // Stabil rekkefølge: sortér plantyper
+  const typeKeys = Array.from(groups.keys()).sort((a, b) => a - b);
+
+  // Sortér planer innen hver gruppe alfabetisk
+  const collator = new Intl.Collator("nb", { sensitivity: "base" });
+  typeKeys.forEach(k => {
+    groups.get(k).sort((a, b) => collator.compare(a.planNavn || "", b.planNavn || ""));
+  });
+
+  // Lag en dropdown per plantype
+  typeKeys.forEach(typeKey => {
+    const dd = document.createElement("div");
+    dd.className = "dropdown";
+
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "dropbtn";
+    btn.setAttribute("aria-haspopup", "true");
+    btn.setAttribute("aria-expanded", "false");
+    btn.textContent = planTypeLabel(typeKey);
+
+    const menu = document.createElement("div");
+    menu.className = "dropdown-menu";
+
+    groups.get(typeKey).forEach(p => {
+      const a = document.createElement("a");
+      a.href = `?id=${encodeURIComponent(p.planID)}`;
+      a.textContent = p.planNavn || "(uten navn)";
+      menu.appendChild(a);
+    });
+
+    btn.addEventListener("click", () => {
+      // Lukk andre som er åpne
+      document.querySelectorAll(".dropdown.open").forEach(x => {
+        if (x !== dd) x.classList.remove("open");
+      });
+
+      dd.classList.toggle("open");
+      btn.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
+    });
+
+    dd.appendChild(btn);
+    dd.appendChild(menu);
+    topnav.appendChild(dd);
+  });
+
+  // Lukk ved klikk utenfor
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll(".dropdown.open").forEach(dd => {
+      if (!dd.contains(e.target)) dd.classList.remove("open");
+    });
+  });
+}
   async function init() {
     try {
       const [plans, goals] = await Promise.all([
