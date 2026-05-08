@@ -400,7 +400,8 @@ function renderInnhold(innhold, planId) {
       const srcIframe = tmp.querySelector("iframe");
 
       if (srcIframe) {
-        const iframeH = parseFloat(srcIframe.getAttribute("height")) || 400;
+        const origW   = rad.innholdBredde || parseFloat(srcIframe.getAttribute("width"))  || 600;
+        const iframeH = rad.innholdHøyde  || parseFloat(srcIframe.getAttribute("height")) || 400;
         const src     = srcIframe.getAttribute("src") || "";
 
         const pbiHeader = document.createElement("div");
