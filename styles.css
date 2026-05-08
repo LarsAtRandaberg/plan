@@ -576,7 +576,21 @@ section h2 {
 @media (max-width: 768px) {
   .menu-btn { display: flex; }
   .topnav { display: none; }
+  .topnav-mobile {
+    display: flex;
+    align-items: center;
+  }
 
+  .topnav-mobile-btn {
+    background: rgba(192,221,151,0.18);
+    color: var(--green-200);
+    border: 0.5px solid rgba(192,221,151,0.3);
+    border-radius: 20px;
+    padding: 5px 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+  }
   .hero { padding: 20px 16px 18px; }
   .hero-title { font-size: 17px; }
 
