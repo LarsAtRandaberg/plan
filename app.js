@@ -20,6 +20,18 @@
   const params = new URLSearchParams(location.search);
   const explicitId = params.get("id");
   let currentPlanId = explicitId || DEFAULT_PLAN_ID;
+  function updateKommuneplanButtonState() {
+  const btn = document.getElementById("btnKommuneplan");
+  if (!btn) return;
+
+  const isDefault = (currentPlanId === DEFAULT_PLAN_ID);
+
+  btn.classList.toggle("is-selected", isDefault);
+  btn.classList.toggle("is-disabled", isDefault);
+
+  if (isDefault) btn.setAttribute("aria-current", "page");
+  else btn.removeAttribute("aria-current");
+}
 
   if (!explicitId) {
     history.replaceState(null, "", `?id=${encodeURIComponent(DEFAULT_PLAN_ID)}${location.hash}`);
