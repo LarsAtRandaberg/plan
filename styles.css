@@ -575,7 +575,6 @@ section h2 {
 ---------------------------------------*/
 @media (max-width: 768px) {
   .menu-btn { display: flex; }
-  .brand-name { display: none; }
   .topnav { display: none; }
 
   .hero { padding: 20px 16px 18px; }
