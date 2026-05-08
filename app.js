@@ -386,16 +386,11 @@
         blokk.appendChild(img);
       }
 
-      if (rad.pbiEmbed) {
-        const FOOTER_PX = 32;
-        const tmp = document.createElement("div");
-        tmp.innerHTML = rad.pbiEmbed;
-        const srcIframe = tmp.querySelector("iframe");
-
-        if (srcIframe) {
-          const origW   = rad.innholdBredde  || parseFloat(srcIframe.getAttribute("width"))  || 600;
-          const iframeH = rad.innholdHøyde   || parseFloat(srcIframe.getAttribute("height")) || 400;
-          const src     = srcIframe.getAttribute("src") || "";
+        if (rad.pbiUrl) {
+          const FOOTER_PX = 56;
+          const origW   = rad.innholdBredde || 600;
+          const iframeH = rad.innholdHøyde  || 400;
+          const src     = rad.pbiUrl;
 
           const pbiHeader = document.createElement("div");
           pbiHeader.className = "innhold-pbi-header";
@@ -429,13 +424,6 @@
           wrapper.style.maxWidth = "100%";
           wrapper.style.margin = "0 auto";
           wrapper.style.height = (iframeH - FOOTER_PX) + "px";
-
-          srcIframe.setAttribute("width", String(origW));
-          srcIframe.setAttribute("height", String(iframeH + FOOTER_PX));
-          srcIframe.style.border = "none";
-          srcIframe.style.display = "block";
-
-          wrapper.appendChild(srcIframe);
           blokk.appendChild(wrapper);
         }
       }
