@@ -6,7 +6,7 @@
     "overskrift": "Fakta om Randaberg",
     "brodtekst": "Randaberg er en av Norges minste kommuner i areal, med 24,72 km². Kommunen hadde 11 867 innbyggere høsten 2024. Vi er en del av Stavanger-regionen og grenser til Stavanger og Rennesøy.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Tekst", "visningsrekkefølge": 1
   },
@@ -17,7 +17,7 @@
     "overskrift": "Befolkning og vekst",
     "brodtekst": "Vi er 11 867 innbyggere høsten 2024. Kommunen planlegger for fortsatt vekst innenfor stramme arealrammer, med fokus på å utvikle eksisterende utbygde områder fremfor å bygge ned landbruksareal.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": "<iframe title=\"2026-T1-NIBOR\" width=\"600\" height=\"373.5\" src=\"https://app.powerbi.com/view?r=eyJrIjoiOTA3N2RiYjItODE1MS00OTg4LWJiYmMtMTIxNTQ5OTgxYjY2IiwidCI6ImE1OGExOTQ5LTYxODgtNDEwZi1hOWNkLTMyMjNjNzUyYjAzNSIsImMiOjh9\" frameborder=\"0\" allowFullScreen=\"true\"></iframe>",
+    "pbiUrl": "https://app.powerbi.com/view?r=eyJrIjoiYjkxM2RjYzMtNzYxMy00OGE2LWEwYzQtN2ZmM2JlMzU4MzY3IiwidCI6ImE1OGExOTQ5LTYxODgtNDEwZi1hOWNkLTMyMjNjNzUyYjAzNSIsImMiOjh9",
     "innholdBredde": 980, "innholdHøyde": 500,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "PBI-rapport", "visningsrekkefølge": 2
@@ -30,7 +30,7 @@
     "brodtekst": "Visjonen handler om å ta vare på det særpregede ved Randaberg: nærhet til natur, korte avstander og et aktivt lokalsamfunn.",
     "bildeUrl": "https://via.placeholder.com/800x400?text=Den+grønne+landsbyen",
     "bildeAltTekst": "Flyfoto over Randaberg med landbruksareal og bebyggelse",
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Bilde", "visningsrekkefølge": 3
   },
@@ -41,7 +41,7 @@
     "overskrift": "Vi former Randabergs fremtid – sammen",
     "brodtekst": "Gjennom arbeidet med kommuneplanen har innbyggere, næringsliv, lag og organisasjoner bidratt med innspill.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": "https://opengov.360online.com/Meetings/randaberg/File/Details/663743.pdf",
     "vedleggEtikett": "Forslag samfunnsdel kommuneplan (PDF)",
     "innholdstype": "Vedlegg", "visningsrekkefølge": 4
@@ -53,7 +53,7 @@
     "overskrift": "Hva mener vi med gode hverdagsliv?",
     "brodtekst": "Gode hverdagsliv handler om at alle innbyggere – uansett alder, bakgrunn og livssituasjon – skal ha mulighet til å leve meningsfulle og trygge liv i Randaberg.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Tekst", "visningsrekkefølge": 1
   },
@@ -64,7 +64,7 @@
     "overskrift": "Status oppvekst i Randaberg",
     "brodtekst": "Randaberg skårer gjennomgående godt på levekårsindekser for barn og unge. Kommunen prioriterer tidlig innsats og tverrfaglig samarbeid.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "PBI-rapport", "visningsrekkefølge": 1
   },
@@ -75,7 +75,7 @@
     "overskrift": "Alderssammensetning og fremtidig behov",
     "brodtekst": "Andelen innbyggere over 65 år vil øke betydelig frem mot 2040. Dette stiller krav til planlegging av tjenester, boliger og infrastruktur for en eldre befolkning.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "PBI-rapport", "visningsrekkefølge": 1
   },
@@ -86,7 +86,7 @@
     "overskrift": "Klimamål og utslippsregnskap",
     "brodtekst": "Randaberg kommune arbeider mot å redusere klimagassutslippene betydelig innen 2030. Transport er den største utslippskilden og krever særlig oppmerksomhet i planperioden.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "PBI-rapport", "visningsrekkefølge": 1
   },
@@ -97,7 +97,7 @@
     "overskrift": "Klimaplan 2022–2030",
     "brodtekst": "Kommunens klimaplan beskriver konkrete tiltak og virkemidler for å nå klimamålene.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": "https://www.randaberg.kommune.no/globalassets/klima/klimaplan.pdf",
     "vedleggEtikett": "Klimaplan 2022–2030 (PDF)",
     "innholdstype": "Vedlegg", "visningsrekkefølge": 2
@@ -110,7 +110,7 @@
     "brodtekst": "Randaberg er en av de mest intensivt drevne landbrukskommunene i Rogaland. Jordvern er derfor en sentral verdi i all arealplanlegging.",
     "bildeUrl": "https://via.placeholder.com/800x400?text=Landbruk+Randaberg",
     "bildeAltTekst": "Dyrket mark i Randaberg med Tungenes fyr i bakgrunnen",
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Bilde", "visningsrekkefølge": 1
   },
@@ -121,7 +121,7 @@
     "overskrift": "Hva betyr «Kommunen er vi»?",
     "brodtekst": "Kommunen er ikke bare et forvaltningsorgan – den er fellesskapet vi alle er en del av.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Tekst", "visningsrekkefølge": 1
   },
@@ -132,7 +132,7 @@
     "overskrift": "Innbyggerundersøkelsen 2024",
     "brodtekst": "Innbyggerundersøkelsen viser at et stort flertall er fornøyd med kommunens tjenester.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "PBI-rapport", "visningsrekkefølge": 1
   },
@@ -144,7 +144,7 @@
     "brodtekst": "Randaberg har svært begrenset tilgang på nye utbyggingsarealer. Kommunen konsentrerer utvikling til eksisterende sentrumsområder og utbygde felt.",
     "bildeUrl": "https://via.placeholder.com/800x400?text=Arealkart+Randaberg",
     "bildeAltTekst": "Arealkart som viser utbyggingsområder og landbruksareal i Randaberg",
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Bilde", "visningsrekkefølge": 1
   },
@@ -155,7 +155,7 @@
     "overskrift": "Hva kjennetegner Randaberg-samfunnet?",
     "brodtekst": "Randaberg er et lokalsamfunn med sterke frivillige tradisjoner, et aktivt næringsliv og tette relasjoner mellom innbyggere.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Tekst", "visningsrekkefølge": 1
   },
@@ -166,7 +166,7 @@
     "overskrift": "Levekårsdata for Randaberg",
     "brodtekst": "Levekårsundersøkelser viser at Randaberg generelt har gode forutsetninger for gode fellesskap.",
     "bildeUrl": null, "bildeAltTekst": null,
-    "pbiEmbed": null, "innholdBredde": null, "innholdHøyde": null,
+    "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "PBI-rapport", "visningsrekkefølge": 1
   }
