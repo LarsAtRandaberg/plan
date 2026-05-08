@@ -5,6 +5,7 @@
   const DEFAULT_PLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
   const URL_PLAN = "data/plan.json";
   const URL_MAAL = "data/maal.json";
+  const URL_INNHOLD = "data/innhold.json";
 
   // =========================
   // DOM
@@ -375,15 +376,73 @@
     history.pushState(null, "", `?id=${encodeURIComponent(planId)}${location.hash || ""}`);
     init(); // re-render
   }
+// =========================
+// Innholdsblokker per mål
+// =========================
+function renderInnhold(innhold, planId) {
+  const radene = innhold
+    .filter((r) => r.innholdPlan === planId)
+    .sort((a, b) => a.visningsrekkefølge - b.visningsrekkefølge);
+
+  radene.forEach((rad) => {
+    const anchorId = `maal-${safeId(rad.innholdMaal)}`;
+    const section = document.getElementById(anchorId);
+    if (!section) return;
+
+    const blokk = document.createElement("div");
+    blokk.className = "innhold-blokk";
+
+    if (rad.overskrift) {
+      const h3 = document.createElement("h3");
+      h3.textContent = rad.overskrift;
+      blokk.appendChild(h3);
+    }
+
+    if (rad.brodtekst) {
+      const p = document.createElement("p");
+      p.textContent = rad.brodtekst;
+      blokk.appendChild(p);
+    }
+
+    if (rad.bildeUrl) {
+      const img = document.createElement("img");
+      img.src = rad.bildeUrl;
+      img.alt = rad.bildeAltTekst || "";
+      img.className = "innhold-bilde";
+      blokk.appendChild(img);
+    }
+
+    if (rad.pbiUrl) {
+      const iframe = document.createElement("iframe");
+      iframe.src = rad.pbiUrl;
+      iframe.className = "innhold-pbi";
+      iframe.allowFullscreen = true;
+      blokk.appendChild(iframe);
+    }
+
+    if (rad.vedleggUrl) {
+      const a = document.createElement("a");
+      a.href = rad.vedleggUrl;
+      a.textContent = rad.vedleggEtikett || "Last ned vedlegg";
+      a.className = "innhold-vedlegg";
+      a.target = "_blank";
+      a.rel = "noopener";
+      blokk.appendChild(a);
+    }
+
+    section.appendChild(blokk);
+  });
+}
 
   // =========================
   // Init
   // =========================
   async function init() {
     try {
-      const [plans, goals] = await Promise.all([
+      const [plans, goals, innhold] = await Promise.all([
         fetch(URL_PLAN, { cache: "no-store" }).then((r) => r.json()),
         fetch(URL_MAAL, { cache: "no-store" }).then((r) => r.json()),
+        fetch(URL_INNHOLD, { cache: "no-store" }).then((r) => r.json()),
       ]);
 
       buildTopMenu(plans);
@@ -401,6 +460,7 @@
       }
 
       buildTree(goalsForPlan);
+      renderInnhold(innhold, currentPlanId);
       setupScrollSpy();
 
       if (location.hash) {
