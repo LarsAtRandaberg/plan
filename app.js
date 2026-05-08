@@ -429,12 +429,15 @@ function renderInnhold(innhold, planId) {
         blokk.appendChild(pbiHeader);
 
         const wrapper = document.createElement("div");
+        const origW = parseFloat(srcIframe.getAttribute("width")) || 600;
+        
         wrapper.style.overflow     = "hidden";
         wrapper.style.borderRadius = "0 0 8px 8px";
-        wrapper.style.width        = "100%";
+        wrapper.style.width        = origW + "px";
+        wrapper.style.maxWidth     = "100%";
         wrapper.style.height       = (iframeH - FOOTER_PX) + "px";
-
-        srcIframe.setAttribute("width",  "100%");
+        
+        srcIframe.setAttribute("width",  String(origW));
         srcIframe.setAttribute("height", String(iframeH + FOOTER_PX));
         srcIframe.style.border  = "none";
         srcIframe.style.display = "block";
