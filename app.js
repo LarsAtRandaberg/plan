@@ -171,7 +171,50 @@
     });
     dropdownClickListenerAttached = true;
   }
+function buildMobileTopMenu(plans) {
+  const btn = document.getElementById("topnav-mobile-btn");
+  const container = document.getElementById("topnav-mobile");
+  if (!btn || !container) return;
 
+  let mobileMenu = document.getElementById("topnav-mobile-menu");
+  if (mobileMenu) mobileMenu.remove();
+
+  mobileMenu = document.createElement("div");
+  mobileMenu.id = "topnav-mobile-menu";
+  mobileMenu.className = "dropdown-menu";
+  mobileMenu.style.left = "0";
+  mobileMenu.style.minWidth = "220px";
+
+  const collator = new Intl.Collator("nb", { sensitivity: "base" });
+  const sorted = plans.slice().sort(function(a, b) {
+    return collator.compare(a.planNavn || "", b.planNavn || "");
+  });
+
+  sorted.forEach(function(p) {
+    const a = document.createElement("a");
+    a.href = "?id=" + encodeURIComponent(p.planID);
+    a.textContent = p.planNavn || "(uten navn)";
+    a.addEventListener("click", function(e) {
+      e.preventDefault();
+      navigateToPlan(p.planID);
+      mobileMenu.style.display = "none";
+    });
+    mobileMenu.appendChild(a);
+  });
+
+  container.appendChild(mobileMenu);
+
+  btn.addEventListener("click", function(e) {
+    e.stopPropagation();
+    const isOpen = mobileMenu.style.display === "block";
+    mobileMenu.style.display = isOpen ? "none" : "block";
+    if (topbar) topbar.classList.remove("is-hidden");
+  });
+
+  document.addEventListener("click", function() {
+    mobileMenu.style.display = "none";
+  });
+}
   function buildTopMenu(plans) {
     if (!topnav) return;
     topnav.innerHTML = "";
