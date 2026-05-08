@@ -216,6 +216,7 @@ function buildTopMenu(plans) {
     btn.setAttribute("aria-haspopup", "true");
     btn.setAttribute("aria-expanded", "false");
     btn.textContent = planTypeLabel(typeKey);
+    if (typeKey === 701100000) btn.id = "btnKommuneplan";
 
     const menu = document.createElement("div");
     menu.className = "dropdown-menu";
