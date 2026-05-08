@@ -1,141 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html lang="no">
 <head>
-  <meta charset="UTF-8">
-  <title>Planportal</title>
-  
-<style>
-  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin: 0; }
-  .topbar {
-    display: flex;
-    align-items: center;
-    gap: 24px;
-    padding: 12px 16px;
-    border-bottom: 1px solid #e5e5e5;
-    background: white;
-    position: sticky;
-    top: 0;
-  }
-  .brand {
-    font-weight: 700;
-    white-space: nowrap;
-  }
-  .nav {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    flex-wrap: wrap;
-  }
-  .nav a, .nav button {
-    font: inherit;
-    color: #111;
-    text-decoration: none;
-    background: none;
-    border: 0;
-    padding: 8px 10px;
-    border-radius: 6px;
-    cursor: pointer;
-  }
-  .nav a:hover, .nav button:hover { background: #f2f2f2; }
-
-  /* Dropdown */
-  .dropdown { position: relative; }
-  .dropdown-menu {
-    display: none;
-    position: absolute;
-    left: 0;
-    top: calc(100% + 6px);
-    min-width: 260px;
-    background: white;
-    border: 1px solid #e5e5e5;
-    border-radius: 8px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
-    padding: 6px;
-    z-index: 10;
-  }
-  .dropdown-menu a {
-    display: block;
-    padding: 8px 10px;
-  }
-  .dropdown.open .dropdown-menu { display: block; }
-
-  .container { padding: 16px; }
-</style>
-
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PlanPortal</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
+  <div class="topbar">
+    <div>PlanPortal</div>
+    <div class="menu-btn" id="menuBtn">☰</div>
+  </div>
 
-<header class="topbar">
-  <div class="brand">PlanPortal Randaberg kommune</div>
+  <div class="layout">
+    <aside class="sidebar" id="sidebar">
+      <h3 id="sidebarTitle">Planer</h3>
+      <div id="menu"></div>
+    </aside>
 
-  <nav class="nav" aria-label="Hovedmeny">
-    <a href="index.html">Kommuneplanen</a>
+    <main class="content">
+      <h1 id="tittel">PlanPortal</h1>
+      <div id="innhold"></div>
+    </main>
+  </div>
 
-    <div class="dropdown" id="ddStrategier">
-      <button type="button" aria-haspopup="true" aria-expanded="false">Strategier</button>
-      <div class="dropdown-menu" role="menu">
-        <a href="#" role="menuitem">Laster strategier…</a>
-      </div>
-    </div>
-
-    <div class="dropdown" id="ddHop">
-      <button type="button" aria-haspopup="true" aria-expanded="false">Handlings- og økonomiplaner</button>
-      <div class="dropdown-menu" role="menu">
-        <a href="#" role="menuitem">Laster HØP…</a>
-      </div>
-    </div>
-  </nav>
-</header>
-
-<div class="container">
-
-<h1>Planer</h1>
-
-<div id="planer"></div>
-
-<script>
-fetch("https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json")
-  .then(res => res.json())
-  .then(data => {
-    const container = document.getElementById("planer");
-
-
-data.forEach(plan => {
-  const a = document.createElement("a");
-  a.href = `plan.html?id=${encodeURIComponent(plan.planID)}`;
-  a.innerText = plan.planNavn;
-  a.style.display = "block";
-  a.style.padding = "6px 0";
-  container.appendChild(a);
-});
-
-  });
-</script>
-</div>
-  
-<script>
-  function setupDropdown(id) {
-    const dd = document.getElementById(id);
-    const btn = dd.querySelector("button");
-    btn.addEventListener("click", () => {
-      const isOpen = dd.classList.toggle("open");
-      btn.setAttribute("aria-expanded", String(isOpen));
-    });
-  }
-  setupDropdown("ddStrategier");
-  setupDropdown("ddHop");
-
-  // Lukk dropdown hvis man klikker utenfor
-  document.addEventListener("click", (e) => {
-    const open = document.querySelectorAll(".dropdown.open");
-    open.forEach(dd => {
-      if (!dd.contains(e.target)) {
-        dd.classList.remove("open");
-        dd.querySelector("button").setAttribute("aria-expanded", "false");
-      }
-    });
-  });
-</script>
-
+  <script src="app.js"></script>
 </body>
 </html>
