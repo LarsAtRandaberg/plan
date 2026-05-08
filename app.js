@@ -15,6 +15,20 @@
 
   if (!menuEl || !contentEl || !titleEl) return;
 
+  const sidebar = document.getElementById("sidebar");
+const menuBtn = document.getElementById("menuBtn");
+const sidebarTitle = document.getElementById("sidebarTitle");
+const menuEl = document.getElementById("menu");
+const contentEl = document.getElementById("innhold");
+const titleEl = document.getElementById("tittel");
+const topnav = document.getElementById("topnav");
+
+if (!menuEl || !contentEl || !titleEl) return;
+
+if (menuBtn && sidebar) {
+  menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
+}
+
   // Mobil: åpne/lukke innholdsmeny
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
