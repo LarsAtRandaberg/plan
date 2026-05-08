@@ -1,4 +1,5 @@
-(() => {(()  // =========================
+(() => {
+  // =========================
   // Konfig
   // =========================
   const DEFAULT_PLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
@@ -42,7 +43,7 @@
     );
   }
 
-  if (sidebarTitle) sidebarTitle.innerText = "Innhold";
+  if (sidebarTitle) sidebarTitle.textContent = "Innhold";
 
   // =========================
   // Hide/show topbar ved scroll
@@ -104,7 +105,9 @@
 
     const section = document.createElement("section");
     section.id = anchorId;
-    section.innerHTML = `<h2>${goal.maalNavn || "(uten navn)"}</h2>`;
+    const heading = document.createElement("h2");
+    heading.textContent = goal.maalNavn || "(uten navn)";
+    section.appendChild(heading);
     contentEl.appendChild(section);
     return anchorId;
   }
@@ -120,7 +123,7 @@
     const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
     if (!activeLink) return;
 
-    // Åpne bare aktiv sti (så ikke “alt åpner seg”)
+    // Åpne bare aktiv sti (så ikke "alt åpner seg")
     const path = [];
     let node = activeLink.closest(".node");
 
@@ -189,6 +192,18 @@
       701100002: "Handlings- og økonomiplaner",
     };
     return labels[planTyper] || `Plantype ${planTyper}`;
+  }
+
+  let dropdownClickListenerAttached = false;
+
+  function attachDropdownListener() {
+    if (dropdownClickListenerAttached) return;
+    document.addEventListener("click", (e) => {
+      document.querySelectorAll(".dropdown.open").forEach((dd) => {
+        if (!dd.contains(e.target)) dd.classList.remove("open");
+      });
+    });
+    dropdownClickListenerAttached = true;
   }
 
   function buildTopMenu(plans) {
@@ -265,13 +280,6 @@
       topnav.appendChild(dd);
     });
 
-    // Lukk ved klikk utenfor
-    document.addEventListener("click", (e) => {
-      document.querySelectorAll(".dropdown.open").forEach((dd) => {
-        if (!dd.contains(e.target)) dd.classList.remove("open");
-      });
-    });
-
     // Nå finnes btnKommuneplan i DOM
     updateKommuneplanButtonState();
   }
@@ -336,7 +344,7 @@
 
       const a = document.createElement("a");
       a.href = `#${anchorId}`;
-      a.innerText = goal.maalNavn || "(uten navn)";
+      a.textContent = goal.maalNavn || "(uten navn)";
       a.addEventListener("click", () => {
         if (window.matchMedia("(max-width: 768px)").matches) {
           sidebar?.classList.remove("open");
@@ -379,11 +387,12 @@
       ]);
 
       buildTopMenu(plans);
+      attachDropdownListener();
 
       clearUI();
 
       const plan = plans.find((p) => p.planID === currentPlanId);
-      titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
+      titleEl.textContent = plan ? plan.planNavn : "Plan ikke funnet";
 
       const goalsForPlan = goals.filter((m) => m.maalPlan === currentPlanId);
       if (goalsForPlan.length === 0) {
@@ -394,11 +403,14 @@
       buildTree(goalsForPlan);
       setupScrollSpy();
 
-      if (location.hash && document.querySelector(location.hash)) {
-        document.querySelector(location.hash).scrollIntoView({ behavior: "smooth", block: "start" });
+      if (location.hash) {
+        const hashElement = document.getElementById(location.hash.substring(1));
+        if (hashElement) {
+          hashElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
       }
     } catch (e) {
-      titleEl.innerText = "Feil";
+      titleEl.textContent = "Feil";
       contentEl.innerHTML = "<p>Det oppstod en feil ved lasting av data.</p>";
       console.error(e);
     }
