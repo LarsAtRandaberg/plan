@@ -427,6 +427,7 @@
           wrapper.style.borderRadius = "0 0 8px 8px";
           wrapper.style.width = (origW+50) + "px";
           wrapper.style.maxWidth = "100%";
+          wrapper.style.margin = "0 auto";
           wrapper.style.height = (iframeH - FOOTER_PX) + "px";
 
           srcIframe.setAttribute("width", String(origW));
