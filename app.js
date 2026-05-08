@@ -542,6 +542,7 @@ function buildMobileTopMenu(plans) {
       ]);
 
       buildTopMenu(plans);
+      buildMobileTopMenu(plans);
       attachDropdownListener();
       clearUI();
 
