@@ -386,46 +386,17 @@
         blokk.appendChild(img);
       }
 
-        if (rad.pbiUrl) {
-          const FOOTER_PX = 56;
-          const origW   = rad.innholdBredde || 600;
-          const iframeH = rad.innholdHøyde  || 400;
-          const src     = rad.pbiUrl;
+       const iframe = document.createElement("iframe");
+iframe.src = src;
+iframe.setAttribute("width",  String(origW));
+iframe.setAttribute("height", String(iframeH + FOOTER_PX));
+iframe.setAttribute("scrolling", "no");
+iframe.setAttribute("frameborder", "0");
+iframe.allowFullscreen = true;
+iframe.style.border  = "none";
+iframe.style.display = "block";
 
-          const pbiHeader = document.createElement("div");
-          pbiHeader.className = "innhold-pbi-header";
-
-          const pbiIcon = document.createElement("i");
-          pbiIcon.className = "ti ti-chart-bar";
-          pbiIcon.setAttribute("aria-hidden", "true");
-
-          const pbiSpan = document.createElement("span");
-          pbiSpan.appendChild(pbiIcon);
-          pbiSpan.appendChild(document.createTextNode(" " + (rad.overskrift || "Power BI-rapport")));
-
-          const pbiLink = document.createElement("a");
-          pbiLink.href = src;
-          pbiLink.target = "_blank";
-          pbiLink.rel = "noopener";
-          pbiLink.setAttribute("aria-label", "Åpne i nytt vindu");
-          pbiLink.style.color = "var(--green-600)";
-          const extIcon = document.createElement("i");
-          extIcon.className = "ti ti-external-link";
-          pbiLink.appendChild(extIcon);
-
-          pbiHeader.appendChild(pbiSpan);
-          pbiHeader.appendChild(pbiLink);
-          blokk.appendChild(pbiHeader);
-
-          const wrapper = document.createElement("div");
-          wrapper.style.overflow = "hidden";
-          wrapper.style.borderRadius = "0 0 8px 8px";
-          wrapper.style.width = (origW+50) + "px";
-          wrapper.style.maxWidth = "100%";
-          wrapper.style.margin = "0 auto";
-          wrapper.style.height = (iframeH - FOOTER_PX) + "px";
-          blokk.appendChild(wrapper);
-        }
+wrapper.appendChild(iframe);
       }
 
       if (rad.vedleggUrl) {
@@ -438,7 +409,7 @@
         const vIcon = document.createElement("div");
         vIcon.className = "innhold-vedlegg-icon";
         const vI = document.createElement("i");
-        vI.className = "ti ti-file-type-pdf";
+        vI.className = "ti ti-file-type-pdf";      
         vI.setAttribute("aria-hidden", "true");
         vIcon.appendChild(vI);
 
