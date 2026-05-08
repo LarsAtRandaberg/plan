@@ -8,7 +8,8 @@
   const params = new URLSearchParams(window.location.search);
   const planId = params.get("id");
 
-  // Beholder dine eksisterende URL-er (som fungerer hos deg)
+  // Du kan bytte til "data/plan.json" og "data/maal.json" senere (mer robust),
+  // men vi lar disse stå siden de har fungert hos deg tidligere.
   const URL_PLAN = "https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/plan.json";
   const URL_MAAL = "https://raw.githubusercontent.com/LarsAtRandaberg/plan/main/data/maal.json";
 
@@ -165,28 +166,29 @@
   }
 
   async function init() {
-    // Hvis ingen id: vis enkel beskjed (du kan senere gjøre dette om til planliste)
-if (!planId) {
-  // LISTE-MODUS: vis planliste i hovedflate og bruk sidebar som navigasjon
-  titleEl.innerText = "Planer";
-  document.getElementById("sidebarTitle").innerText = "Planer";
-  menuEl.innerHTML = "";
-  contentEl.innerHTML = "<p>Velg en plan i listen.</p>";
+    // LISTE-MODUS når det ikke finnes ?id=...
+    if (!planId) {
+      titleEl.innerText = "Planer";
 
-  const planer = await fetch(URL_PLAN).then(r => r.json());
+      const sidebarTitle = document.getElementById("sidebarTitle");
+      if (sidebarTitle) sidebarTitle.innerText = "Planer";
 
-  // Bygg liste i sidebar
-  planer.forEach(p => {
-    const a = document.createElement("a");
-    a.href = `?id=${encodeURIComponent(p.planID)}`;
-    a.innerText = p.planNavn || "(uten navn)";
-    menuEl.appendChild(a);
-  });
+      menuEl.innerHTML = "";
+      contentEl.innerHTML = "<p>Velg en plan i listen.</p>";
 
-  // I liste-modus trenger vi ikke scroll-spy eller mål
-  return;
-}
-    // Sett tittel
+      const planer = await fetch(URL_PLAN).then(r => r.json());
+
+      planer.forEach(p => {
+        const a = document.createElement("a");
+        a.href = `?id=${encodeURIComponent(p.planID)}`;
+        a.innerText = p.planNavn || "(uten navn)";
+        menuEl.appendChild(a);
+      });
+
+      return;
+    }
+
+    // PLAN-MODUS når ?id=... finnes
     fetch(URL_PLAN)
       .then(r => r.json())
       .then(planer => {
@@ -194,7 +196,6 @@ if (!planId) {
         titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
       });
 
-    // Bygg meny + innhold
     const maal = await fetch(URL_MAAL).then(r => r.json());
 
     const maalForPlan = maal
@@ -211,7 +212,6 @@ if (!planId) {
 
     const byId = new Map(maalForPlan.map(m => [m.maalID, m]));
 
-    // children: parentId -> [barn]
     const children = new Map();
     function addChild(parentId, child) {
       if (!children.has(parentId)) children.set(parentId, []);
@@ -226,12 +226,10 @@ if (!planId) {
 
     const renderNode = renderNodeFactory(children);
 
-    // Render toppnivå
     (children.get(null) || []).forEach(m => {
       menuEl.appendChild(renderNode(m, 0));
     });
 
-    // Start scroll-spy når seksjoner finnes
     setupScrollSpy();
   }
 
