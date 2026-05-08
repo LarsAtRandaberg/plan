@@ -388,22 +388,41 @@
         blokk.appendChild(img);
       }
 
-      if (rad.pbiUrl) {
-        const pbiHeader = document.createElement("div");
-        pbiHeader.className = "innhold-pbi-header";
-        pbiHeader.innerHTML = `
-          <span><i class="ti ti-chart-bar" aria-hidden="true"></i>${rad.overskrift || "Power BI-rapport"}</span>
-          <a href="${rad.pbiUrl}" target="_blank" rel="noopener" aria-label="Åpne i nytt vindu" style="color:var(--green-600)">
-            <i class="ti ti-external-link"></i>
-          </a>`;
-        blokk.appendChild(pbiHeader);
+      if (rad.pbiEmbed) {
+        const FOOTER_PX = 32;
 
-        const iframe = document.createElement("iframe");
-        iframe.src           = rad.pbiUrl;
-        iframe.className     = "innhold-pbi";
-        iframe.allowFullscreen = true;
-        iframe.title         = rad.overskrift || "Power BI-rapport";
-        blokk.appendChild(iframe);
+        const tmp = document.createElement("div");
+        tmp.innerHTML = rad.pbiEmbed;
+        const srcIframe = tmp.querySelector("iframe");
+
+        if (srcIframe) {
+          const iframeH = parseFloat(srcIframe.getAttribute("height")) || 400;
+          const src     = srcIframe.getAttribute("src");
+
+          const pbiHeader = document.createElement("div");
+          pbiHeader.className = "innhold-pbi-header";
+          pbiHeader.innerHTML = `
+            <span><i class="ti ti-chart-bar" aria-hidden="true"></i>${rad.overskrift || "Power BI-rapport"}</span>
+            <a href="${src}" target="_blank" rel="noopener" aria-label="Åpne i nytt vindu" style="color:var(--green-600)">
+              <i class="ti ti-external-link"></i>
+            </a>`;
+          blokk.appendChild(pbiHeader);
+
+          const wrapper = document.createElement("div");
+          wrapper.style.overflow     = "hidden";
+          wrapper.style.borderRadius = "0 0 8px 8px";
+          wrapper.style.width        = "100%";
+          wrapper.style.height       = `${iframeH - FOOTER_PX}px`;
+
+          srcIframe.setAttribute("width",  "100%");
+          srcIframe.setAttribute("height", String(iframeH + FOOTER_PX));
+          srcIframe.style.border  = "none";
+          srcIframe.style.display = "block";
+
+          wrapper.appendChild(srcIframe);
+          blokk.appendChild(wrapper);
+        }
+      }
       }
 
       if (rad.vedleggUrl) {
