@@ -303,3 +303,13 @@ section{
   opacity: 0.75;
   cursor: default;
 }
+/* Skjul toppmeny ved scroll ned */
+.topbar.is-hidden {
+  transform: translateY(-110%);
+  transition: transform 180ms ease;
+}
+
+/* Normal tilstand (må ha transition på normalen også) */
+.topbar {
+  transition: transform 180ms ease;
+}
