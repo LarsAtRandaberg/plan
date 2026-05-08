@@ -387,7 +387,7 @@
       }
 
       if (rad.pbiUrl) {
-        const FOOTER_PX = 56;
+        const FOOTER_PX = 30;
         const origW   = rad.innholdBredde || 600;
         const iframeH = rad.innholdHøyde  || 400;
         const src     = rad.pbiUrl;
