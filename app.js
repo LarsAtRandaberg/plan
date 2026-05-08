@@ -11,34 +11,32 @@
   const contentEl = document.getElementById("innhold");
   const titleEl = document.getElementById("tittel");
 
+  const topnav = document.getElementById("topnav");
+
   if (!menuEl || !contentEl || !titleEl) return;
 
+  // Mobil: åpne/lukke innholdsmeny
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
   }
 
+  // URL -> plan
   const params = new URLSearchParams(location.search);
   const explicitId = params.get("id");
   let currentPlanId = explicitId || DEFAULT_PLAN_ID;
-  function updateKommuneplanButtonState() {
-  const btn = document.getElementById("btnKommuneplan");
-  if (!btn) return;
 
-  const isDefault = (currentPlanId === DEFAULT_PLAN_ID);
-
-  btn.classList.toggle("is-selected", isDefault);
-  btn.classList.toggle("is-disabled", isDefault);
-
-  if (isDefault) btn.setAttribute("aria-current", "page");
-  else btn.removeAttribute("aria-current");
-}
-
+  // Hvis id mangler: sett default i URL uten reload (behold hash)
   if (!explicitId) {
-    history.replaceState(null, "", `?id=${encodeURIComponent(DEFAULT_PLAN_ID)}${location.hash}`);
+    history.replaceState(
+      null,
+      "",
+      `?id=${encodeURIComponent(DEFAULT_PLAN_ID)}${location.hash}`
+    );
   }
 
   if (sidebarTitle) sidebarTitle.innerText = "Innhold";
 
+  // ---------- helpers ----------
   function safeId(text) {
     return String(text || "")
       .toLowerCase()
@@ -74,6 +72,7 @@
     const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
     if (!activeLink) return;
 
+    // Åpne bare aktiv sti
     const path = [];
     let node = activeLink.closest(".node");
     while (node) {
@@ -109,6 +108,110 @@
     setActiveLink(sections[0].id);
   }
 
+  // ---------- kommuneplan-knapp state ----------
+  function updateKommuneplanButtonState() {
+    const btn = document.getElementById("btnKommuneplan");
+    if (!btn) return;
+
+    const isDefault = (currentPlanId === DEFAULT_PLAN_ID);
+
+    btn.classList.toggle("is-selected", isDefault);
+    btn.classList.toggle("is-disabled", isDefault);
+
+    if (isDefault) btn.setAttribute("aria-current", "page");
+    else btn.removeAttribute("aria-current");
+  }
+
+  // ---------- top menu ----------
+  function planTypeLabel(planTyper) {
+    const labels = {
+      701100000: "Kommuneplanen",
+      701100001: "Strategier",
+      701100002: "Handlings- og økonomiplaner"
+    };
+    return labels[planTyper] || `Plantype ${planTyper}`;
+  }
+
+  function buildTopMenu(plans) {
+    if (!topnav) return;
+    topnav.innerHTML = "";
+
+    const groups = new Map();
+    plans.forEach(p => {
+      const key = p.planTyper;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push(p);
+    });
+
+    const typeKeys = Array.from(groups.keys()).sort((a, b) => a - b);
+
+    const collator = new Intl.Collator("nb", { sensitivity: "base" });
+    typeKeys.forEach(k => {
+      groups.get(k).sort((a, b) => collator.compare(a.planNavn || "", b.planNavn || ""));
+    });
+
+    typeKeys.forEach(typeKey => {
+      const dd = document.createElement("div");
+      dd.className = "dropdown";
+
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "dropbtn";
+      btn.setAttribute("aria-haspopup", "true");
+      btn.setAttribute("aria-expanded", "false");
+      btn.textContent = planTypeLabel(typeKey);
+
+      // Dette er knappen vi vil markere som valgt/inaktiv når DEFAULT_PLAN_ID er valgt
+      if (typeKey === 701100000) btn.id = "btnKommuneplan";
+
+      const menu = document.createElement("div");
+      menu.className = "dropdown-menu";
+
+      groups.get(typeKey).forEach(p => {
+        const a = document.createElement("a");
+        a.href = `?id=${encodeURIComponent(p.planID)}`;
+        a.textContent = p.planNavn || "(uten navn)";
+
+        // Naviger uten full reload
+        a.addEventListener("click", (e) => {
+          e.preventDefault();
+          navigateToPlan(p.planID);
+          dd.classList.remove("open");
+          btn.setAttribute("aria-expanded", "false");
+        });
+
+        menu.appendChild(a);
+      });
+
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+
+        // Lukk andre åpne dropdowns
+        document.querySelectorAll(".dropdown.open").forEach(x => {
+          if (x !== dd) x.classList.remove("open");
+        });
+
+        dd.classList.toggle("open");
+        btn.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
+      });
+
+      dd.appendChild(btn);
+      dd.appendChild(menu);
+      topnav.appendChild(dd);
+    });
+
+    // Lukk ved klikk utenfor
+    document.addEventListener("click", (e) => {
+      document.querySelectorAll(".dropdown.open").forEach(dd => {
+        if (!dd.contains(e.target)) dd.classList.remove("open");
+      });
+    });
+
+    // Viktig: Nå finnes btnKommuneplan i DOM → oppdater state
+    updateKommuneplanButtonState();
+  }
+
+  // ---------- tree ----------
   function buildTree(goalsForPlan) {
     const byId = new Map(goalsForPlan.map(g => [g.maalID, g]));
 
@@ -185,90 +288,26 @@
 
     (children.get(null) || []).forEach(g => menuEl.appendChild(renderNode(g, 0)));
   }
-function planTypeLabel(planTyper) {
-  const labels = {
-    701100000: "Kommuneplanen",
-    701100001: "Strategier",
-    701100002: "Handlings- og økonomiplaner"
-  };
-  return labels[planTyper] || `Plantype ${planTyper}`;
-}
 
-function buildTopMenu(plans) {
-  const topnav = document.getElementById("topnav");
-  if (!topnav) return;
+  // ---------- navigation ----------
+  function navigateToPlan(planId) {
+    currentPlanId = planId;
+    updateKommuneplanButtonState();
+    history.pushState(null, "", `?id=${encodeURIComponent(planId)}${location.hash || ""}`);
+    init(); // re-render
+  }
 
-  topnav.innerHTML = "";
-
-  // Gruppér planer per planTyper
-  const groups = new Map();
-  plans.forEach(p => {
-    const key = p.planTyper;
-    if (!groups.has(key)) groups.set(key, []);
-    groups.get(key).push(p);
-  });
-
-  // Stabil rekkefølge: sortér plantyper
-  const typeKeys = Array.from(groups.keys()).sort((a, b) => a - b);
-
-  // Sortér planer innen hver gruppe alfabetisk
-  const collator = new Intl.Collator("nb", { sensitivity: "base" });
-  typeKeys.forEach(k => {
-    groups.get(k).sort((a, b) => collator.compare(a.planNavn || "", b.planNavn || ""));
-  });
-
-  // Lag en dropdown per plantype
-  typeKeys.forEach(typeKey => {
-    const dd = document.createElement("div");
-    dd.className = "dropdown";
-
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "dropbtn";
-    btn.setAttribute("aria-haspopup", "true");
-    btn.setAttribute("aria-expanded", "false");
-    btn.textContent = planTypeLabel(typeKey);
-    if (typeKey === 701100000) btn.id = "btnKommuneplan";
-
-    const menu = document.createElement("div");
-    menu.className = "dropdown-menu";
-
-    groups.get(typeKey).forEach(p => {
-      const a = document.createElement("a");
-      a.href = `?id=${encodeURIComponent(p.planID)}`;
-      a.textContent = p.planNavn || "(uten navn)";
-      menu.appendChild(a);
-    });
-
-    btn.addEventListener("click", () => {
-      // Lukk andre som er åpne
-      document.querySelectorAll(".dropdown.open").forEach(x => {
-        if (x !== dd) x.classList.remove("open");
-      });
-
-      dd.classList.toggle("open");
-      btn.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
-    });
-
-    dd.appendChild(btn);
-    dd.appendChild(menu);
-    topnav.appendChild(dd);
-  });
-
-  // Lukk ved klikk utenfor
-  document.addEventListener("click", (e) => {
-    document.querySelectorAll(".dropdown.open").forEach(dd => {
-      if (!dd.contains(e.target)) dd.classList.remove("open");
-    });
-  });
-}
+  // ---------- init ----------
   async function init() {
     try {
       const [plans, goals] = await Promise.all([
         fetch(URL_PLAN, { cache: "no-store" }).then(r => r.json()),
         fetch(URL_MAAL, { cache: "no-store" }).then(r => r.json())
       ]);
-buildTopMenu(plans);
+
+      // Bygg toppmeny (må skje før vi oppdaterer kommuneplan-knapp state)
+      buildTopMenu(plans);
+
       clearUI();
 
       const plan = plans.find(p => p.planID === currentPlanId);
@@ -296,9 +335,9 @@ buildTopMenu(plans);
   window.addEventListener("popstate", () => {
     const p = new URLSearchParams(location.search);
     currentPlanId = p.get("id") || DEFAULT_PLAN_ID;
+    updateKommuneplanButtonState();
     init();
   });
 
   init();
 })();
-``
