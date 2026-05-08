@@ -391,8 +391,6 @@
         const origW   = rad.innholdBredde || 600;
         const iframeH = rad.innholdHøyde  || 400;
         const src     = rad.pbiUrl;
-        blokk.style.border = "none";
-        blokk.style.padding = "0";
 
         const pbiHeader = document.createElement("div");
         pbiHeader.className = "innhold-pbi-header";
