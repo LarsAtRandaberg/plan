@@ -104,7 +104,7 @@ section{
   color: var(--blue-900);
   font-weight:600;
   border-left:3px solid var(--activeBorder);
-  padding-left:5px; /* kompenser for border */
+  padding-left:5px;
 }
 
 /*---------------------------------------
@@ -118,7 +118,6 @@ section{
   gap:3px;
 }
 
-/* Toggle (trekant) */
 #menu .toggle{
   width:16px;
   height:16px;
@@ -145,12 +144,10 @@ section{
   content:"▾";
 }
 
-/* For noder uten barn: fjern toggle helt (unngår "bokser") */
 #menu .toggle.placeholder{
   display:none;
 }
 
-/* Children container: ingen egen innrykk her – innrykk styres av level på .row */
 #menu .children{
   display:none;
   margin:0;
@@ -163,21 +160,18 @@ section{
 }
 
 /*---------------------------------------
-  ENTydig innrykk per nivå
-  (dette er der /plan/ ofte blir "feil")
+  INNRYKK PER NIVÅ
 ---------------------------------------*/
 #menu .row.level-0{ padding-left:0; }
 #menu .row.level-1{ padding-left:10px; border-left:1px solid var(--line); }
 #menu .row.level-2{ padding-left:20px; border-left:1px solid var(--line); }
 #menu .row.level-3{ padding-left:30px; border-left:1px solid var(--line); }
 
-/* Typografi per nivå */
 #menu .row.level-0 a{ font-weight:700; color: var(--green-800); }
 #menu .row.level-1 a{ font-weight:600; color: var(--blue-800); }
 #menu .row.level-2 a,
 #menu .row.level-3 a{ font-weight:400; color: var(--blue-800); }
 
-/* Nivå 0: alltid åpent, ingen toggle (kun direkte rad!) */
 #menu .node.level-0 > .children{
   display:block;
 }
@@ -227,12 +221,12 @@ section{
   display:flex;
   align-items:center;
   gap:8px;
+  padding: 6px 8px;      /* ← ENDRET: var i :hover, nå alltid på */
+  border-radius: 6px;    /* ← ENDRET: likeså */
 }
 
 .brand-link:hover{
   background: var(--blue-200);
-  border-radius: 6px;
-  padding: 6px 8px;
 }
 
 .brand-logo{
@@ -304,7 +298,6 @@ section{
   background: var(--hover);
 }
 
-/* Valgt (planen er valgt) */
 .topnav .is-selected {
   background: var(--blue-200);
   color: var(--blue-900);
@@ -313,7 +306,6 @@ section{
   border-radius: 6px;
 }
 
-/* Inaktiv (ikke klikkbar) når du allerede er på samme plan */
 .topnav .is-disabled {
   pointer-events: none;
   opacity: 0.75;
