@@ -1,40 +1,34 @@
-(() => {
+(() => {(()  // =========================
+  // Konfig
+  // =========================
   const DEFAULT_PLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
-
   const URL_PLAN = "data/plan.json";
   const URL_MAAL = "data/maal.json";
+
+  // =========================
+  // DOM
+  // =========================
+  const topbar = document.querySelector(".topbar");
+  const topnav = document.getElementById("topnav");
 
   const sidebar = document.getElementById("sidebar");
   const menuBtn = document.getElementById("menuBtn");
   const sidebarTitle = document.getElementById("sidebarTitle");
+
   const menuEl = document.getElementById("menu");
   const contentEl = document.getElementById("innhold");
   const titleEl = document.getElementById("tittel");
 
-  const topnav = document.getElementById("topnav");
-
   if (!menuEl || !contentEl || !titleEl) return;
 
-  const sidebar = document.getElementById("sidebar");
-const menuBtn = document.getElementById("menuBtn");
-const sidebarTitle = document.getElementById("sidebarTitle");
-const menuEl = document.getElementById("menu");
-const contentEl = document.getElementById("innhold");
-const titleEl = document.getElementById("tittel");
-const topnav = document.getElementById("topnav");
-
-if (!menuEl || !contentEl || !titleEl) return;
-
-if (menuBtn && sidebar) {
-  menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
-}
-
-  // Mobil: åpne/lukke innholdsmeny
+  // Mobil: åpne/lukke venstremeny
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
   }
 
+  // =========================
   // URL -> plan
+  // =========================
   const params = new URLSearchParams(location.search);
   const explicitId = params.get("id");
   let currentPlanId = explicitId || DEFAULT_PLAN_ID;
@@ -50,7 +44,47 @@ if (menuBtn && sidebar) {
 
   if (sidebarTitle) sidebarTitle.innerText = "Innhold";
 
-  // ---------- helpers ----------
+  // =========================
+  // Hide/show topbar ved scroll
+  // =========================
+  (() => {
+    if (!topbar) return;
+
+    let lastY = window.scrollY;
+    let ticking = false;
+
+    function onScroll() {
+      const y = window.scrollY;
+      const delta = y - lastY;
+
+      // Ikke skjul toppmenyen når en dropdown er åpen
+      const dropdownOpen = document.querySelector(".dropdown.open");
+
+      if (!dropdownOpen && delta > 6 && y > 80) {
+        topbar.classList.add("is-hidden");
+      } else if (delta < -6) {
+        topbar.classList.remove("is-hidden");
+      }
+
+      lastY = y;
+      ticking = false;
+    }
+
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          window.requestAnimationFrame(onScroll);
+          ticking = true;
+        }
+      },
+      { passive: true }
+    );
+  })();
+
+  // =========================
+  // Hjelpere
+  // =========================
   function safeId(text) {
     return String(text || "")
       .toLowerCase()
@@ -76,7 +110,7 @@ if (menuBtn && sidebar) {
   }
 
   function setActiveLink(activeSectionId) {
-    document.querySelectorAll("#menu a").forEach(a => {
+    document.querySelectorAll("#menu a").forEach((a) => {
       const isActive = a.getAttribute("href") === `#${activeSectionId}`;
       a.classList.toggle("active", isActive);
       if (isActive) a.setAttribute("aria-current", "true");
@@ -86,48 +120,57 @@ if (menuBtn && sidebar) {
     const activeLink = document.querySelector(`#menu a[href="#${activeSectionId}"]`);
     if (!activeLink) return;
 
-    // Åpne bare aktiv sti
+    // Åpne bare aktiv sti (så ikke “alt åpner seg”)
     const path = [];
     let node = activeLink.closest(".node");
+
     while (node) {
       path.push(node);
       const parent = node.parentElement;
       node = parent ? parent.closest(".node") : null;
     }
+
     const pathSet = new Set(path);
 
-    document.querySelectorAll("#menu .node.open").forEach(n => {
+    document.querySelectorAll("#menu .node.open").forEach((n) => {
       if (n.classList.contains("level-0")) return;
       if (!pathSet.has(n)) n.classList.remove("open");
     });
 
-    path.forEach(n => n.classList.add("open"));
+    path.forEach((n) => n.classList.add("open"));
 
-    try { activeLink.scrollIntoView({ block: "nearest" }); } catch (_) {}
+    try {
+      activeLink.scrollIntoView({ block: "nearest" });
+    } catch (_) {}
   }
 
   function setupScrollSpy() {
     const sections = Array.from(document.querySelectorAll("main section[id]"));
     if (sections.length === 0) return;
 
-    const observer = new IntersectionObserver(entries => {
-      const visible = entries
-        .filter(e => e.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
-      if (visible.length > 0) setActiveLink(visible[0].target.id);
-    }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
+        if (visible.length > 0) setActiveLink(visible[0].target.id);
+      },
+      { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0.01 }
+    );
 
-    sections.forEach(s => observer.observe(s));
+    sections.forEach((s) => observer.observe(s));
     setActiveLink(sections[0].id);
   }
 
-  // ---------- kommuneplan-knapp state ----------
+  // =========================
+  // Kommuneplan-knapp state
+  // =========================
   function updateKommuneplanButtonState() {
     const btn = document.getElementById("btnKommuneplan");
     if (!btn) return;
 
-    const isDefault = (currentPlanId === DEFAULT_PLAN_ID);
+    const isDefault = currentPlanId === DEFAULT_PLAN_ID;
 
     btn.classList.toggle("is-selected", isDefault);
     btn.classList.toggle("is-disabled", isDefault);
@@ -136,12 +179,14 @@ if (menuBtn && sidebar) {
     else btn.removeAttribute("aria-current");
   }
 
-  // ---------- top menu ----------
+  // =========================
+  // Toppmeny (planTyper dropdown)
+  // =========================
   function planTypeLabel(planTyper) {
     const labels = {
       701100000: "Kommuneplanen",
       701100001: "Strategier",
-      701100002: "Handlings- og økonomiplaner"
+      701100002: "Handlings- og økonomiplaner",
     };
     return labels[planTyper] || `Plantype ${planTyper}`;
   }
@@ -150,21 +195,24 @@ if (menuBtn && sidebar) {
     if (!topnav) return;
     topnav.innerHTML = "";
 
+    // Gruppér pr planTyper
     const groups = new Map();
-    plans.forEach(p => {
+    plans.forEach((p) => {
       const key = p.planTyper;
       if (!groups.has(key)) groups.set(key, []);
       groups.get(key).push(p);
     });
 
+    // Stabil rekkefølge: sortér typekoder
     const typeKeys = Array.from(groups.keys()).sort((a, b) => a - b);
 
+    // Sortér planer alfabetisk inne i hver type
     const collator = new Intl.Collator("nb", { sensitivity: "base" });
-    typeKeys.forEach(k => {
+    typeKeys.forEach((k) => {
       groups.get(k).sort((a, b) => collator.compare(a.planNavn || "", b.planNavn || ""));
     });
 
-    typeKeys.forEach(typeKey => {
+    typeKeys.forEach((typeKey) => {
       const dd = document.createElement("div");
       dd.className = "dropdown";
 
@@ -175,13 +223,13 @@ if (menuBtn && sidebar) {
       btn.setAttribute("aria-expanded", "false");
       btn.textContent = planTypeLabel(typeKey);
 
-      // Dette er knappen vi vil markere som valgt/inaktiv når DEFAULT_PLAN_ID er valgt
+      // Kommuneplanen-knappen (for state)
       if (typeKey === 701100000) btn.id = "btnKommuneplan";
 
       const menu = document.createElement("div");
       menu.className = "dropdown-menu";
 
-      groups.get(typeKey).forEach(p => {
+      groups.get(typeKey).forEach((p) => {
         const a = document.createElement("a");
         a.href = `?id=${encodeURIComponent(p.planID)}`;
         a.textContent = p.planNavn || "(uten navn)";
@@ -201,12 +249,15 @@ if (menuBtn && sidebar) {
         e.stopPropagation();
 
         // Lukk andre åpne dropdowns
-        document.querySelectorAll(".dropdown.open").forEach(x => {
+        document.querySelectorAll(".dropdown.open").forEach((x) => {
           if (x !== dd) x.classList.remove("open");
         });
 
         dd.classList.toggle("open");
         btn.setAttribute("aria-expanded", dd.classList.contains("open") ? "true" : "false");
+
+        // Når bruker åpner dropdown: sørg for at topbar er synlig
+        topbar?.classList.remove("is-hidden");
       });
 
       dd.appendChild(btn);
@@ -216,18 +267,20 @@ if (menuBtn && sidebar) {
 
     // Lukk ved klikk utenfor
     document.addEventListener("click", (e) => {
-      document.querySelectorAll(".dropdown.open").forEach(dd => {
+      document.querySelectorAll(".dropdown.open").forEach((dd) => {
         if (!dd.contains(e.target)) dd.classList.remove("open");
       });
     });
 
-    // Viktig: Nå finnes btnKommuneplan i DOM → oppdater state
+    // Nå finnes btnKommuneplan i DOM
     updateKommuneplanButtonState();
   }
 
-  // ---------- tree ----------
+  // =========================
+  // Venstremeny: tre/hierarki
+  // =========================
   function buildTree(goalsForPlan) {
-    const byId = new Map(goalsForPlan.map(g => [g.maalID, g]));
+    const byId = new Map(goalsForPlan.map((g) => [g.maalID, g]));
 
     const children = new Map();
     const addChild = (parentId, child) => {
@@ -235,12 +288,13 @@ if (menuBtn && sidebar) {
       children.get(parentId).push(child);
     };
 
-    goalsForPlan.forEach(g => {
+    goalsForPlan.forEach((g) => {
       const parentId = g.maalOverordnet;
       if (parentId && byId.has(parentId)) addChild(parentId, g);
       else addChild(null, g);
     });
 
+    // Sortér alfabetisk
     const collator = new Intl.Collator("nb", { sensitivity: "base" });
     for (const arr of children.values()) {
       arr.sort((a, b) => collator.compare(a.maalNavn || "", b.maalNavn || ""));
@@ -257,7 +311,7 @@ if (menuBtn && sidebar) {
       row.className = `row level-${Math.min(level, 3)}`;
 
       const kids = children.get(goal.maalID) || [];
-      const hasKids = (level !== 0) && kids.length > 0;
+      const hasKids = level !== 0 && kids.length > 0;
 
       const toggle = document.createElement("button");
       toggle.type = "button";
@@ -269,8 +323,9 @@ if (menuBtn && sidebar) {
         const parent = node.parentElement;
         const willOpen = !node.classList.contains("open");
 
+        // Kun én åpen pr nivå
         if (willOpen && parent) {
-          Array.from(parent.children).forEach(el => {
+          Array.from(parent.children).forEach((el) => {
             if (el !== node && el.classList && el.classList.contains("node")) {
               el.classList.remove("open");
             }
@@ -296,14 +351,16 @@ if (menuBtn && sidebar) {
       childWrap.className = "children";
       node.appendChild(childWrap);
 
-      kids.forEach(k => childWrap.appendChild(renderNode(k, level + 1)));
+      kids.forEach((k) => childWrap.appendChild(renderNode(k, level + 1)));
       return node;
     }
 
-    (children.get(null) || []).forEach(g => menuEl.appendChild(renderNode(g, 0)));
+    (children.get(null) || []).forEach((g) => menuEl.appendChild(renderNode(g, 0)));
   }
 
-  // ---------- navigation ----------
+  // =========================
+  // Navigasjon (uten full reload)
+  // =========================
   function navigateToPlan(planId) {
     currentPlanId = planId;
     updateKommuneplanButtonState();
@@ -311,23 +368,24 @@ if (menuBtn && sidebar) {
     init(); // re-render
   }
 
-  // ---------- init ----------
+  // =========================
+  // Init
+  // =========================
   async function init() {
     try {
       const [plans, goals] = await Promise.all([
-        fetch(URL_PLAN, { cache: "no-store" }).then(r => r.json()),
-        fetch(URL_MAAL, { cache: "no-store" }).then(r => r.json())
+        fetch(URL_PLAN, { cache: "no-store" }).then((r) => r.json()),
+        fetch(URL_MAAL, { cache: "no-store" }).then((r) => r.json()),
       ]);
 
-      // Bygg toppmeny (må skje før vi oppdaterer kommuneplan-knapp state)
       buildTopMenu(plans);
 
       clearUI();
 
-      const plan = plans.find(p => p.planID === currentPlanId);
+      const plan = plans.find((p) => p.planID === currentPlanId);
       titleEl.innerText = plan ? plan.planNavn : "Plan ikke funnet";
 
-      const goalsForPlan = goals.filter(m => m.maalPlan === currentPlanId);
+      const goalsForPlan = goals.filter((m) => m.maalPlan === currentPlanId);
       if (goalsForPlan.length === 0) {
         contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
         return;
