@@ -266,4 +266,25 @@ section{
 .dropdown-menu a:hover{
   background: var(--hover);
 }
+/* Topbar: lys bakgrunn fra fargekart */
+.topbar{
+  background: var(--blue-100);
+  border-bottom: 1px solid var(--blue-200);
+}
 
+/* Brand/tekst i toppmeny */
+.topbar, .topbar a, .topbar button{
+  color: var(--blue-900);
+}
+
+/* Litt tydeligere hover på elementer i toppmeny */
+.topbar .dropbtn:hover,
+.topbar .brand-link:hover{
+  background: var(--blue-200);
+}
+
+/* Hvis du vil ha en “kort skygge” når man scroller (valgfritt):
+   gir tydelig skille ved lange sider */
+.topbar{
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
