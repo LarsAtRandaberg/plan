@@ -700,6 +700,7 @@ section h2 {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding: 0 12px;
   }
 
   .topbar .brand { flex: 1; }
