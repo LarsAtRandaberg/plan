@@ -685,7 +685,41 @@ function buildMobileTopMenu(plans) {
       }
     });
   }
-  
+  function attachMobileSearchListeners() {
+    const searchBtn   = document.getElementById("searchBtn");
+    const searchWrapper = document.getElementById("search-wrapper");
+    if (!searchBtn || !searchWrapper) return;
+
+    // Legg til lukkeknapp i wrapper
+    let closeBtn = document.getElementById("search-close-btn");
+    if (!closeBtn) {
+      closeBtn = document.createElement("button");
+      closeBtn.type = "button";
+      closeBtn.id = "search-close-btn";
+      closeBtn.className = "search-close-btn";
+      closeBtn.setAttribute("aria-label", "Lukk søk");
+      closeBtn.innerHTML = "<i class=\"ti ti-x\" aria-hidden=\"true\"></i>";
+      searchWrapper.appendChild(closeBtn);
+    }
+
+    searchBtn.addEventListener("click", function() {
+      searchWrapper.classList.add("mobile-open");
+      if (searchInput) {
+        searchInput.focus();
+      }
+    });
+
+    closeBtn.addEventListener("click", function() {
+      searchWrapper.classList.remove("mobile-open");
+      if (searchInput) {
+        searchInput.value = "";
+      }
+      if (searchResults) {
+        searchResults.classList.remove("open");
+        searchResults.innerHTML = "";
+      }
+    });
+  }
   // =========================
   // Navigasjon
   // =========================
@@ -712,6 +746,7 @@ function buildMobileTopMenu(plans) {
       buildMobileTopMenu(plans);
       attachDropdownListener();
       attachSearchListeners();
+      attachMobileSearchListeners();
       clearUI();
 
       const plan = plans.find(function(p) { return p.planID === currentPlanId; });
