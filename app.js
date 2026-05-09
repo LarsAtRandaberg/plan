@@ -211,7 +211,7 @@ function buildMobileTopMenu(plans) {
   mobileMenu.id = "topnav-mobile-menu";
   mobileMenu.className = "dropdown-menu";
   mobileMenu.style.left = "0";
-  mobileMenu.style.minWidth = "220px";
+  mobileMenu.style.minWidth = "250px";
 
   const collator = new Intl.Collator("nb", { sensitivity: "base" });
   const sorted = plans.slice().sort(function(a, b) {
