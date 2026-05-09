@@ -759,11 +759,7 @@ section h2 {
   }
 
   .search-icon {
-    position: static;
-    order: 2;
-    flex-shrink: 0;
-    color: rgba(255,255,255,0.7);
-    font-size: 16px;
+    display: none;
   }
 
   .search-input {
