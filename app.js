@@ -29,6 +29,7 @@ let searchModeActive = false;
   function closeSearch() {
     const searchWrapper = document.getElementById("search-wrapper");
     if (searchWrapper) searchWrapper.classList.remove("mobile-open");
+    searchWrapper.style.maxWidth = "";
     if (searchInput) { searchInput.value = ""; }
     if (searchResults) { searchResults.classList.remove("open"); searchResults.innerHTML = ""; }
     const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
@@ -714,8 +715,11 @@ function buildMobileTopMenu(plans) {
 
     searchBtn.addEventListener("click", function() {
       const btnRect    = searchBtn.getBoundingClientRect();
+      const logoRect = document.querySelector(".brand-logo").getBoundingClientRect();
+      const maxWidth = window.innerWidth - logoRect.right - 5 - rightOffset;
       const rightOffset = window.innerWidth - btnRect.right;
       searchWrapper.style.right = rightOffset + "px";
+      searchWrapper.style.maxWidth = maxWidth + "px";
       searchWrapper.classList.add("mobile-open");
       searchBtn.style.background = "transparent";
       searchBtn.style.borderColor = "transparent";
