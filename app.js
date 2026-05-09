@@ -28,15 +28,18 @@ let searchModeActive = false;
 
   function closeSearch() {
     const searchWrapper = document.getElementById("search-wrapper");
-    if (searchWrapper) searchWrapper.classList.remove("mobile-open");
-    searchWrapper.style.maxWidth = "";
+    if (searchWrapper) {
+      searchWrapper.classList.remove("mobile-open");
+      searchWrapper.style.maxWidth = "";
+      searchWrapper.style.right = "";
+    }
     if (searchInput) { searchInput.value = ""; }
     if (searchResults) { searchResults.classList.remove("open"); searchResults.innerHTML = ""; }
     const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
     if (menuIcon) menuIcon.className = "ti ti-menu-2";
     searchModeActive = false;
-    searchBtn.style.background = "";
-    searchBtn.style.borderColor = "";
+    const sb = document.getElementById("searchBtn");
+    if (sb) { sb.style.background = ""; sb.style.borderColor = ""; }
     const brandName = document.querySelector(".brand-name");
     if (brandName) brandName.style.display = "";
   }
@@ -781,7 +784,6 @@ function buildMobileTopMenu(plans) {
 
       buildTree(goalsForPlan);
       renderInnhold(innhold, currentPlanId);
-      setupScrollSpy();
       setupScrollSpy();
 
       if (location.hash) {
