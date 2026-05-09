@@ -702,15 +702,17 @@ function buildMobileTopMenu(plans) {
       searchWrapper.appendChild(closeBtn);
     }
 
+const topbarActions = document.querySelector(".topbar-actions");
+
     searchBtn.addEventListener("click", function() {
       searchWrapper.classList.add("mobile-open");
-      if (searchInput) {
-        searchInput.focus();
-      }
+      if (topbarActions) topbarActions.style.visibility = "hidden";
+      if (searchInput) searchInput.focus();
     });
 
     closeBtn.addEventListener("click", function() {
       searchWrapper.classList.remove("mobile-open");
+      if (topbarActions) topbarActions.style.visibility = "visible";  
       if (searchInput) {
         searchInput.value = "";
       }
