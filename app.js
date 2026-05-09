@@ -24,8 +24,26 @@
 
   if (!menuEl || !contentEl || !titleEl) return;
 
+let searchModeActive = false;
+
+  function closeSearch() {
+    const searchWrapper = document.getElementById("search-wrapper");
+    if (searchWrapper) searchWrapper.classList.remove("mobile-open");
+    if (searchInput) { searchInput.value = ""; }
+    if (searchResults) { searchResults.classList.remove("open"); searchResults.innerHTML = ""; }
+    const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
+    if (menuIcon) menuIcon.className = "ti ti-menu-2";
+    searchModeActive = false;
+  }
+
   if (menuBtn && sidebar) {
-    menuBtn.addEventListener("click", () => sidebar.classList.toggle("open"));
+    menuBtn.addEventListener("click", function() {
+      if (searchModeActive) {
+        closeSearch();
+      } else {
+        sidebar.classList.toggle("open");
+      }
+    });
   }
 
   // =========================
@@ -685,42 +703,24 @@ function buildMobileTopMenu(plans) {
       }
     });
   }
-  function attachMobileSearchListeners() {
-    const searchBtn   = document.getElementById("searchBtn");
+function attachMobileSearchListeners() {
+    const searchBtn     = document.getElementById("searchBtn");
     const searchWrapper = document.getElementById("search-wrapper");
     if (!searchBtn || !searchWrapper) return;
 
-    // Legg til lukkeknapp i wrapper
-    let closeBtn = document.getElementById("search-close-btn");
-    if (!closeBtn) {
-      closeBtn = document.createElement("button");
-      closeBtn.type = "button";
-      closeBtn.id = "search-close-btn";
-      closeBtn.className = "search-close-btn";
-      closeBtn.setAttribute("aria-label", "Lukk søk");
-      closeBtn.innerHTML = "<i class=\"ti ti-x\" aria-hidden=\"true\"></i>";
-      searchWrapper.appendChild(closeBtn);
-    }
-
-const topbarActions = document.querySelector(".topbar-actions");
-
     searchBtn.addEventListener("click", function() {
       searchWrapper.classList.add("mobile-open");
-      if (topbarActions) topbarActions.style.visibility = "hidden";
+      const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
+      if (menuIcon) menuIcon.className = "ti ti-x";
+      searchModeActive = true;
       if (searchInput) searchInput.focus();
     });
 
-    closeBtn.addEventListener("click", function() {
-      searchWrapper.classList.remove("mobile-open");
-      if (topbarActions) topbarActions.style.visibility = "visible";  
-      if (searchInput) {
-        searchInput.value = "";
-      }
-      if (searchResults) {
-        searchResults.classList.remove("open");
-        searchResults.innerHTML = "";
-      }
-    });
+    if (searchInput) {
+      searchInput.addEventListener("keydown", function(e) {
+        if (e.key === "Escape") closeSearch();
+      });
+    }
   }
   // =========================
   // Navigasjon
