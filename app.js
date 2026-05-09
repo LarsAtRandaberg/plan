@@ -50,6 +50,8 @@ let searchModeActive = false;
         closeSearch();
       } else {
         sidebar.classList.toggle("open");
+        const sb = document.getElementById("searchBtn");
+        if (sb) sb.style.pointerEvents = sidebar.classList.contains("open") ? "none" : "";
       }
     });
   }
