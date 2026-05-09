@@ -462,7 +462,91 @@
           wrapper.appendChild(iframe);
           blokk.appendChild(wrapper);
         }
+if (rad.json) {
+          try {
+            const cfg = JSON.parse(rad.json);
 
+            if (cfg.type === "diagram") {
+              const canvas = document.createElement("canvas");
+              canvas.style.maxWidth = "100%";
+              blokk.appendChild(canvas);
+
+              const grønn900 = "#173404";
+              const grønn800 = "#27500a";
+              const grønn600 = "#3b6d11";
+              const grønn200 = "#c0dd97";
+              const grønn100 = "#eaf3de";
+
+              const farger = [grønn600, grønn200, grønn800, grønn900];
+
+              const datasets = cfg.datasett.map(function(ds, i) {
+                const base = {
+                  label:           ds.etikett,
+                  data:            ds.verdier,
+                  backgroundColor: cfg.diagramtype === "linje" ? grønn100 : farger[i % farger.length],
+                  borderColor:     cfg.diagramtype === "linje" ? grønn600 : farger[i % farger.length],
+                  borderRadius:    cfg.diagramtype === "soyle" ? 6 : 0,
+                  borderWidth:     cfg.diagramtype === "linje" ? 2 : 0,
+                  fill:            cfg.diagramtype === "linje",
+                  tension:         cfg.diagramtype === "linje" ? 0.3 : 0,
+                  pointBackgroundColor: grønn800,
+                  pointRadius:     cfg.diagramtype === "linje" ? 4 : 0
+                };
+                return base;
+              });
+
+              new Chart(canvas, {
+                type: cfg.diagramtype === "soyle" ? "bar" : cfg.diagramtype,
+                data: { labels: cfg.labels, datasets: datasets },
+                options: {
+                  responsive: true,
+                  maintainAspectRatio: true,
+                  aspectRatio: 2.5,
+                  plugins: {
+                    legend: {
+                      display: cfg.diagramtype === "doughnut",
+                      position: "right",
+                      labels: { color: grønn800, padding: 16, font: { size: 12 } }
+                    }
+                  },
+                  scales: cfg.diagramtype === "doughnut" ? {} : {
+                    y: { grid: { color: grønn100 }, ticks: { color: grønn600 } },
+                    x: { grid: { display: false }, ticks: { color: grønn600 } }
+                  },
+                  cutout: cfg.diagramtype === "doughnut" ? "65%" : undefined
+                }
+              });
+            }
+
+            if (cfg.type === "nokkeltall") {
+              const grid = document.createElement("div");
+              grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:8px";
+
+              cfg.tall.forEach(function(t) {
+                const kort = document.createElement("div");
+                kort.style.cssText = "background:#27500a;border-radius:10px;padding:16px;color:#fff";
+
+                const trendFarge = t.trend === "opp" ? "#c0dd97" : t.trend === "ned" ? "#f4c89a" : "rgba(255,255,255,0.6)";
+                const trendPil   = t.trend === "opp" ? "↑" : t.trend === "ned" ? "↓" : "→";
+                const trendBg    = t.trend === "opp" ? "rgba(192,221,151,0.2)" : t.trend === "ned" ? "rgba(224,112,48,0.2)" : "rgba(255,255,255,0.1)";
+
+                kort.innerHTML =
+                  "<div style='font-size:13px;font-weight:600;line-height:1.3;margin-bottom:2px'>" + t.etikett + "</div>" +
+                  "<div style='font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:8px'>" + (t.undertittel || "") + "</div>" +
+                  "<div style='display:inline-flex;align-items:center;gap:3px;font-size:11px;font-weight:600;padding:2px 6px;border-radius:20px;margin-bottom:8px;background:" + trendBg + ";color:" + trendFarge + "'>" + trendPil + " " + (t.trend === "opp" ? "Over mål" : t.trend === "ned" ? "Under mål" : "Stabilt") + "</div>" +
+                  "<div style='font-size:30px;font-weight:700;line-height:1;color:#c0dd97;margin-bottom:8px'>" + t.verdi + "<span style='font-size:16px'>" + (t.enhet || "") + "</span></div>" +
+                  "<div style='font-size:11px;color:rgba(255,255,255,0.55);border-top:0.5px solid rgba(255,255,255,0.2);padding-top:8px'>" + (t.maalverdi || "") + "</div>";
+
+                grid.appendChild(kort);
+              });
+
+              blokk.appendChild(grid);
+            }
+
+          } catch(e) {
+            console.error("JSON-renderer feil:", e);
+          }
+        }
         if (rad.vedleggUrl) {
           const a = document.createElement("a");
           a.href = rad.vedleggUrl;
