@@ -687,45 +687,28 @@ section h2 {
   align-items: center;
   gap: 6px;
 }
-
 /*---------------------------------------
   MEDIAQUERIES MOBIL
 ---------------------------------------*/
 @media (max-width: 768px) {
-  .menu-btn  { display: flex; }
-  .topnav    { display: none; }
+  .menu-btn { display: flex; }
+  .topnav   { display: none; }
+
   .topbar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-  
-    .topbar .brand {
-      flex: 1;
-    }
-  
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .topbar .brand {
+    flex: 1;
+  }
+
   .topbar-actions {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-left: auto;
-  }
-  .search-wrapper {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 52px;
-    background: var(--green-900);
-    z-index: 500;
-    align-items: center;
-    padding: 0 12px;
-    gap: 8px;
-  }
-
-  .search-wrapper.mobile-open {
-    display: flex;
   }
 
   .search-btn {
@@ -757,15 +740,54 @@ section h2 {
     flex-shrink: 0;
   }
 
+  .search-wrapper {
+    display: none;
+    position: fixed;
+    top: 9px;
+    right: 56px;
+    left: auto;
+    width: 34px;
+    height: 34px;
+    background: var(--green-900);
+    z-index: 500;
+    align-items: center;
+    padding: 0 8px;
+    gap: 8px;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: width 0.25s ease, left 0.25s ease;
+  }
+
+  .search-wrapper.mobile-open {
+    display: flex;
+    width: calc(100% - 100px);
+    left: 12px;
+  }
+
+  .search-icon {
+    left: 8px;
+    flex-shrink: 0;
+  }
+
   .search-input {
     flex: 1;
     width: 100%;
-    border-radius: 20px;
+    border-radius: 6px;
     font-size: 14px;
+    opacity: 0;
+    transition: opacity 0.15s ease 0.1s;
+  }
+
+  .search-wrapper.mobile-open .search-input {
+    opacity: 1;
   }
 
   .search-input:focus {
     width: 100%;
+  }
+
+  .search-input::-webkit-search-cancel-button {
+    display: none;
   }
 
   .search-results {
@@ -778,7 +800,7 @@ section h2 {
     max-height: 60vh;
   }
 
-  .hero  { padding: 20px 16px 18px; }
+  .hero       { padding: 20px 16px 18px; }
   .hero-title { font-size: 17px; }
 
   .layout { display: block; }
@@ -807,7 +829,7 @@ section h2 {
     padding-bottom: 8px;
   }
 
-  #menu-topnav .dropdown { position: relative; margin-bottom: 4px; }
+  #menu-topnav .dropdown        { position: relative; margin-bottom: 4px; }
 
   #menu-topnav .dropbtn {
     width: 100%;
