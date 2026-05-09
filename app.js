@@ -613,7 +613,7 @@
       const btnRect   = searchBtn.getBoundingClientRect();
       const rightOffset = window.innerWidth - btnRect.right;
       searchWrapper.style.right = rightOffset + "px";
-      searchWrapper.style.width = "300px";
+      searchWrapper.style.width = "250px";
       searchWrapper.classList.add("mobile-open");
       searchBtn.style.background   = "transparent";
       searchBtn.style.borderColor  = "transparent";
