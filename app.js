@@ -722,7 +722,7 @@ function buildMobileTopMenu(plans) {
       const brandRect = document.querySelector(".brand-logo").getBoundingClientRect();
       const maxWidth = window.innerWidth - brandRect.right - 5;
       searchWrapper.style.right = rightOffset + "px";
-      searchWrapper.style.width = "300px";
+      searchWrapper.style.width = "230px";
       searchWrapper.classList.add("mobile-open");
       searchBtn.style.background = "transparent";
       searchBtn.style.borderColor = "transparent";
