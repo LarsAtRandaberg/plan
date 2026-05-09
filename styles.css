@@ -596,22 +596,20 @@ section h2 {
 }
 
 .search-input {
-  background: rgba(255,255,255,0.1);
-  border: 0.5px solid rgba(255,255,255,0.2);
-  border-radius: 20px;
-  padding: 5px 12px 5px 32px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  padding: 5px 8px;
   font-size: 13px;
   color: #fff;
   width: 220px;
   outline: none;
-  transition: width 0.2s, background 0.2s;
+  transition: width 0.2s;
 }
 
 .search-input::placeholder { color: rgba(255,255,255,0.45); }
 
 .search-input:focus {
-  background: rgba(255,255,255,0.15);
-  border-color: rgba(192,221,151,0.5);
   width: 300px;
 }
 
