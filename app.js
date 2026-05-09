@@ -36,6 +36,8 @@ let searchModeActive = false;
     searchModeActive = false;
     searchBtn.style.background = "";
     searchBtn.style.borderColor = "";
+    const brandName = document.querySelector(".brand-name");
+    if (brandName) brandName.style.display = "";
   }
 
   if (menuBtn && sidebar) {
@@ -717,6 +719,8 @@ function buildMobileTopMenu(plans) {
       searchWrapper.classList.add("mobile-open");
       searchBtn.style.background = "transparent";
       searchBtn.style.borderColor = "transparent";
+      const brandName = document.querySelector(".brand-name");
+      if (brandName) brandName.style.display = "none";
       const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
       if (menuIcon) menuIcon.className = "ti ti-x";
       searchModeActive = true;
