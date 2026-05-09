@@ -717,6 +717,7 @@ function buildMobileTopMenu(plans) {
     if (!searchBtn || !searchWrapper) return;
 
     searchBtn.addEventListener("click", function() {
+      alert("searchBtn klikket");
       const btnRect    = searchBtn.getBoundingClientRect();
       const rightOffset = window.innerWidth - btnRect.right;
       const logoRect = document.querySelector(".brand-logo").getBoundingClientRect();
