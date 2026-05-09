@@ -10,40 +10,47 @@
   // =========================
   // DOM
   // =========================
-  const topbar  = document.querySelector(".topbar");
-  const topnav  = document.getElementById("topnav");
-  const sidebar = document.getElementById("sidebar");
-  const menuBtn = document.getElementById("menuBtn");
-  const menuEl  = document.getElementById("menu");
+  const topbar         = document.querySelector(".topbar");
+  const topnav         = document.getElementById("topnav");
+  const sidebar        = document.getElementById("sidebar");
+  const menuBtn        = document.getElementById("menuBtn");
+  const menuEl         = document.getElementById("menu");
   const contentEl      = document.getElementById("innhold");
   const titleEl        = document.getElementById("tittel");
   const heroTittelEl   = document.getElementById("hero-tittel");
   const heroMaalCountEl = document.getElementById("hero-maal-count");
-  const searchInput   = document.getElementById("search-input");
-  const searchResults = document.getElementById("search-results");
+  const searchInput    = document.getElementById("search-input");
+  const searchResults  = document.getElementById("search-results");
 
   if (!menuEl || !contentEl || !titleEl) return;
 
-let searchModeActive = false;
+  // =========================
+  // Søk – tilstandsvariabel
+  // =========================
+  let searchModeActive = false;
 
   function closeSearch() {
-    const searchWrapper = document.getElementById("search-wrapper");
-    if (searchWrapper) {
-      searchWrapper.classList.remove("mobile-open");
-      searchWrapper.style.maxWidth = "";
-      searchWrapper.style.right = "";
+    const sw = document.getElementById("search-wrapper");
+    if (sw) {
+      sw.classList.remove("mobile-open");
+      sw.style.maxWidth = "";
+      sw.style.right    = "";
+      sw.style.width    = "";
     }
-    if (searchInput) { searchInput.value = ""; }
-    if (searchResults) { searchResults.classList.remove("open"); searchResults.innerHTML = ""; }
+    if (searchInput)  { searchInput.value = ""; }
+    if (searchResults){ searchResults.classList.remove("open"); searchResults.innerHTML = ""; }
     const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
     if (menuIcon) menuIcon.className = "ti ti-menu-2";
     searchModeActive = false;
     const sb = document.getElementById("searchBtn");
-    if (sb) { sb.style.background = ""; sb.style.borderColor = ""; }
+    if (sb) { sb.style.background = ""; sb.style.borderColor = ""; sb.style.pointerEvents = ""; }
     const brandName = document.querySelector(".brand-name");
     if (brandName) brandName.style.display = "";
   }
 
+  // =========================
+  // Hamburger / sidebar
+  // =========================
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", function() {
       if (searchModeActive) {
@@ -59,7 +66,7 @@ let searchModeActive = false;
   // =========================
   // URL -> plan
   // =========================
-  const params = new URLSearchParams(location.search);
+  const params     = new URLSearchParams(location.search);
   const explicitId = params.get("id");
   let currentPlanId = explicitId || DEFAULT_PLAN_ID;
 
@@ -72,19 +79,18 @@ let searchModeActive = false;
   // =========================
   (() => {
     if (!topbar) return;
-    let lastY = window.scrollY;
+    let lastY   = window.scrollY;
     let ticking = false;
 
     function onScroll() {
-      const y = window.scrollY;
+      const y     = window.scrollY;
       const delta = y - lastY;
-      const dropdownOpen = document.querySelector(".dropdown.open");
-      if (!dropdownOpen && delta > 6 && y > 80) {
+      if (!document.querySelector(".dropdown.open") && delta > 6 && y > 80) {
         topbar.classList.add("is-hidden");
       } else if (delta < -6) {
         topbar.classList.remove("is-hidden");
       }
-      lastY = y;
+      lastY   = y;
       ticking = false;
     }
 
@@ -105,16 +111,16 @@ let searchModeActive = false;
   }
 
   function clearUI() {
-    menuEl.innerHTML = "";
+    menuEl.innerHTML  = "";
     contentEl.innerHTML = "";
   }
 
   function ensureSection(goal) {
     const anchorId = "maal-" + safeId(goal.maalID);
     if (document.getElementById(anchorId)) return anchorId;
-    const section = document.createElement("section");
-    section.id = anchorId;
-    const heading = document.createElement("h2");
+    const section  = document.createElement("section");
+    section.id     = anchorId;
+    const heading  = document.createElement("h2");
     heading.textContent = goal.maalNavn || "(uten navn)";
     section.appendChild(heading);
     contentEl.appendChild(section);
@@ -126,7 +132,7 @@ let searchModeActive = false;
       const isActive = a.getAttribute("href") === "#" + activeSectionId;
       a.classList.toggle("active", isActive);
       if (isActive) a.setAttribute("aria-current", "true");
-      else a.removeAttribute("aria-current");
+      else          a.removeAttribute("aria-current");
     });
 
     const activeLink = document.querySelector("#menu a[href='#" + activeSectionId + "']");
@@ -152,14 +158,14 @@ let searchModeActive = false;
 
   function setupScrollSpy() {
     const sections = Array.from(document.querySelectorAll("main section[id]"));
-    if (sections.length === 0) return;
+    if (!sections.length) return;
 
     const observer = new IntersectionObserver(function(entries) {
       const visible = entries
         .filter(function(e) { return e.isIntersecting; })
         .sort(function(a, b) { return a.boundingClientRect.top - b.boundingClientRect.top; });
-      if (visible.length > 0) setActiveLink(visible[0].target.id);
-    }, { root: null, rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
+      if (visible.length) setActiveLink(visible[0].target.id);
+    }, { rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
 
     sections.forEach(function(s) { observer.observe(s); });
     setActiveLink(sections[0].id);
@@ -173,9 +179,9 @@ let searchModeActive = false;
     if (!btn) return;
     const isDefault = currentPlanId === DEFAULT_PLAN_ID;
     btn.classList.toggle("is-selected", isDefault);
-    btn.classList.toggle("is-disabled", isDefault);
+    btn.classList.toggle("is-disabled",  isDefault);
     if (isDefault) btn.setAttribute("aria-current", "page");
-    else btn.removeAttribute("aria-current");
+    else           btn.removeAttribute("aria-current");
   }
 
   // =========================
@@ -187,7 +193,7 @@ let searchModeActive = false;
       701100001: "Strategier",
       701100002: "Handlings- og økonomiplaner"
     };
-    return labels[planTyper] || ("Plantype " + planTyper);
+    return labels[planTyper] || "Plantype " + planTyper;
   }
 
   let dropdownClickListenerAttached = false;
@@ -201,75 +207,32 @@ let searchModeActive = false;
     });
     dropdownClickListenerAttached = true;
   }
-function buildMobileTopMenu(plans) {
-  const btn = document.getElementById("topnav-mobile-btn");
-  const container = document.getElementById("topnav-mobile");
-  if (!btn || !container) return;
 
-  let mobileMenu = document.getElementById("topnav-mobile-menu");
-  if (mobileMenu) mobileMenu.remove();
-
-  mobileMenu = document.createElement("div");
-  mobileMenu.id = "topnav-mobile-menu";
-  mobileMenu.className = "dropdown-menu";
-  mobileMenu.style.left = "0";
-  mobileMenu.style.minWidth = "250px";
-
-  const collator = new Intl.Collator("nb", { sensitivity: "base" });
-  const sorted = plans.slice().sort(function(a, b) {
-    return collator.compare(a.planNavn || "", b.planNavn || "");
-  });
-
-  sorted.forEach(function(p) {
-    const a = document.createElement("a");
-    a.href = "?id=" + encodeURIComponent(p.planID);
-    a.textContent = p.planNavn || "(uten navn)";
-    a.addEventListener("click", function(e) {
-      e.preventDefault();
-      navigateToPlan(p.planID);
-      mobileMenu.style.display = "none";
-    });
-    mobileMenu.appendChild(a);
-  });
-
-  container.appendChild(mobileMenu);
-
-  btn.addEventListener("click", function(e) {
-    e.stopPropagation();
-    const isOpen = mobileMenu.style.display === "block";
-    mobileMenu.style.display = isOpen ? "none" : "block";
-    if (topbar) topbar.classList.remove("is-hidden");
-  });
-
-  document.addEventListener("click", function() {
-    mobileMenu.style.display = "none";
-  });
-}
   function buildTopMenu(plans) {
     if (!topnav) return;
     topnav.innerHTML = "";
     const menuTopnav = document.getElementById("menu-topnav");
     if (menuTopnav) menuTopnav.innerHTML = "";
 
-    const groups = new Map();
+    const groups   = new Map();
+    const collator = new Intl.Collator("nb", { sensitivity: "base" });
+
     plans.forEach(function(p) {
-      const key = p.planTyper;
-      if (!groups.has(key)) groups.set(key, []);
-      groups.get(key).push(p);
+      if (!groups.has(p.planTyper)) groups.set(p.planTyper, []);
+      groups.get(p.planTyper).push(p);
     });
 
     const typeKeys = Array.from(groups.keys()).sort(function(a, b) { return a - b; });
-    const collator = new Intl.Collator("nb", { sensitivity: "base" });
     typeKeys.forEach(function(k) {
       groups.get(k).sort(function(a, b) { return collator.compare(a.planNavn || "", b.planNavn || ""); });
     });
 
     typeKeys.forEach(function(typeKey) {
-      const dd = document.createElement("div");
+      const dd  = document.createElement("div");
       dd.className = "dropdown";
 
       const btn = document.createElement("button");
-      btn.type = "button";
+      btn.type  = "button";
       btn.className = "dropbtn";
       btn.setAttribute("aria-haspopup", "true");
       btn.setAttribute("aria-expanded", "false");
@@ -305,26 +268,26 @@ function buildMobileTopMenu(plans) {
       dd.appendChild(btn);
       dd.appendChild(menu);
       topnav.appendChild(dd);
+
       if (menuTopnav) {
-  const ddClone = dd.cloneNode(true);
-  ddClone.querySelector("button").addEventListener("click", function(e) {
-    e.stopPropagation();
-    document.querySelectorAll("#menu-topnav .dropdown.open").forEach(function(x) {
-      if (x !== ddClone) x.classList.remove("open");
-    });
-    ddClone.classList.toggle("open");
-  });
-  ddClone.querySelectorAll("a").forEach(function(a) {
-    a.addEventListener("click", function(e) {
-      e.preventDefault();
-      const url = new URL(a.href);
-      const planId = url.searchParams.get("id");
-      if (planId) navigateToPlan(planId);
-      if (sidebar) sidebar.classList.remove("open");
-    });
-  });
-  menuTopnav.appendChild(ddClone);
-}
+        const ddClone = dd.cloneNode(true);
+        ddClone.querySelector("button").addEventListener("click", function(e) {
+          e.stopPropagation();
+          document.querySelectorAll("#menu-topnav .dropdown.open").forEach(function(x) {
+            if (x !== ddClone) x.classList.remove("open");
+          });
+          ddClone.classList.toggle("open");
+        });
+        ddClone.querySelectorAll("a").forEach(function(a) {
+          a.addEventListener("click", function(e) {
+            e.preventDefault();
+            const planId = new URL(a.href).searchParams.get("id");
+            if (planId) navigateToPlan(planId);
+            if (sidebar) sidebar.classList.remove("open");
+          });
+        });
+        menuTopnav.appendChild(ddClone);
+      }
     });
 
     updateKommuneplanButtonState();
@@ -334,48 +297,41 @@ function buildMobileTopMenu(plans) {
   // Venstremeny: tre/hierarki
   // =========================
   function buildTree(goalsForPlan) {
-    const byId = new Map(goalsForPlan.map(function(g) { return [g.maalID, g]; }));
+    const byId     = new Map(goalsForPlan.map(function(g) { return [g.maalID, g]; }));
     const children = new Map();
-
-    function addChild(parentId, child) {
-      if (!children.has(parentId)) children.set(parentId, []);
-      children.get(parentId).push(child);
-    }
+    const collator = new Intl.Collator("nb", { sensitivity: "base" });
 
     goalsForPlan.forEach(function(g) {
-      const parentId = g.maalOverordnet;
-      if (parentId && byId.has(parentId)) addChild(parentId, g);
-      else addChild(null, g);
+      const pid = g.maalOverordnet;
+      const key = (pid && byId.has(pid)) ? pid : null;
+      if (!children.has(key)) children.set(key, []);
+      children.get(key).push(g);
     });
 
-    const collator = new Intl.Collator("nb", { sensitivity: "base" });
     children.forEach(function(arr) {
       arr.sort(function(a, b) { return collator.compare(a.maalNavn || "", b.maalNavn || ""); });
     });
 
     function renderNode(goal, level) {
       const anchorId = ensureSection(goal);
-
-      const node = document.createElement("div");
+      const node     = document.createElement("div");
       node.className = "node level-" + Math.min(level, 3);
       if (level === 0) node.classList.add("open");
 
-      const row = document.createElement("div");
+      const row  = document.createElement("div");
       row.className = "row level-" + Math.min(level, 3);
 
-      const kids = children.get(goal.maalID) || [];
+      const kids    = children.get(goal.maalID) || [];
       const hasKids = level !== 0 && kids.length > 0;
 
       const toggle = document.createElement("button");
-      toggle.type = "button";
+      toggle.type  = "button";
       toggle.className = hasKids ? "toggle" : "toggle placeholder";
-
       toggle.addEventListener("click", function() {
         if (!hasKids) return;
-        const parent = node.parentElement;
         const willOpen = !node.classList.contains("open");
-        if (willOpen && parent) {
-          Array.from(parent.children).forEach(function(el) {
+        if (willOpen && node.parentElement) {
+          Array.from(node.parentElement.children).forEach(function(el) {
             if (el !== node && el.classList && el.classList.contains("node")) {
               el.classList.remove("open");
             }
@@ -385,21 +341,18 @@ function buildMobileTopMenu(plans) {
       });
 
       const a = document.createElement("a");
-      a.href = "#" + anchorId;
-
+      a.href  = "#" + anchorId;
       if (goal.maalIkon) {
         const icon = document.createElement("i");
         icon.className = "ti " + goal.maalIkon;
         icon.setAttribute("aria-hidden", "true");
-        icon.style.marginRight = "5px";
-        icon.style.fontSize = "13px";
+        icon.style.cssText = "margin-right:5px;font-size:13px";
         a.appendChild(icon);
       }
-
       a.appendChild(document.createTextNode(goal.maalNavn || "(uten navn)"));
       a.addEventListener("click", function() {
-        if (window.matchMedia("(max-width: 768px)").matches) {
-          if (sidebar) sidebar.classList.remove("open");
+        if (window.matchMedia("(max-width: 768px)").matches && sidebar) {
+          sidebar.classList.remove("open");
         }
       });
 
@@ -409,9 +362,9 @@ function buildMobileTopMenu(plans) {
 
       const childWrap = document.createElement("div");
       childWrap.className = "children";
+      kids.forEach(function(k) { childWrap.appendChild(renderNode(k, level + 1)); });
       node.appendChild(childWrap);
 
-      kids.forEach(function(k) { childWrap.appendChild(renderNode(k, level + 1)); });
       return node;
     }
 
@@ -422,157 +375,133 @@ function buildMobileTopMenu(plans) {
   // Innholdsblokker per mål
   // =========================
   function renderInnhold(innhold, planId) {
-    const radene = innhold
+    const BADGE_CLASS = { "Tekst":"badge-tekst","PBI-rapport":"badge-pbi","Bilde":"badge-bilde","Vedlegg":"badge-vedlegg","Kombinert":"badge-tekst" };
+    const BADGE_ICON  = { "Tekst":"ti-align-left","PBI-rapport":"ti-chart-bar","Bilde":"ti-photo","Vedlegg":"ti-file-description","Kombinert":"ti-layout-grid" };
+    const FOOTER_PX   = 30;
+
+    innhold
       .filter(function(r) { return r.innholdPlan === planId; })
-      .sort(function(a, b) { return a.visningsrekkefølge - b.visningsrekkefølge; });
+      .sort(function(a, b) { return a.visningsrekkefølge - b.visningsrekkefølge; })
+      .forEach(function(rad) {
+        const anchorId = "maal-" + safeId(rad.innholdMaal);
+        const section  = document.getElementById(anchorId);
+        if (!section) return;
 
-    radene.forEach(function(rad) {
-      const anchorId = "maal-" + safeId(rad.innholdMaal);
-      const section = document.getElementById(anchorId);
-      if (!section) return;
+        const blokk = document.createElement("div");
+        blokk.className = "innhold-blokk";
 
-      const blokk = document.createElement("div");
-      blokk.className = "innhold-blokk";
+        // Badge
+        const type      = rad.innholdstype || "Tekst";
+        const badge     = document.createElement("div");
+        badge.className = "card-type-badge " + (BADGE_CLASS[type] || "badge-tekst");
+        const badgeI    = document.createElement("i");
+        badgeI.className = "ti " + (BADGE_ICON[type] || "ti-file");
+        badgeI.setAttribute("aria-hidden", "true");
+        badgeI.style.fontSize = "11px";
+        badge.appendChild(badgeI);
+        badge.appendChild(document.createTextNode(" " + type));
+        blokk.appendChild(badge);
 
-      const badgeClass = {
-        "Tekst":       "badge-tekst",
-        "PBI-rapport": "badge-pbi",
-        "Bilde":       "badge-bilde",
-        "Vedlegg":     "badge-vedlegg",
-        "Kombinert":   "badge-tekst"
-      }[rad.innholdstype] || "badge-tekst";
+        if (rad.overskrift) {
+          const h3 = document.createElement("h3");
+          h3.textContent = rad.overskrift;
+          blokk.appendChild(h3);
+        }
 
-      const badgeIcon = {
-        "Tekst":       "ti-align-left",
-        "PBI-rapport": "ti-chart-bar",
-        "Bilde":       "ti-photo",
-        "Vedlegg":     "ti-file-description",
-        "Kombinert":   "ti-layout-grid"
-      }[rad.innholdstype] || "ti-file";
+        if (rad.brodtekst) {
+          const p = document.createElement("p");
+          p.textContent = rad.brodtekst;
+          blokk.appendChild(p);
+        }
 
-      const badge = document.createElement("div");
-      badge.className = "card-type-badge " + badgeClass;
-      const badgeI = document.createElement("i");
-      badgeI.className = "ti " + badgeIcon;
-      badgeI.setAttribute("aria-hidden", "true");
-      badgeI.style.fontSize = "11px";
-      badge.appendChild(badgeI);
-      badge.appendChild(document.createTextNode(" " + (rad.innholdstype || "Tekst")));
-      blokk.appendChild(badge);
+        if (rad.bildeUrl) {
+          const img = document.createElement("img");
+          img.src   = rad.bildeUrl;
+          img.alt   = rad.bildeAltTekst || "";
+          img.className = "innhold-bilde";
+          if (rad.innholdBredde) img.style.maxWidth = rad.innholdBredde + "px";
+          blokk.appendChild(img);
+        }
 
-      if (rad.overskrift) {
-        const h3 = document.createElement("h3");
-        h3.textContent = rad.overskrift;
-        blokk.appendChild(h3);
-      }
+        if (rad.pbiUrl) {
+          const origW   = rad.innholdBredde || 600;
+          const iframeH = rad.innholdHøyde  || 400;
 
-      if (rad.brodtekst) {
-        const p = document.createElement("p");
-        p.textContent = rad.brodtekst;
-        blokk.appendChild(p);
-      }
+          const pbiHeader = document.createElement("div");
+          pbiHeader.className = "innhold-pbi-header";
+          const pbiIcon = document.createElement("i");
+          pbiIcon.className = "ti ti-chart-bar";
+          pbiIcon.setAttribute("aria-hidden", "true");
+          const pbiSpan = document.createElement("span");
+          pbiSpan.appendChild(pbiIcon);
+          pbiSpan.appendChild(document.createTextNode(" " + (rad.overskrift || "Power BI-rapport")));
+          const pbiLink = document.createElement("a");
+          pbiLink.href   = rad.pbiUrl;
+          pbiLink.target = "_blank";
+          pbiLink.rel    = "noopener";
+          pbiLink.setAttribute("aria-label", "Åpne i nytt vindu");
+          pbiLink.style.color = "var(--green-600)";
+          const extIcon = document.createElement("i");
+          extIcon.className = "ti ti-external-link";
+          pbiLink.appendChild(extIcon);
+          pbiHeader.appendChild(pbiSpan);
+          pbiHeader.appendChild(pbiLink);
+          blokk.appendChild(pbiHeader);
 
-      if (rad.bildeUrl) {
-        const img = document.createElement("img");
-        img.src = rad.bildeUrl;
-        img.alt = rad.bildeAltTekst || "";
-        img.className = "innhold-bilde";
-        if (rad.innholdBredde) img.style.maxWidth = rad.innholdBredde + "px";
-        blokk.appendChild(img);
-      }
+          const wrapper = document.createElement("div");
+          wrapper.style.cssText = "overflow:hidden;border-radius:0 0 8px 8px;width:" + (origW+20) + "px;max-width:99%;margin:0 auto;border:none;height:" + (iframeH-FOOTER_PX) + "px";
 
-      if (rad.pbiUrl) {
-        const FOOTER_PX = 30;
-        const origW   = rad.innholdBredde || 600;
-        const iframeH = rad.innholdHøyde  || 400;
-        const src     = rad.pbiUrl;
+          const iframe = document.createElement("iframe");
+          iframe.src = rad.pbiUrl;
+          iframe.setAttribute("width",     String(origW + 20));
+          iframe.setAttribute("height",    String(iframeH + FOOTER_PX));
+          iframe.setAttribute("scrolling", "no");
+          iframe.setAttribute("frameborder", "0");
+          iframe.allowFullscreen = true;
+          iframe.style.cssText   = "border:none;display:block";
+          wrapper.appendChild(iframe);
+          blokk.appendChild(wrapper);
+        }
 
-        const pbiHeader = document.createElement("div");
-        pbiHeader.className = "innhold-pbi-header";
+        if (rad.vedleggUrl) {
+          const a = document.createElement("a");
+          a.href = rad.vedleggUrl;
+          a.className = "innhold-vedlegg";
+          a.target = "_blank";
+          a.rel    = "noopener";
 
-        const pbiIcon = document.createElement("i");
-        pbiIcon.className = "ti ti-chart-bar";
-        pbiIcon.setAttribute("aria-hidden", "true");
+          const vIcon = document.createElement("div");
+          vIcon.className = "innhold-vedlegg-icon";
+          const vI = document.createElement("i");
+          vI.className = "ti ti-file-type-pdf";
+          vI.setAttribute("aria-hidden", "true");
+          vIcon.appendChild(vI);
 
-        const pbiSpan = document.createElement("span");
-        pbiSpan.appendChild(pbiIcon);
-        pbiSpan.appendChild(document.createTextNode(" " + (rad.overskrift || "Power BI-rapport")));
+          const vInfo = document.createElement("div");
+          vInfo.className = "innhold-vedlegg-info";
+          const vName = document.createElement("div");
+          vName.className   = "innhold-vedlegg-name";
+          vName.textContent = rad.vedleggEtikett || "Last ned vedlegg";
+          vInfo.appendChild(vName);
 
-        const pbiLink = document.createElement("a");
-        pbiLink.href = src;
-        pbiLink.target = "_blank";
-        pbiLink.rel = "noopener";
-        pbiLink.setAttribute("aria-label", "Åpne i nytt vindu");
-        pbiLink.style.color = "var(--green-600)";
-        const extIcon = document.createElement("i");
-        extIcon.className = "ti ti-external-link";
-        pbiLink.appendChild(extIcon);
+          const vArrow = document.createElement("div");
+          vArrow.className = "vedlegg-arrow";
+          const vArrowI = document.createElement("i");
+          vArrowI.className = "ti ti-download";
+          vArrowI.setAttribute("aria-hidden", "true");
+          vArrow.appendChild(vArrowI);
 
-        pbiHeader.appendChild(pbiSpan);
-        pbiHeader.appendChild(pbiLink);
-        blokk.appendChild(pbiHeader);
+          a.appendChild(vIcon);
+          a.appendChild(vInfo);
+          a.appendChild(vArrow);
+          blokk.appendChild(a);
+        }
 
-        const wrapper = document.createElement("div");
-        wrapper.style.overflow     = "hidden";
-        wrapper.style.borderRadius = "0 0 8px 8px";
-        wrapper.style.width        = (origW + 20) + "px";
-        wrapper.style.maxWidth     = "99%";
-        wrapper.style.margin       = "0 auto";
-        wrapper.style.border = "none";
-        wrapper.style.height       = (iframeH - FOOTER_PX) + "px";
-
-        const iframe = document.createElement("iframe");
-        iframe.src = src;
-        iframe.setAttribute("width",     String(origW + 20));
-        iframe.setAttribute("height",    String(iframeH + FOOTER_PX));
-        iframe.setAttribute("scrolling", "no");
-        iframe.setAttribute("frameborder", "0");
-        iframe.allowFullscreen = true;
-        iframe.style.border    = "none";
-        iframe.style.display   = "block";
-
-        wrapper.appendChild(iframe);
-        blokk.appendChild(wrapper);
-      }
-
-      if (rad.vedleggUrl) {
-        const a = document.createElement("a");
-        a.href = rad.vedleggUrl;
-        a.className = "innhold-vedlegg";
-        a.target = "_blank";
-        a.rel = "noopener";
-
-        const vIcon = document.createElement("div");
-        vIcon.className = "innhold-vedlegg-icon";
-        const vI = document.createElement("i");
-        vI.className = "ti ti-file-type-pdf";
-        vI.setAttribute("aria-hidden", "true");
-        vIcon.appendChild(vI);
-
-        const vInfo = document.createElement("div");
-        vInfo.className = "innhold-vedlegg-info";
-        const vName = document.createElement("div");
-        vName.className = "innhold-vedlegg-name";
-        vName.textContent = rad.vedleggEtikett || "Last ned vedlegg";
-        vInfo.appendChild(vName);
-
-        const vArrow = document.createElement("div");
-        vArrow.className = "vedlegg-arrow";
-        const vArrowI = document.createElement("i");
-        vArrowI.className = "ti ti-download";
-        vArrowI.setAttribute("aria-hidden", "true");
-        vArrow.appendChild(vArrowI);
-
-        a.appendChild(vIcon);
-        a.appendChild(vInfo);
-        a.appendChild(vArrow);
-        blokk.appendChild(a);
-      }
-
-      section.appendChild(blokk);
-    });
+        section.appendChild(blokk);
+      });
   }
-// =========================
+
+  // =========================
   // Søk
   // =========================
   let searchData = { plans: [], goals: [], innhold: [] };
@@ -591,143 +520,103 @@ function buildMobileTopMenu(plans) {
       return;
     }
 
-    const planMap = new Map(searchData.plans.map(function(p) { return [p.planID, p.planNavn]; }));
-
-    const goalHits = searchData.goals.filter(function(g) {
-      return (g.maalNavn || "").toLowerCase().includes(q);
-    });
-
+    const planMap     = new Map(searchData.plans.map(function(p) { return [p.planID, p.planNavn]; }));
+    const goalHits    = searchData.goals.filter(function(g) { return (g.maalNavn || "").toLowerCase().includes(q); });
     const innholdHits = searchData.innhold.filter(function(r) {
-      return (r.overskrift || "").toLowerCase().includes(q) ||
-             (r.brodtekst  || "").toLowerCase().includes(q);
+      return (r.overskrift || "").toLowerCase().includes(q) || (r.brodtekst || "").toLowerCase().includes(q);
     });
 
-    if (goalHits.length === 0 && innholdHits.length === 0) {
+    if (!goalHits.length && !innholdHits.length) {
       searchResults.innerHTML = "<div class=\"search-empty\">Ingen treff for «" + query.trim() + "»</div>";
       searchResults.classList.add("open");
       return;
     }
 
-    // Gruppér på plan
     const groups = new Map();
+    function getGroup(planId) {
+      if (!groups.has(planId)) groups.set(planId, { planNavn: planMap.get(planId) || "Ukjent plan", goals: [], innhold: [] });
+      return groups.get(planId);
+    }
 
-    goalHits.forEach(function(g) {
-      const planId   = g.maalPlan;
-      const planNavn = planMap.get(planId) || "Ukjent plan";
-      if (!groups.has(planId)) groups.set(planId, { planNavn, goals: [], innhold: [] });
-      groups.get(planId).goals.push(g);
-    });
-
-    innholdHits.forEach(function(r) {
-      const planId   = r.innholdPlan;
-      const planNavn = planMap.get(planId) || "Ukjent plan";
-      if (!groups.has(planId)) groups.set(planId, { planNavn, goals: [], innhold: [] });
-      groups.get(planId).innhold.push(r);
-    });
+    goalHits.forEach(function(g)    { getGroup(g.maalPlan).goals.push(g); });
+    innholdHits.forEach(function(r) { getGroup(r.innholdPlan).innhold.push(r); });
 
     searchResults.innerHTML = "";
 
     groups.forEach(function(group, planId) {
-      const groupLabel = document.createElement("div");
-      groupLabel.className = "search-group-label";
-      groupLabel.textContent = group.planNavn;
-      searchResults.appendChild(groupLabel);
+      const label = document.createElement("div");
+      label.className   = "search-group-label";
+      label.textContent = group.planNavn;
+      searchResults.appendChild(label);
+
+      function makeItem(iconClass, title, sub, anchorId) {
+        const item = document.createElement("div");
+        item.className = "search-result-item";
+        item.innerHTML = "<i class=\"ti " + iconClass + " search-result-icon\" aria-hidden=\"true\"></i>" +
+          "<div><div class=\"search-result-title\">" + title + "</div><div class=\"search-result-sub\">" + sub + "</div></div>";
+        item.addEventListener("click", function() {
+          searchResults.classList.remove("open");
+          if (searchInput) searchInput.value = "";
+          if (planId !== currentPlanId) {
+            history.pushState(null, "", "?id=" + encodeURIComponent(planId) + "#" + anchorId);
+            currentPlanId = planId;
+            init().then(function() {
+              const el = document.getElementById(anchorId);
+              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+            });
+          } else {
+            const el = document.getElementById(anchorId);
+            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        });
+        return item;
+      }
 
       group.goals.forEach(function(g) {
-        const anchorId = "maal-" + safeId(g.maalID);
-        const item = document.createElement("div");
-        item.className = "search-result-item";
-        item.innerHTML =
-          "<i class=\"ti ti-target search-result-icon\" aria-hidden=\"true\"></i>" +
-          "<div>" +
-            "<div class=\"search-result-title\">" + (g.maalNavn || "") + "</div>" +
-            "<div class=\"search-result-sub\">Mål</div>" +
-          "</div>";
-        item.addEventListener("click", function() {
-          searchResults.classList.remove("open");
-          searchInput.value = "";
-          if (planId !== currentPlanId) {
-            history.pushState(null, "", "?id=" + encodeURIComponent(planId) + "#" + anchorId);
-            currentPlanId = planId;
-            init().then(function() {
-              const el = document.getElementById(anchorId);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-            });
-          } else {
-            const el = document.getElementById(anchorId);
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        });
-        searchResults.appendChild(item);
+        searchResults.appendChild(makeItem("ti-target", g.maalNavn || "", "Mål", "maal-" + safeId(g.maalID)));
       });
-
       group.innhold.forEach(function(r) {
-        const anchorId = "maal-" + safeId(r.innholdMaal);
-        const item = document.createElement("div");
-        item.className = "search-result-item";
-        item.innerHTML =
-          "<i class=\"ti ti-file-text search-result-icon\" aria-hidden=\"true\"></i>" +
-          "<div>" +
-            "<div class=\"search-result-title\">" + (r.overskrift || "") + "</div>" +
-            "<div class=\"search-result-sub\">" + (group.planNavn || "") + "</div>" +
-          "</div>";
-        item.addEventListener("click", function() {
-          searchResults.classList.remove("open");
-          searchInput.value = "";
-          if (planId !== currentPlanId) {
-            history.pushState(null, "", "?id=" + encodeURIComponent(planId) + "#" + anchorId);
-            currentPlanId = planId;
-            init().then(function() {
-              const el = document.getElementById(anchorId);
-              if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-            });
-          } else {
-            const el = document.getElementById(anchorId);
-            if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
-        });
-        searchResults.appendChild(item);
+        searchResults.appendChild(makeItem("ti-file-text", r.overskrift || "", group.planNavn, "maal-" + safeId(r.innholdMaal)));
       });
     });
 
     searchResults.classList.add("open");
   }
 
+  // Listeners – settes opp én gang
+  let searchListenersAttached       = false;
+  let mobileSearchListenersAttached = false;
+
   function attachSearchListeners() {
-    if (!searchInput) return;
+    if (searchListenersAttached || !searchInput) return;
+    searchListenersAttached = true;
 
-    searchInput.addEventListener("input", function() {
-      runSearch(searchInput.value);
-    });
-
+    searchInput.addEventListener("input", function() { runSearch(searchInput.value); });
     searchInput.addEventListener("keydown", function(e) {
-      if (e.key === "Escape") {
-        searchResults.classList.remove("open");
-        searchInput.value = "";
-      }
+      if (e.key === "Escape") { searchResults.classList.remove("open"); searchInput.value = ""; }
     });
-
     document.addEventListener("click", function(e) {
-      if (!searchInput.contains(e.target) && !searchResults.contains(e.target)) {
+      if (searchInput && !searchInput.contains(e.target) && searchResults && !searchResults.contains(e.target)) {
         searchResults.classList.remove("open");
       }
     });
   }
+
   function attachMobileSearchListeners() {
+    if (mobileSearchListenersAttached) return;
     const searchBtn     = document.getElementById("searchBtn");
     const searchWrapper = document.getElementById("search-wrapper");
     if (!searchBtn || !searchWrapper) return;
+    mobileSearchListenersAttached = true;
 
     searchBtn.addEventListener("click", function() {
-      const btnRect    = searchBtn.getBoundingClientRect();
+      const btnRect   = searchBtn.getBoundingClientRect();
       const rightOffset = window.innerWidth - btnRect.right;
-      const brandRect = document.querySelector(".brand-logo").getBoundingClientRect();
-      const maxWidth = window.innerWidth - brandRect.right - 5;
       searchWrapper.style.right = rightOffset + "px";
-      searchWrapper.style.width = "230px";
+      searchWrapper.style.width = "300px";
       searchWrapper.classList.add("mobile-open");
-      searchBtn.style.background = "transparent";
-      searchBtn.style.borderColor = "transparent";
+      searchBtn.style.background   = "transparent";
+      searchBtn.style.borderColor  = "transparent";
       const brandName = document.querySelector(".brand-name");
       if (brandName) brandName.style.display = "none";
       const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
@@ -742,6 +631,7 @@ function buildMobileTopMenu(plans) {
       });
     }
   }
+
   // =========================
   // Navigasjon
   // =========================
@@ -765,7 +655,6 @@ function buildMobileTopMenu(plans) {
 
       buildTopMenu(plans);
       buildSearchIndex(plans, goals, innhold);
-      buildMobileTopMenu(plans);
       attachDropdownListener();
       attachSearchListeners();
       attachMobileSearchListeners();
@@ -775,7 +664,7 @@ function buildMobileTopMenu(plans) {
       titleEl.textContent = plan ? plan.planNavn : "Plan ikke funnet";
 
       const goalsForPlan = goals.filter(function(m) { return m.maalPlan === currentPlanId; });
-      if (goalsForPlan.length === 0) {
+      if (!goalsForPlan.length) {
         contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>";
         return;
       }
@@ -795,7 +684,7 @@ function buildMobileTopMenu(plans) {
 
       return true;
     } catch(e) {
-      titleEl.textContent = "Feil";
+      titleEl.textContent  = "Feil";
       contentEl.innerHTML = "<p>Det oppstod en feil ved lasting av data.</p>";
       console.error(e);
     }
