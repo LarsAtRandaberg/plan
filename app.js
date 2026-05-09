@@ -708,8 +708,10 @@ function buildMobileTopMenu(plans) {
       ]);
 
       buildTopMenu(plans);
+      buildSearchIndex(plans, goals, innhold);
       buildMobileTopMenu(plans);
       attachDropdownListener();
+      attachSearchListeners();
       clearUI();
 
       const plan = plans.find(function(p) { return p.planID === currentPlanId; });
@@ -728,6 +730,7 @@ function buildMobileTopMenu(plans) {
       buildTree(goalsForPlan);
       renderInnhold(innhold, currentPlanId);
       setupScrollSpy();
+      return true;
 
       if (location.hash) {
         const el = document.getElementById(location.hash.substring(1));
