@@ -719,7 +719,7 @@ function buildMobileTopMenu(plans) {
     searchBtn.addEventListener("click", function() {
       const btnRect    = searchBtn.getBoundingClientRect();
       const rightOffset = window.innerWidth - btnRect.right;
-      const brandRect = document.querySelector(".brand").getBoundingClientRect();
+      const brandRect = document.querySelector(".brand-logo").getBoundingClientRect();
       const maxWidth = window.innerWidth - brandRect.right - 5;
       searchWrapper.style.right = rightOffset + "px";
       searchWrapper.style.maxWidth = maxWidth + "px";
