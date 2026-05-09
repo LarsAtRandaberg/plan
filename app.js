@@ -703,12 +703,15 @@ function buildMobileTopMenu(plans) {
       }
     });
   }
-function attachMobileSearchListeners() {
+  function attachMobileSearchListeners() {
     const searchBtn     = document.getElementById("searchBtn");
     const searchWrapper = document.getElementById("search-wrapper");
     if (!searchBtn || !searchWrapper) return;
 
     searchBtn.addEventListener("click", function() {
+      const btnRect    = searchBtn.getBoundingClientRect();
+      const rightOffset = window.innerWidth - btnRect.right;
+      searchWrapper.style.right = rightOffset + "px";
       searchWrapper.classList.add("mobile-open");
       const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
       if (menuIcon) menuIcon.className = "ti ti-x";
