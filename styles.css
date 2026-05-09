@@ -726,6 +726,10 @@ section h2 {
   align-items: center;
 }
 
+.search-btn {
+  display: none;
+}
+
 .search-icon {
   position: absolute;
   left: 10px;
