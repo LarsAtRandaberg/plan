@@ -704,10 +704,12 @@ section h2 {
       flex: 1;
     }
   
-    .search-btn,
-    .menu-btn {
-      flex-shrink: 0;
-    }
+  .topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-left: auto;
+  }
   .search-wrapper {
     display: none;
     position: fixed;
