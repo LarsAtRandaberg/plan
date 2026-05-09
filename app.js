@@ -218,6 +218,8 @@ function buildMobileTopMenu(plans) {
   function buildTopMenu(plans) {
     if (!topnav) return;
     topnav.innerHTML = "";
+    const menuTopnav = document.getElementById("menu-topnav");
+    if (menuTopnav) menuTopnav.innerHTML = "";
 
     const groups = new Map();
     plans.forEach(function(p) {
@@ -273,6 +275,26 @@ function buildMobileTopMenu(plans) {
       dd.appendChild(btn);
       dd.appendChild(menu);
       topnav.appendChild(dd);
+      if (menuTopnav) {
+  const ddClone = dd.cloneNode(true);
+  ddClone.querySelector("button").addEventListener("click", function(e) {
+    e.stopPropagation();
+    document.querySelectorAll("#menu-topnav .dropdown.open").forEach(function(x) {
+      if (x !== ddClone) x.classList.remove("open");
+    });
+    ddClone.classList.toggle("open");
+  });
+  ddClone.querySelectorAll("a").forEach(function(a) {
+    a.addEventListener("click", function(e) {
+      e.preventDefault();
+      const url = new URL(a.href);
+      const planId = url.searchParams.get("id");
+      if (planId) navigateToPlan(planId);
+      if (sidebar) sidebar.classList.remove("open");
+    });
+  });
+  menuTopnav.appendChild(ddClone);
+}
     });
 
     updateKommuneplanButtonState();
