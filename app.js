@@ -717,11 +717,10 @@ function buildMobileTopMenu(plans) {
     if (!searchBtn || !searchWrapper) return;
 
     searchBtn.addEventListener("click", function() {
-      alert("searchBtn klikket");
       const btnRect    = searchBtn.getBoundingClientRect();
       const rightOffset = window.innerWidth - btnRect.right;
-      const logoRect = document.querySelector(".brand-logo").getBoundingClientRect();
-      const maxWidth = window.innerWidth - logoRect.right - 5;
+      const brandRect = document.querySelector(".brand").getBoundingClientRect();
+      const maxWidth = window.innerWidth - brandRect.right - 5;
       searchWrapper.style.right = rightOffset + "px";
       searchWrapper.style.maxWidth = maxWidth + "px";
       searchWrapper.classList.add("mobile-open");
