@@ -577,6 +577,7 @@ section h2 {
 .search-btn       { display: none; }
 .search-close-btn { display: none; }
 .topnav-mobile    { display: none; }
+.topbar-actions   { display: flex; align-items: center; gap: 6px; }
 
 /*---------------------------------------
   SØK (desktop)
@@ -585,33 +586,40 @@ section h2 {
   position: relative;
   display: flex;
   align-items: center;
+  background: rgba(255,255,255,0.1);
+  border: 0.5px solid rgba(255,255,255,0.2);
+  border-radius: 20px;
+  padding: 0 10px;
+  gap: 6px;
+  transition: border-color 0.2s;
+}
+
+.search-wrapper:focus-within {
+  border-color: rgba(192,221,151,0.5);
+  background: rgba(255,255,255,0.15);
 }
 
 .search-icon {
-  position: absolute;
-  left: 10px;
   color: rgba(255,255,255,0.5);
   font-size: 15px;
   pointer-events: none;
+  flex-shrink: 0;
 }
 
 .search-input {
   background: transparent;
   border: none;
-  border-radius: 0;
-  padding: 5px 8px;
+  padding: 5px 0;
   font-size: 13px;
   color: #fff;
-  width: 220px;
+  width: 200px;
   outline: none;
   transition: width 0.2s;
 }
 
 .search-input::placeholder { color: rgba(255,255,255,0.45); }
 
-.search-input:focus {
-  width: 300px;
-}
+.search-input:focus { width: 280px; }
 
 .search-results {
   display: none;
@@ -680,14 +688,6 @@ section h2 {
   color: #888;
   text-align: center;
 }
-.topbar-actions {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-.search-input::placeholder {
-  color: rgba(255,255,255,0.8);
-}
 
 /*---------------------------------------
   MEDIAQUERIES MOBIL
@@ -702,9 +702,7 @@ section h2 {
     align-items: center;
   }
 
-  .topbar .brand {
-    flex: 1;
-  }
+  .topbar .brand { flex: 1; }
 
   .topbar-actions {
     display: flex;
@@ -727,27 +725,12 @@ section h2 {
     font-size: 18px;
   }
 
-  .search-close-btn {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-    border: 0.5px solid rgba(255,255,255,0.2);
-    background: rgba(255,255,255,0.08);
-    cursor: pointer;
-    color: #fff;
-    font-size: 18px;
-    flex-shrink: 0;
-  }
-
-.search-wrapper {
+  /* Desktop søkeboks skjult på mobil */
+  .search-wrapper {
     display: flex;
     position: fixed;
     top: 9px;
     right: 12px;
-    left: auto;
     width: 34px;
     height: 34px;
     background: rgba(255,255,255,0.08);
@@ -756,19 +739,23 @@ section h2 {
     z-index: 500;
     align-items: center;
     justify-content: flex-end;
-    padding: 0 8px;
+    padding: 0 9px;
+    gap: 0;
     overflow: hidden;
     opacity: 0;
     pointer-events: none;
-    transition: width 0.3s ease, opacity 0.2s ease, padding 0.3s ease;
+    transition: width 0.3s ease, opacity 0.2s ease;
   }
 
   .search-wrapper.mobile-open {
     opacity: 1;
     pointer-events: auto;
     width: calc(100% - 60px);
-    right: 12px;
-    padding: 0 8px;
+    justify-content: flex-start;
+    padding: 0 10px;
+    gap: 6px;
+    background: rgba(255,255,255,0.08);
+    border-color: rgba(192,221,151,0.3);
   }
 
   .search-icon {
@@ -783,9 +770,8 @@ section h2 {
     order: 1;
     flex: 1;
     width: 100%;
-    border-radius: 6px;
+    padding: 5px 0;
     font-size: 14px;
-    padding: 5px 8px;
     opacity: 0;
     transition: opacity 0.15s ease 0.15s;
   }
@@ -794,55 +780,11 @@ section h2 {
     opacity: 1;
   }
 
-  .search-input:focus {
-    width: 100%;
-  }
+  .search-input::placeholder { color: rgba(255,255,255,0.7); }
 
-  .search-input::placeholder {
-    color: rgba(255,255,255,0.8);
-  }
+  .search-input:focus { width: 100%; }
 
-  .search-input::-webkit-search-cancel-button {
-    display: none;
-  }
-
-  .search-wrapper.mobile-open {
-    opacity: 1;
-    pointer-events: auto;
-    width: calc(100% - 60px);
-    right: 12px;
-    left: auto;
-    padding: 0 8px;
-    background: var(--green-900);
-    border-color: rgba(192,221,151,0.3);
-    justify-content: flex-start;
-  }
-
-  .search-icon {
-    left: 8px;
-    flex-shrink: 0;
-  }
-
-  .search-input {
-    flex: 1;
-    width: 100%;
-    border-radius: 6px;
-    font-size: 14px;
-    opacity: 0;
-    transition: opacity 0.15s ease 0.1s;
-  }
-
-  .search-wrapper.mobile-open .search-input {
-    opacity: 1;
-  }
-
-  .search-input:focus {
-    width: 100%;
-  }
-
-  .search-input::-webkit-search-cancel-button {
-    display: none;
-  }
+  .search-input::-webkit-search-cancel-button { display: none; }
 
   .search-results {
     position: fixed;
@@ -856,8 +798,7 @@ section h2 {
 
   .hero       { padding: 20px 16px 18px; }
   .hero-title { font-size: 17px; }
-
-  .layout { display: block; }
+  .layout     { display: block; }
 
   .sidebar {
     position: fixed;
@@ -871,10 +812,8 @@ section h2 {
   }
 
   .sidebar.open { left: 0; }
-
-  .content { padding: 16px; }
-
-  .innhold-pbi { height: 260px; }
+  .content      { padding: 16px; }
+  .innhold-pbi  { height: 260px; }
 
   #menu-topnav {
     display: block;
@@ -919,5 +858,7 @@ section h2 {
     border-radius: 6px;
   }
 
+  #menu-topnav .dropdown-menu a:hover { background: var(--green-100); }
+}
   #menu-topnav .dropdown-menu a:hover { background: var(--green-100); }
 }
