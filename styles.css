@@ -573,6 +573,10 @@ section h2 {
 /*---------------------------------------
   MOBIL
 ---------------------------------------*/
+#menu-topnav {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .menu-btn { display: flex; }
   .topnav { display: none; }
@@ -614,4 +618,63 @@ section h2 {
   .content { padding: 16px; }
 
   .innhold-pbi { height: 260px; }
+
+  #menu-topnav {
+    display: block;
+    border-bottom: 1px solid var(--green-100);
+    margin-bottom: 8px;
+    padding-bottom: 8px;
+  }
+
+  #menu-topnav .dropdown {
+    position: relative;
+    margin-bottom: 4px;
+  }
+
+  #menu-topnav .dropbtn {
+    width: 100%;
+    text-align: left;
+    color: var(--green-900);
+    font-weight: 600;
+    font-size: 13px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    background: none;
+    border: none;
+  }
+
+  #menu-topnav .dropbtn:hover {
+    background: var(--green-100);
+  }
+
+  #menu-topnav .dropbtn.is-selected {
+    background: var(--green-100);
+    color: var(--green-900);
+    border: none;
+  }
+
+  #menu-topnav .dropdown-menu {
+    position: static;
+    display: none;
+    box-shadow: none;
+    border: none;
+    border-radius: 0;
+    padding: 0 0 0 12px;
+    background: transparent;
+  }
+
+  #menu-topnav .dropdown.open .dropdown-menu {
+    display: block;
+  }
+
+  #menu-topnav .dropdown-menu a {
+    font-size: 12px;
+    color: var(--green-800);
+    padding: 5px 8px;
+    border-radius: 6px;
+  }
+
+  #menu-topnav .dropdown-menu a:hover {
+    background: var(--green-100);
+  }
 }
