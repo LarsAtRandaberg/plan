@@ -764,7 +764,8 @@ section h2 {
     opacity: 1;
     pointer-events: auto;
     width: calc(100% - 60px);
-    left: 12px;
+    right: 12px;
+    left: auto;
     padding: 0 8px;
     background: var(--green-900);
     border-color: rgba(192,221,151,0.3);
