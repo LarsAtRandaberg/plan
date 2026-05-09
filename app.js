@@ -715,9 +715,9 @@ function buildMobileTopMenu(plans) {
 
     searchBtn.addEventListener("click", function() {
       const btnRect    = searchBtn.getBoundingClientRect();
-      const logoRect = document.querySelector(".brand-logo").getBoundingClientRect();
-      const maxWidth = window.innerWidth - logoRect.right - 5 - rightOffset;
       const rightOffset = window.innerWidth - btnRect.right;
+      const logoRect = document.querySelector(".brand-logo").getBoundingClientRect();
+      const maxWidth = window.innerWidth - logoRect.right - 5;
       searchWrapper.style.right = rightOffset + "px";
       searchWrapper.style.maxWidth = maxWidth + "px";
       searchWrapper.classList.add("mobile-open");
@@ -782,12 +782,14 @@ function buildMobileTopMenu(plans) {
       buildTree(goalsForPlan);
       renderInnhold(innhold, currentPlanId);
       setupScrollSpy();
-      return true;
+      setupScrollSpy();
 
       if (location.hash) {
         const el = document.getElementById(location.hash.substring(1));
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
+
+      return true;
     } catch(e) {
       titleEl.textContent = "Feil";
       contentEl.innerHTML = "<p>Det oppstod en feil ved lasting av data.</p>";
