@@ -30,6 +30,8 @@
     "brodtekst": "Visjonen handler om å ta vare på det særpregede ved Randaberg: nærhet til natur, korte avstander og et aktivt lokalsamfunn.",
     "bildeUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/31/Randaberg_kommune_sentrum.jpg/1920px-Randaberg_kommune_sentrum.jpg",
     "bildeAltTekst": "Randaberg kommunesentrum",
+    "innholdBredde": 800,
+    "innholdHøyde": null,
     "pbiUrl": null, "innholdBredde": null, "innholdHøyde": null,
     "vedleggUrl": null, "vedleggEtikett": null,
     "innholdstype": "Bilde", "visningsrekkefølge": 3
