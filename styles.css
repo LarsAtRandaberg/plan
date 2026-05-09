@@ -689,7 +689,20 @@ section h2 {
 @media (max-width: 768px) {
   .menu-btn  { display: flex; }
   .topnav    { display: none; }
-
+  .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  
+    .topbar .brand {
+      flex: 1;
+    }
+  
+    .search-btn,
+    .menu-btn {
+      flex-shrink: 0;
+    }
   .search-wrapper {
     display: none;
     position: fixed;
