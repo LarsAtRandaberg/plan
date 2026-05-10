@@ -433,44 +433,44 @@
     const BADGE_ICON  = { "Tekst":"ti-align-left","Bilde":"ti-photo","PBI-rapport":"ti-chart-bar","Lenke":"ti-link","JSON-kode":"ti-code" };
     const FOOTER_PX   = 30;
 
+    // Grupper rader per mål
+    const perMaal = new Map();
     innhold
-      .filter(function(r) {
-        return (r.innholdPlan || r.planID) === planId;
-      })
+      .filter(function(r) { return (r.innholdPlan || r.planID) === planId; })
       .sort(function(a, b) {
         return (a.visningsrekkefølge || a.innhold_rekkefølge || 0) - (b.visningsrekkefølge || b.innhold_rekkefølge || 0);
       })
       .forEach(function(rad) {
-        const anchorId = "maal-" + safeId(rad.innholdMaal || rad.maalID);
-        const section  = document.getElementById(anchorId);
-        if (!section) return;
+        const maalId = rad.innholdMaal || rad.maalID;
+        if (!perMaal.has(maalId)) perMaal.set(maalId, []);
+        perMaal.get(maalId).push(rad);
+      });
 
+    perMaal.forEach(function(rader, maalId) {
+      const anchorId = "maal-" + safeId(maalId);
+      const section  = document.getElementById(anchorId);
+      if (!section) return;
+
+      // Én blokk per mål som omfavner alle rader
+      const blokk = document.createElement("div");
+      blokk.className = "innhold-blokk";
+
+      rader.forEach(function(rad) {
         const typeRaw   = rad.innholdstype;
         const type      = TYPE_MAP[typeRaw] || typeRaw || "Tekst";
         const brodtekst = rad.brodtekst     || rad.innhold          || null;
-        const mediaUrl  = rad.mediaUrl      || rad.bildeUrl         || (type === "Bilde"       ? rad.innhold_url_json : null) || null;
-        const pbiUrl    = rad.pbiUrl        ||                         (type === "PBI-rapport"  ? rad.innhold_url_json : null) || null;
-        const lenkeUrl  = rad.vedleggUrl    ||                         (type === "Lenke"        ? rad.innhold_url_json : null) || null;
-        const jsonData  = rad.json          ||                         (type === "JSON-kode"    ? rad.innhold_url_json : null) || null;
+        const mediaUrl  = rad.mediaUrl      || rad.bildeUrl         || (type === "Bilde"      ? rad.innhold_url_json : null) || null;
+        const pbiUrl    = rad.pbiUrl        ||                         (type === "PBI-rapport" ? rad.innhold_url_json : null) || null;
+        const lenkeUrl  = rad.vedleggUrl    ||                         (type === "Lenke"       ? rad.innhold_url_json : null) || null;
+        const jsonData  = rad.json          ||                         (type === "JSON-kode"   ? rad.innhold_url_json : null) || null;
         const altTekst  = rad.bildeAltTekst || rad.alternativ_tekst  || "";
         const bredde    = rad.innholdBredde || rad.innhold_bredde    || null;
         const høyde     = rad.innholdHøyde  || rad.innhold_hoyde     || null;
         const nivaaRaw  = rad.overskriftNivaa || rad.overskrift_nivaa || null;
 
-        const blokk = document.createElement("div"); blokk.className = "innhold-blokk";
-
-        // Badge
-        const badge  = document.createElement("div");
-        badge.className = "card-type-badge " + (BADGE_CLASS[type] || "badge-tekst");
-        const badgeI = document.createElement("i");
-        badgeI.className = "ti " + (BADGE_ICON[type] || "ti-file");
-        badgeI.setAttribute("aria-hidden", "true"); badgeI.style.fontSize = "11px";
-        badge.appendChild(badgeI); badge.appendChild(document.createTextNode(" " + type));
-        blokk.appendChild(badge);
-
-        // Overskrift med nivå
+        // Overskrift
         if (rad.overskrift) {
-          const tag  = NIVAA_MAP[nivaaRaw] || "h3";
+          const tag  = NIVAA_MAP[nivaaRaw]  || "h3";
           const stil = NIVAA_STIL[nivaaRaw] || "font-size:14px;font-weight:600;color:#173404;margin:0 0 6px";
           const hEl  = document.createElement(tag);
           hEl.textContent = rad.overskrift;
@@ -529,12 +529,12 @@
             renderJSON(parsed, blokk);
           } catch(e) {
             console.error("JSON-renderer feil for rad:", rad.overskrift, e);
-            console.error("JSON-data:", jsonData);
           }
         }
-
-        section.appendChild(blokk);
       });
+
+      section.appendChild(blokk);
+    });
   }
 
   // =========================
