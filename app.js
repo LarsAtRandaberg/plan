@@ -341,6 +341,7 @@
     if (cfg.type === "nokkeltall") {
       const grid = document.createElement("div");
       const isMobil = window.innerWidth <= 768;
+
       grid.style.cssText = isMobil
         ? "display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px"
         : "display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-top:8px";
@@ -397,7 +398,9 @@
       grid.appendChild(lagKolonne(cfg.venstre));
 
       const senter = document.createElement("div");
-      senter.style.cssText = "width:150px;height:150px;border-radius:50%;background:#3b6d11;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;font-weight:700;line-height:1.35;padding:16px;flex-shrink:0" + (isMobil ? ";margin:0 auto" : "");
+      var senterStil = "width:150px;height:150px;border-radius:50%;background:#3b6d11;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;font-weight:700;line-height:1.35;padding:16px;flex-shrink:0";
+      if (isMobil) { senterStil += ";margin:0 auto"; }
+      senter.style.cssText = senterStil;
       senter.innerHTML = cfg.senter.replace(/\n/g, "<br>");
       grid.appendChild(senter);
 
