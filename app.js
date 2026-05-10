@@ -364,8 +364,12 @@
     }
 
     if (cfg.type === "oversikt") {
+      const isMobil = window.innerWidth <= 768;
       const grid = document.createElement("div");
-      grid.style.cssText = "display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-top:8px";
+
+      grid.style.cssText = isMobil
+        ? "display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px"
+        : "display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-top:8px";
 
       function lagKolonne(data) {
         const kol = document.createElement("div");
