@@ -484,7 +484,21 @@ section h2 {
     color: #fff;
     font-size: 18px;
   }
+/* Oversikt-visualisering */
+  .innhold-blokk [style*="grid-template-columns:1fr auto 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
 
+  .innhold-blokk [style*="border-radius:50%"] {
+    margin: 16px auto !important;
+  }
+
+  /* Bilder */
+  .innhold-bilde {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto;
+  }
   .search-wrapper {
     display: flex;
     position: fixed;
