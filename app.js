@@ -340,7 +340,10 @@
 
     if (cfg.type === "nokkeltall") {
       const grid = document.createElement("div");
-      grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:8px";
+      const isMobil = window.innerWidth <= 768;
+      grid.style.cssText = isMobil
+        ? "display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px"
+        : "display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-top:8px";
       cfg.tall.forEach(function(t) {
         const kort = document.createElement("div");
         kort.style.cssText = "background:#27500a;border-radius:10px;padding:16px;color:#fff";
