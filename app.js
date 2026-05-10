@@ -524,7 +524,13 @@
 
         // JSON-kode
         if (jsonData) {
-          try { renderJSON(JSON.parse(jsonData), blokk); } catch(e) { console.error("JSON-renderer feil:", e); }
+          try {
+            const parsed = JSON.parse(jsonData);
+            renderJSON(parsed, blokk);
+          } catch(e) {
+            console.error("JSON-renderer feil for rad:", rad.overskrift, e);
+            console.error("JSON-data:", jsonData);
+          }
         }
 
         section.appendChild(blokk);
