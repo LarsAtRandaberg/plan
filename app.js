@@ -397,7 +397,7 @@
       grid.appendChild(lagKolonne(cfg.venstre));
 
       const senter = document.createElement("div");
-      senter.style.cssText = "width:170px;height:170px;border-radius:50%;background:#3b6d11;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:16px;font-weight:700;line-height:1.35;padding:20px;flex-shrink:0";
+      senter.style.cssText = "width:150px;height:150px;border-radius:50%;background:#3b6d11;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;font-weight:700;line-height:1.35;padding:16px;flex-shrink:0" + (isMobil ? ";margin:0 auto" : "");
       senter.innerHTML = cfg.senter.replace(/\n/g, "<br>");
       grid.appendChild(senter);
 
