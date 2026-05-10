@@ -1,15 +1,9 @@
 (() => {
-  // =========================
-  // Konfig
-  // =========================
   const DEFAULT_PLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
   const URL_PLAN    = "data/plan.json";
   const URL_MAAL    = "data/maal.json";
   const URL_INNHOLD = "data/innhold.json";
 
-  // =========================
-  // DOM
-  // =========================
   const topbar          = document.querySelector(".topbar");
   const topnav          = document.getElementById("topnav");
   const sidebar         = document.getElementById("sidebar");
@@ -24,9 +18,6 @@
 
   if (!menuEl || !contentEl || !titleEl) return;
 
-  // =========================
-  // Søk – tilstand
-  // =========================
   let searchModeActive = false;
 
   function closeSearch() {
@@ -43,9 +34,6 @@
     if (brandName) brandName.style.display = "";
   }
 
-  // =========================
-  // Hamburger / sidebar
-  // =========================
   if (menuBtn && sidebar) {
     menuBtn.addEventListener("click", function() {
       if (searchModeActive) {
@@ -58,9 +46,6 @@
     });
   }
 
-  // =========================
-  // URL -> plan
-  // =========================
   const params      = new URLSearchParams(location.search);
   const explicitId  = params.get("id");
   let currentPlanId = explicitId || DEFAULT_PLAN_ID;
@@ -69,9 +54,6 @@
     history.replaceState(null, "", "?id=" + encodeURIComponent(DEFAULT_PLAN_ID) + location.hash);
   }
 
-  // =========================
-  // Hide/show topbar ved scroll
-  // =========================
   (() => {
     if (!topbar) return;
     let lastY = window.scrollY, ticking = false;
@@ -86,9 +68,6 @@
     }, { passive: true });
   })();
 
-  // =========================
-  // Hjelpere
-  // =========================
   function safeId(text) {
     return String(text || "").toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
   }
@@ -112,7 +91,7 @@
       const isActive = a.getAttribute("href") === "#" + activeSectionId;
       a.classList.toggle("active", isActive);
       if (isActive) a.setAttribute("aria-current", "true");
-      else          a.removeAttribute("aria-current");
+      else a.removeAttribute("aria-current");
     });
     const activeLink = document.querySelector("#menu a[href='#" + activeSectionId + "']");
     if (!activeLink) return;
@@ -145,9 +124,6 @@
     setActiveLink(sections[0].id);
   }
 
-  // =========================
-  // Kommuneplan-knapp state
-  // =========================
   function updateKommuneplanButtonState() {
     const btn = document.getElementById("btnKommuneplan");
     if (!btn) return;
@@ -155,12 +131,9 @@
     btn.classList.toggle("is-selected", isDefault);
     btn.classList.toggle("is-disabled",  isDefault);
     if (isDefault) btn.setAttribute("aria-current", "page");
-    else           btn.removeAttribute("aria-current");
+    else btn.removeAttribute("aria-current");
   }
 
-  // =========================
-  // Toppmeny
-  // =========================
   function planTypeLabel(planTyper) {
     const labels = { 701100000: "Kommuneplanen", 701100001: "Strategier", 701100002: "Handlings- og økonomiplaner" };
     return labels[planTyper] || "Plantype " + planTyper;
@@ -238,9 +211,6 @@
     updateKommuneplanButtonState();
   }
 
-  // =========================
-  // Venstremeny: tre/hierarki
-  // =========================
   function buildTree(goalsForPlan) {
     const byId     = new Map(goalsForPlan.map(function(g) { return [g.maalID, g]; }));
     const children = new Map();
@@ -302,15 +272,15 @@
   // JSON-renderer
   // =========================
   function renderJSON(cfg, blokk) {
-    const G = { c900:"#173404", c800:"#27500a", c600:"#3b6d11", c200:"#c0dd97", c100:"#eaf3de" };
+    var G = { c900:"#173404", c800:"#27500a", c600:"#3b6d11", c200:"#c0dd97", c100:"#eaf3de" };
 
     if (cfg.type === "diagram") {
-      const wrap = document.createElement("div"); wrap.style.cssText = "position:relative;margin-top:8px";
-      const canvas = document.createElement("canvas"); wrap.appendChild(canvas); blokk.appendChild(wrap);
-      const farger = [G.c600, G.c200, G.c800, G.c900];
-      const isLinje    = cfg.diagramtype === "linje";
-      const isDoughnut = cfg.diagramtype === "doughnut";
-      const datasets = cfg.datasett.map(function(ds, i) {
+      var wrap = document.createElement("div"); wrap.style.cssText = "position:relative;margin-top:8px";
+      var canvas = document.createElement("canvas"); wrap.appendChild(canvas); blokk.appendChild(wrap);
+      var farger = [G.c600, G.c200, G.c800, G.c900];
+      var isLinje    = cfg.diagramtype === "linje";
+      var isDoughnut = cfg.diagramtype === "doughnut";
+      var datasets = cfg.datasett.map(function(ds, i) {
         return {
           label: ds.etikett, data: ds.verdier,
           backgroundColor: isLinje ? G.c100 : isDoughnut ? [G.c200, G.c600, G.c800, G.c900] : farger[i % farger.length],
@@ -339,19 +309,15 @@
     }
 
     if (cfg.type === "nokkeltall") {
-      const grid = document.createElement("div");
-      const isMobil = window.innerWidth <= 768;
-
-      grid.style.cssText = isMobil
-        ? "display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px"
-        : "display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-top:8px";
+      var grid = document.createElement("div");
+      grid.style.cssText = "display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:8px";
       cfg.tall.forEach(function(t) {
-        const kort = document.createElement("div");
+        var kort = document.createElement("div");
         kort.style.cssText = "background:#27500a;border-radius:10px;padding:16px;color:#fff";
-        const trendFarge = t.trend === "opp" ? "#c0dd97" : t.trend === "ned" ? "#f4c89a" : "rgba(255,255,255,0.6)";
-        const trendPil   = t.trend === "opp" ? "↑" : t.trend === "ned" ? "↓" : "→";
-        const trendBg    = t.trend === "opp" ? "rgba(192,221,151,0.2)" : t.trend === "ned" ? "rgba(224,112,48,0.2)" : "rgba(255,255,255,0.1)";
-        const trendTekst = t.trend === "opp" ? "Over mål" : t.trend === "ned" ? "Under mål" : "Stabilt";
+        var trendFarge = t.trend === "opp" ? "#c0dd97" : t.trend === "ned" ? "#f4c89a" : "rgba(255,255,255,0.6)";
+        var trendPil   = t.trend === "opp" ? "↑" : t.trend === "ned" ? "↓" : "→";
+        var trendBg    = t.trend === "opp" ? "rgba(192,221,151,0.2)" : t.trend === "ned" ? "rgba(224,112,48,0.2)" : "rgba(255,255,255,0.1)";
+        var trendTekst = t.trend === "opp" ? "Over mål" : t.trend === "ned" ? "Under mål" : "Stabilt";
         kort.innerHTML =
           "<div style='font-size:13px;font-weight:600;line-height:1.3;margin-bottom:2px'>" + t.etikett + "</div>" +
           "<div style='font-size:11px;color:rgba(255,255,255,0.6);margin-bottom:8px'>" + (t.undertittel || "") + "</div>" +
@@ -364,33 +330,33 @@
     }
 
     if (cfg.type === "oversikt") {
-      const isMobil = window.innerWidth <= 768;
-      const grid = document.createElement("div");
+      var isMobil = window.innerWidth <= 768;
 
+      var grid = document.createElement("div");
       grid.style.cssText = isMobil
         ? "display:grid;grid-template-columns:1fr;gap:16px;margin-top:8px"
         : "display:grid;grid-template-columns:1fr auto 1fr;gap:24px;align-items:center;margin-top:8px";
 
       function lagKolonne(data) {
-        const kol = document.createElement("div");
+        var kol = document.createElement("div");
         if (data.tittel) {
-          const t = document.createElement("div");
+          var t = document.createElement("div");
           t.style.cssText = "font-size:16px;font-weight:700;color:#173404;margin-bottom:14px";
           t.textContent = data.tittel; kol.appendChild(t);
         }
         data.punkter.forEach(function(p) {
-          const punkt = document.createElement("div");
+          var punkt = document.createElement("div");
           punkt.style.cssText = "display:flex;align-items:flex-start;gap:10px;margin-bottom:12px";
-          const dot = document.createElement("div");
+          var dot = document.createElement("div");
           dot.style.cssText = "width:12px;height:12px;border-radius:50%;background:#3b6d11;flex-shrink:0;margin-top:4px";
-          const inn = document.createElement("div");
+          var inn = document.createElement("div");
           if (p.tittel) {
-            const pt = document.createElement("div");
+            var pt = document.createElement("div");
             pt.style.cssText = "font-size:13px;font-weight:700;color:#173404;margin-bottom:2px";
             pt.textContent = p.tittel; inn.appendChild(pt);
           }
           if (p.tekst) {
-            const tt = document.createElement("div");
+            var tt = document.createElement("div");
             tt.style.cssText = "font-size:12px;color:#3b6d11;line-height:1.5";
             tt.textContent = p.tekst; inn.appendChild(tt);
           }
@@ -401,7 +367,7 @@
 
       grid.appendChild(lagKolonne(cfg.venstre));
 
-      const senter = document.createElement("div");
+      var senter = document.createElement("div");
       var senterStil = "width:150px;height:150px;border-radius:50%;background:#3b6d11;color:#fff;display:flex;align-items:center;justify-content:center;text-align:center;font-size:14px;font-weight:700;line-height:1.35;padding:16px;flex-shrink:0";
       if (isMobil) { senterStil += ";margin:0 auto"; }
       senter.style.cssText = senterStil;
@@ -417,128 +383,109 @@
   // Innholdsblokker per mål
   // =========================
   function renderInnhold(innhold, planId) {
-    const TYPE_MAP = {
+    var TYPE_MAP = {
       701100000: "Tekst",
       701100001: "Bilde",
       701100002: "PBI-rapport",
       701100003: "Lenke",
       701100004: "JSON-kode"
     };
-
-    const NIVAA_MAP = {
-      701100000: "h2",
-      701100001: "h3",
-      701100002: "h4",
-      701100003: "h5"
-    };
-
-    const NIVAA_STIL = {
+    var NIVAA_MAP  = { 701100000:"h2", 701100001:"h3", 701100002:"h4", 701100003:"h5" };
+    var NIVAA_STIL = {
       701100000: "font-size:22px;font-weight:700;color:#173404;margin:0 0 10px",
       701100001: "font-size:18px;font-weight:600;color:#173404;margin:0 0 8px",
       701100002: "font-size:16px;font-weight:600;color:#27500a;margin:0 0 6px",
       701100003: "font-size:14px;font-weight:600;color:#3b6d11;margin:0 0 4px"
     };
+    var FOOTER_PX = 30;
 
-    const BADGE_CLASS = { "Tekst":"badge-tekst","Bilde":"badge-bilde","PBI-rapport":"badge-pbi","Lenke":"badge-vedlegg","JSON-kode":"badge-tekst" };
-    const BADGE_ICON  = { "Tekst":"ti-align-left","Bilde":"ti-photo","PBI-rapport":"ti-chart-bar","Lenke":"ti-link","JSON-kode":"ti-code" };
-    const FOOTER_PX   = 30;
-
-    // Grupper rader per mål
-    const perMaal = new Map();
+    var perMaal = new Map();
     innhold
       .filter(function(r) { return (r.innholdPlan || r.planID) === planId; })
       .sort(function(a, b) {
         return (a.visningsrekkefølge || a.innhold_rekkefølge || 0) - (b.visningsrekkefølge || b.innhold_rekkefølge || 0);
       })
       .forEach(function(rad) {
-        const maalId = rad.innholdMaal || rad.maalID;
+        var maalId = rad.innholdMaal || rad.maalID;
         if (!perMaal.has(maalId)) perMaal.set(maalId, []);
         perMaal.get(maalId).push(rad);
       });
 
     perMaal.forEach(function(rader, maalId) {
-      const anchorId = "maal-" + safeId(maalId);
-      const section  = document.getElementById(anchorId);
+      var anchorId = "maal-" + safeId(maalId);
+      var section  = document.getElementById(anchorId);
       if (!section) return;
 
-      // Én blokk per mål som omfavner alle rader
-      const blokk = document.createElement("div");
+      var blokk = document.createElement("div");
       blokk.className = "innhold-blokk";
 
       rader.forEach(function(rad) {
-        const typeRaw   = rad.innholdstype;
-        const type      = TYPE_MAP[typeRaw] || typeRaw || "Tekst";
-        const brodtekst = rad.brodtekst     || rad.innhold          || null;
-        const mediaUrl  = rad.mediaUrl      || rad.bildeUrl         || (type === "Bilde"      ? rad.innhold_url_json : null) || null;
-        const pbiUrl    = rad.pbiUrl        ||                         (type === "PBI-rapport" ? rad.innhold_url_json : null) || null;
-        const lenkeUrl  = rad.vedleggUrl    ||                         (type === "Lenke"       ? rad.innhold_url_json : null) || null;
-        const jsonData  = rad.json          ||                         (type === "JSON-kode"   ? rad.innhold_url_json : null) || null;
-        const altTekst  = rad.bildeAltTekst || rad.alternativ_tekst  || "";
-        const bredde    = rad.innholdBredde || rad.innhold_bredde    || null;
-        const høyde     = rad.innholdHøyde  || rad.innhold_hoyde     || null;
-        const nivaaRaw  = rad.overskriftNivaa || rad.overskrift_nivaa || null;
+        var typeRaw   = rad.innholdstype;
+        var type      = TYPE_MAP[typeRaw] || typeRaw || "Tekst";
+        var brodtekst = rad.brodtekst     || rad.innhold         || null;
+        var mediaUrl  = rad.mediaUrl      || rad.bildeUrl        || (type === "Bilde"      ? rad.innhold_url_json : null) || null;
+        var pbiUrl    = rad.pbiUrl        ||                        (type === "PBI-rapport" ? rad.innhold_url_json : null) || null;
+        var lenkeUrl  = rad.vedleggUrl    ||                        (type === "Lenke"       ? rad.innhold_url_json : null) || null;
+        var jsonData  = rad.json          ||                        (type === "JSON-kode"   ? rad.innhold_url_json : null) || null;
+        var altTekst  = rad.bildeAltTekst || rad.alternativ_tekst || "";
+        var bredde    = rad.innholdBredde || rad.innhold_bredde   || null;
+        var høyde     = rad.innholdHøyde  || rad.innhold_hoyde    || null;
+        var nivaaRaw  = rad.overskriftNivaa || rad.overskrift_nivaa || null;
 
-        // Overskrift
         if (rad.overskrift) {
-          const tag  = NIVAA_MAP[nivaaRaw]  || "h3";
-          const stil = NIVAA_STIL[nivaaRaw] || "font-size:14px;font-weight:600;color:#173404;margin:0 0 6px";
-          const hEl  = document.createElement(tag);
+          var tag  = NIVAA_MAP[nivaaRaw]  || "h3";
+          var stil = NIVAA_STIL[nivaaRaw] || "font-size:14px;font-weight:600;color:#173404;margin:0 0 6px";
+          var hEl  = document.createElement(tag);
           hEl.textContent = rad.overskrift;
           hEl.style.cssText = stil;
           blokk.appendChild(hEl);
         }
 
-        // Brødtekst
         if (brodtekst) {
-          const p = document.createElement("p"); p.textContent = brodtekst; blokk.appendChild(p);
+          var p = document.createElement("p"); p.textContent = brodtekst; blokk.appendChild(p);
         }
 
-        // Bilde
         if (mediaUrl && type === "Bilde") {
-          const img = document.createElement("img");
+          var img = document.createElement("img");
           img.src = mediaUrl; img.alt = altTekst; img.className = "innhold-bilde";
           if (bredde) img.style.maxWidth = bredde + "px";
           blokk.appendChild(img);
         }
 
-        // PBI
         if (pbiUrl) {
-          const origW   = bredde || 600;
-          const iframeH = høyde  || 400;
-          const pbiHeader = document.createElement("div"); pbiHeader.className = "innhold-pbi-header";
-          const pbiIcon = document.createElement("i"); pbiIcon.className = "ti ti-chart-bar"; pbiIcon.setAttribute("aria-hidden", "true");
-          const pbiSpan = document.createElement("span"); pbiSpan.appendChild(pbiIcon); pbiSpan.appendChild(document.createTextNode(" " + (rad.overskrift || "Power BI-rapport")));
-          const pbiLink = document.createElement("a"); pbiLink.href = pbiUrl; pbiLink.target = "_blank"; pbiLink.rel = "noopener"; pbiLink.setAttribute("aria-label", "Åpne i nytt vindu"); pbiLink.style.color = "var(--green-600)";
-          const extIcon = document.createElement("i"); extIcon.className = "ti ti-external-link"; pbiLink.appendChild(extIcon);
+          var origW   = bredde || 600;
+          var iframeH = høyde  || 400;
+          var pbiHeader = document.createElement("div"); pbiHeader.className = "innhold-pbi-header";
+          var pbiIcon = document.createElement("i"); pbiIcon.className = "ti ti-chart-bar"; pbiIcon.setAttribute("aria-hidden", "true");
+          var pbiSpan = document.createElement("span"); pbiSpan.appendChild(pbiIcon); pbiSpan.appendChild(document.createTextNode(" " + (rad.overskrift || "Power BI-rapport")));
+          var pbiLink = document.createElement("a"); pbiLink.href = pbiUrl; pbiLink.target = "_blank"; pbiLink.rel = "noopener"; pbiLink.setAttribute("aria-label", "Åpne i nytt vindu"); pbiLink.style.color = "var(--green-600)";
+          var extIcon = document.createElement("i"); extIcon.className = "ti ti-external-link"; pbiLink.appendChild(extIcon);
           pbiHeader.appendChild(pbiSpan); pbiHeader.appendChild(pbiLink); blokk.appendChild(pbiHeader);
-          const wrapper = document.createElement("div");
+          var wrapper = document.createElement("div");
           wrapper.style.cssText = "overflow:hidden;border-radius:0 0 8px 8px;width:" + (origW+20) + "px;max-width:99%;margin:0 auto;border:none;height:" + (iframeH-FOOTER_PX) + "px";
-          const iframe = document.createElement("iframe"); iframe.src = pbiUrl;
+          var iframe = document.createElement("iframe"); iframe.src = pbiUrl;
           iframe.setAttribute("width", String(origW+20)); iframe.setAttribute("height", String(iframeH+FOOTER_PX));
           iframe.setAttribute("scrolling", "no"); iframe.setAttribute("frameborder", "0");
           iframe.allowFullscreen = true; iframe.style.cssText = "border:none;display:block";
           wrapper.appendChild(iframe); blokk.appendChild(wrapper);
         }
 
-        // Lenke
         if (lenkeUrl) {
-          const a = document.createElement("a"); a.href = lenkeUrl; a.className = "innhold-vedlegg"; a.target = "_blank"; a.rel = "noopener";
-          const vIcon = document.createElement("div"); vIcon.className = "innhold-vedlegg-icon";
-          const vI = document.createElement("i"); vI.className = "ti ti-link"; vI.setAttribute("aria-hidden", "true"); vIcon.appendChild(vI);
-          const vInfo = document.createElement("div"); vInfo.className = "innhold-vedlegg-info";
-          const vName = document.createElement("div"); vName.className = "innhold-vedlegg-name"; vName.textContent = rad.vedleggEtikett || rad.overskrift || "Åpne lenke"; vInfo.appendChild(vName);
-          const vArrow = document.createElement("div"); vArrow.className = "vedlegg-arrow";
-          const vArrowI = document.createElement("i"); vArrowI.className = "ti ti-external-link"; vArrowI.setAttribute("aria-hidden", "true"); vArrow.appendChild(vArrowI);
+          var a = document.createElement("a"); a.href = lenkeUrl; a.className = "innhold-vedlegg"; a.target = "_blank"; a.rel = "noopener";
+          var vIcon = document.createElement("div"); vIcon.className = "innhold-vedlegg-icon";
+          var vI = document.createElement("i"); vI.className = "ti ti-link"; vI.setAttribute("aria-hidden", "true"); vIcon.appendChild(vI);
+          var vInfo = document.createElement("div"); vInfo.className = "innhold-vedlegg-info";
+          var vName = document.createElement("div"); vName.className = "innhold-vedlegg-name"; vName.textContent = rad.vedleggEtikett || rad.overskrift || "Åpne lenke"; vInfo.appendChild(vName);
+          var vArrow = document.createElement("div"); vArrow.className = "vedlegg-arrow";
+          var vArrowI = document.createElement("i"); vArrowI.className = "ti ti-external-link"; vArrowI.setAttribute("aria-hidden", "true"); vArrow.appendChild(vArrowI);
           a.appendChild(vIcon); a.appendChild(vInfo); a.appendChild(vArrow); blokk.appendChild(a);
         }
 
-        // JSON-kode
         if (jsonData) {
           try {
-            const parsed = JSON.parse(jsonData);
-            renderJSON(parsed, blokk);
+            renderJSON(JSON.parse(jsonData), blokk);
           } catch(e) {
-            console.error("JSON-renderer feil for rad:", rad.overskrift, e);
+            console.error("JSON-renderer feil:", rad.overskrift, e);
           }
         }
       });
@@ -550,16 +497,16 @@
   // =========================
   // Søk
   // =========================
-  let searchData = { plans: [], goals: [], innhold: [] };
-  function buildSearchIndex(plans, goals, innhold) { searchData = { plans, goals, innhold }; }
+  var searchData = { plans: [], goals: [], innhold: [] };
+  function buildSearchIndex(plans, goals, innhold) { searchData = { plans: plans, goals: goals, innhold: innhold }; }
 
   function runSearch(query) {
     if (!searchResults) return;
-    const q = query.trim().toLowerCase();
+    var q = query.trim().toLowerCase();
     if (q.length < 2) { searchResults.classList.remove("open"); searchResults.innerHTML = ""; return; }
-    const planMap     = new Map(searchData.plans.map(function(p) { return [p.planID, p.planNavn]; }));
-    const goalHits    = searchData.goals.filter(function(g) { return (g.maalNavn || "").toLowerCase().includes(q); });
-    const innholdHits = searchData.innhold.filter(function(r) {
+    var planMap     = new Map(searchData.plans.map(function(p) { return [p.planID, p.planNavn]; }));
+    var goalHits    = searchData.goals.filter(function(g) { return (g.maalNavn || "").toLowerCase().includes(q); });
+    var innholdHits = searchData.innhold.filter(function(r) {
       return (r.overskrift || "").toLowerCase().includes(q) ||
              (r.brodtekst || r.innhold || "").toLowerCase().includes(q);
     });
@@ -567,7 +514,7 @@
       searchResults.innerHTML = "<div class=\"search-empty\">Ingen treff for «" + query.trim() + "»</div>";
       searchResults.classList.add("open"); return;
     }
-    const groups = new Map();
+    var groups = new Map();
     function getGroup(pid) {
       if (!groups.has(pid)) groups.set(pid, { planNavn: planMap.get(pid) || "Ukjent plan", goals: [], innhold: [] });
       return groups.get(pid);
@@ -576,18 +523,18 @@
     innholdHits.forEach(function(r) { getGroup(r.innholdPlan || r.planID).innhold.push(r); });
     searchResults.innerHTML = "";
     groups.forEach(function(group, pid) {
-      const label = document.createElement("div"); label.className = "search-group-label"; label.textContent = group.planNavn; searchResults.appendChild(label);
+      var label = document.createElement("div"); label.className = "search-group-label"; label.textContent = group.planNavn; searchResults.appendChild(label);
       function makeItem(iconClass, title, sub, anchorId) {
-        const item = document.createElement("div"); item.className = "search-result-item";
+        var item = document.createElement("div"); item.className = "search-result-item";
         item.innerHTML = "<i class=\"ti " + iconClass + " search-result-icon\" aria-hidden=\"true\"></i><div><div class=\"search-result-title\">" + title + "</div><div class=\"search-result-sub\">" + sub + "</div></div>";
         item.addEventListener("click", function() {
           searchResults.classList.remove("open"); if (searchInput) searchInput.value = "";
           if (pid !== currentPlanId) {
             history.pushState(null, "", "?id=" + encodeURIComponent(pid) + "#" + anchorId);
             currentPlanId = pid;
-            init().then(function() { const el = document.getElementById(anchorId); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); });
+            init().then(function() { var el = document.getElementById(anchorId); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); });
           } else {
-            const el = document.getElementById(anchorId); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+            var el = document.getElementById(anchorId); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         });
         return item;
@@ -598,7 +545,7 @@
     searchResults.classList.add("open");
   }
 
-  let searchListenersAttached = false, mobileSearchListenersAttached = false;
+  var searchListenersAttached = false, mobileSearchListenersAttached = false;
 
   function attachSearchListeners() {
     if (searchListenersAttached || !searchInput) return; searchListenersAttached = true;
@@ -615,21 +562,21 @@
 
   function attachMobileSearchListeners() {
     if (mobileSearchListenersAttached) return;
-    const searchBtn     = document.getElementById("searchBtn");
-    const searchWrapper = document.getElementById("search-wrapper");
+    var searchBtn     = document.getElementById("searchBtn");
+    var searchWrapper = document.getElementById("search-wrapper");
     if (!searchBtn || !searchWrapper) return;
     mobileSearchListenersAttached = true;
     searchBtn.addEventListener("click", function() {
-      const btnRect     = searchBtn.getBoundingClientRect();
-      const rightOffset = window.innerWidth - btnRect.right;
+      var btnRect     = searchBtn.getBoundingClientRect();
+      var rightOffset = window.innerWidth - btnRect.right;
       searchWrapper.style.right = rightOffset + "px";
       searchWrapper.style.width = "300px";
       searchWrapper.classList.add("mobile-open");
       searchBtn.style.background  = "transparent";
       searchBtn.style.borderColor = "transparent";
-      const brandName = document.querySelector(".brand-name");
+      var brandName = document.querySelector(".brand-name");
       if (brandName) brandName.style.display = "none";
-      const menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
+      var menuIcon = menuBtn ? menuBtn.querySelector("i") : null;
       if (menuIcon) menuIcon.className = "ti ti-x";
       searchModeActive = true;
       if (searchInput) searchInput.focus();
@@ -639,9 +586,6 @@
     }
   }
 
-  // =========================
-  // Navigasjon
-  // =========================
   function navigateToPlan(planId) {
     currentPlanId = planId;
     updateKommuneplanButtonState();
@@ -649,34 +593,40 @@
     init();
   }
 
-  // =========================
-  // Init
-  // =========================
   async function init() {
     try {
-      const [plans, goals, innhold] = await Promise.all([
+      var results = await Promise.all([
         fetch(URL_PLAN,    { cache: "no-store" }).then(function(r) { return r.json(); }),
         fetch(URL_MAAL,    { cache: "no-store" }).then(function(r) { return r.json(); }),
         fetch(URL_INNHOLD, { cache: "no-store" }).then(function(r) { return r.json(); })
       ]);
+      var plans   = results[0];
+      var goals   = results[1];
+      var innhold = results[2];
+
       buildTopMenu(plans);
       buildSearchIndex(plans, goals, innhold);
       attachDropdownListener();
       attachSearchListeners();
       attachMobileSearchListeners();
       clearUI();
-      const plan = plans.find(function(p) { return p.planID === currentPlanId; });
+
+      var plan = plans.find(function(p) { return p.planID === currentPlanId; });
       titleEl.textContent = plan ? plan.planNavn : "Plan ikke funnet";
-      const goalsForPlan = goals.filter(function(m) { return m.maalPlan === currentPlanId; });
+
+      var goalsForPlan = goals.filter(function(m) { return m.maalPlan === currentPlanId; });
       if (!goalsForPlan.length) { contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>"; return; }
-      const rootGoal = goalsForPlan.find(function(g) { return !g.maalOverordnet; });
+
+      var rootGoal = goalsForPlan.find(function(g) { return !g.maalOverordnet; });
       if (heroTittelEl)    heroTittelEl.textContent    = rootGoal ? rootGoal.maalNavn : "";
       if (heroMaalCountEl) heroMaalCountEl.textContent = goalsForPlan.length;
+
       buildTree(goalsForPlan);
       renderInnhold(innhold, currentPlanId);
       setupScrollSpy();
+
       if (location.hash) {
-        const el = document.getElementById(location.hash.substring(1));
+        var el = document.getElementById(location.hash.substring(1));
         if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
       }
       return true;
@@ -688,7 +638,7 @@
   }
 
   window.addEventListener("popstate", function() {
-    const p = new URLSearchParams(location.search);
+    var p = new URLSearchParams(location.search);
     currentPlanId = p.get("id") || DEFAULT_PLAN_ID;
     updateKommuneplanButtonState();
     init();
