@@ -377,6 +377,117 @@
       grid.appendChild(lagKolonne(cfg.hoyre));
       blokk.appendChild(grid);
     }
+    if (cfg.type === "tabell") {
+      var kolKlasser = ["kol-6","kol-3","kol-4","kol-1","kol-5","kol-2"];
+      var tWrap = document.createElement("div");
+      tWrap.style.cssText = "border:0.5px solid #c0dd97;border-radius:8px;overflow-x:auto;margin-top:8px";
+      var table = document.createElement("table");
+      table.style.cssText = "width:100%;border-collapse:collapse;font-size:12px";
+
+      // Thead
+      var thead = document.createElement("thead");
+      var hRad  = document.createElement("tr");
+      var th0   = document.createElement("th");
+      th0.style.cssText = "background:#eaf3de;color:#27500a;font-weight:600;font-size:11px;padding:8px 10px;text-align:left;border-bottom:1px solid #c0dd97;min-width:180px";
+      var eF = document.createElement("span"); eF.className = "enhet-full"; eF.textContent = cfg.enhet_full || "Tall i tusen kroner";
+      var eM = document.createElement("span"); eM.className = "enhet-mill"; eM.textContent = cfg.enhet_mill || "Tall i millioner kroner";
+      th0.appendChild(eF); th0.appendChild(eM);
+      hRad.appendChild(th0);
+      cfg.kolonner.forEach(function(kol) {
+        var th = document.createElement("th");
+        th.innerHTML = kol.label.replace("\n", "<br>");
+        th.className = kol.klass || "";
+        th.style.cssText = "background:#eaf3de;color:#27500a;font-weight:600;font-size:11px;padding:8px 10px;text-align:right;border-bottom:1px solid #c0dd97;white-space:nowrap";
+        hRad.appendChild(th);
+      });
+      thead.appendChild(hRad); table.appendChild(thead);
+
+      var tbody  = document.createElement("tbody");
+      var idTell = 0;
+
+      function tilMill(str) {
+        var ren = str.replace(/\s/g, "").replace(",", ".");
+        var n   = parseFloat(ren);
+        if (isNaN(n) || str === "0") return "0";
+        return (n / 1000).toFixed(1).replace(".", ",");
+      }
+
+      function lagTallCelle(v, klass, erProsent) {
+        var td = document.createElement("td");
+        td.className = klass || "";
+        td.style.cssText = "padding:6px 10px;text-align:right;color:#27500a;font-variant-numeric:tabular-nums;white-space:nowrap";
+        if (erProsent) { td.textContent = v; return td; }
+        var sf = document.createElement("span"); sf.className = "tall-full"; sf.textContent = v;
+        var sm = document.createElement("span"); sm.className = "tall-mill"; sm.textContent = tilMill(v);
+        td.appendChild(sf); td.appendChild(sm);
+        return td;
+      }
+
+      function lagTabellRader(rader, nivaa, forelderGruppe) {
+        rader.forEach(function(rad) {
+          var id      = "tr" + (++idTell);
+          var harBarn = rad.barn && rad.barn.length > 0;
+          var tr      = document.createElement("tr");
+          var klasser = [];
+          if (rad.type === "sum")       { klasser.push("rad-sum");       tr.style.cssText = "font-weight:700;background:#eaf3de;border-top:0.5px solid #c0dd97;border-bottom:0.5px solid #c0dd97"; }
+          if (rad.type === "highlight") { klasser.push("rad-highlight"); tr.style.cssText = "font-weight:700;background:#c0dd97;border-top:1px solid #3b6d11;border-bottom:1px solid #3b6d11"; }
+          if (rad.type === "prosent")   { klasser.push("rad-prosent");   tr.style.cssText = "font-size:11px;background:#f6f8f4;font-style:italic"; }
+          if (rad.type === "seksjon")   { klasser.push("rad-seksjon");   tr.style.cssText = "background:#f0f7e8;border-top:1px solid #c0dd97"; }
+          if (forelderGruppe)           { klasser.push("gruppe-" + forelderGruppe); tr.classList.add("skjult"); }
+          tr.className = klasser.join(" ");
+
+          if (rad.type === "seksjon") {
+            var td = document.createElement("td");
+            td.setAttribute("colspan", cfg.kolonner.length + 1);
+            td.style.cssText = "font-weight:600;color:#27500a;font-size:11px;text-transform:uppercase;letter-spacing:0.04em;padding:5px 10px";
+            td.textContent = rad.tekst;
+            tr.appendChild(td); tbody.appendChild(tr); return;
+          }
+
+          var td0   = document.createElement("td");
+          var celle = document.createElement("div"); celle.style.cssText = "display:flex;align-items:center;gap:6px";
+          var btn   = document.createElement("button");
+          btn.style.cssText = "width:16px;height:16px;border-radius:3px;background:#eaf3de;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:9px;color:#3b6d11;flex-shrink:0;transition:transform 0.15s";
+          btn.textContent = "▶";
+          if (!harBarn) btn.style.visibility = "hidden";
+
+          if (harBarn) {
+            btn.addEventListener("click", function(e) {
+              e.stopPropagation();
+              var erApen = btn.dataset.open === "1";
+              btn.dataset.open = erApen ? "0" : "1";
+              btn.style.transform = erApen ? "" : "rotate(90deg)";
+              document.querySelectorAll(".gruppe-" + id).forEach(function(el) {
+                var grupper = Array.from(el.classList).filter(function(c) { return c.startsWith("gruppe-"); });
+                var erDirekte = grupper.length === 1 + (forelderGruppe ? 1 : 0);
+                if (erApen) {
+                  el.classList.add("skjult");
+                  el.querySelectorAll("[data-open='1']").forEach(function(b) { b.dataset.open = "0"; b.style.transform = ""; });
+                } else if (erDirekte) {
+                  el.classList.remove("skjult");
+                }
+              });
+            });
+          }
+
+          td0.style.cssText = "padding:6px 10px;text-align:left;color:#173404;padding-left:" + (8 + nivaa * 18) + "px";
+          celle.appendChild(btn); celle.appendChild(document.createTextNode(rad.tekst));
+          td0.appendChild(celle); tr.appendChild(td0);
+
+          rad.v.forEach(function(v, i) {
+            tr.appendChild(lagTallCelle(v, kolKlasser[i], rad.type === "prosent"));
+          });
+
+          tbody.appendChild(tr);
+          if (harBarn) lagTabellRader(rad.barn, nivaa + 1, id);
+        });
+      }
+
+      lagTabellRader(cfg.rader, 0, null);
+      table.appendChild(tbody);
+      tWrap.appendChild(table);
+      blokk.appendChild(tWrap);
+    }
   }
 
   // =========================
