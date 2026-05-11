@@ -482,10 +482,17 @@
         }
 
         if (jsonData) {
-          try {
-            renderJSON(JSON.parse(jsonData), blokk);
-          } catch(e) {
-            console.error("JSON-renderer feil:", rad.overskrift, e);
+          if (jsonData.trim().startsWith("http")) {
+            fetch(jsonData)
+              .then(function(r) { return r.json(); })
+              .then(function(parsed) { renderJSON(parsed, blokk); })
+              .catch(function(e) { console.error("JSON-fetch feil:", rad.overskrift, e); });
+          } else {
+            try {
+              renderJSON(JSON.parse(jsonData), blokk);
+            } catch(e) {
+              console.error("JSON-renderer feil:", rad.overskrift, e);
+            }
           }
         }
       });
