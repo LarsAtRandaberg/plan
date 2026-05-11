@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Økonomisk oversikt drift</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: system-ui, Arial, sans-serif; background: #f6f8f4; padding: 24px; color: #173404; }
+.shell { max-width: 1000px; margin: 0 auto; }
+
+.innhold-blokk {
+  background: #fff;
+  border: 0.5px solid #c0dd97;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.tabell-tittel { font-size: 16px; font-weight: 700; color: #173404; margin-bottom: 4px; }
+.tabell-undertittel { font-size: 12px; color: #3b6d11; margin-bottom: 16px; }
+
+.tabell-wrapper {
+  border: 0.5px solid #c0dd97;
+  border-radius: 8px;
+  overflow-x: auto;
+}
+
+table { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+thead th {
+  background: #eaf3de;
+  color: #27500a;
+  font-weight: 600;
+  font-size: 11px;
+  padding: 8px 10px;
+  text-align: right;
+  border-bottom: 1px solid #c0dd97;
+  white-space: nowrap;
+}
+thead th:first-child { text-align: left; min-width: 180px; }
+
+tbody tr { border-bottom: 0.5px solid #eaf3de; }
+tbody tr:last-child { border-bottom: none; }
+tbody tr:hover:not(.rad-seksjon) { background: #f9fcf6; }
+
+tbody td {
+  padding: 6px 10px;
+  text-align: right;
+  color: #27500a;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+tbody td:first-child { text-align: left; color: #173404; white-space: normal; }
+
+.rad-sum td       { font-weight: 700; background: #eaf3de; color: #173404; border-top: 0.5px solid #c0dd97; border-bottom: 0.5px solid #c0dd97; }
+.rad-highlight td { font-weight: 700; background: #c0dd97; color: #173404; border-top: 1px solid #3b6d11; border-bottom: 1px solid #3b6d11; }
+.rad-prosent td   { font-size: 11px; color: #3b6d11; background: #f6f8f4; font-style: italic; }
+.rad-seksjon td   { background: #f0f7e8; font-weight: 600; color: #27500a; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; padding: 5px 10px; border-top: 1px solid #c0dd97; }
+
+.nivaa-1 td:first-child { padding-left: 22px; color: #27500a; }
+.nivaa-2 td:first-child { padding-left: 40px; color: #3b6d11; font-size: 11px; }
+
+.toggle-celle { display: flex; align-items: center; gap: 6px; }
+.toggle-btn {
+  width: 16px; height: 16px; border-radius: 3px;
+  background: #eaf3de; border: none; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; color: #3b6d11; flex-shrink: 0;
+  transition: transform 0.15s;
+}
+.toggle-btn:hover { background: #c0dd97; }
+.toggle-btn.open  { transform: rotate(90deg); }
+.ingen-toggle .toggle-btn { visibility: hidden; }
+.skjult { display: none; }
+
+/* Kolonne-synlighet */
+.kol-1 { }
+.kol-2 { }
+.kol-3 { }
+.kol-4 { }
+.kol-5 { }
+.kol-6 { }
+
+@media (max-width: 880px) { .kol-1 { display: none; } }
+@media (max-width: 760px) { .kol-2 { display: none; } }
+@media (max-width: 640px) { .kol-3 { display: none; } }
+@media (max-width: 520px) { .kol-4 { display: none; } }
+@media (max-width: 400px) { .kol-5 { display: none; } }
+
+/* Enhet-bytte */
+.enhet-full { display: inline; }
+.enhet-mill { display: none;   }
+.tall-full  { display: inline; }
+.tall-mill  { display: none;   }
+
+@media (max-width: 640px) {
+  .enhet-full { display: none;   }
+  .enhet-mill { display: inline; }
+  .tall-full  { display: none;   }
+  .tall-mill  { display: inline; }
+}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="innhold-blokk">
+    <div class="tabell-tittel">Økonomisk oversikt drift</div>
+    <div class="tabell-undertittel">Sortert etter kostraart i henhold til budsjett og regnskapsforskriften §5-6</div>
+    <div class="tabell-wrapper" id="tabell-wrapper"></div>
+  </div>
+</div>
+
+<script>
+var cfg = {
+  "type": "tabell",
+  "enhet_full": "Tall i tusen kroner",
+  "enhet_mill": "Tall i millioner kroner",
+  "kolonner": [
+    { "label": "Regnskap\n2025",                     "klass": "kol-6" },
+    { "label": "Opp. vedt.\n2025",                   "klass": "kol-3" },
+    { "label": "Revidert\nbudsjett 2025",             "klass": "kol-4" },
+    { "label": "Tekniske\netter T2",                  "klass": "kol-1" },
+    { "label": "Justert og\nrevidert budsjett 2025",  "klass": "kol-5" },
+    { "label": "Regnskap\n2024",                      "klass": "kol-2" }
+  ],
+  "rader": [
+    { "type": "seksjon", "tekst": "Driftsinntekter" },
+    { "tekst": "Rammetilskudd",                        "v": ["-370 439","-359 700","-374 871","0","-374 871","-340 115"] },
+    { "tekst": "Inntekts- og formuesskatt",             "v": ["-543 328","-532 000","-532 000","0","-532 000","-481 042"] },
+    { "tekst": "Eiendomsskatt",                         "v": ["-20 755", "-20 731", "-20 731", "0","-20 731", "-20 601"]  },
+    { "tekst": "Andre skatteinntekter",                 "v": ["0","0","0","0","0","0"] },
+    { "tekst": "Andre overføringer og tilskudd fra staten", "v": ["-100 904","-96 531","-90 298","0","-90 298","-122 084"] },
+    { "tekst": "Overføringer og tilskudd fra andre",    "v": ["-150 605","-134 445","-133 361","342","-133 019","-151 115"] },
+    { "tekst": "Brukerbetalinger",                      "v": ["-34 925", "-29 460", "-31 367", "-3 214", "-34 581", "-34 910"] },
+    { "tekst": "Salgs- og leieinntekter",               "v": ["-130 387","-117 164","-125 641","-391","-126 032","-119 269"] },
+    { "type": "highlight", "tekst": "Sum driftsinntekter", "v": ["-1 351 343","-1 290 030","-1 308 268","-3 263","-1 311 531","-1 269 136"] },
+
+    { "type": "seksjon", "tekst": "Driftsutgifter" },
+    { "tekst": "Lønnsutgifter",                        "v": ["672 445","656 891","647 394","12 037","659 431","650 083"] },
+    { "tekst": "Sosiale utgifter",                      "v": ["176 116","162 114","176 307","1 040","177 347","159 404"] },
+    { "tekst": "Kjøp av varer og tjenester",            "v": ["318 353","289 682","307 161","-6 134","301 027","324 995"] },
+    { "tekst": "Overføringer og tilskudd til andre",    "v": ["102 425","102 608","102 224","-3 680","98 544","108 749"] },
+    { "tekst": "Avskrivninger",                         "v": ["77 508","67 000","67 000","0","67 000","72 839"] },
+    { "type": "highlight", "tekst": "Sum driftsutgifter", "v": ["1 346 846","1 278 294","1 300 087","3 263","1 303 350","1 316 070"] },
+    { "type": "highlight", "tekst": "Brutto driftsresultat", "v": ["-4 497","-11 736","-8 181","0","-8 181","46 934"] },
+
+    { "type": "seksjon", "tekst": "Finansposter" },
+    { "tekst": "Renteinntekter",                        "v": ["-24 753","-27 200","-24 700","0","-24 700","-27 501"] },
+    { "tekst": "Utbytter",                              "v": ["-25 614","-23 000","-25 576","0","-25 576","-24 455"] },
+    { "tekst": "Gevinster og tap på finansielle omløpsmidler", "v": ["-5 425","0","-4 000","0","-4 000","-15 884"] },
+    { "tekst": "Renteutgifter",                         "v": ["63 018","58 354","62 241","0","62 241","63 136"] },
+    { "tekst": "Avdrag på lån",                         "v": ["49 025","44 986","44 986","0","44 986","45 575"] },
+    { "type": "sum", "tekst": "Netto finansutgifter",   "v": ["56 251","53 140","52 951","0","52 951","40 871"] },
+    { "tekst": "Motpost avskrivninger",                 "v": ["-77 508","-67 000","-67 000","0","-67 000","-72 839"] },
+    { "type": "highlight", "tekst": "Netto driftsresultat", "v": ["-25 753","-25 596","-22 230","0","-22 230","14 966"] },
+    { "type": "prosent", "tekst": "Netto driftsresultat i prosent av driftsinntektene", "v": ["1,9 %","2,0 %","1,7 %","0,0 %","1,7 %","-1,2 %"] },
+
+    { "type": "seksjon", "tekst": "Disponeringer" },
+    { "tekst": "Overføring til investering",            "v": ["5 000","10 450","5 000","0","5 000","0"] },
+    { "tekst": "Avsetninger til bundne driftsfond",     "v": ["7 161","1 578","4 578","0","4 578","4 364"] },
+    { "tekst": "Bruk av bundne driftsfond",             "v": ["-3 364","-400","-2 814","0","-2 814","-4 400"] },
+    { "tekst": "Avsetninger til disposisjonsfond",      "v": ["24 785","13 968","24 785","0","24 785","0"] },
+    { "tekst": "Bruk av disposisjonsfond",              "v": ["-7 829","0","-9 319","0","-9 319","-14 930"] },
+    { "tekst": "Dekning av tidligere års merforbruk",   "v": ["0","0","0","0","0","0"] },
+    { "type": "sum", "tekst": "Sum disponeringer eller dekning av netto driftsresultat", "v": ["25 753","25 596","22 230","0","22 230","-14 966"] },
+    { "type": "highlight", "tekst": "Fremført til inndekning i senere år (merforbruk)", "v": ["0","0","0","0","0","0"] }
+  ]
+};
+
+function tilMill(str) {
+  var ren  = str.replace(/\s/g, "").replace(",", ".");
+  var tall = parseFloat(ren);
+  if (isNaN(tall) || str === "0") return "0";
+  return (tall / 1000).toFixed(1).replace(".", ",");
+}
+
+function lagTallCelle(verdi, kolKlass, erProsent) {
+  var td = document.createElement("td");
+  if (kolKlass) td.className = kolKlass;
+  if (erProsent) {
+    td.textContent = verdi;
+    return td;
+  }
+  var full = document.createElement("span"); full.className = "tall-full"; full.textContent = verdi;
+  var mill = document.createElement("span"); mill.className = "tall-mill"; mill.textContent = tilMill(verdi);
+  td.appendChild(full); td.appendChild(mill);
+  return td;
+}
+
+var wrapper = document.getElementById("tabell-wrapper");
+var table   = document.createElement("table");
+
+// Thead
+var thead = document.createElement("thead");
+var hRad  = document.createElement("tr");
+
+// Første th: enhet med bytte
+var th0 = document.createElement("th");
+var eF = document.createElement("span"); eF.className = "enhet-full"; eF.textContent = cfg.enhet_full;
+var eM = document.createElement("span"); eM.className = "enhet-mill"; eM.textContent = cfg.enhet_mill;
+th0.appendChild(eF); th0.appendChild(eM);
+hRad.appendChild(th0);
+
+cfg.kolonner.forEach(function(kol) {
+  var th = document.createElement("th");
+  th.innerHTML = kol.label.replace("\n", "<br>");
+  if (kol.klass) th.className = kol.klass;
+  hRad.appendChild(th);
+});
+thead.appendChild(hRad);
+table.appendChild(thead);
+
+// Tbody
+var tbody   = document.createElement("tbody");
+var idTell  = 0;
+var kolKlasser = ["kol-6","kol-3","kol-4","kol-1","kol-5","kol-2"];
+
+function lagRader(rader, nivaa, forelderGruppe) {
+  rader.forEach(function(rad) {
+    var id      = "r" + (++idTell);
+    var harBarn = rad.barn && rad.barn.length > 0;
+    var tr      = document.createElement("tr");
+    var klasser = ["nivaa-" + nivaa];
+    if (rad.type === "sum")       klasser.push("rad-sum");
+    if (rad.type === "highlight") klasser.push("rad-highlight");
+    if (rad.type === "prosent")   klasser.push("rad-prosent");
+    if (rad.type === "seksjon")   klasser.push("rad-seksjon");
+    if (!harBarn)                 klasser.push("ingen-toggle");
+    if (forelderGruppe)           klasser.push("gruppe-" + forelderGruppe, "skjult");
+    tr.className = klasser.join(" ");
+
+    if (rad.type === "seksjon") {
+      var td = document.createElement("td");
+      td.setAttribute("colspan", cfg.kolonner.length + 1);
+      td.textContent = rad.tekst;
+      tr.appendChild(td); tbody.appendChild(tr); return;
+    }
+
+    // Tekstcelle
+    var td0    = document.createElement("td");
+    var celle  = document.createElement("div"); celle.className = "toggle-celle";
+    var btn    = document.createElement("button"); btn.className = "toggle-btn"; btn.textContent = "▶";
+
+    if (harBarn) {
+      btn.addEventListener("click", function(e) {
+        e.stopPropagation();
+        var erApen = btn.classList.contains("open");
+        btn.classList.toggle("open", !erApen);
+        document.querySelectorAll(".gruppe-" + id).forEach(function(el) {
+          var grupper = Array.from(el.classList).filter(function(c) { return c.startsWith("gruppe-"); });
+          var erDirekte = grupper.length === 1 + (forelderGruppe ? 1 : 0);
+          if (erApen) {
+            el.classList.add("skjult");
+            el.querySelectorAll(".toggle-btn.open").forEach(function(b) { b.classList.remove("open"); });
+          } else if (erDirekte) {
+            el.classList.remove("skjult");
+          }
+        });
+      });
+    }
+
+    celle.appendChild(btn);
+    celle.appendChild(document.createTextNode(rad.tekst));
+    td0.appendChild(celle); tr.appendChild(td0);
+
+    // Tallceller
+    rad.v.forEach(function(v, i) {
+      tr.appendChild(lagTallCelle(v, kolKlasser[i], rad.type === "prosent"));
+    });
+
+    tbody.appendChild(tr);
+    if (harBarn) lagRader(rad.barn, nivaa + 1, id);
+  });
+}
+
+lagRader(cfg.rader, 0, null);
+table.appendChild(tbody);
+wrapper.appendChild(table);
+</script>
+</body>
+</html>
