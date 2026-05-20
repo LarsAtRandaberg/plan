@@ -231,7 +231,7 @@
       if (level === 0) node.classList.add("open");
       const row  = document.createElement("div");
       row.className = "row level-" + Math.min(level, 3);
-      const kids    = children.get(goal.maalID) || [];
+      const kids    = level < 2 ? (children.get(goal.maalID) || []) : [];
       const hasKids = level !== 0 && kids.length > 0;
       const toggle = document.createElement("button");
       toggle.type  = "button";
