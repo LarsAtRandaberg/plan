@@ -636,6 +636,7 @@
       ".maalgrep-filter:hover,.maalgrep-filter.active{background:var(--green-100);border-color:var(--green-400);color:var(--green-900)}" +
       ".maalgrep-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}" +
       ".maalgrep-item{display:flex;gap:10px;padding:12px;border:.5px solid var(--green-100);border-radius:8px;background:#fbfcfa}" +
+      ".maalgrep-item[hidden]{display:none}" +
       ".maalgrep-number{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--green-600);background:var(--green-100);border-radius:6px;padding:3px 6px;height:fit-content}" +
       ".maalgrep-body{min-width:0}" +
       ".maalgrep-text{font-size:13px;line-height:1.45;color:var(--green-900)}" +
