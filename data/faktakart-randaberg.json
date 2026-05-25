@@ -1,0 +1,119 @@
+{
+  "type": "faktakart",
+  "tittel": "Fakta om Randaberg",
+  "undertittel": "Kommuneplanens samfunnsdel",
+  "center": [59.003, 5.62],
+  "zoom": 12,
+  "nokkeltall": [
+    { "label": "Innbyggere", "verdi": "11 867" },
+    { "label": "Areal", "verdi": "24,72 km2" },
+    { "label": "Planperiode", "verdi": "2026-2040" }
+  ],
+  "punkter": [
+    {
+      "id": "befolkning",
+      "tittel": "Befolkning og vekst",
+      "ikon": "ti-users",
+      "lat": 59.001,
+      "lng": 5.617,
+      "zoom": 12,
+      "korttekst": "Forventer vekst mot 2050, med flere eldre og nye behov.",
+      "tekst": "Randaberg har 11 867 innbyggere høsten 2025 og forventes å passere 13 892 i 2050. I 2025 er den største aldersgruppen 55-59 år.",
+      "tall": [
+        { "label": "I dag", "verdi": "11 867" },
+        { "label": "2050", "verdi": "13 892" },
+        { "label": "Størst aldersgruppe", "verdi": "55-59 år" }
+      ]
+    },
+    {
+      "id": "jordbruk",
+      "tittel": "Areal og jordbruk",
+      "ikon": "ti-plant",
+      "lat": 58.996,
+      "lng": 5.593417,
+      "zoom": 13,
+      "korttekst": "Norges minste landkommune, med store jordbruksverdier.",
+      "tekst": "Kommunen er 24,72 km2 og er Norges minste landkommune. Omtrent 60 prosent av arealet er dyrket jord.",
+      "tall": [
+        { "label": "Areal", "verdi": "24,72 km2" },
+        { "label": "Dyrket jord", "verdi": "ca. 60 %" },
+        { "label": "Tetthet", "verdi": "489/km2" }
+      ]
+    },
+    {
+      "id": "bolig",
+      "tittel": "Boliger",
+      "ikon": "ti-home",
+      "lat": 59.005583,
+      "lng": 5.624333,
+      "zoom": 13,
+      "korttekst": "Boligstruktur og fortetting påvirker arealstrategien.",
+      "tekst": "Randaberg har 4696 boliger og 125 hytter. 88 prosent av innbyggerne eier egen bolig, og 8,3 prosent bor på landbrukseiendom.",
+      "tall": [
+        { "label": "Boliger", "verdi": "4696" },
+        { "label": "Hytter", "verdi": "125" },
+        { "label": "Eierandel", "verdi": "88 %" }
+      ]
+    },
+    {
+      "id": "pendling",
+      "tittel": "Pendling",
+      "ikon": "ti-route",
+      "lat": 58.994833,
+      "lng": 5.651639,
+      "zoom": 12,
+      "korttekst": "Store pendlingsstrømmer inn og ut av kommunen.",
+      "tekst": "4464 personer pendler ut av kommunen, mens 2087 pendler inn. Det er over 2000 elbiler i kommunen.",
+      "tall": [
+        { "label": "Pendler ut", "verdi": "4464" },
+        { "label": "Pendler inn", "verdi": "2087" },
+        { "label": "Elbiler", "verdi": "2000+" }
+      ]
+    },
+    {
+      "id": "arbeidsplasser",
+      "tittel": "Arbeidsplasser",
+      "ikon": "ti-briefcase",
+      "lat": 58.99925,
+      "lng": 5.659611,
+      "zoom": 13,
+      "korttekst": "Kommunen er største arbeidsgiver, samtidig står flere utenfor.",
+      "tekst": "Randaberg kommune er den største arbeidsgiveren i kommunen. Ca. 1300 personer i yrkesaktiv alder står utenfor arbeid eller utdanning.",
+      "tall": [
+        { "label": "Største arbeidsgiver", "verdi": "Kommunen" },
+        { "label": "Utenfor", "verdi": "ca. 1300" },
+        { "label": "Tema", "verdi": "Inkludering" }
+      ]
+    },
+    {
+      "id": "rogfast",
+      "tittel": "Rogfast",
+      "ikon": "ti-road",
+      "lat": 59.010667,
+      "lng": 5.634472,
+      "zoom": 12,
+      "korttekst": "Planlagt åpnet i 2033.",
+      "tekst": "Rogfast bygges gjennom store deler av planperioden og er planlagt åpnet i 2033. Prosjektet kan påvirke pendling, næring og transportmønstre.",
+      "tall": [
+        { "label": "Planlagt åpning", "verdi": "2033" },
+        { "label": "Lengde", "verdi": "26,7 km" },
+        { "label": "Dypeste punkt", "verdi": "392 m" }
+      ]
+    },
+    {
+      "id": "frivillighet",
+      "tittel": "Frivillighet",
+      "ikon": "ti-heart-handshake",
+      "lat": 58.998866,
+      "lng": 5.616423,
+      "zoom": 13,
+      "korttekst": "Frivillighetssentraler og et aktivt organisasjonsliv.",
+      "tekst": "Randaberg har to frivillighetssentraler og et stort frivillig engasjement. Bare innsatsen knyttet direkte til frivillighetens hus telte over 4,7 årsverk i 2024.",
+      "tall": [
+        { "label": "Sentraler", "verdi": "2" },
+        { "label": "Årsverk 2024", "verdi": "4,7" },
+        { "label": "Tema", "verdi": "Fellesskap" }
+      ]
+    }
+  ]
+}
