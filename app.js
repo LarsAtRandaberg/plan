@@ -622,33 +622,7 @@
       .filter(Boolean);
   }
 
-  function ensureMaalgrepStyles() {
-    if (document.getElementById("maalgrep-styles")) return;
-    var style = document.createElement("style");
-    style.id = "maalgrep-styles";
-    style.textContent =
-      ".maalgrep{background:#fff;border:.5px solid var(--line);border-radius:10px;padding:16px;margin-top:12px}" +
-      ".maalgrep-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}" +
-      ".maalgrep-header h3{margin:0;font-size:15px;font-weight:700;color:var(--green-900)}" +
-      ".maalgrep-meta{font-size:11px;color:var(--green-600);white-space:nowrap}" +
-      ".maalgrep-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}" +
-      ".maalgrep-filter{border:.5px solid var(--line);background:#fff;color:var(--green-800);border-radius:999px;padding:4px 9px;font:inherit;font-size:11px;cursor:pointer}" +
-      ".maalgrep-filter:hover,.maalgrep-filter.active{background:var(--green-100);border-color:var(--green-400);color:var(--green-900)}" +
-      ".maalgrep-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}" +
-      ".maalgrep-item{display:flex;gap:10px;padding:12px;border:.5px solid var(--green-100);border-radius:8px;background:#fbfcfa}" +
-      ".maalgrep-item[hidden]{display:none}" +
-      ".maalgrep-number{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--green-600);background:var(--green-100);border-radius:6px;padding:3px 6px;height:fit-content}" +
-      ".maalgrep-body{min-width:0}" +
-      ".maalgrep-text{font-size:13px;line-height:1.45;color:var(--green-900)}" +
-      ".maalgrep-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}" +
-      ".maalgrep-tag{font-size:10px;color:var(--green-800);background:var(--green-100);border-radius:999px;padding:2px 7px}" +
-      "@media(max-width:768px){.maalgrep-header{display:block}.maalgrep-meta{margin-top:4px}.maalgrep-list{grid-template-columns:1fr}}";
-    document.head.appendChild(style);
-  }
-
   function renderMaalgrep(goalsForPlan) {
-    ensureMaalgrepStyles();
-
     var children = new Map();
     var collator = new Intl.Collator("nb", { sensitivity: "base" });
 
