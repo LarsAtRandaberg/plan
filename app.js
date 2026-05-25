@@ -137,9 +137,9 @@
   function planTypeLabel(planTyper) {
     const labels = {
       701100000: "Kommuneplanens samfunnsdel",
-      701100003: "Temaplaner",
+      701100001: "Temaplaner",
       701100002: "Handlings- og økonomiplaner",
-      701100001: "Strategier"
+      701100003: "Strategier"
     };
     return labels[planTyper] || "Plantype " + planTyper;
   }
@@ -147,9 +147,9 @@
   function planTypeSortValue(planTyper) {
     const order = {
       701100000: 0,
-      701100003: 1,
+      701100001: 1,
       701100002: 2,
-      701100001: 3
+      701100003: 3
     };
     return Object.prototype.hasOwnProperty.call(order, planTyper) ? order[planTyper] : 99;
   }
