@@ -158,18 +158,18 @@ body {
 .hero::before {
   content: '';
   position: absolute;
-  right: 32px;
-  top: 50%;
-  width: min(30vw, 230px);
+  right: 62px;
+  top: 26px;
+  width: min(18vw, 150px);
   aspect-ratio: 950 / 997;
   height: auto;
   background-image: var(--veg-card);
   background-repeat: no-repeat;
   background-size: contain;
   background-position: center;
-  opacity: 0.08;
+  opacity: 0.045;
   filter: invert(89%) sepia(18%) saturate(482%) hue-rotate(37deg) brightness(98%) contrast(91%);
-  transform: translateY(-50%);
+  transform: rotate(-8deg);
   pointer-events: none;
 }
 .hero::after {
@@ -229,12 +229,17 @@ body {
 .sidebar::before {
   content: '';
   position: absolute;
-  inset: 0;
+  left: 12px;
+  right: auto;
+  bottom: 22px;
+  width: 105px;
+  height: 520px;
   background-image: var(--veg-watermark);
   background-repeat: no-repeat;
-  background-size: 190px auto;
-  background-position: center 46%;
-  opacity: 0.035;
+  background-size: 105px auto;
+  background-position: left bottom;
+  opacity: 0.065;
+  filter: invert(82%) sepia(17%) saturate(391%) hue-rotate(157deg) brightness(103%) contrast(92%);
   pointer-events: none;
 }
 
