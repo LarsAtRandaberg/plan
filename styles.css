@@ -14,8 +14,10 @@
   --activeBg:      var(--green-100);
   --activeBorder:  var(--green-400);
 
-  --veg-ornament: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='260' viewBox='0 0 520 260'%3E%3Cg fill='none' stroke='%23c0dd97' stroke-width='8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M44 190C92 98 174 42 260 80c80 36 136 21 210-38' opacity='.55'/%3E%3Cpath d='M104 150c-38-31-44-70-18-103 37 9 58 36 58 79-12 7-25 15-40 24Z' fill='%23c0dd97' stroke='none' opacity='.34'/%3E%3Cpath d='M204 86c-7-47 11-78 54-86 25 31 22 66-6 101-16-5-32-10-48-15Z' fill='%23c0dd97' stroke='none' opacity='.3'/%3E%3Cpath d='M336 88c19-38 52-53 92-36 3 40-18 67-61 80-10-15-20-29-31-44Z' fill='%23c0dd97' stroke='none' opacity='.32'/%3E%3Cpath d='M70 218c23-34 63-48 105-34' opacity='.45'/%3E%3Cpath d='M286 132c47 4 82 27 104 68' opacity='.38'/%3E%3C/g%3E%3Cg fill='%23639922' opacity='.42'%3E%3Cellipse cx='54' cy='206' rx='12' ry='19' transform='rotate(36 54 206)'/%3E%3Cellipse cx='91' cy='178' rx='13' ry='21' transform='rotate(55 91 178)'/%3E%3Cellipse cx='148' cy='137' rx='12' ry='20' transform='rotate(58 148 137)'/%3E%3Cellipse cx='242' cy='78' rx='13' ry='22' transform='rotate(105 242 78)'/%3E%3Cellipse cx='330' cy='100' rx='12' ry='20' transform='rotate(120 330 100)'/%3E%3Cellipse cx='427' cy='56' rx='13' ry='22' transform='rotate(65 427 56)'/%3E%3C/g%3E%3C/svg%3E");
-  --veg-watermark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='260' viewBox='0 0 220 260'%3E%3Cg fill='none' stroke='%2327500a' stroke-width='6' stroke-linecap='round' stroke-linejoin='round' opacity='.22'%3E%3Cpath d='M34 228c34-76 72-125 151-181'/%3E%3Cpath d='M78 169c-35-22-42-58-18-94 35 7 55 33 53 76-10 6-22 12-35 18Z' fill='%2327500a' stroke='none' opacity='.16'/%3E%3Cpath d='M126 109c-5-41 12-70 51-79 23 27 20 58-6 89-15-3-29-7-45-10Z' fill='%2327500a' stroke='none' opacity='.15'/%3E%3Cpath d='M48 218c25-31 59-43 101-35'/%3E%3C/g%3E%3C/svg%3E");
+  --veg-hero: url("assets/vegetables/persille-svart.png");
+  --veg-watermark: url("assets/vegetables/squash-svart.png");
+  --veg-card: url("assets/vegetables/tomat-svart.png");
+  --veg-accent: url("assets/vegetables/blad-svart.png");
 }
 
 /* =========================
@@ -161,10 +163,11 @@ body {
   top: -52px;
   width: min(56vw, 520px);
   height: 260px;
-  background-image: var(--veg-ornament);
+  background-image: var(--veg-hero);
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 0.42;
+  opacity: 0.08;
+  filter: invert(89%) sepia(18%) saturate(482%) hue-rotate(37deg) brightness(98%) contrast(91%);
   pointer-events: none;
 }
 .hero::after {
@@ -174,10 +177,11 @@ body {
   bottom: -42px;
   width: min(42vw, 360px);
   height: 180px;
-  background-image: var(--veg-ornament);
+  background-image: var(--veg-card);
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 0.16;
+  opacity: 0.07;
+  filter: invert(89%) sepia(18%) saturate(482%) hue-rotate(37deg) brightness(98%) contrast(91%);
   transform: rotate(180deg);
   pointer-events: none;
 }
@@ -232,8 +236,8 @@ body {
   background-color: #fff;
   background-image: var(--veg-watermark);
   background-repeat: no-repeat;
-  background-size: 160px auto;
-  background-position: left 10px bottom 18px;
+  background-size: 86px auto;
+  background-position: left 14px bottom 24px;
   z-index: 90;
 }
 
@@ -404,10 +408,10 @@ section h2 {
   top: -78px;
   width: 310px;
   height: 160px;
-  background-image: var(--veg-ornament);
+  background-image: var(--veg-accent);
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 0.22;
+  opacity: 0.055;
   pointer-events: none;
 }
 
@@ -628,10 +632,10 @@ section h2 {
   bottom: -92px;
   width: 230px;
   height: 130px;
-  background-image: var(--veg-ornament);
+  background-image: var(--veg-card);
   background-repeat: no-repeat;
   background-size: contain;
-  opacity: 0.08;
+  opacity: 0.045;
   pointer-events: none;
 }
 
