@@ -613,6 +613,168 @@
   }
 
   // =========================
+  // Nederste maalnivaa
+  // =========================
+  function parseMaalTags(raw) {
+    return String(raw || "")
+      .split(";")
+      .map(function(tag) { return tag.trim().replace(/^#/, ""); })
+      .filter(Boolean);
+  }
+
+  function ensureMaalgrepStyles() {
+    if (document.getElementById("maalgrep-styles")) return;
+    var style = document.createElement("style");
+    style.id = "maalgrep-styles";
+    style.textContent =
+      ".maalgrep{background:#fff;border:.5px solid var(--line);border-radius:10px;padding:16px;margin-top:12px}" +
+      ".maalgrep-header{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:12px}" +
+      ".maalgrep-header h3{margin:0;font-size:15px;font-weight:700;color:var(--green-900)}" +
+      ".maalgrep-meta{font-size:11px;color:var(--green-600);white-space:nowrap}" +
+      ".maalgrep-filters{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}" +
+      ".maalgrep-filter{border:.5px solid var(--line);background:#fff;color:var(--green-800);border-radius:999px;padding:4px 9px;font:inherit;font-size:11px;cursor:pointer}" +
+      ".maalgrep-filter:hover,.maalgrep-filter.active{background:var(--green-100);border-color:var(--green-400);color:var(--green-900)}" +
+      ".maalgrep-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}" +
+      ".maalgrep-item{display:flex;gap:10px;padding:12px;border:.5px solid var(--green-100);border-radius:8px;background:#fbfcfa}" +
+      ".maalgrep-number{flex:0 0 auto;font-size:11px;font-weight:700;color:var(--green-600);background:var(--green-100);border-radius:6px;padding:3px 6px;height:fit-content}" +
+      ".maalgrep-body{min-width:0}" +
+      ".maalgrep-text{font-size:13px;line-height:1.45;color:var(--green-900)}" +
+      ".maalgrep-tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}" +
+      ".maalgrep-tag{font-size:10px;color:var(--green-800);background:var(--green-100);border-radius:999px;padding:2px 7px}" +
+      "@media(max-width:768px){.maalgrep-header{display:block}.maalgrep-meta{margin-top:4px}.maalgrep-list{grid-template-columns:1fr}}";
+    document.head.appendChild(style);
+  }
+
+  function renderMaalgrep(goalsForPlan) {
+    ensureMaalgrepStyles();
+
+    var children = new Map();
+    var collator = new Intl.Collator("nb", { sensitivity: "base" });
+
+    goalsForPlan.forEach(function(goal) {
+      if (!goal.maalOverordnet) return;
+      if (!children.has(goal.maalOverordnet)) children.set(goal.maalOverordnet, []);
+      children.get(goal.maalOverordnet).push(goal);
+    });
+
+    children.forEach(function(arr) {
+      arr.sort(function(a, b) { return collator.compare(a.maalNavn || "", b.maalNavn || ""); });
+    });
+
+    goalsForPlan.forEach(function(parentGoal) {
+      if (parentGoal.maalType !== 701100002) return;
+
+      var tiltak = (children.get(parentGoal.maalID) || []).filter(function(goal) {
+        return goal.maalType === 701100003;
+      });
+      if (!tiltak.length) return;
+
+      var section = document.getElementById("maal-" + safeId(parentGoal.maalID));
+      if (!section || section.querySelector(".maalgrep")) return;
+
+      var allTags = new Set();
+      tiltak.forEach(function(goal) {
+        parseMaalTags(goal.maalEmneknagger).forEach(function(tag) { allTags.add(tag); });
+      });
+
+      var wrap = document.createElement("div");
+      wrap.className = "maalgrep";
+
+      var header = document.createElement("div");
+      header.className = "maalgrep-header";
+
+      var title = document.createElement("h3");
+      title.textContent = "Hvordan gjør vi det?";
+
+      var meta = document.createElement("div");
+      meta.className = "maalgrep-meta";
+      meta.textContent = tiltak.length + " grep" + (allTags.size ? " · " + allTags.size + " emner" : "");
+
+      header.appendChild(title);
+      header.appendChild(meta);
+      wrap.appendChild(header);
+
+      if (allTags.size) {
+        var filters = document.createElement("div");
+        filters.className = "maalgrep-filters";
+
+        var allBtn = document.createElement("button");
+        allBtn.type = "button";
+        allBtn.className = "maalgrep-filter active";
+        allBtn.textContent = "Alle";
+        allBtn.dataset.tag = "";
+        filters.appendChild(allBtn);
+
+        Array.from(allTags).sort(function(a, b) { return collator.compare(a, b); }).forEach(function(tag) {
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "maalgrep-filter";
+          btn.textContent = "#" + tag;
+          btn.dataset.tag = tag;
+          filters.appendChild(btn);
+        });
+
+        wrap.appendChild(filters);
+      }
+
+      var list = document.createElement("div");
+      list.className = "maalgrep-list";
+
+      tiltak.forEach(function(goal, index) {
+        var tags = parseMaalTags(goal.maalEmneknagger);
+        var item = document.createElement("article");
+        item.className = "maalgrep-item";
+        item.dataset.tags = tags.join(" ");
+
+        var number = document.createElement("div");
+        number.className = "maalgrep-number";
+        number.textContent = String(index + 1).padStart(2, "0");
+
+        var body = document.createElement("div");
+        body.className = "maalgrep-body";
+
+        var text = document.createElement("div");
+        text.className = "maalgrep-text";
+        text.textContent = goal.maalNavn || "(uten navn)";
+        body.appendChild(text);
+
+        if (tags.length) {
+          var tagWrap = document.createElement("div");
+          tagWrap.className = "maalgrep-tags";
+          tags.forEach(function(tag) {
+            var chip = document.createElement("span");
+            chip.className = "maalgrep-tag";
+            chip.textContent = "#" + tag;
+            tagWrap.appendChild(chip);
+          });
+          body.appendChild(tagWrap);
+        }
+
+        item.appendChild(number);
+        item.appendChild(body);
+        list.appendChild(item);
+      });
+
+      wrap.appendChild(list);
+      wrap.addEventListener("click", function(e) {
+        var btn = e.target.closest(".maalgrep-filter");
+        if (!btn) return;
+
+        var tag = btn.dataset.tag || "";
+        wrap.querySelectorAll(".maalgrep-filter").forEach(function(filterBtn) {
+          filterBtn.classList.toggle("active", filterBtn === btn);
+        });
+        wrap.querySelectorAll(".maalgrep-item").forEach(function(item) {
+          var tags = (item.dataset.tags || "").split(" ");
+          item.hidden = !!tag && !tags.includes(tag);
+        });
+      });
+
+      section.appendChild(wrap);
+    });
+  }
+
+  // =========================
   // Søk
   // =========================
   var searchData = { plans: [], goals: [], innhold: [] };
@@ -741,6 +903,7 @@
 
       buildTree(goalsForPlan);
       renderInnhold(innhold, currentPlanId);
+      renderMaalgrep(goalsForPlan);
       setupScrollSpy();
 
       if (location.hash) {
