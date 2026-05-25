@@ -135,8 +135,23 @@
   }
 
   function planTypeLabel(planTyper) {
-    const labels = { 701100000: "Kommuneplanen", 701100001: "Strategier", 701100002: "Handlings- og økonomiplaner" };
+    const labels = {
+      701100000: "Kommuneplanens samfunnsdel",
+      701100003: "Temaplaner",
+      701100002: "Handlings- og økonomiplaner",
+      701100001: "Strategier"
+    };
     return labels[planTyper] || "Plantype " + planTyper;
+  }
+
+  function planTypeSortValue(planTyper) {
+    const order = {
+      701100000: 0,
+      701100003: 1,
+      701100002: 2,
+      701100001: 3
+    };
+    return Object.prototype.hasOwnProperty.call(order, planTyper) ? order[planTyper] : 99;
   }
 
   let dropdownClickListenerAttached = false;
@@ -161,7 +176,9 @@
       if (!groups.has(p.planTyper)) groups.set(p.planTyper, []);
       groups.get(p.planTyper).push(p);
     });
-    const typeKeys = Array.from(groups.keys()).sort(function(a, b) { return a - b; });
+    const typeKeys = Array.from(groups.keys()).sort(function(a, b) {
+      return planTypeSortValue(a) - planTypeSortValue(b) || a - b;
+    });
     typeKeys.forEach(function(k) {
       groups.get(k).sort(function(a, b) { return collator.compare(a.planNavn || "", b.planNavn || ""); });
     });
