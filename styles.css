@@ -931,7 +931,7 @@ section h2 {
     position: fixed;
     left: -280px; top: 0;
     height: 100%; width: 240px;
-    z-index: 200;
+    z-index: 1200;
     transition: left 0.25s;
     box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   }
