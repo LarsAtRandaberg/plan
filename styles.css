@@ -371,6 +371,213 @@ section h2 {
 .vedlegg-arrow i         { font-size: 15px; color: #aaa; }
 
 /* =========================
+   FAKTAKART
+   ========================= */
+.faktakart {
+  background: #fbf6dc;
+  border: 0.5px solid var(--line);
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.faktakart-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 20px;
+  align-items: end;
+  padding: 22px 22px 16px;
+}
+
+.faktakart-kicker {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--green-600);
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.faktakart-header h3 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.05;
+  color: var(--green-900);
+}
+
+.faktakart-meta {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.faktakart-pill {
+  display: inline-flex;
+  align-items: center;
+  border: 0.5px solid var(--line);
+  border-radius: 999px;
+  padding: 5px 9px;
+  background: rgba(255,255,255,0.55);
+  font-size: 11px;
+  color: var(--green-800);
+  white-space: nowrap;
+}
+
+.faktakart-body {
+  display: grid;
+  grid-template-columns: minmax(250px, 0.75fr) minmax(360px, 1.25fr);
+  gap: 16px;
+  padding: 0 22px 22px;
+}
+
+.faktakart-list {
+  display: grid;
+  gap: 8px;
+  align-content: start;
+}
+
+.faktakart-card {
+  width: 100%;
+  text-align: left;
+  border: 0.5px solid rgba(192,221,151,0.9);
+  background: rgba(255,255,255,0.62);
+  border-radius: 8px;
+  padding: 12px;
+  cursor: pointer;
+  color: inherit;
+  font: inherit;
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+
+.faktakart-card:hover,
+.faktakart-card.active {
+  background: #fff;
+  border-color: var(--green-400);
+  transform: translateY(-1px);
+}
+
+.faktakart-card.active {
+  box-shadow: inset 3px 0 0 var(--green-400);
+}
+
+.faktakart-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.faktakart-card h4 {
+  margin: 0;
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.faktakart-card i {
+  color: var(--green-600);
+  font-size: 18px;
+  flex: 0 0 auto;
+}
+
+.faktakart-card p {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--green-800);
+}
+
+.faktakart-map-panel {
+  min-width: 0;
+}
+
+.faktakart-map {
+  height: 430px;
+  width: 100%;
+  border-radius: 10px;
+  border: 0.5px solid var(--line);
+  overflow: hidden;
+  background: #d7ecf4;
+}
+
+.faktakart-map-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--green-800);
+  font-size: 13px;
+}
+
+.faktakart-detail {
+  margin-top: 10px;
+  background: #fff;
+  border: 0.5px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  min-height: 136px;
+}
+
+.faktakart-detail h4 {
+  margin: 0 0 8px;
+  font-size: 18px;
+}
+
+.faktakart-detail p {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--green-800);
+}
+
+.faktakart-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.faktakart-stat {
+  border-radius: 7px;
+  background: var(--green-100);
+  padding: 8px;
+}
+
+.faktakart-stat span {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--green-600);
+  margin-bottom: 2px;
+}
+
+.faktakart-stat strong {
+  font-size: 14px;
+  color: var(--green-900);
+}
+
+.faktakart-marker {
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--green-800);
+  border: 3px solid #fff;
+  box-shadow: 0 5px 14px rgba(23,52,4,0.28);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+}
+
+.leaflet-popup-content {
+  color: var(--green-900);
+  font-family: system-ui, Arial, sans-serif;
+  font-size: 13px;
+}
+
+/* =========================
    MAALGREP
    ========================= */
 .maalgrep {
@@ -702,6 +909,57 @@ section h2 {
   }
   #menu-topnav .dropdown-menu a:hover { background: var(--green-100); }
 
+  .faktakart-header {
+    display: block;
+    padding: 18px 16px 12px;
+  }
+
+  .faktakart-header h3 {
+    font-size: 25px;
+  }
+
+  .faktakart-meta {
+    justify-content: flex-start;
+    margin-top: 12px;
+  }
+
+  .faktakart-body {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 0 16px 16px;
+  }
+
+  .faktakart-map-panel {
+    order: 1;
+  }
+
+  .faktakart-list {
+    order: 2;
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x proximity;
+  }
+
+  .faktakart-card {
+    flex: 0 0 78%;
+    scroll-snap-align: start;
+  }
+
+  .faktakart-map {
+    height: 320px;
+  }
+
+  .faktakart-detail {
+    order: 3;
+  }
+
+  .faktakart-stats {
+    grid-template-columns: 1fr;
+  }
+
   .maalgrep-header {
     display: block;
   }
@@ -712,5 +970,15 @@ section h2 {
 
   .maalgrep-list {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 460px) {
+  .faktakart-card {
+    flex-basis: 88%;
+  }
+
+  .faktakart-map {
+    height: 270px;
   }
 }

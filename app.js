@@ -271,8 +271,246 @@
   // =========================
   // JSON-renderer
   // =========================
+  var leafletPromise = null;
+
+  function loadStylesheetOnce(id, href) {
+    if (document.getElementById(id)) return;
+    var link = document.createElement("link");
+    link.id = id;
+    link.rel = "stylesheet";
+    link.href = href;
+    document.head.appendChild(link);
+  }
+
+  function loadScriptOnce(id, src) {
+    var existing = document.getElementById(id);
+    if (existing) {
+      return new Promise(function(resolve, reject) {
+        if (existing.dataset.loaded === "1") resolve();
+        else {
+          existing.addEventListener("load", function() { resolve(); }, { once: true });
+          existing.addEventListener("error", function() { reject(new Error("Kunne ikke laste " + src)); }, { once: true });
+        }
+      });
+    }
+    return new Promise(function(resolve, reject) {
+      var script = document.createElement("script");
+      script.id = id;
+      script.src = src;
+      script.async = true;
+      script.addEventListener("load", function() { script.dataset.loaded = "1"; resolve(); }, { once: true });
+      script.addEventListener("error", function() { reject(new Error("Kunne ikke laste " + src)); }, { once: true });
+      document.head.appendChild(script);
+    });
+  }
+
+  function ensureLeaflet() {
+    if (window.L) return Promise.resolve();
+    if (!leafletPromise) {
+      loadStylesheetOnce("leaflet-css", "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
+      leafletPromise = loadScriptOnce("leaflet-js", "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js");
+    }
+    return leafletPromise;
+  }
+
+  function makeFaktakartStat(label, verdi) {
+    var stat = document.createElement("div");
+    stat.className = "faktakart-stat";
+    var l = document.createElement("span");
+    l.textContent = label || "";
+    var v = document.createElement("strong");
+    v.textContent = verdi || "";
+    stat.appendChild(l);
+    stat.appendChild(v);
+    return stat;
+  }
+
+  function renderFaktakart(cfg, blokk) {
+    var points = Array.isArray(cfg.punkter) ? cfg.punkter : [];
+    if (!points.length) return;
+
+    var wrap = document.createElement("div");
+    wrap.className = "faktakart";
+
+    var header = document.createElement("div");
+    header.className = "faktakart-header";
+    var titleWrap = document.createElement("div");
+    if (cfg.undertittel) {
+      var kicker = document.createElement("div");
+      kicker.className = "faktakart-kicker";
+      kicker.textContent = cfg.undertittel;
+      titleWrap.appendChild(kicker);
+    }
+    var title = document.createElement("h3");
+    title.textContent = cfg.tittel || "Fakta";
+    titleWrap.appendChild(title);
+    header.appendChild(titleWrap);
+
+    if (Array.isArray(cfg.nokkeltall) && cfg.nokkeltall.length) {
+      var meta = document.createElement("div");
+      meta.className = "faktakart-meta";
+      cfg.nokkeltall.forEach(function(item) {
+        var pill = document.createElement("span");
+        pill.className = "faktakart-pill";
+        pill.textContent = (item.label ? item.label + ": " : "") + (item.verdi || "");
+        meta.appendChild(pill);
+      });
+      header.appendChild(meta);
+    }
+    wrap.appendChild(header);
+
+    var body = document.createElement("div");
+    body.className = "faktakart-body";
+
+    var list = document.createElement("div");
+    list.className = "faktakart-list";
+    list.setAttribute("aria-label", "Faktaområder");
+
+    var mapPanel = document.createElement("div");
+    mapPanel.className = "faktakart-map-panel";
+    var mapEl = document.createElement("div");
+    mapEl.className = "faktakart-map";
+    mapPanel.appendChild(mapEl);
+    var detail = document.createElement("aside");
+    detail.className = "faktakart-detail";
+    detail.setAttribute("aria-live", "polite");
+    mapPanel.appendChild(detail);
+
+    body.appendChild(list);
+    body.appendChild(mapPanel);
+    wrap.appendChild(body);
+    blokk.appendChild(wrap);
+
+    function normalizePoint(point, index) {
+      return {
+        id: point.id || ("punkt-" + index),
+        title: point.tittel || point.title || "(uten navn)",
+        shortText: point.korttekst || point.kortTekst || "",
+        text: point.tekst || point.brodtekst || point.detalj || "",
+        icon: point.ikon || point.icon || "ti-map-pin",
+        lat: Number(point.lat || (point.posisjon && point.posisjon[0])),
+        lng: Number(point.lng || point.lon || (point.posisjon && point.posisjon[1])),
+        zoom: Number(point.zoom || cfg.zoom || 12),
+        stats: Array.isArray(point.tall) ? point.tall : []
+      };
+    }
+
+    var normalized = points.map(normalizePoint).filter(function(point) {
+      return !isNaN(point.lat) && !isNaN(point.lng);
+    });
+    if (!normalized.length) return;
+
+    normalized.forEach(function(point, index) {
+      var card = document.createElement("button");
+      card.type = "button";
+      card.className = "faktakart-card" + (index === 0 ? " active" : "");
+      card.dataset.id = point.id;
+      var cardTop = document.createElement("div");
+      cardTop.className = "faktakart-card-top";
+      var h = document.createElement("h4");
+      h.textContent = point.title;
+      var icon = document.createElement("i");
+      icon.className = "ti " + point.icon;
+      icon.setAttribute("aria-hidden", "true");
+      cardTop.appendChild(h);
+      cardTop.appendChild(icon);
+      card.appendChild(cardTop);
+      if (point.shortText) {
+        var p = document.createElement("p");
+        p.textContent = point.shortText;
+        card.appendChild(p);
+      }
+      list.appendChild(card);
+    });
+
+    function renderDetail(point) {
+      detail.innerHTML = "";
+      var h = document.createElement("h4");
+      h.textContent = point.title;
+      detail.appendChild(h);
+      if (point.text) {
+        var p = document.createElement("p");
+        p.textContent = point.text;
+        detail.appendChild(p);
+      }
+      if (point.stats.length) {
+        var stats = document.createElement("div");
+        stats.className = "faktakart-stats";
+        point.stats.forEach(function(item) {
+          stats.appendChild(makeFaktakartStat(item.label, item.verdi));
+        });
+        detail.appendChild(stats);
+      }
+    }
+
+    function showMapError(message) {
+      mapEl.classList.add("faktakart-map-error");
+      mapEl.textContent = message;
+      renderDetail(normalized[0]);
+    }
+
+    ensureLeaflet().then(function() {
+      var center = Array.isArray(cfg.center) ? cfg.center : [normalized[0].lat, normalized[0].lng];
+      var map = L.map(mapEl, {
+        scrollWheelZoom: false,
+        zoomControl: true
+      }).setView(center, Number(cfg.zoom || 12));
+
+      L.tileLayer(cfg.tileUrl || "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        maxZoom: Number(cfg.maxZoom || 18),
+        attribution: cfg.attribution || "&copy; OpenStreetMap"
+      }).addTo(map);
+
+      var markers = {};
+
+      function activate(id, fromMarker) {
+        var point = normalized.find(function(p) { return p.id === id; }) || normalized[0];
+        list.querySelectorAll(".faktakart-card").forEach(function(card) {
+          card.classList.toggle("active", card.dataset.id === point.id);
+        });
+        renderDetail(point);
+        map.setView([point.lat, point.lng], point.zoom, { animate: true });
+        if (!fromMarker && markers[point.id]) markers[point.id].openPopup();
+      }
+
+      normalized.forEach(function(point) {
+        var icon = L.divIcon({
+          className: "",
+          html: "<div class=\"faktakart-marker\"><i class=\"ti " + point.icon + "\"></i></div>",
+          iconSize: [30, 30],
+          iconAnchor: [15, 15]
+        });
+        var popup = document.createElement("div");
+        var popupTitle = document.createElement("strong");
+        popupTitle.textContent = point.title;
+        popup.appendChild(popupTitle);
+        if (point.shortText) {
+          popup.appendChild(document.createElement("br"));
+          popup.appendChild(document.createTextNode(point.shortText));
+        }
+        markers[point.id] = L.marker([point.lat, point.lng], { icon: icon }).addTo(map).bindPopup(popup);
+        markers[point.id].on("click", function() { activate(point.id, true); });
+      });
+
+      list.querySelectorAll(".faktakart-card").forEach(function(card) {
+        card.addEventListener("click", function() { activate(card.dataset.id, false); });
+      });
+
+      renderDetail(normalized[0]);
+      setTimeout(function() { map.invalidateSize(); }, 0);
+    }).catch(function(e) {
+      console.error("Kartlasting feilet:", e);
+      showMapError("Kartet kunne ikke lastes.");
+    });
+  }
+
   function renderJSON(cfg, blokk) {
     var G = { c900:"#173404", c800:"#27500a", c600:"#3b6d11", c200:"#c0dd97", c100:"#eaf3de" };
+
+    if (cfg.type === "faktakart") {
+      renderFaktakart(cfg, blokk);
+      return;
+    }
 
     if (cfg.type === "diagram") {
       var wrap = document.createElement("div"); wrap.style.cssText = "position:relative;margin-top:8px";
