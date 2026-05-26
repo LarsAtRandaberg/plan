@@ -1,0 +1,19 @@
+{
+  "type": "hop-data-index",
+  "version": 1,
+  "updated": "2026-05-26",
+  "description": "Datakilder for handlings- og okonomiplan i planportalen.",
+  "datasets": [
+    {
+      "id": "opprinnelig-vedtatt-2025",
+      "kind": "opprinnelig-vedtatt-budsjett",
+      "year": 2025,
+      "format": "xledger-adv-json",
+      "source": "Xledger Flex export",
+      "path": "data-hop/vedtatt/2025.adv.json",
+      "status": "frozen",
+      "rows": 2427,
+      "amountField": "2025"
+    }
+  ]
+}
