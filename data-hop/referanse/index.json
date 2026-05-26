@@ -24,6 +24,17 @@
       "validTo": null,
       "path": "data-hop/referanse/kostra-regnskapsbegrep-arter-kapitler-2025.json",
       "items": 496
+    },
+    {
+      "id": "kostra-regnskapsfunksjoner-2025",
+      "source": "SSB Klass",
+      "classificationId": 277,
+      "versionId": 3234,
+      "name": "KOSTRA regnskapsfunksjoner 2025",
+      "validFrom": "2025-01-01",
+      "validTo": null,
+      "path": "data-hop/referanse/kostra-regnskapsfunksjoner-2025.json",
+      "items": 213
     }
   ]
 }
