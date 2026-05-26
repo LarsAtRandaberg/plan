@@ -25,6 +25,44 @@
       "status": "frozen",
       "rows": 2341,
       "amountField": "2026"
+    },
+    {
+      "id": "normalisert-vedtatt-2025",
+      "kind": "normalisert-vedtatt-budsjett",
+      "year": 2025,
+      "format": "hop-normalisert-json",
+      "source": "data-hop/vedtatt/2025.adv.json",
+      "path": "data-hop/normalisert/vedtatt-2025.json",
+      "status": "generated",
+      "rows": 2427
+    },
+    {
+      "id": "normalisert-vedtatt-2026",
+      "kind": "normalisert-vedtatt-budsjett",
+      "year": 2026,
+      "format": "hop-normalisert-json",
+      "source": "data-hop/vedtatt/2026.adv.json",
+      "path": "data-hop/normalisert/vedtatt-2026.json",
+      "status": "generated",
+      "rows": 2341
+    },
+    {
+      "id": "obligatoriske-tabeller-2025-vedtatt",
+      "kind": "beregnet-obligatoriske-tabeller",
+      "year": 2025,
+      "format": "hop-beregnet-json",
+      "source": "data-hop/normalisert/vedtatt-2025.json",
+      "path": "data-hop/aggregert/obligatoriske-tabeller-2025-vedtatt.json",
+      "status": "generated"
+    },
+    {
+      "id": "obligatoriske-tabeller-2026-vedtatt",
+      "kind": "beregnet-obligatoriske-tabeller",
+      "year": 2026,
+      "format": "hop-beregnet-json",
+      "source": "data-hop/normalisert/vedtatt-2026.json",
+      "path": "data-hop/aggregert/obligatoriske-tabeller-2026-vedtatt.json",
+      "status": "generated"
     }
   ]
 }

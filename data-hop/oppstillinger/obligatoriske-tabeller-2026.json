@@ -37,7 +37,7 @@
         { "post": "19", "label": "Gevinster og tap pa finansielle omlopsmidler", "rule": "909 - 509" },
         { "post": "20", "label": "Renteutgifter", "rule": "sum(500:501)" },
         { "post": "21", "label": "Avdrag pa lan", "rule": "sum(510:511)" },
-        { "post": "22", "label": "Netto finansutgifter", "rule": "post(17:21)", "rowType": "sum" },
+        { "post": "22", "label": "Netto finansutgifter", "rule": "post(20) + post(21) - post(17) - post(18) - post(19)", "rowType": "sum" },
         { "post": "23", "label": "Motpost avskrivninger", "rule": "990" },
         { "post": "24", "label": "Netto driftsresultat", "rule": "post(16) - post(22) + post(23)", "rowType": "result" },
         { "post": "25", "label": "Overforing til investering", "rule": "570" },
@@ -46,7 +46,7 @@
         { "post": "28", "label": "Avsetninger til disposisjonsfond", "rule": "540" },
         { "post": "29", "label": "Bruk av disposisjonsfond", "rule": "940" },
         { "post": "30", "label": "Dekning av tidligere ars merforbruk", "rule": "530" },
-        { "post": "31", "label": "Sum disponeringer eller dekning av netto driftsresultat", "rule": "post(25:30)", "rowType": "sum" },
+        { "post": "31", "label": "Sum disponeringer eller dekning av netto driftsresultat", "rule": "post(25) + post(26) - post(27) + post(28) - post(29) + post(30)", "rowType": "sum" },
         { "post": "32", "label": "Fremfort til inndekning i senere ar (merforbruk)", "rule": "980; post(24) - post(31)", "rowType": "result" }
       ]
     },
@@ -71,7 +71,7 @@
         { "post": "12", "label": "Gevinster og tap pa finansielle omlopsmidler", "rule": "909 - 509" },
         { "post": "13", "label": "Renteutgifter", "rule": "sum(500:501)" },
         { "post": "14", "label": "Avdrag pa lan", "rule": "sum(510:511)" },
-        { "post": "15", "label": "Netto finansutgifter", "rule": "post(10:14)", "rowType": "sum" },
+        { "post": "15", "label": "Netto finansutgifter", "rule": "post(13) + post(14) - post(10) - post(11) - post(12)", "rowType": "sum" },
         { "post": "16", "label": "Motpost avskrivninger", "rule": "990" },
         { "post": "17", "label": "Netto driftsresultat", "rule": "post(9) - post(15) + post(16)", "rowType": "result" },
         { "post": "18", "label": "Overforing til investering", "rule": "570" },
@@ -80,7 +80,7 @@
         { "post": "21", "label": "Avsetninger til disposisjonsfond", "rule": "540" },
         { "post": "22", "label": "Bruk av disposisjonsfond", "rule": "940" },
         { "post": "23", "label": "Dekning av tidligere ars merforbruk", "rule": "530" },
-        { "post": "24", "label": "Sum disponeringer eller dekning av netto driftsresultat", "rule": "post(18:23)", "rowType": "sum" },
+        { "post": "24", "label": "Sum disponeringer eller dekning av netto driftsresultat", "rule": "post(18) + post(19) - post(20) + post(21) - post(22) + post(23)", "rowType": "sum" },
         { "post": "25", "label": "Fremfort til inndekning i senere ar (merforbruk)", "rule": "980; post(17) - post(24)", "rowType": "result" }
       ]
     },
@@ -109,14 +109,14 @@
         { "post": "16", "label": "Bruk av lan til videreutlan", "rule": "sum(911:912)" },
         { "post": "17", "label": "Avdrag pa lan til videreutlan", "rule": "512" },
         { "post": "18", "label": "Mottatte avdrag pa videreutlan", "rule": "922" },
-        { "post": "19", "label": "Netto utgifter videreutlan", "rule": "post(15:18)", "rowType": "sum" },
+        { "post": "19", "label": "Netto utgifter videreutlan", "rule": "post(15) - post(16) + post(17) - post(18)", "rowType": "sum" },
         { "post": "20", "label": "Overforing fra drift", "rule": "970" },
         { "post": "21", "label": "Avsetninger til bundne investeringsfond", "rule": "550" },
         { "post": "22", "label": "Bruk av bundne investeringsfond", "rule": "950" },
         { "post": "23", "label": "Avsetninger til ubundet investeringsfond", "rule": "540" },
         { "post": "24", "label": "Bruk av ubundet investeringsfond", "rule": "940" },
         { "post": "25", "label": "Dekning av tidligere ars udekket belop", "rule": "530" },
-        { "post": "26", "label": "Sum overforing fra drift og netto avsetninger", "rule": "post(20:25)", "rowType": "sum" },
+        { "post": "26", "label": "Sum overforing fra drift og netto avsetninger", "rule": "post(20) + post(21) - post(22) + post(23) - post(24) + post(25)", "rowType": "sum" },
         { "post": "27", "label": "Fremfort til inndekning (udekket belop)", "rule": "980; -post(6) + post(14) - post(19) - post(26)", "rowType": "result" }
       ]
     },
