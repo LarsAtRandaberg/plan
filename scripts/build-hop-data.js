@@ -127,28 +127,39 @@ function normalizeBudget(year) {
   return result;
 }
 
-function makeAmountByArt(rows, klasse) {
+function makeArtIndex(rows, klasse) {
   const map = new Map();
   rows
     .filter((row) => row.klasse === klasse)
     .forEach((row) => {
-      map.set(row.kostraart, (map.get(row.kostraart) || 0) + row.belop);
+      if (!map.has(row.kostraart)) {
+        map.set(row.kostraart, {
+          code: row.kostraart,
+          name: row.kostraartNavn || row.systemkontoNavn || "",
+          rawAmount: 0
+        });
+      }
+      map.get(row.kostraart).rawAmount += row.belop;
     });
   return map;
 }
 
-function sumRange(amounts, from, to) {
+function amountForArt(artIndex, code) {
+  return artIndex.get(String(code).padStart(3, "0"))?.rawAmount || 0;
+}
+
+function sumRange(artIndex, from, to) {
   let total = 0;
-  for (const [code, amount] of amounts.entries()) {
+  for (const [code, item] of artIndex.entries()) {
     if (/^\d+$/.test(code) && Number(code) >= Number(from) && Number(code) <= Number(to)) {
-      total += amount;
+      total += item.rawAmount;
     }
   }
   return total;
 }
 
-function artValue(amounts, code) {
-  return amounts.get(String(code).padStart(3, "0")) || 0;
+function artValue(artIndex, code) {
+  return amountForArt(artIndex, code);
 }
 
 function rowDisplayMultiplier(tableId, post) {
@@ -172,11 +183,65 @@ function rowDisplayMultiplier(tableId, post) {
   return 1;
 }
 
-function evalArtRule(rule, amounts) {
+function artCodesInRange(artIndex, from, to) {
+  return [...artIndex.keys()]
+    .filter((code) => /^\d+$/.test(code) && Number(code) >= Number(from) && Number(code) <= Number(to))
+    .sort((a, b) => Number(a) - Number(b));
+}
+
+function directArtContributions(rule, artIndex, multiplier) {
+  if (!rule || /post\(|fra_/.test(rule)) return [];
+  const expr = rule.replace(/;.*$/, "");
+  const normalized = expr.replace(/-/g, "+-");
+  const terms = normalized
+    .split("+")
+    .map((term) => term.trim())
+    .filter(Boolean);
+  const contributions = new Map();
+
+  terms.forEach((term) => {
+    let sign = 1;
+    if (term.startsWith("-")) {
+      sign = -1;
+      term = term.slice(1).trim();
+    }
+
+    const rangeMatch = term.match(/^sum\((\d+):(\d+)\)$/);
+    if (rangeMatch) {
+      artCodesInRange(artIndex, rangeMatch[1], rangeMatch[2]).forEach((code) => {
+        contributions.set(code, (contributions.get(code) || 0) + sign);
+      });
+      return;
+    }
+
+    if (/^\d{3}$/.test(term)) {
+      const code = term.padStart(3, "0");
+      if (artIndex.has(code)) contributions.set(code, (contributions.get(code) || 0) + sign);
+    }
+  });
+
+  return [...contributions.entries()]
+    .map(([code, factor]) => {
+      const item = artIndex.get(code);
+      const rawAmount = item.rawAmount * factor;
+      return {
+        type: "kostraart",
+        code,
+        name: item.name,
+        factor,
+        rawAmount,
+        amount: rawAmount * multiplier
+      };
+    })
+    .filter((item) => item.amount !== 0)
+    .sort((a, b) => Number(a.code) - Number(b.code));
+}
+
+function evalArtRule(rule, artIndex) {
   if (!rule || /post\(|fra_/.test(rule)) return null;
   let expr = rule.replace(/;.*$/, "");
-  expr = expr.replace(/sum\((\d+):(\d+)\)/g, (_, from, to) => String(sumRange(amounts, from, to)));
-  expr = expr.replace(/(?<![A-Za-z])\b(\d{3})\b/g, (_, code) => String(artValue(amounts, code)));
+  expr = expr.replace(/sum\((\d+):(\d+)\)/g, (_, from, to) => String(sumRange(artIndex, from, to)));
+  expr = expr.replace(/(?<![A-Za-z])\b(\d{3})\b/g, (_, code) => String(artValue(artIndex, code)));
   if (!/^[0-9+\-*/ ().]+$/.test(expr)) return null;
   return Function(`return (${expr})`)();
 }
@@ -207,17 +272,18 @@ function evalPostRule(rule, values) {
 function calculateStatements(year, normalized) {
   const statements = readJson("data-hop/oppstillinger/obligatoriske-tabeller-2026.json");
   const tables = statements.tables.map((table) => {
-    const amounts = makeAmountByArt(normalized.rows, table.klasse);
+    const artIndex = makeArtIndex(normalized.rows, table.klasse);
     const hasSourceRows = normalized.rows.some((row) => row.klasse === table.klasse);
     const values = new Map();
     const rows = table.rows.map((row) => {
-      let rawAmount = hasSourceRows ? evalArtRule(row.rule, amounts) : null;
+      const multiplier = rowDisplayMultiplier(table.id, row.post);
+      let rawAmount = hasSourceRows ? evalArtRule(row.rule, artIndex) : null;
       const isArtRule = rawAmount != null;
       if (rawAmount == null && hasSourceRows) rawAmount = evalPostRule(row.rule, values);
       const canCalculate = rawAmount != null;
       const displayAmount = canCalculate
         ? isArtRule
-          ? rawAmount * rowDisplayMultiplier(table.id, row.post)
+          ? rawAmount * multiplier
           : rawAmount
         : null;
       if (canCalculate) values.set(row.post, displayAmount);
@@ -227,7 +293,8 @@ function calculateStatements(year, normalized) {
         rule: row.rule,
         rowType: row.rowType || "line",
         canCalculate,
-        amount: displayAmount
+        amount: displayAmount,
+        children: isArtRule ? directArtContributions(row.rule, artIndex, multiplier) : []
       };
     });
     return {

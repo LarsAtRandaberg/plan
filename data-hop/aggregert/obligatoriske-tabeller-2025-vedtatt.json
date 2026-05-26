@@ -19,7 +19,17 @@
           "rule": "800",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 359700000
+          "amount": 359700000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "800",
+              "name": "Rammetilskudd",
+              "factor": 1,
+              "rawAmount": -359700000,
+              "amount": 359700000
+            }
+          ]
         },
         {
           "post": "2",
@@ -27,7 +37,17 @@
           "rule": "870",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 532000000
+          "amount": 532000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "870",
+              "name": "Skatt på inntekt og formue",
+              "factor": 1,
+              "rawAmount": -532000000,
+              "amount": 532000000
+            }
+          ]
         },
         {
           "post": "3",
@@ -35,7 +55,17 @@
           "rule": "sum(871:873) + 876 + sum(878:879)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 9746000
+          "amount": 9746000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "876",
+              "name": "Eiendomsskatt kraftnett og næringseiendom m.m.",
+              "factor": 1,
+              "rawAmount": -9746000,
+              "amount": 9746000
+            }
+          ]
         },
         {
           "post": "4",
@@ -43,7 +73,8 @@
           "rule": "877",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "5",
@@ -51,7 +82,17 @@
           "rule": "810",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 96531000
+          "amount": 96531000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "810",
+              "name": "Andre statlige overføringer",
+              "factor": 1,
+              "rawAmount": -96531000,
+              "amount": 96531000
+            }
+          ]
         },
         {
           "post": "6",
@@ -59,7 +100,65 @@
           "rule": "sum(700:780) + sum(830:850) + sum(880:890) + 920",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 134444545
+          "amount": 134444545,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "700",
+              "name": "Refusjon fra staten",
+              "factor": 1,
+              "rawAmount": -60588000,
+              "amount": 60588000
+            },
+            {
+              "type": "kostraart",
+              "code": "710",
+              "name": "Sykelønnsrefusjon",
+              "factor": 1,
+              "rawAmount": -31284000,
+              "amount": 31284000
+            },
+            {
+              "type": "kostraart",
+              "code": "729",
+              "name": "Momskomp. inv. innt.",
+              "factor": 1,
+              "rawAmount": -27174000,
+              "amount": 27174000
+            },
+            {
+              "type": "kostraart",
+              "code": "730",
+              "name": "Refusjon fra fylkeskommuner",
+              "factor": 1,
+              "rawAmount": -2457944,
+              "amount": 2457944
+            },
+            {
+              "type": "kostraart",
+              "code": "750",
+              "name": "Refusjon fra kommuner",
+              "factor": 1,
+              "rawAmount": -5728601,
+              "amount": 5728601
+            },
+            {
+              "type": "kostraart",
+              "code": "770",
+              "name": "Refusjon fra andre",
+              "factor": 1,
+              "rawAmount": -6528000,
+              "amount": 6528000
+            },
+            {
+              "type": "kostraart",
+              "code": "890",
+              "name": "Overføringer fra andre",
+              "factor": 1,
+              "rawAmount": -684000,
+              "amount": 684000
+            }
+          ]
         },
         {
           "post": "7",
@@ -67,7 +166,17 @@
           "rule": "600",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 29460000
+          "amount": 29460000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "600",
+              "name": "Brukerbetalinger",
+              "factor": 1,
+              "rawAmount": -29460000,
+              "amount": 29460000
+            }
+          ]
         },
         {
           "post": "8",
@@ -75,7 +184,49 @@
           "rule": "sum(620:660)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 117163500
+          "amount": 117163500,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "620",
+              "name": "Annet salg av varer og tjenester, gebyrer",
+              "factor": 1,
+              "rawAmount": -2440000,
+              "amount": 2440000
+            },
+            {
+              "type": "kostraart",
+              "code": "629",
+              "name": "Billettinntekter",
+              "factor": 1,
+              "rawAmount": -2648000,
+              "amount": 2648000
+            },
+            {
+              "type": "kostraart",
+              "code": "630",
+              "name": "Utleie av boliger og lokaler mv. og festeavgifter",
+              "factor": 1,
+              "rawAmount": -40439500,
+              "amount": 40439500
+            },
+            {
+              "type": "kostraart",
+              "code": "640",
+              "name": "Merverdiavgiftspliktige gebyrer",
+              "factor": 1,
+              "rawAmount": -70585000,
+              "amount": 70585000
+            },
+            {
+              "type": "kostraart",
+              "code": "650",
+              "name": "Annet merverdiavgiftspliktig salg av varer og tjenester",
+              "factor": 1,
+              "rawAmount": -1051000,
+              "amount": 1051000
+            }
+          ]
         },
         {
           "post": "9",
@@ -83,7 +234,8 @@
           "rule": "post(1:8)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 1279045045
+          "amount": 1279045045,
+          "children": []
         },
         {
           "post": "10",
@@ -91,7 +243,89 @@
           "rule": "sum(010:089) + sum(160:165)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 656890549
+          "amount": 656890549,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "010",
+              "name": "Fastlønn",
+              "factor": 1,
+              "rawAmount": 575207933,
+              "amount": 575207933
+            },
+            {
+              "type": "kostraart",
+              "code": "020",
+              "name": "Lønn til vikarer",
+              "factor": 1,
+              "rawAmount": 34151000,
+              "amount": 34151000
+            },
+            {
+              "type": "kostraart",
+              "code": "030",
+              "name": "Lønn til ekstrahjelp",
+              "factor": 1,
+              "rawAmount": 2660000,
+              "amount": 2660000
+            },
+            {
+              "type": "kostraart",
+              "code": "040",
+              "name": "Overtidslønn",
+              "factor": 1,
+              "rawAmount": 781416,
+              "amount": 781416
+            },
+            {
+              "type": "kostraart",
+              "code": "050",
+              "name": "Annen lønn og trekkpliktige godtgjørelser",
+              "factor": 1,
+              "rawAmount": 17353000,
+              "amount": 17353000
+            },
+            {
+              "type": "kostraart",
+              "code": "070",
+              "name": "Lønn til vedlikehold",
+              "factor": 1,
+              "rawAmount": 6876000,
+              "amount": 6876000
+            },
+            {
+              "type": "kostraart",
+              "code": "075",
+              "name": "Lønn renhold",
+              "factor": 1,
+              "rawAmount": 13143000,
+              "amount": 13143000
+            },
+            {
+              "type": "kostraart",
+              "code": "080",
+              "name": "Godtgjørelse folkevalgte",
+              "factor": 1,
+              "rawAmount": 3095000,
+              "amount": 3095000
+            },
+            {
+              "type": "kostraart",
+              "code": "160",
+              "name": "Utgifter og godtgjørelser for reiser, diett, bil m.v. som er opplysningspliktige",
+              "factor": 1,
+              "rawAmount": 847200,
+              "amount": 847200
+            },
+            {
+              "type": "kostraart",
+              "code": "165",
+              "name": "Andre opplysningspliktige godtgjørelser",
+              "factor": 1,
+              "rawAmount": 2776000,
+              "amount": 2776000
+            }
+          ]
         },
         {
           "post": "11",
@@ -99,7 +333,25 @@
           "rule": "sum(090:099)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 162113965
+          "amount": 162113965,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "090",
+              "name": "Pensjonsinnskudd og trekkpl. fors.ordn.",
+              "factor": 1,
+              "rawAmount": 67031032,
+              "amount": 67031032
+            },
+            {
+              "type": "kostraart",
+              "code": "099",
+              "name": "Arbeidsgiveravgift",
+              "factor": 1,
+              "rawAmount": 95082933,
+              "amount": 95082933
+            }
+          ]
         },
         {
           "post": "12",
@@ -107,7 +359,241 @@
           "rule": "sum(100:285) - sum(160:165) + sum(300:380)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 289681531
+          "amount": 289681531,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "100",
+              "name": "Kontormateriell",
+              "factor": 1,
+              "rawAmount": 1322500,
+              "amount": 1322500
+            },
+            {
+              "type": "kostraart",
+              "code": "105",
+              "name": "Undervisningsmateriell",
+              "factor": 1,
+              "rawAmount": 2490000,
+              "amount": 2490000
+            },
+            {
+              "type": "kostraart",
+              "code": "110",
+              "name": "Medisinsk forbruksmateriell",
+              "factor": 1,
+              "rawAmount": 2073500,
+              "amount": 2073500
+            },
+            {
+              "type": "kostraart",
+              "code": "114",
+              "name": "Medikamenter",
+              "factor": 1,
+              "rawAmount": 605000,
+              "amount": 605000
+            },
+            {
+              "type": "kostraart",
+              "code": "115",
+              "name": "Matvarer",
+              "factor": 1,
+              "rawAmount": 9102645,
+              "amount": 9102645
+            },
+            {
+              "type": "kostraart",
+              "code": "120",
+              "name": "Samlepost for annet forbruksmateriell, varer og tjenester",
+              "factor": 1,
+              "rawAmount": 8071500,
+              "amount": 8071500
+            },
+            {
+              "type": "kostraart",
+              "code": "130",
+              "name": "Post, banktjenester, telefon, internett, -bredbånd",
+              "factor": 1,
+              "rawAmount": 1714031,
+              "amount": 1714031
+            },
+            {
+              "type": "kostraart",
+              "code": "140",
+              "name": "Annonse, reklame, informasjon",
+              "factor": 1,
+              "rawAmount": 818000,
+              "amount": 818000
+            },
+            {
+              "type": "kostraart",
+              "code": "150",
+              "name": "Opplæring og kurs",
+              "factor": 1,
+              "rawAmount": 1596400,
+              "amount": 1596400
+            },
+            {
+              "type": "kostraart",
+              "code": "170",
+              "name": "Transport og reise",
+              "factor": 1,
+              "rawAmount": 5530000,
+              "amount": 5530000
+            },
+            {
+              "type": "kostraart",
+              "code": "180",
+              "name": "Strøm",
+              "factor": 1,
+              "rawAmount": 10660000,
+              "amount": 10660000
+            },
+            {
+              "type": "kostraart",
+              "code": "183",
+              "name": "Naturgass",
+              "factor": 1,
+              "rawAmount": 12000,
+              "amount": 12000
+            },
+            {
+              "type": "kostraart",
+              "code": "185",
+              "name": "Forsikringer, vakthold og sikring",
+              "factor": 1,
+              "rawAmount": 3203000,
+              "amount": 3203000
+            },
+            {
+              "type": "kostraart",
+              "code": "190",
+              "name": "Husleie, leie av lokaler og grunn",
+              "factor": 1,
+              "rawAmount": 20449000,
+              "amount": 20449000
+            },
+            {
+              "type": "kostraart",
+              "code": "195",
+              "name": "Avgifter, gebyrer, lisenser o.l.",
+              "factor": 1,
+              "rawAmount": 21765955,
+              "amount": 21765955
+            },
+            {
+              "type": "kostraart",
+              "code": "200",
+              "name": "Kjøp og finansiell leie av driftsmidler",
+              "factor": 1,
+              "rawAmount": 4519000,
+              "amount": 4519000
+            },
+            {
+              "type": "kostraart",
+              "code": "209",
+              "name": "Medisinsk utstyr",
+              "factor": 1,
+              "rawAmount": 40000,
+              "amount": 40000
+            },
+            {
+              "type": "kostraart",
+              "code": "210",
+              "name": "Kjøp og leie av transportmidler",
+              "factor": 1,
+              "rawAmount": 2756000,
+              "amount": 2756000
+            },
+            {
+              "type": "kostraart",
+              "code": "220",
+              "name": "Leie av driftsmidler",
+              "factor": 1,
+              "rawAmount": 15000,
+              "amount": 15000
+            },
+            {
+              "type": "kostraart",
+              "code": "230",
+              "name": "Vedlikehold, påkostninger nybygg og nyanlegg",
+              "factor": 1,
+              "rawAmount": 17564000,
+              "amount": 17564000
+            },
+            {
+              "type": "kostraart",
+              "code": "240",
+              "name": "Driftsavtaler, reparasjoner og vaktmestertjenester",
+              "factor": 1,
+              "rawAmount": 3423000,
+              "amount": 3423000
+            },
+            {
+              "type": "kostraart",
+              "code": "250",
+              "name": "Materialer til vedlikehold",
+              "factor": 1,
+              "rawAmount": 278000,
+              "amount": 278000
+            },
+            {
+              "type": "kostraart",
+              "code": "260",
+              "name": "Renhold og vaskeritjenester",
+              "factor": 1,
+              "rawAmount": 2629000,
+              "amount": 2629000
+            },
+            {
+              "type": "kostraart",
+              "code": "270",
+              "name": "Andre tjenester (Utgår f.o.m 2026)",
+              "factor": 1,
+              "rawAmount": 23495000,
+              "amount": 23495000
+            },
+            {
+              "type": "kostraart",
+              "code": "300",
+              "name": "Kjøp fra staten",
+              "factor": 1,
+              "rawAmount": 1283000,
+              "amount": 1283000
+            },
+            {
+              "type": "kostraart",
+              "code": "330",
+              "name": "Kjøp fra fylkeskommuner",
+              "factor": 1,
+              "rawAmount": 80000,
+              "amount": 80000
+            },
+            {
+              "type": "kostraart",
+              "code": "350",
+              "name": "Kjøp fra andre kommuner/komm. inst.",
+              "factor": 1,
+              "rawAmount": 23264000,
+              "amount": 23264000
+            },
+            {
+              "type": "kostraart",
+              "code": "370",
+              "name": "Kjøp fra andre",
+              "factor": 1,
+              "rawAmount": 75296000,
+              "amount": 75296000
+            },
+            {
+              "type": "kostraart",
+              "code": "380",
+              "name": "Kjøp fra andre regnskapsenheter som inngår i KOSTRA konsern",
+              "factor": 1,
+              "rawAmount": 45626000,
+              "amount": 45626000
+            }
+          ]
         },
         {
           "post": "13",
@@ -115,7 +601,49 @@
           "rule": "sum(400:480) + 520",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 102608000
+          "amount": 102608000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "400",
+              "name": "Overføring til staten",
+              "factor": 1,
+              "rawAmount": 8200000,
+              "amount": 8200000
+            },
+            {
+              "type": "kostraart",
+              "code": "429",
+              "name": "Merverdiavgift som gir rett til merverdiavgiftskompensasjon",
+              "factor": 1,
+              "rawAmount": 27175000,
+              "amount": 27175000
+            },
+            {
+              "type": "kostraart",
+              "code": "430",
+              "name": "Overføring til fylkeskommuner",
+              "factor": 1,
+              "rawAmount": 17000,
+              "amount": 17000
+            },
+            {
+              "type": "kostraart",
+              "code": "450",
+              "name": "Overføring til kommuner",
+              "factor": 1,
+              "rawAmount": 1732000,
+              "amount": 1732000
+            },
+            {
+              "type": "kostraart",
+              "code": "470",
+              "name": "Overføring til andre (private) ",
+              "factor": 1,
+              "rawAmount": 65484000,
+              "amount": 65484000
+            }
+          ]
         },
         {
           "post": "14",
@@ -123,7 +651,17 @@
           "rule": "590",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 67000000
+          "amount": 67000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "590",
+              "name": "Avskrivninger",
+              "factor": 1,
+              "rawAmount": 67000000,
+              "amount": 67000000
+            }
+          ]
         },
         {
           "post": "15",
@@ -131,7 +669,8 @@
           "rule": "post(10:14)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 1278294045
+          "amount": 1278294045,
+          "children": []
         },
         {
           "post": "16",
@@ -139,7 +678,8 @@
           "rule": "post(9) - post(15)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 751000
+          "amount": 751000,
+          "children": []
         },
         {
           "post": "17",
@@ -147,7 +687,17 @@
           "rule": "sum(900:901)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 27200000
+          "amount": 27200000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "900",
+              "name": "Renteinntekter",
+              "factor": 1,
+              "rawAmount": -27200000,
+              "amount": 27200000
+            }
+          ]
         },
         {
           "post": "18",
@@ -155,7 +705,17 @@
           "rule": "905",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 23000000
+          "amount": 23000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "905",
+              "name": "Utbytte fra selskaper",
+              "factor": 1,
+              "rawAmount": -23000000,
+              "amount": 23000000
+            }
+          ]
         },
         {
           "post": "19",
@@ -163,7 +723,8 @@
           "rule": "909 - 509",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "20",
@@ -171,7 +732,17 @@
           "rule": "sum(500:501)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 58354000
+          "amount": 58354000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "500",
+              "name": "Renteutgifter, provisjoner og andre finansutgifter",
+              "factor": 1,
+              "rawAmount": 58354000,
+              "amount": 58354000
+            }
+          ]
         },
         {
           "post": "21",
@@ -179,7 +750,17 @@
           "rule": "sum(510:511)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 44986000
+          "amount": 44986000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "510",
+              "name": "Avdrag på lån",
+              "factor": 1,
+              "rawAmount": 44986000,
+              "amount": 44986000
+            }
+          ]
         },
         {
           "post": "22",
@@ -187,7 +768,8 @@
           "rule": "post(20) + post(21) - post(17) - post(18) - post(19)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 53140000
+          "amount": 53140000,
+          "children": []
         },
         {
           "post": "23",
@@ -195,7 +777,17 @@
           "rule": "990",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 67000000
+          "amount": 67000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "990",
+              "name": "Motpost avskrivninger",
+              "factor": 1,
+              "rawAmount": -67000000,
+              "amount": 67000000
+            }
+          ]
         },
         {
           "post": "24",
@@ -203,7 +795,8 @@
           "rule": "post(16) - post(22) + post(23)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 14611000
+          "amount": 14611000,
+          "children": []
         },
         {
           "post": "25",
@@ -211,7 +804,17 @@
           "rule": "570",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 10450000
+          "amount": 10450000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "570",
+              "name": "Overføring til investering (K)",
+              "factor": 1,
+              "rawAmount": 10450000,
+              "amount": 10450000
+            }
+          ]
         },
         {
           "post": "26",
@@ -219,7 +822,17 @@
           "rule": "550",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 1578000
+          "amount": 1578000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "550",
+              "name": "Avsetninger til bundne fond",
+              "factor": 1,
+              "rawAmount": 1578000,
+              "amount": 1578000
+            }
+          ]
         },
         {
           "post": "27",
@@ -227,7 +840,17 @@
           "rule": "950",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 400000
+          "amount": 400000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "950",
+              "name": "Bruk av bundne fond",
+              "factor": 1,
+              "rawAmount": -400000,
+              "amount": 400000
+            }
+          ]
         },
         {
           "post": "28",
@@ -235,7 +858,17 @@
           "rule": "540",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 13968000
+          "amount": 13968000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "540",
+              "name": "Avsetninger til ubundne fond",
+              "factor": 1,
+              "rawAmount": 13968000,
+              "amount": 13968000
+            }
+          ]
         },
         {
           "post": "29",
@@ -243,7 +876,8 @@
           "rule": "940",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "30",
@@ -251,7 +885,8 @@
           "rule": "530",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "31",
@@ -259,7 +894,8 @@
           "rule": "post(25) + post(26) - post(27) + post(28) - post(29) + post(30)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 25596000
+          "amount": 25596000,
+          "children": []
         },
         {
           "post": "32",
@@ -267,7 +903,8 @@
           "rule": "980; post(24) - post(31)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": -10985000
+          "amount": -10985000,
+          "children": []
         }
       ]
     },
@@ -284,7 +921,17 @@
           "rule": "800",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 359700000
+          "amount": 359700000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "800",
+              "name": "Rammetilskudd",
+              "factor": 1,
+              "rawAmount": -359700000,
+              "amount": 359700000
+            }
+          ]
         },
         {
           "post": "2",
@@ -292,7 +939,17 @@
           "rule": "870",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 532000000
+          "amount": 532000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "870",
+              "name": "Skatt på inntekt og formue",
+              "factor": 1,
+              "rawAmount": -532000000,
+              "amount": 532000000
+            }
+          ]
         },
         {
           "post": "3",
@@ -300,7 +957,17 @@
           "rule": "sum(871:873) + 876 + sum(878:879)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 9746000
+          "amount": 9746000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "876",
+              "name": "Eiendomsskatt kraftnett og næringseiendom m.m.",
+              "factor": 1,
+              "rawAmount": -9746000,
+              "amount": 9746000
+            }
+          ]
         },
         {
           "post": "4",
@@ -308,7 +975,17 @@
           "rule": "810 + 877",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 96531000
+          "amount": 96531000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "810",
+              "name": "Andre statlige overføringer",
+              "factor": 1,
+              "rawAmount": -96531000,
+              "amount": 96531000
+            }
+          ]
         },
         {
           "post": "5",
@@ -316,7 +993,8 @@
           "rule": "post(1:4)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 997977000
+          "amount": 997977000,
+          "children": []
         },
         {
           "post": "6",
@@ -324,7 +1002,8 @@
           "rule": "fra_bevilgningsoversikt_5_4_andre_ledd",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "7",
@@ -332,7 +1011,17 @@
           "rule": "590",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 67000000
+          "amount": 67000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "590",
+              "name": "Avskrivninger",
+              "factor": 1,
+              "rawAmount": 67000000,
+              "amount": 67000000
+            }
+          ]
         },
         {
           "post": "8",
@@ -340,7 +1029,8 @@
           "rule": "post(6:7)",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "9",
@@ -348,7 +1038,8 @@
           "rule": "post(5) - post(8)",
           "rowType": "result",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "10",
@@ -356,7 +1047,17 @@
           "rule": "sum(900:901)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 27200000
+          "amount": 27200000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "900",
+              "name": "Renteinntekter",
+              "factor": 1,
+              "rawAmount": -27200000,
+              "amount": 27200000
+            }
+          ]
         },
         {
           "post": "11",
@@ -364,7 +1065,17 @@
           "rule": "905",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 23000000
+          "amount": 23000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "905",
+              "name": "Utbytte fra selskaper",
+              "factor": 1,
+              "rawAmount": -23000000,
+              "amount": 23000000
+            }
+          ]
         },
         {
           "post": "12",
@@ -372,7 +1083,8 @@
           "rule": "909 - 509",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "13",
@@ -380,7 +1092,17 @@
           "rule": "sum(500:501)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 58354000
+          "amount": 58354000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "500",
+              "name": "Renteutgifter, provisjoner og andre finansutgifter",
+              "factor": 1,
+              "rawAmount": 58354000,
+              "amount": 58354000
+            }
+          ]
         },
         {
           "post": "14",
@@ -388,7 +1110,17 @@
           "rule": "sum(510:511)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 44986000
+          "amount": 44986000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "510",
+              "name": "Avdrag på lån",
+              "factor": 1,
+              "rawAmount": 44986000,
+              "amount": 44986000
+            }
+          ]
         },
         {
           "post": "15",
@@ -396,7 +1128,8 @@
           "rule": "post(13) + post(14) - post(10) - post(11) - post(12)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 53140000
+          "amount": 53140000,
+          "children": []
         },
         {
           "post": "16",
@@ -404,7 +1137,17 @@
           "rule": "990",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 67000000
+          "amount": 67000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "990",
+              "name": "Motpost avskrivninger",
+              "factor": 1,
+              "rawAmount": -67000000,
+              "amount": 67000000
+            }
+          ]
         },
         {
           "post": "17",
@@ -412,7 +1155,8 @@
           "rule": "post(9) - post(15) + post(16)",
           "rowType": "result",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "18",
@@ -420,7 +1164,17 @@
           "rule": "570",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 10450000
+          "amount": 10450000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "570",
+              "name": "Overføring til investering (K)",
+              "factor": 1,
+              "rawAmount": 10450000,
+              "amount": 10450000
+            }
+          ]
         },
         {
           "post": "19",
@@ -428,7 +1182,17 @@
           "rule": "550",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 1578000
+          "amount": 1578000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "550",
+              "name": "Avsetninger til bundne fond",
+              "factor": 1,
+              "rawAmount": 1578000,
+              "amount": 1578000
+            }
+          ]
         },
         {
           "post": "20",
@@ -436,7 +1200,17 @@
           "rule": "950",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 400000
+          "amount": 400000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "950",
+              "name": "Bruk av bundne fond",
+              "factor": 1,
+              "rawAmount": -400000,
+              "amount": 400000
+            }
+          ]
         },
         {
           "post": "21",
@@ -444,7 +1218,17 @@
           "rule": "540",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 13968000
+          "amount": 13968000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "540",
+              "name": "Avsetninger til ubundne fond",
+              "factor": 1,
+              "rawAmount": 13968000,
+              "amount": 13968000
+            }
+          ]
         },
         {
           "post": "22",
@@ -452,7 +1236,8 @@
           "rule": "940",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "23",
@@ -460,7 +1245,8 @@
           "rule": "530",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "24",
@@ -468,7 +1254,8 @@
           "rule": "post(18) + post(19) - post(20) + post(21) - post(22) + post(23)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 25596000
+          "amount": 25596000,
+          "children": []
         },
         {
           "post": "25",
@@ -476,7 +1263,8 @@
           "rule": "980; post(17) - post(24)",
           "rowType": "result",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         }
       ]
     },
@@ -493,7 +1281,57 @@
           "rule": "sum(010:099) + sum(100:285) + sum(300:380) + 429 + sum(500:501)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 119731500
+          "amount": 119731500,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "200",
+              "name": "Kjøp og finansiell leasing av driftsmidler",
+              "factor": 1,
+              "rawAmount": 5525000,
+              "amount": 5525000
+            },
+            {
+              "type": "kostraart",
+              "code": "230",
+              "name": "Vedlikehold, påkostning nybygg og nyanlegg",
+              "factor": 1,
+              "rawAmount": 73385000,
+              "amount": 73385000
+            },
+            {
+              "type": "kostraart",
+              "code": "250",
+              "name": "Materialer til vedlikehold, påkostning, nybygg, nyanlegg",
+              "factor": 1,
+              "rawAmount": 2300000,
+              "amount": 2300000
+            },
+            {
+              "type": "kostraart",
+              "code": "270",
+              "name": "Andre tjenester",
+              "factor": 1,
+              "rawAmount": 11450000,
+              "amount": 11450000
+            },
+            {
+              "type": "kostraart",
+              "code": "285",
+              "name": "Kjøp av eksisterende bygninger og anlegg",
+              "factor": 1,
+              "rawAmount": 5000000,
+              "amount": 5000000
+            },
+            {
+              "type": "kostraart",
+              "code": "429",
+              "name": "Merverdiavgift som gir rett til merverdiavgiftskompensasjon",
+              "factor": 1,
+              "rawAmount": 22071500,
+              "amount": 22071500
+            }
+          ]
         },
         {
           "post": "2",
@@ -501,7 +1339,8 @@
           "rule": "400 + sum(430:480)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "3",
@@ -509,7 +1348,8 @@
           "rule": "529",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "4",
@@ -517,7 +1357,8 @@
           "rule": "sum(520:521)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "5",
@@ -525,7 +1366,8 @@
           "rule": "sum(510:511)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "6",
@@ -533,7 +1375,8 @@
           "rule": "post(1:5)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 119731500
+          "amount": 119731500,
+          "children": []
         },
         {
           "post": "7",
@@ -541,7 +1384,17 @@
           "rule": "729",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 22071500
+          "amount": 22071500,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "729",
+              "name": "Kompensasjon for merverdiavgift ",
+              "factor": 1,
+              "rawAmount": -22071500,
+              "amount": 22071500
+            }
+          ]
         },
         {
           "post": "8",
@@ -549,7 +1402,8 @@
           "rule": "sum(700:780) - 729 + sum(810:850) + sum(880:890) + sum(900:901)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "9",
@@ -557,7 +1411,8 @@
           "rule": "620 + 650 + sum(660:670)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "10",
@@ -565,7 +1420,8 @@
           "rule": "929",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "11",
@@ -573,7 +1429,8 @@
           "rule": "905",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "12",
@@ -581,7 +1438,17 @@
           "rule": "sum(920:921)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 4600000
+          "amount": 4600000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "920",
+              "name": "Mottatte avdrag på utlån",
+              "factor": 1,
+              "rawAmount": -4600000,
+              "amount": 4600000
+            }
+          ]
         },
         {
           "post": "13",
@@ -589,7 +1456,17 @@
           "rule": "sum(910:911)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 82610000
+          "amount": 82610000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "910",
+              "name": "Bruk av lån (I)",
+              "factor": 1,
+              "rawAmount": -82610000,
+              "amount": 82610000
+            }
+          ]
         },
         {
           "post": "14",
@@ -597,7 +1474,8 @@
           "rule": "post(7:13)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 109281500
+          "amount": 109281500,
+          "children": []
         },
         {
           "post": "15",
@@ -605,7 +1483,17 @@
           "rule": "sum(521:522)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 40000000
+          "amount": 40000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "522",
+              "name": "Videreutlån",
+              "factor": 1,
+              "rawAmount": 40000000,
+              "amount": 40000000
+            }
+          ]
         },
         {
           "post": "16",
@@ -613,7 +1501,8 @@
           "rule": "sum(911:912)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "17",
@@ -621,7 +1510,17 @@
           "rule": "512",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 7000000
+          "amount": 7000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "512",
+              "name": "Avdrag på lån til videreutlån",
+              "factor": 1,
+              "rawAmount": 7000000,
+              "amount": 7000000
+            }
+          ]
         },
         {
           "post": "18",
@@ -629,7 +1528,17 @@
           "rule": "922",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 25000000
+          "amount": 25000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "922",
+              "name": "Mottatte avdrag på videreutlån",
+              "factor": 1,
+              "rawAmount": -25000000,
+              "amount": 25000000
+            }
+          ]
         },
         {
           "post": "19",
@@ -637,7 +1546,8 @@
           "rule": "post(15) - post(16) + post(17) - post(18)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 22000000
+          "amount": 22000000,
+          "children": []
         },
         {
           "post": "20",
@@ -645,7 +1555,17 @@
           "rule": "970",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 10450000
+          "amount": 10450000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "970",
+              "name": "Overføring fra drift",
+              "factor": 1,
+              "rawAmount": -10450000,
+              "amount": 10450000
+            }
+          ]
         },
         {
           "post": "21",
@@ -653,7 +1573,8 @@
           "rule": "550",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "22",
@@ -661,7 +1582,17 @@
           "rule": "950",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 22000000
+          "amount": 22000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "950",
+              "name": "Bruk av bundne fond",
+              "factor": 1,
+              "rawAmount": -22000000,
+              "amount": 22000000
+            }
+          ]
         },
         {
           "post": "23",
@@ -669,7 +1600,8 @@
           "rule": "540",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "24",
@@ -677,7 +1609,8 @@
           "rule": "940",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "25",
@@ -685,7 +1618,8 @@
           "rule": "530",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 0
+          "amount": 0,
+          "children": []
         },
         {
           "post": "26",
@@ -693,7 +1627,8 @@
           "rule": "post(20) + post(21) - post(22) + post(23) - post(24) + post(25)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": -11550000
+          "amount": -11550000,
+          "children": []
         },
         {
           "post": "27",
@@ -701,7 +1636,8 @@
           "rule": "980; -post(6) + post(14) - post(19) - post(26)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": -20900000
+          "amount": -20900000,
+          "children": []
         }
       ]
     },
@@ -718,7 +1654,8 @@
           "rule": "post(A.I:A.IV)",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.I",
@@ -726,7 +1663,8 @@
           "rule": "24 + 27",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.I.1",
@@ -734,7 +1672,8 @@
           "rule": "27",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.I.2",
@@ -742,7 +1681,8 @@
           "rule": "24",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.II",
@@ -750,7 +1690,8 @@
           "rule": "sum(21:23) + 29",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.II.1",
@@ -758,7 +1699,8 @@
           "rule": "21",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.II.2",
@@ -766,7 +1708,8 @@
           "rule": "29",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.II.3",
@@ -774,7 +1717,8 @@
           "rule": "sum(22:23)",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.III",
@@ -782,7 +1726,8 @@
           "rule": "28",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "A.IV",
@@ -790,7 +1735,8 @@
           "rule": "20",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B",
@@ -798,7 +1744,8 @@
           "rule": "post(B.I:B.III)",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.I",
@@ -806,7 +1753,8 @@
           "rule": "10",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.II",
@@ -814,7 +1762,8 @@
           "rule": "sum(11:12) + 15 + 18",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.II.1",
@@ -822,7 +1771,8 @@
           "rule": "18",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.II.2",
@@ -830,7 +1780,8 @@
           "rule": "11",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.II.3",
@@ -838,7 +1789,8 @@
           "rule": "12",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.II.4",
@@ -846,7 +1798,8 @@
           "rule": "15",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.III",
@@ -854,7 +1807,8 @@
           "rule": "sum(13:14) + 16 + 19",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.III.1",
@@ -862,7 +1816,8 @@
           "rule": "13 + 14",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.III.2",
@@ -870,7 +1825,8 @@
           "rule": "16",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "B.III.3",
@@ -878,7 +1834,8 @@
           "rule": "19",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "SUM_EIENDELER",
@@ -886,7 +1843,8 @@
           "rule": "post(A) + post(B)",
           "rowType": "result",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C",
@@ -894,7 +1852,8 @@
           "rule": "post(C.I:C.III)",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.I",
@@ -902,7 +1861,8 @@
           "rule": "51 + 56 + 5900",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.I.1",
@@ -910,7 +1870,8 @@
           "rule": "56",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.I.2",
@@ -918,7 +1879,8 @@
           "rule": "51",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.I.3",
@@ -926,7 +1888,8 @@
           "rule": "5900",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.II",
@@ -934,7 +1897,8 @@
           "rule": "53 + 55 + 5970",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.II.1",
@@ -942,7 +1906,8 @@
           "rule": "53",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.II.2",
@@ -950,7 +1915,8 @@
           "rule": "55",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.II.3",
@@ -958,7 +1924,8 @@
           "rule": "5970",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.III",
@@ -966,7 +1933,8 @@
           "rule": "580 + 581 + 5990",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.III.1",
@@ -974,7 +1942,8 @@
           "rule": "5990",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.III.2",
@@ -982,7 +1951,8 @@
           "rule": "581",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "C.III.3",
@@ -990,7 +1960,8 @@
           "rule": "580",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "D",
@@ -998,7 +1969,8 @@
           "rule": "post(D.I:D.II)",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "D.I",
@@ -1006,7 +1978,8 @@
           "rule": "sum(411:412) + 431 + sum(451:454) + 47",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "D.I.1",
@@ -1014,7 +1987,8 @@
           "rule": "sum(451:454) + 47",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "D.I.2",
@@ -1022,7 +1996,8 @@
           "rule": "sum(411:412)",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "D.I.3",
@@ -1030,7 +2005,8 @@
           "rule": "431",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "D.II",
@@ -1038,7 +2014,8 @@
           "rule": "40",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "E",
@@ -1046,7 +2023,8 @@
           "rule": "post(E.I)",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "E.I",
@@ -1054,7 +2032,8 @@
           "rule": "sum(31:32) + sum(34:35) + 39",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "E.I.1",
@@ -1062,7 +2041,8 @@
           "rule": "33 + 35",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "E.I.2",
@@ -1070,7 +2050,8 @@
           "rule": "31",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "E.I.3",
@@ -1078,7 +2059,8 @@
           "rule": "34",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "E.I.4",
@@ -1086,7 +2068,8 @@
           "rule": "32",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "E.I.5",
@@ -1094,7 +2077,8 @@
           "rule": "39",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "SUM_EGENKAPITAL_GJELD",
@@ -1102,7 +2086,8 @@
           "rule": "post(C) + post(D) + post(E)",
           "rowType": "result",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "F",
@@ -1110,7 +2095,8 @@
           "rule": "post(F.I:F.III)",
           "rowType": "sum",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "F.I",
@@ -1118,7 +2104,8 @@
           "rule": "sum(9100:9110)",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "F.II",
@@ -1126,7 +2113,8 @@
           "rule": "9200",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         },
         {
           "post": "F.III",
@@ -1134,7 +2122,8 @@
           "rule": "9999",
           "rowType": "line",
           "canCalculate": false,
-          "amount": null
+          "amount": null,
+          "children": []
         }
       ]
     }
