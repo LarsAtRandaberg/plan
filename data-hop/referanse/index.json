@@ -1,0 +1,29 @@
+{
+  "type": "hop-reference-index",
+  "version": 1,
+  "updated": "2026-05-26",
+  "references": [
+    {
+      "id": "kostra-regnskapsarter-2025",
+      "source": "SSB Klass",
+      "classificationId": 259,
+      "versionId": 3232,
+      "name": "KOSTRA regnskapsarter 2025",
+      "validFrom": "2025-01-01",
+      "validTo": null,
+      "path": "data-hop/referanse/kostra-regnskapsarter-2025.json",
+      "items": 331
+    },
+    {
+      "id": "kostra-regnskapsbegrep-arter-kapitler-2025",
+      "source": "SSB Klass",
+      "classificationId": 374,
+      "versionId": 3233,
+      "name": "KOSTRA regnskapsbegrep arter og kapitler samlet 2025",
+      "validFrom": "2025-01-01",
+      "validTo": null,
+      "path": "data-hop/referanse/kostra-regnskapsbegrep-arter-kapitler-2025.json",
+      "items": 496
+    }
+  ]
+}
