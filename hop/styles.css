@@ -1,0 +1,382 @@
+:root {
+  --green-900: #173404;
+  --green-800: #27500a;
+  --green-600: #3b6d11;
+  --green-400: #639922;
+  --green-200: #c0dd97;
+  --green-100: #eaf3de;
+  --paper: #f6f8f4;
+  --line: #c0dd97;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, Arial, sans-serif;
+  color: var(--green-900);
+  background: var(--paper);
+}
+
+.hop-topbar {
+  height: 58px;
+  background: var(--green-900);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+  z-index: 10;
+}
+
+.brand-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: #fff;
+}
+
+.brand-logo {
+  height: 34px;
+  width: auto;
+}
+
+.brand-name {
+  font-size: 13px;
+  line-height: 1.15;
+  font-weight: 600;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.top-actions a {
+  color: rgba(255,255,255,0.78);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 7px 10px;
+  border-radius: 6px;
+}
+
+.top-actions a:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+}
+
+.page-shell {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px;
+}
+
+.hero {
+  min-height: 210px;
+  background: var(--green-800);
+  color: #fff;
+  border-radius: 8px;
+  padding: 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: "";
+  position: absolute;
+  right: 44px;
+  bottom: -38px;
+  width: 210px;
+  height: 210px;
+  border: 18px solid rgba(192,221,151,0.12);
+  border-radius: 50%;
+}
+
+.hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-kicker {
+  color: var(--green-200);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.hero h1 {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.15;
+  font-weight: 750;
+}
+
+.hero p {
+  margin: 12px 0 0;
+  color: rgba(255,255,255,0.76);
+}
+
+.year-switcher {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.year-switcher button {
+  min-width: 64px;
+  border: 0.5px solid rgba(255,255,255,0.24);
+  background: rgba(255,255,255,0.08);
+  color: #fff;
+  border-radius: 6px;
+  padding: 8px 12px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.year-switcher button.active,
+.year-switcher button:hover {
+  background: var(--green-200);
+  color: var(--green-900);
+}
+
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+  margin: 16px 0;
+}
+
+.summary-card {
+  min-height: 118px;
+  background: #fff;
+  border: 0.5px solid var(--line);
+  border-radius: 8px;
+  padding: 16px;
+  display: grid;
+  gap: 8px;
+}
+
+.summary-card i {
+  color: var(--green-600);
+  font-size: 20px;
+}
+
+.summary-card span {
+  color: var(--green-600);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.summary-card strong {
+  font-size: 24px;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
+}
+
+.statements-card {
+  background: #fff;
+  border: 0.5px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.statement-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px;
+  border-bottom: 0.5px solid var(--line);
+  overflow-x: auto;
+}
+
+.statement-tab {
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--green-800);
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  white-space: nowrap;
+}
+
+.statement-tab.active,
+.statement-tab:hover {
+  background: var(--green-100);
+  color: var(--green-900);
+}
+
+.statement-panel {
+  display: none;
+  padding: 18px;
+}
+
+.statement-panel.active { display: block; }
+
+.table-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+.table-heading h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.table-heading span {
+  color: var(--green-600);
+  font-size: 12px;
+  text-align: right;
+}
+
+.table-wrap {
+  overflow-x: auto;
+  border: 0.5px solid var(--line);
+  border-radius: 8px;
+}
+
+table {
+  width: 100%;
+  min-width: 640px;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+th {
+  background: var(--green-100);
+  color: var(--green-800);
+  font-size: 11px;
+  padding: 9px 10px;
+  text-align: left;
+  border-bottom: 0.5px solid var(--line);
+}
+
+th:last-child,
+.amount {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+td {
+  padding: 8px 10px;
+  border-bottom: 0.5px solid rgba(192,221,151,0.45);
+}
+
+.statement-row-sum td {
+  background: #f4f8ee;
+  font-weight: 750;
+}
+
+.statement-row-result td {
+  background: var(--green-100);
+  font-weight: 850;
+}
+
+.statement-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.row-toggle {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 4px;
+  background: var(--green-100);
+  color: var(--green-600);
+  cursor: pointer;
+  flex: 0 0 auto;
+  line-height: 1;
+  padding: 0;
+}
+
+.row-toggle:hover { background: var(--green-200); }
+.row-toggle.placeholder { visibility: hidden; }
+
+.child-row { display: none; }
+.child-row.open { display: table-row; }
+
+.child-row td {
+  background: #fbfdf8;
+  color: var(--green-600);
+  font-size: 12px;
+}
+
+.child-label {
+  padding-left: 48px;
+}
+
+.loading,
+.error {
+  padding: 18px;
+  color: var(--green-600);
+}
+
+@media (max-width: 900px) {
+  .page-shell {
+    padding: 16px;
+  }
+
+  .hero {
+    display: block;
+    padding: 24px 20px;
+  }
+
+  .hero h1 {
+    font-size: 27px;
+  }
+
+  .year-switcher {
+    justify-content: flex-start;
+    margin-top: 18px;
+  }
+
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .table-heading {
+    display: block;
+  }
+
+  .table-heading span {
+    display: block;
+    margin-top: 4px;
+    text-align: left;
+  }
+}
+
+@media (max-width: 560px) {
+  .hop-topbar {
+    padding: 0 14px;
+  }
+
+  .top-actions a {
+    font-size: 12px;
+    padding: 6px 7px;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .statement-panel {
+    padding: 10px;
+  }
+}
