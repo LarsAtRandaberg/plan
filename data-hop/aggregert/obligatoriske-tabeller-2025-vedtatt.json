@@ -339,16 +339,16 @@
           "label": "Sum netto driftsutgifter",
           "rule": "post(6:7)",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 67000000
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "9",
           "label": "Brutto driftsresultat",
           "rule": "post(5) - post(8)",
           "rowType": "result",
-          "canCalculate": true,
-          "amount": 930977000
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "10",
@@ -411,8 +411,8 @@
           "label": "Netto driftsresultat",
           "rule": "post(9) - post(15) + post(16)",
           "rowType": "result",
-          "canCalculate": true,
-          "amount": 944837000
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "18",
@@ -475,8 +475,8 @@
           "label": "Fremfort til inndekning i senere ar (merforbruk)",
           "rule": "980; post(17) - post(24)",
           "rowType": "result",
-          "canCalculate": true,
-          "amount": 919241000
+          "canCalculate": false,
+          "amount": null
         }
       ]
     },
@@ -725,72 +725,72 @@
           "label": "Varige driftsmidler",
           "rule": "24 + 27",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 51
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.I.1",
           "label": "Faste eiendommer og anlegg",
           "rule": "27",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 27
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.I.2",
           "label": "Utstyr, maskiner og transportmidler",
           "rule": "24",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 24
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.II",
           "label": "Finansielle anleggsmidler",
           "rule": "sum(21:23) + 29",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 29
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.II.1",
           "label": "Aksjer og andeler",
           "rule": "21",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 21
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.II.2",
           "label": "Obligasjoner",
           "rule": "29",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 29
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.II.3",
           "label": "Utlan",
           "rule": "sum(22:23)",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 0
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.III",
           "label": "Immaterielle eiendeler",
           "rule": "28",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 28
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "A.IV",
           "label": "Pensjonsmidler",
           "rule": "20",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 20
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B",
@@ -805,80 +805,80 @@
           "label": "Bankinnskudd",
           "rule": "10",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 10
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.II",
           "label": "Finansielle omlopsmidler",
           "rule": "sum(11:12) + 15 + 18",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 33
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.II.1",
           "label": "Aksjer og andeler",
           "rule": "18",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 18
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.II.2",
           "label": "Obligasjoner",
           "rule": "11",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 11
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.II.3",
           "label": "Sertifikater",
           "rule": "12",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 12
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.II.4",
           "label": "Derivater",
           "rule": "15",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 15
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.III",
           "label": "Kortsiktige fordringer",
           "rule": "sum(13:14) + 16 + 19",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 35
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.III.1",
           "label": "Kundefordringer",
           "rule": "13 + 14",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 27
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.III.2",
           "label": "Andre kortsiktige fordringer",
           "rule": "16",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 16
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "B.III.3",
           "label": "Premieavvik",
           "rule": "19",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 19
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "SUM_EIENDELER",
@@ -901,96 +901,96 @@
           "label": "Egenkapital drift",
           "rule": "51 + 56 + 5900",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 6007
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.I.1",
           "label": "Disposisjonsfond",
           "rule": "56",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 56
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.I.2",
           "label": "Bundne driftsfond",
           "rule": "51",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 51
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.I.3",
           "label": "Merforbruk i driftsregnskapet",
           "rule": "5900",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 5900
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.II",
           "label": "Egenkapital investering",
           "rule": "53 + 55 + 5970",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 6078
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.II.1",
           "label": "Ubundet investeringsfond",
           "rule": "53",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 53
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.II.2",
           "label": "Bundne investeringsfond",
           "rule": "55",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 55
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.II.3",
           "label": "Udekket belop i investeringsregnskapet",
           "rule": "5970",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 5970
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.III",
           "label": "Annen egenkapital",
           "rule": "580 + 581 + 5990",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 5990
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.III.1",
           "label": "Kapitalkonto",
           "rule": "5990",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 5990
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.III.2",
           "label": "Prinsippendringer som pavirker arbeidskapitalen drift",
           "rule": "581",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 0
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "C.III.3",
           "label": "Prinsippendringer som pavirker arbeidskapitalen investering",
           "rule": "580",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 0
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "D",
@@ -1005,40 +1005,40 @@
           "label": "Lan",
           "rule": "sum(411:412) + 431 + sum(451:454) + 47",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 47
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "D.I.1",
           "label": "Gjeld til kredittinstitusjoner",
           "rule": "sum(451:454) + 47",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 47
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "D.I.2",
           "label": "Obligasjonslan",
           "rule": "sum(411:412)",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 0
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "D.I.3",
           "label": "Sertifikatlan",
           "rule": "431",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 0
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "D.II",
           "label": "Pensjonsforpliktelse",
           "rule": "40",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 40
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "E",
@@ -1053,48 +1053,48 @@
           "label": "Kortsiktig gjeld",
           "rule": "sum(31:32) + sum(34:35) + 39",
           "rowType": "sum",
-          "canCalculate": true,
-          "amount": 39
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "E.I.1",
           "label": "Leverandorgjeld",
           "rule": "33 + 35",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 68
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "E.I.2",
           "label": "Likviditetslan",
           "rule": "31",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 31
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "E.I.3",
           "label": "Derivater",
           "rule": "34",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 34
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "E.I.4",
           "label": "Annen kortsiktig gjeld",
           "rule": "32",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 32
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "E.I.5",
           "label": "Premieavvik",
           "rule": "39",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 39
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "SUM_EGENKAPITAL_GJELD",
@@ -1117,24 +1117,24 @@
           "label": "Ubrukte lanemidler",
           "rule": "sum(9100:9110)",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 0
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "F.II",
           "label": "Andre memoriakonti",
           "rule": "9200",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 9200
+          "canCalculate": false,
+          "amount": null
         },
         {
           "post": "F.III",
           "label": "Motkonto for memoriakontiene",
           "rule": "9999",
           "rowType": "line",
-          "canCalculate": true,
-          "amount": 9999
+          "canCalculate": false,
+          "amount": null
         }
       ]
     }

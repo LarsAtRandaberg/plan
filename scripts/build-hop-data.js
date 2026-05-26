@@ -184,12 +184,22 @@ function evalArtRule(rule, amounts) {
 function evalPostRule(rule, values) {
   if (!rule || /fra_/.test(rule)) return null;
   let expr = rule.replace(/.*;/, "").trim();
+  let missingPostReference = false;
   expr = expr.replace(/post\((\d+):(\d+)\)/g, (_, from, to) => {
     let total = 0;
-    for (let post = Number(from); post <= Number(to); post += 1) total += values.get(String(post)) || 0;
+    for (let post = Number(from); post <= Number(to); post += 1) {
+      const key = String(post);
+      if (!values.has(key)) missingPostReference = true;
+      total += values.get(key) || 0;
+    }
     return String(total);
   });
-  expr = expr.replace(/post\((\d+)\)/g, (_, post) => String(values.get(String(Number(post))) || 0));
+  expr = expr.replace(/post\((\d+)\)/g, (_, post) => {
+    const key = String(Number(post));
+    if (!values.has(key)) missingPostReference = true;
+    return String(values.get(key) || 0);
+  });
+  if (missingPostReference) return null;
   if (!/^[0-9+\-*/ ().]+$/.test(expr)) return null;
   return Function(`return (${expr})`)();
 }
@@ -198,11 +208,12 @@ function calculateStatements(year, normalized) {
   const statements = readJson("data-hop/oppstillinger/obligatoriske-tabeller-2026.json");
   const tables = statements.tables.map((table) => {
     const amounts = makeAmountByArt(normalized.rows, table.klasse);
+    const hasSourceRows = normalized.rows.some((row) => row.klasse === table.klasse);
     const values = new Map();
     const rows = table.rows.map((row) => {
-      let rawAmount = evalArtRule(row.rule, amounts);
+      let rawAmount = hasSourceRows ? evalArtRule(row.rule, amounts) : null;
       const isArtRule = rawAmount != null;
-      if (rawAmount == null) rawAmount = evalPostRule(row.rule, values);
+      if (rawAmount == null && hasSourceRows) rawAmount = evalPostRule(row.rule, values);
       const canCalculate = rawAmount != null;
       const displayAmount = canCalculate
         ? isArtRule
