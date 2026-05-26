@@ -7,5 +7,6 @@ Denne mappen inneholder datakilder for handlings- og okonomiplaner.
 - `justeringer/` er reservert for budsjettjusteringer fra Dataverse.
 - `aggregert/` er reservert for ferdig summerte visninger.
 - `referanse/` inneholder eksterne kodeverk, forelopig KOSTRA-arter, KOSTRA arter/kapitler og KOSTRA-funksjoner fra SSB Klass.
+- `oppstillinger/` inneholder definisjoner for obligatoriske regnskapsoppstillinger og tabeller.
 
 Opprinnelig vedtatt budsjett skal behandles som historisk kildegrunnlag og ikke endres etter publisering.
