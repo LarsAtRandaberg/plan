@@ -14,6 +14,17 @@
       "status": "frozen",
       "rows": 2427,
       "amountField": "2025"
+    },
+    {
+      "id": "opprinnelig-vedtatt-2026",
+      "kind": "opprinnelig-vedtatt-budsjett",
+      "year": 2026,
+      "format": "xledger-adv-json",
+      "source": "Xledger Flex export",
+      "path": "data-hop/vedtatt/2026.adv.json",
+      "status": "frozen",
+      "rows": 2341,
+      "amountField": "2026"
     }
   ]
 }
