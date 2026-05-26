@@ -521,11 +521,199 @@
     });
   }
 
+  function formatHopAmount(amount) {
+    if (amount === null || amount === undefined || isNaN(Number(amount))) return "";
+    return Math.round(Number(amount)).toLocaleString("nb-NO");
+  }
+
+  function renderHopStatementData(data, blokk) {
+    var tables = Array.isArray(data.tables) ? data.tables : [];
+    if (!tables.length) return;
+
+    var wrap = document.createElement("div");
+    wrap.className = "hop-statements";
+
+    var header = document.createElement("div");
+    header.className = "hop-statements-header";
+    var title = document.createElement("h3");
+    title.textContent = data.title || "Obligatoriske tabeller";
+    header.appendChild(title);
+    var meta = document.createElement("div");
+    meta.className = "hop-statements-meta";
+    meta.textContent = data.year ? "Opprinnelig vedtatt budsjett " + data.year : "Opprinnelig vedtatt budsjett";
+    header.appendChild(meta);
+    wrap.appendChild(header);
+
+    var tabs = document.createElement("div");
+    tabs.className = "hop-tabs";
+    tabs.setAttribute("role", "tablist");
+    var panels = document.createElement("div");
+    panels.className = "hop-panels";
+
+    function makeRow(row, tableId) {
+      var hasChildren = Array.isArray(row.children) && row.children.length > 0;
+      var tr = document.createElement("tr");
+      tr.className = "hop-row hop-row-" + (row.rowType || "line");
+      tr.dataset.post = row.post;
+
+      var labelTd = document.createElement("td");
+      labelTd.className = "hop-label";
+      var labelWrap = document.createElement("div");
+      labelWrap.className = "hop-label-wrap";
+
+      var toggle = document.createElement("button");
+      toggle.type = "button";
+      toggle.className = hasChildren ? "hop-toggle" : "hop-toggle placeholder";
+      toggle.setAttribute("aria-label", "Vis KOSTRA-arter for " + row.label);
+      toggle.textContent = hasChildren ? "▸" : "";
+      labelWrap.appendChild(toggle);
+
+      var text = document.createElement("span");
+      text.textContent = row.post + ". " + row.label;
+      labelWrap.appendChild(text);
+      labelTd.appendChild(labelWrap);
+      tr.appendChild(labelTd);
+
+      var amountTd = document.createElement("td");
+      amountTd.className = "hop-amount";
+      amountTd.textContent = row.canCalculate ? formatHopAmount(row.amount) : "Ikke beregnet";
+      tr.appendChild(amountTd);
+
+      if (hasChildren) {
+        toggle.addEventListener("click", function() {
+          var isOpen = tr.classList.toggle("open");
+          toggle.textContent = isOpen ? "▾" : "▸";
+          tr.parentElement.querySelectorAll("tr[data-parent='" + tableId + "-" + row.post + "']").forEach(function(child) {
+            child.classList.toggle("open", isOpen);
+          });
+        });
+      }
+      return tr;
+    }
+
+    function makeChildRow(parentPost, child, tableId) {
+      var tr = document.createElement("tr");
+      tr.className = "hop-child-row";
+      tr.dataset.parent = tableId + "-" + parentPost;
+
+      var labelTd = document.createElement("td");
+      labelTd.className = "hop-label hop-child-label";
+      labelTd.textContent = child.code + " " + child.name;
+      tr.appendChild(labelTd);
+
+      var amountTd = document.createElement("td");
+      amountTd.className = "hop-amount";
+      amountTd.textContent = formatHopAmount(child.amount);
+      tr.appendChild(amountTd);
+      return tr;
+    }
+
+    tables.forEach(function(tableData, index) {
+      var tabId = "hop-tab-" + index + "-" + safeId(tableData.id || tableData.name);
+      var panelId = "hop-panel-" + index + "-" + safeId(tableData.id || tableData.name);
+
+      var tab = document.createElement("button");
+      tab.type = "button";
+      tab.className = "hop-tab" + (index === 0 ? " active" : "");
+      tab.id = tabId;
+      tab.setAttribute("role", "tab");
+      tab.setAttribute("aria-selected", index === 0 ? "true" : "false");
+      tab.setAttribute("aria-controls", panelId);
+      tab.textContent = tableData.name || ("Tabell " + (index + 1));
+      tabs.appendChild(tab);
+
+      var panel = document.createElement("section");
+      panel.className = "hop-panel" + (index === 0 ? " active" : "");
+      panel.id = panelId;
+      panel.setAttribute("role", "tabpanel");
+      panel.setAttribute("aria-labelledby", tabId);
+
+      var tableHeader = document.createElement("div");
+      tableHeader.className = "hop-table-header";
+      var h = document.createElement("h4");
+      h.textContent = tableData.name || "";
+      tableHeader.appendChild(h);
+      var ref = document.createElement("div");
+      ref.className = "hop-legal-ref";
+      ref.textContent = tableData.legalRef || "";
+      tableHeader.appendChild(ref);
+      panel.appendChild(tableHeader);
+
+      var tableWrap = document.createElement("div");
+      tableWrap.className = "hop-table-wrap";
+      var table = document.createElement("table");
+      table.className = "hop-table";
+      var thead = document.createElement("thead");
+      var headRow = document.createElement("tr");
+      ["Post", "Beløp"].forEach(function(label) {
+        var th = document.createElement("th");
+        th.textContent = label;
+        headRow.appendChild(th);
+      });
+      thead.appendChild(headRow);
+      table.appendChild(thead);
+      var tbody = document.createElement("tbody");
+      (tableData.rows || []).forEach(function(row) {
+        tbody.appendChild(makeRow(row, tableData.id || tableData.name || String(index)));
+        (row.children || []).forEach(function(child) {
+          tbody.appendChild(makeChildRow(row.post, child, tableData.id || tableData.name || String(index)));
+        });
+      });
+      table.appendChild(tbody);
+      tableWrap.appendChild(table);
+      panel.appendChild(tableWrap);
+      panels.appendChild(panel);
+
+      tab.addEventListener("click", function() {
+        tabs.querySelectorAll(".hop-tab").forEach(function(btn) {
+          var active = btn === tab;
+          btn.classList.toggle("active", active);
+          btn.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        panels.querySelectorAll(".hop-panel").forEach(function(p) {
+          p.classList.toggle("active", p === panel);
+        });
+      });
+    });
+
+    wrap.appendChild(tabs);
+    wrap.appendChild(panels);
+    blokk.appendChild(wrap);
+  }
+
+  function renderHopStatements(cfg, blokk) {
+    if (cfg.type === "hop-beregnet-obligatoriske-tabeller") {
+      renderHopStatementData(cfg, blokk);
+      return;
+    }
+    var url = cfg.url || cfg.dataUrl || cfg.kilde;
+    if (!url) return;
+    var loading = document.createElement("div");
+    loading.className = "hop-loading";
+    loading.textContent = "Laster HØP-tabeller...";
+    blokk.appendChild(loading);
+    fetch(url, { cache: "no-store" })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        loading.remove();
+        renderHopStatementData(data, blokk);
+      })
+      .catch(function(e) {
+        console.error("HØP-tabeller kunne ikke lastes:", e);
+        loading.textContent = "HØP-tabellene kunne ikke lastes.";
+      });
+  }
+
   function renderJSON(cfg, blokk) {
     var G = { c900:"#173404", c800:"#27500a", c600:"#3b6d11", c200:"#c0dd97", c100:"#eaf3de" };
 
     if (cfg.type === "faktakart") {
       renderFaktakart(cfg, blokk);
+      return;
+    }
+
+    if (cfg.type === "hop-tabeller" || cfg.type === "hop-beregnet-obligatoriske-tabeller") {
+      renderHopStatements(cfg, blokk);
       return;
     }
 
