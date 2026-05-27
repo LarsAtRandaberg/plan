@@ -41,6 +41,7 @@
         { "post": "23", "label": "Motpost avskrivninger", "rule": "990" },
         { "post": "24", "label": "Netto driftsresultat", "rule": "post(16) - post(22) + post(23)", "rowType": "result" },
         { "post": "25", "label": "Overforing til investering", "rule": "570" },
+        { "post": "25a", "label": "Netto driftsresultat i prosent av driftsinntekter", "rule": "post(24) / post(9)", "rowType": "metric", "valueType": "percent" },
         { "post": "26", "label": "Avsetninger til bundne driftsfond", "rule": "550" },
         { "post": "27", "label": "Bruk av bundne driftsfond", "rule": "950" },
         { "post": "28", "label": "Avsetninger til disposisjonsfond", "rule": "540" },

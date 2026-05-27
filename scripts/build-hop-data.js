@@ -403,7 +403,7 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
       let rawAmount = hasSourceRows ? evalArtRule(row.rule, artIndex) : null;
       const isArtRule = rawAmount != null;
       if (rawAmount == null && hasSourceRows) rawAmount = evalPostRule(row.rule, values);
-      const canCalculate = rawAmount != null;
+      const canCalculate = rawAmount != null && Number.isFinite(rawAmount);
       const displayAmount = canCalculate
         ? isArtRule
           ? rawAmount * multiplier
@@ -415,6 +415,7 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
         label: row.label,
         rule: row.rule,
         rowType: row.rowType || "line",
+        valueType: row.valueType || "amount",
         canCalculate,
         amount: displayAmount,
         children: isArtRule ? directArtContributions(row.rule, artIndex, multiplier) : []

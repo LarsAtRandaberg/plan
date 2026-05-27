@@ -12,6 +12,18 @@
     return Math.round(Number(amount)).toLocaleString("nb-NO");
   }
 
+  function formatPercent(amount) {
+    if (amount === null || amount === undefined || !Number.isFinite(Number(amount))) return "Ikke beregnet";
+    return (Number(amount) * 100).toLocaleString("nb-NO", {
+      minimumFractionDigits: 1,
+      maximumFractionDigits: 1
+    }) + " %";
+  }
+
+  function formatValue(amount, valueType) {
+    return valueType === "percent" ? formatPercent(amount) : formatAmount(amount);
+  }
+
   function safeId(text) {
     return String(text || "").toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
   }
@@ -93,13 +105,13 @@
 
     const amountTd = document.createElement("td");
     amountTd.className = "amount";
-    amountTd.textContent = formatAmount(row.amount);
+    amountTd.textContent = formatValue(row.amount, row.valueType);
     tr.appendChild(amountTd);
 
     if (hasComparison) {
       const comparisonTd = document.createElement("td");
       comparisonTd.className = "amount comparison-amount";
-      comparisonTd.textContent = comparisonRow ? formatAmount(comparisonRow.amount) : "";
+      comparisonTd.textContent = comparisonRow ? formatValue(comparisonRow.amount, row.valueType) : "";
       tr.appendChild(comparisonTd);
     }
 

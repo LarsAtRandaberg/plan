@@ -18,6 +18,7 @@
           "label": "Rammetilskudd",
           "rule": "800",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 370438848,
           "children": [
@@ -36,6 +37,7 @@
           "label": "Inntekts- og formuesskatt",
           "rule": "870",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 543327858.11,
           "children": [
@@ -54,6 +56,7 @@
           "label": "Eiendomsskatt",
           "rule": "sum(871:873) + sum(875:879)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 20755301.66,
           "children": [
@@ -88,6 +91,7 @@
           "label": "Andre skatteinntekter",
           "rule": "877",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -97,6 +101,7 @@
           "label": "Andre overforinger og tilskudd fra staten",
           "rule": "810",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 100904142.72000001,
           "children": [
@@ -115,6 +120,7 @@
           "label": "Overforinger og tilskudd fra andre",
           "rule": "sum(700:780) + sum(830:850) + sum(880:890) + 920",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 150605376.59,
           "children": [
@@ -205,6 +211,7 @@
           "label": "Brukerbetalinger",
           "rule": "600",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 34925064.11,
           "children": [
@@ -223,6 +230,7 @@
           "label": "Salgs- og leieinntekter",
           "rule": "sum(620:660)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 130386721.21999998,
           "children": [
@@ -273,6 +281,7 @@
           "label": "Sum driftsinntekter",
           "rule": "post(1:8)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 1351343312.4099998,
           "children": []
@@ -282,6 +291,7 @@
           "label": "Lonnsutgifter",
           "rule": "sum(010:089) + sum(160:165)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 672444948.41,
           "children": [
@@ -380,6 +390,7 @@
           "label": "Sosiale utgifter",
           "rule": "sum(090:099)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 176116172.14,
           "children": [
@@ -406,6 +417,7 @@
           "label": "Kjop av varer og tjenester",
           "rule": "sum(100:285) - sum(160:165) + sum(300:380)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 318352651.26,
           "children": [
@@ -656,6 +668,7 @@
           "label": "Overforinger og tilskudd til andre",
           "rule": "sum(400:480) + 520",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 102425101.34,
           "children": [
@@ -722,6 +735,7 @@
           "label": "Avskrivninger",
           "rule": "590",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 77507573.49999997,
           "children": [
@@ -740,6 +754,7 @@
           "label": "Sum driftsutgifter",
           "rule": "post(10:14)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 1346846446.6499999,
           "children": []
@@ -749,6 +764,7 @@
           "label": "Brutto driftsresultat",
           "rule": "post(9) - post(15)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 4496865.75999999,
           "children": []
@@ -758,6 +774,7 @@
           "label": "Renteinntekter",
           "rule": "sum(900:901)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 24752654.9,
           "children": [
@@ -776,6 +793,7 @@
           "label": "Utbytter",
           "rule": "905",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 25613877,
           "children": [
@@ -794,6 +812,7 @@
           "label": "Gevinster og tap pa finansielle omlopsmidler",
           "rule": "909 + 509",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": -5424616.42,
           "children": [
@@ -820,6 +839,7 @@
           "label": "Renteutgifter",
           "rule": "sum(500:501)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 63017751.10999998,
           "children": [
@@ -838,6 +858,7 @@
           "label": "Avdrag pa lan",
           "rule": "sum(510:511)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 49024565,
           "children": [
@@ -856,6 +877,7 @@
           "label": "Netto finansutgifter",
           "rule": "post(20) + post(21) - post(17) - post(18) + post(19)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 56251167.78999998,
           "children": []
@@ -865,6 +887,7 @@
           "label": "Motpost avskrivninger",
           "rule": "990",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 77507574,
           "children": [
@@ -883,6 +906,7 @@
           "label": "Netto driftsresultat",
           "rule": "post(16) - post(22) + post(23)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 25753271.970000014,
           "children": []
@@ -892,6 +916,7 @@
           "label": "Overforing til investering",
           "rule": "570",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 5000000,
           "children": [
@@ -906,10 +931,21 @@
           ]
         },
         {
+          "post": "25a",
+          "label": "Netto driftsresultat i prosent av driftsinntekter",
+          "rule": "post(24) / post(9)",
+          "rowType": "metric",
+          "valueType": "percent",
+          "canCalculate": true,
+          "amount": 0.01905753462757836,
+          "children": []
+        },
+        {
           "post": "26",
           "label": "Avsetninger til bundne driftsfond",
           "rule": "550",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 7161352.6,
           "children": [
@@ -928,6 +964,7 @@
           "label": "Bruk av bundne driftsfond",
           "rule": "950",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 3364074,
           "children": [
@@ -946,6 +983,7 @@
           "label": "Avsetninger til disposisjonsfond",
           "rule": "540",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 24784999.66,
           "children": [
@@ -964,6 +1002,7 @@
           "label": "Bruk av disposisjonsfond",
           "rule": "940",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 7829006.29,
           "children": [
@@ -982,6 +1021,7 @@
           "label": "Dekning av tidligere ars merforbruk",
           "rule": "530",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -991,6 +1031,7 @@
           "label": "Sum disponeringer eller dekning av netto driftsresultat",
           "rule": "post(25) + post(26) - post(27) + post(28) - post(29) + post(30)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 25753271.97,
           "children": []
@@ -1000,6 +1041,7 @@
           "label": "Fremfort til inndekning i senere ar (merforbruk)",
           "rule": "980; post(24) - post(31)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 1.4901161193847656e-8,
           "children": []
@@ -1018,6 +1060,7 @@
           "label": "Rammetilskudd",
           "rule": "800",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 370438848,
           "children": [
@@ -1036,6 +1079,7 @@
           "label": "Inntekts- og formuesskatt",
           "rule": "870",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 543327858.11,
           "children": [
@@ -1054,6 +1098,7 @@
           "label": "Eiendomsskatt",
           "rule": "sum(871:873) + sum(875:879)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 20755301.66,
           "children": [
@@ -1088,6 +1133,7 @@
           "label": "Andre generelle driftsinntekter",
           "rule": "810 + 877",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 100904142.72000001,
           "children": [
@@ -1106,6 +1152,7 @@
           "label": "Sum generelle driftsinntekter",
           "rule": "post(1:4)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 1035426150.49,
           "children": []
@@ -1115,6 +1162,7 @@
           "label": "Sum bevilgninger drift, netto",
           "rule": "fra_bevilgningsoversikt_5_4_andre_ledd",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -1124,6 +1172,7 @@
           "label": "Avskrivninger",
           "rule": "590",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 77507573.49999997,
           "children": [
@@ -1142,6 +1191,7 @@
           "label": "Sum netto driftsutgifter",
           "rule": "post(6:7)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -1151,6 +1201,7 @@
           "label": "Brutto driftsresultat",
           "rule": "post(5) - post(8)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -1160,6 +1211,7 @@
           "label": "Renteinntekter",
           "rule": "sum(900:901)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 24752654.9,
           "children": [
@@ -1178,6 +1230,7 @@
           "label": "Utbytter",
           "rule": "905",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 25613877,
           "children": [
@@ -1196,6 +1249,7 @@
           "label": "Gevinster og tap pa finansielle omlopsmidler",
           "rule": "909 + 509",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": -5424616.42,
           "children": [
@@ -1222,6 +1276,7 @@
           "label": "Renteutgifter",
           "rule": "sum(500:501)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 63017751.10999998,
           "children": [
@@ -1240,6 +1295,7 @@
           "label": "Avdrag pa lan",
           "rule": "sum(510:511)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 49024565,
           "children": [
@@ -1258,6 +1314,7 @@
           "label": "Netto finansutgifter",
           "rule": "post(13) + post(14) - post(10) - post(11) - post(12)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 67100400.62999998,
           "children": []
@@ -1267,6 +1324,7 @@
           "label": "Motpost avskrivninger",
           "rule": "990",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 77507574,
           "children": [
@@ -1285,6 +1343,7 @@
           "label": "Netto driftsresultat",
           "rule": "post(9) - post(15) + post(16)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -1294,6 +1353,7 @@
           "label": "Overforing til investering",
           "rule": "570",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 5000000,
           "children": [
@@ -1312,6 +1372,7 @@
           "label": "Avsetninger til bundne driftsfond",
           "rule": "550",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 7161352.6,
           "children": [
@@ -1330,6 +1391,7 @@
           "label": "Bruk av bundne driftsfond",
           "rule": "950",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 3364074,
           "children": [
@@ -1348,6 +1410,7 @@
           "label": "Avsetninger til disposisjonsfond",
           "rule": "540",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 24784999.66,
           "children": [
@@ -1366,6 +1429,7 @@
           "label": "Bruk av disposisjonsfond",
           "rule": "940",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 7829006.29,
           "children": [
@@ -1384,6 +1448,7 @@
           "label": "Dekning av tidligere ars merforbruk",
           "rule": "530",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -1393,6 +1458,7 @@
           "label": "Sum disponeringer eller dekning av netto driftsresultat",
           "rule": "post(18) + post(19) - post(20) + post(21) - post(22) + post(23)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 25753271.97,
           "children": []
@@ -1402,6 +1468,7 @@
           "label": "Fremfort til inndekning i senere ar (merforbruk)",
           "rule": "980; post(17) - post(24)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -1420,6 +1487,7 @@
           "label": "Investeringer i varige driftsmidler",
           "rule": "sum(010:099) + sum(100:285) + sum(300:380) + 429 + sum(500:501)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 106874668.85,
           "children": [
@@ -1606,6 +1674,7 @@
           "label": "Tilskudd til andres investeringer",
           "rule": "400 + sum(430:480)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 1523573.68,
           "children": [
@@ -1624,6 +1693,7 @@
           "label": "Investeringer i aksjer og andeler i selskaper",
           "rule": "529",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 2465965,
           "children": [
@@ -1642,6 +1712,7 @@
           "label": "Utlan av egne midler",
           "rule": "sum(520:521)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 1095024.4,
           "children": [
@@ -1660,6 +1731,7 @@
           "label": "Avdrag pa lan",
           "rule": "sum(510:511)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -1669,6 +1741,7 @@
           "label": "Sum investeringsutgifter",
           "rule": "post(1:5)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 111959231.93,
           "children": []
@@ -1678,6 +1751,7 @@
           "label": "Kompensasjon for merverdiavgift",
           "rule": "729",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 13780763.23,
           "children": [
@@ -1696,6 +1770,7 @@
           "label": "Tilskudd fra andre",
           "rule": "sum(700:780) - 729 + sum(810:850) + sum(880:890) + sum(900:901)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 6653320.09,
           "children": [
@@ -1738,6 +1813,7 @@
           "label": "Salg av varige driftsmidler",
           "rule": "620 + 650 + sum(660:670)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 110000,
           "children": [
@@ -1756,6 +1832,7 @@
           "label": "Salg av finansielle anleggsmidler",
           "rule": "929",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -1765,6 +1842,7 @@
           "label": "Utdeling fra selskaper",
           "rule": "905",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -1774,6 +1852,7 @@
           "label": "Mottatte avdrag pa utlan av egne midler",
           "rule": "sum(920:921)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 4590600,
           "children": [
@@ -1792,6 +1871,7 @@
           "label": "Bruk av lan",
           "rule": "sum(910:911)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 74635389.86,
           "children": [
@@ -1810,6 +1890,7 @@
           "label": "Sum investeringsinntekter",
           "rule": "post(7:13)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 99770073.18,
           "children": []
@@ -1819,6 +1900,7 @@
           "label": "Videreutlan",
           "rule": "sum(521:522)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 37819353.6,
           "children": [
@@ -1837,6 +1919,7 @@
           "label": "Bruk av lan til videreutlan",
           "rule": "sum(911:912)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 10000000,
           "children": [
@@ -1855,6 +1938,7 @@
           "label": "Avdrag pa lan til videreutlan",
           "rule": "512",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 7000000,
           "children": [
@@ -1873,6 +1957,7 @@
           "label": "Mottatte avdrag pa videreutlan",
           "rule": "922",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 18267052.04,
           "children": [
@@ -1891,6 +1976,7 @@
           "label": "Netto utgifter videreutlan",
           "rule": "post(15) - post(16) + post(17) - post(18)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 16552301.560000002,
           "children": []
@@ -1900,6 +1986,7 @@
           "label": "Overforing fra drift",
           "rule": "970",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 5000000,
           "children": [
@@ -1918,6 +2005,7 @@
           "label": "Avsetninger til bundne investeringsfond",
           "rule": "550",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 18267052.04,
           "children": [
@@ -1936,6 +2024,7 @@
           "label": "Bruk av bundne investeringsfond",
           "rule": "950",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 32355829.6,
           "children": [
@@ -1954,6 +2043,7 @@
           "label": "Avsetninger til ubundet investeringsfond",
           "rule": "540",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -1963,6 +2053,7 @@
           "label": "Bruk av ubundet investeringsfond",
           "rule": "940",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -1972,6 +2063,7 @@
           "label": "Dekning av tidligere ars udekket belop",
           "rule": "530",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -1981,6 +2073,7 @@
           "label": "Sum overforing fra drift og netto avsetninger",
           "rule": "post(20) + post(21) - post(22) + post(23) - post(24) + post(25)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": -9088777.560000002,
           "children": []
@@ -1990,6 +2083,7 @@
           "label": "Fremfort til inndekning (udekket belop)",
           "rule": "980; -post(6) + post(14) - post(19) - post(26)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": -19652682.75,
           "children": []
@@ -2008,6 +2102,7 @@
           "label": "Anleggsmidler",
           "rule": "post(A.I:A.IV)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2017,6 +2112,7 @@
           "label": "Varige driftsmidler",
           "rule": "24 + 27",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 51,
           "children": []
@@ -2026,6 +2122,7 @@
           "label": "Faste eiendommer og anlegg",
           "rule": "27",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 27,
           "children": []
@@ -2035,6 +2132,7 @@
           "label": "Utstyr, maskiner og transportmidler",
           "rule": "24",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 24,
           "children": []
@@ -2044,6 +2142,7 @@
           "label": "Finansielle anleggsmidler",
           "rule": "sum(21:23) + 29",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 29,
           "children": []
@@ -2053,6 +2152,7 @@
           "label": "Aksjer og andeler",
           "rule": "21",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 21,
           "children": []
@@ -2062,6 +2162,7 @@
           "label": "Obligasjoner",
           "rule": "29",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 29,
           "children": []
@@ -2071,6 +2172,7 @@
           "label": "Utlan",
           "rule": "sum(22:23)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -2080,6 +2182,7 @@
           "label": "Immaterielle eiendeler",
           "rule": "28",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 28,
           "children": []
@@ -2089,6 +2192,7 @@
           "label": "Pensjonsmidler",
           "rule": "20",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 20,
           "children": []
@@ -2098,6 +2202,7 @@
           "label": "Omlopsmidler",
           "rule": "post(B.I:B.III)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2107,6 +2212,7 @@
           "label": "Bankinnskudd",
           "rule": "10",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 10,
           "children": []
@@ -2116,6 +2222,7 @@
           "label": "Finansielle omlopsmidler",
           "rule": "sum(11:12) + 15 + 18",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 33,
           "children": []
@@ -2125,6 +2232,7 @@
           "label": "Aksjer og andeler",
           "rule": "18",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 18,
           "children": []
@@ -2134,6 +2242,7 @@
           "label": "Obligasjoner",
           "rule": "11",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 11,
           "children": []
@@ -2143,6 +2252,7 @@
           "label": "Sertifikater",
           "rule": "12",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 12,
           "children": []
@@ -2152,6 +2262,7 @@
           "label": "Derivater",
           "rule": "15",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 15,
           "children": []
@@ -2161,6 +2272,7 @@
           "label": "Kortsiktige fordringer",
           "rule": "sum(13:14) + 16 + 19",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 35,
           "children": []
@@ -2170,6 +2282,7 @@
           "label": "Kundefordringer",
           "rule": "13 + 14",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 27,
           "children": []
@@ -2179,6 +2292,7 @@
           "label": "Andre kortsiktige fordringer",
           "rule": "16",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 16,
           "children": []
@@ -2188,6 +2302,7 @@
           "label": "Premieavvik",
           "rule": "19",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 19,
           "children": []
@@ -2197,6 +2312,7 @@
           "label": "Sum eiendeler",
           "rule": "post(A) + post(B)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2206,6 +2322,7 @@
           "label": "Egenkapital",
           "rule": "post(C.I:C.III)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2215,6 +2332,7 @@
           "label": "Egenkapital drift",
           "rule": "51 + 56 + 5900",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 6007,
           "children": []
@@ -2224,6 +2342,7 @@
           "label": "Disposisjonsfond",
           "rule": "56",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 56,
           "children": []
@@ -2233,6 +2352,7 @@
           "label": "Bundne driftsfond",
           "rule": "51",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 51,
           "children": []
@@ -2242,6 +2362,7 @@
           "label": "Merforbruk i driftsregnskapet",
           "rule": "5900",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 5900,
           "children": []
@@ -2251,6 +2372,7 @@
           "label": "Egenkapital investering",
           "rule": "53 + 55 + 5970",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 6078,
           "children": []
@@ -2260,6 +2382,7 @@
           "label": "Ubundet investeringsfond",
           "rule": "53",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 53,
           "children": []
@@ -2269,6 +2392,7 @@
           "label": "Bundne investeringsfond",
           "rule": "55",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 55,
           "children": []
@@ -2278,6 +2402,7 @@
           "label": "Udekket belop i investeringsregnskapet",
           "rule": "5970",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 5970,
           "children": []
@@ -2287,6 +2412,7 @@
           "label": "Annen egenkapital",
           "rule": "580 + 581 + 5990",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 5990,
           "children": []
@@ -2296,6 +2422,7 @@
           "label": "Kapitalkonto",
           "rule": "5990",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 5990,
           "children": []
@@ -2305,6 +2432,7 @@
           "label": "Prinsippendringer som pavirker arbeidskapitalen drift",
           "rule": "581",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -2314,6 +2442,7 @@
           "label": "Prinsippendringer som pavirker arbeidskapitalen investering",
           "rule": "580",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -2323,6 +2452,7 @@
           "label": "Langsiktig gjeld",
           "rule": "post(D.I:D.II)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2332,6 +2462,7 @@
           "label": "Lan",
           "rule": "sum(411:412) + 431 + sum(451:454) + 47",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 47,
           "children": []
@@ -2341,6 +2472,7 @@
           "label": "Gjeld til kredittinstitusjoner",
           "rule": "sum(451:454) + 47",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 47,
           "children": []
@@ -2350,6 +2482,7 @@
           "label": "Obligasjonslan",
           "rule": "sum(411:412)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -2359,6 +2492,7 @@
           "label": "Sertifikatlan",
           "rule": "431",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -2368,6 +2502,7 @@
           "label": "Pensjonsforpliktelse",
           "rule": "40",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 40,
           "children": []
@@ -2377,6 +2512,7 @@
           "label": "Kortsiktig gjeld",
           "rule": "post(E.I)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2386,6 +2522,7 @@
           "label": "Kortsiktig gjeld",
           "rule": "sum(31:32) + sum(34:35) + 39",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 39,
           "children": []
@@ -2395,6 +2532,7 @@
           "label": "Leverandorgjeld",
           "rule": "33 + 35",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 68,
           "children": []
@@ -2404,6 +2542,7 @@
           "label": "Likviditetslan",
           "rule": "31",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 31,
           "children": []
@@ -2413,6 +2552,7 @@
           "label": "Derivater",
           "rule": "34",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 34,
           "children": []
@@ -2422,6 +2562,7 @@
           "label": "Annen kortsiktig gjeld",
           "rule": "32",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 32,
           "children": []
@@ -2431,6 +2572,7 @@
           "label": "Premieavvik",
           "rule": "39",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 39,
           "children": []
@@ -2440,6 +2582,7 @@
           "label": "Sum egenkapital og gjeld",
           "rule": "post(C) + post(D) + post(E)",
           "rowType": "result",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2449,6 +2592,7 @@
           "label": "Memoriakonti",
           "rule": "post(F.I:F.III)",
           "rowType": "sum",
+          "valueType": "amount",
           "canCalculate": false,
           "amount": null,
           "children": []
@@ -2458,6 +2602,7 @@
           "label": "Ubrukte lanemidler",
           "rule": "sum(9100:9110)",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
           "children": []
@@ -2467,6 +2612,7 @@
           "label": "Andre memoriakonti",
           "rule": "9200",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 9200,
           "children": []
@@ -2476,6 +2622,7 @@
           "label": "Motkonto for memoriakontiene",
           "rule": "9999",
           "rowType": "line",
+          "valueType": "amount",
           "canCalculate": true,
           "amount": 9999,
           "children": []
