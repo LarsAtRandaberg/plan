@@ -152,6 +152,64 @@
     return tr;
   }
 
+  function makeBalanceCells(tr, balance) {
+    ["ib", "endring", "ub"].forEach((key) => {
+      const td = document.createElement("td");
+      td.className = "amount";
+      td.textContent = formatAmount(balance ? balance[key] : null);
+      tr.appendChild(td);
+    });
+  }
+
+  function makeBalanceRow(row, tableKey) {
+    const hasChildren = Array.isArray(row.children) && row.children.length > 0;
+    const tr = document.createElement("tr");
+    tr.className = "statement-row statement-row-" + (row.rowType || "line");
+
+    const labelTd = document.createElement("td");
+    const labelWrap = document.createElement("div");
+    labelWrap.className = "statement-label";
+
+    const toggle = document.createElement("button");
+    toggle.type = "button";
+    toggle.className = hasChildren ? "row-toggle" : "row-toggle placeholder";
+    toggle.textContent = hasChildren ? "â–¸" : "";
+    toggle.setAttribute("aria-label", "Vis detaljer for " + row.label);
+    labelWrap.appendChild(toggle);
+
+    const text = document.createElement("span");
+    text.textContent = row.post + ". " + row.label;
+    labelWrap.appendChild(text);
+    labelTd.appendChild(labelWrap);
+    tr.appendChild(labelTd);
+    makeBalanceCells(tr, row.balance);
+
+    if (hasChildren) {
+      toggle.addEventListener("click", () => {
+        const open = tr.classList.toggle("open");
+        toggle.textContent = open ? "â–¾" : "â–¸";
+        tr.parentElement.querySelectorAll(`tr[data-parent="${tableKey}-${row.post}"]`).forEach((childRow) => {
+          childRow.classList.toggle("open", open);
+        });
+      });
+    }
+
+    return tr;
+  }
+
+  function makeBalanceChildRow(parentPost, child, tableKey) {
+    const tr = document.createElement("tr");
+    tr.className = "child-row";
+    tr.dataset.parent = tableKey + "-" + parentPost;
+
+    const labelTd = document.createElement("td");
+    labelTd.className = "child-label";
+    labelTd.textContent = child.code + " " + child.name;
+    tr.appendChild(labelTd);
+    makeBalanceCells(tr, child.balance);
+    return tr;
+  }
+
   function renderStatements(data, comparisonData) {
     tabsEl.innerHTML = "";
     panelsEl.innerHTML = "";
@@ -160,6 +218,9 @@
       const comparisonTable = findTable(comparisonData, tableData);
       const comparisonRows = makeRowLookup(comparisonTable);
       const hasComparison = Boolean(comparisonTable);
+      const isBalanceTable = tableData.id === "balanseregnskap-5-8";
+      if (isBalanceTable && !comparisonTable) return;
+      const displayTable = isBalanceTable && comparisonTable ? comparisonTable : tableData;
       const tableKey = safeId(tableData.id || tableData.name || index);
       const tabId = "tab-" + tableKey;
       const panelId = "panel-" + tableKey;
@@ -195,8 +256,10 @@
       const table = document.createElement("table");
       const thead = document.createElement("thead");
       const headRow = document.createElement("tr");
-      const headers = ["Post", "Vedtatt budsjett"];
-      if (hasComparison) headers.push("Regnskap");
+      const headers = isBalanceTable && comparisonTable
+        ? ["Post", "01.01." + data.year, "Endring", "31.12." + data.year]
+        : ["Post", "Vedtatt budsjett"];
+      if (!isBalanceTable && hasComparison) headers.push("Regnskap");
       headers.forEach((label) => {
         const th = document.createElement("th");
         th.textContent = label;
@@ -206,7 +269,14 @@
       table.appendChild(thead);
 
       const tbody = document.createElement("tbody");
-      tableData.rows.forEach((row) => {
+      displayTable.rows.forEach((row) => {
+        if (isBalanceTable && comparisonTable) {
+          tbody.appendChild(makeBalanceRow(row, tableKey));
+          (row.children || []).forEach((child) => {
+            tbody.appendChild(makeBalanceChildRow(row.post, child, tableKey));
+          });
+          return;
+        }
         const comparisonRow = comparisonRows.get(String(row.post));
         const comparisonChildren = makeChildLookup(comparisonRow);
         tbody.appendChild(makeTableRow(row, tableKey, comparisonRow, hasComparison));

@@ -2105,7 +2105,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 6091866719.039999,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 5817580571.239999,
+            "endring": 274286147.79999983,
+            "ub": 6091866719.039999
+          }
         },
         {
           "post": "A.I",
@@ -2122,7 +2127,12 @@
               "name": "Utstyr, maskiner og transportmidler",
               "factor": 1,
               "rawAmount": 63434963.95,
-              "amount": 63434963.95
+              "amount": 63434963.95,
+              "balance": {
+                "ib": 61485784.16,
+                "endring": 1949179.7899999984,
+                "ub": 63434963.95
+              }
             },
             {
               "type": "balansekapittel",
@@ -2130,9 +2140,19 @@
               "name": "Faste eiendommer og anlegg",
               "factor": 1,
               "rawAmount": 1970068605.4799995,
-              "amount": 1970068605.4799995
+              "amount": 1970068605.4799995,
+              "balance": {
+                "ib": 1942577094.52,
+                "endring": 27491510.959999993,
+                "ub": 1970068605.4799995
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 2004062878.68,
+            "endring": 29440690.749999993,
+            "ub": 2033503569.4299996
+          }
         },
         {
           "post": "A.I.1",
@@ -2149,9 +2169,19 @@
               "name": "Faste eiendommer og anlegg",
               "factor": 1,
               "rawAmount": 1970068605.4799995,
-              "amount": 1970068605.4799995
+              "amount": 1970068605.4799995,
+              "balance": {
+                "ib": 1942577094.52,
+                "endring": 27491510.959999993,
+                "ub": 1970068605.4799995
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 1942577094.52,
+            "endring": 27491510.959999993,
+            "ub": 1970068605.4799995
+          }
         },
         {
           "post": "A.I.2",
@@ -2168,9 +2198,19 @@
               "name": "Utstyr, maskiner og transportmidler",
               "factor": 1,
               "rawAmount": 63434963.95,
-              "amount": 63434963.95
+              "amount": 63434963.95,
+              "balance": {
+                "ib": 61485784.16,
+                "endring": 1949179.7899999984,
+                "ub": 63434963.95
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 61485784.16,
+            "endring": 1949179.7899999984,
+            "ub": 63434963.95
+          }
         },
         {
           "post": "A.II",
@@ -2187,7 +2227,12 @@
               "name": "Aksjer og andeler (anleggsmidler)",
               "factor": 1,
               "rawAmount": 73081984,
-              "amount": 73081984
+              "amount": 73081984,
+              "balance": {
+                "ib": 70616019,
+                "endring": 2465965,
+                "ub": 73081984
+              }
             },
             {
               "type": "balansekapittel",
@@ -2195,9 +2240,19 @@
               "name": "Utlån (anleggsmidler)",
               "factor": 1,
               "rawAmount": 267891546.31000003,
-              "amount": 267891546.31000003
+              "amount": 267891546.31000003,
+              "balance": {
+                "ib": 251828081.36,
+                "endring": 16063464.950000003,
+                "ub": 267891546.31000003
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 322444100.36,
+            "endring": 18529429.950000003,
+            "ub": 340973530.31000006
+          }
         },
         {
           "post": "A.II.1",
@@ -2214,9 +2269,19 @@
               "name": "Aksjer og andeler (anleggsmidler)",
               "factor": 1,
               "rawAmount": 73081984,
-              "amount": 73081984
+              "amount": 73081984,
+              "balance": {
+                "ib": 70616019,
+                "endring": 2465965,
+                "ub": 73081984
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 70616019,
+            "endring": 2465965,
+            "ub": 73081984
+          }
         },
         {
           "post": "A.II.2",
@@ -2226,7 +2291,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "A.II.3",
@@ -2243,9 +2313,19 @@
               "name": "Utlån (anleggsmidler)",
               "factor": 1,
               "rawAmount": 267891546.31000003,
-              "amount": 267891546.31000003
+              "amount": 267891546.31000003,
+              "balance": {
+                "ib": 251828081.36,
+                "endring": 16063464.950000003,
+                "ub": 267891546.31000003
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 251828081.36,
+            "endring": 16063464.950000003,
+            "ub": 267891546.31000003
+          }
         },
         {
           "post": "A.III",
@@ -2255,7 +2335,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "A.IV",
@@ -2272,9 +2357,19 @@
               "name": "Pensjonsmidler (K)",
               "factor": 1,
               "rawAmount": 1342912519.56,
-              "amount": 1342912519.56
+              "amount": 1342912519.56,
+              "balance": {
+                "ib": 1164566613.16,
+                "endring": 178345906.39999986,
+                "ub": 1342912519.56
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 1164566613.16,
+            "endring": 178345906.39999986,
+            "ub": 1342912519.56
+          }
         },
         {
           "post": "B",
@@ -2284,7 +2379,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 368267926.45,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 388074160.78,
+            "endring": -19806234.330000058,
+            "ub": 368267926.45
+          }
         },
         {
           "post": "B.I",
@@ -2301,9 +2401,19 @@
               "name": "Bankinnskudd og kontanter",
               "factor": 1,
               "rawAmount": 49969551.31999999,
-              "amount": 49969551.31999999
+              "amount": 49969551.31999999,
+              "balance": {
+                "ib": 68663029.14,
+                "endring": -18693477.820000004,
+                "ub": 49969551.31999999
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 68663029.14,
+            "endring": -18693477.820000004,
+            "ub": 49969551.31999999
+          }
         },
         {
           "post": "B.II",
@@ -2320,9 +2430,19 @@
               "name": "Aksjer og andeler (omløpsmidler)",
               "factor": 1,
               "rawAmount": 71535541.19,
-              "amount": 71535541.19
+              "amount": 71535541.19,
+              "balance": {
+                "ib": 66846903.9,
+                "endring": 4688637.289999999,
+                "ub": 71535541.19
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 66846903.9,
+            "endring": 4688637.289999999,
+            "ub": 71535541.19
+          }
         },
         {
           "post": "B.II.1",
@@ -2339,9 +2459,19 @@
               "name": "Aksjer og andeler (omløpsmidler)",
               "factor": 1,
               "rawAmount": 71535541.19,
-              "amount": 71535541.19
+              "amount": 71535541.19,
+              "balance": {
+                "ib": 66846903.9,
+                "endring": 4688637.289999999,
+                "ub": 71535541.19
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 66846903.9,
+            "endring": 4688637.289999999,
+            "ub": 71535541.19
+          }
         },
         {
           "post": "B.II.2",
@@ -2351,7 +2481,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "B.II.3",
@@ -2361,7 +2496,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "B.II.4",
@@ -2371,7 +2511,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "B.III",
@@ -2388,7 +2533,12 @@
               "name": "Kundefordringer",
               "factor": 1,
               "rawAmount": 69692855.42,
-              "amount": 69692855.42
+              "amount": 69692855.42,
+              "balance": {
+                "ib": 28370385.55,
+                "endring": 41322469.870000005,
+                "ub": 69692855.42
+              }
             },
             {
               "type": "balansekapittel",
@@ -2396,7 +2546,12 @@
               "name": "Andre kortsiktige fordringer",
               "factor": 1,
               "rawAmount": 14161829.690000003,
-              "amount": 14161829.690000003
+              "amount": 14161829.690000003,
+              "balance": {
+                "ib": 55139690.8,
+                "endring": -40977861.11000007,
+                "ub": 14161829.690000003
+              }
             },
             {
               "type": "balansekapittel",
@@ -2404,9 +2559,19 @@
               "name": "Premieavvik (K)",
               "factor": 1,
               "rawAmount": 91372607.64000002,
-              "amount": 91372607.64000002
+              "amount": 91372607.64000002,
+              "balance": {
+                "ib": 102207247.49,
+                "endring": -10834639.849999992,
+                "ub": 91372607.64000002
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 185717323.83999997,
+            "endring": -10490031.090000054,
+            "ub": 175227292.75
+          }
         },
         {
           "post": "B.III.1",
@@ -2423,9 +2588,19 @@
               "name": "Kundefordringer",
               "factor": 1,
               "rawAmount": 69692855.42,
-              "amount": 69692855.42
+              "amount": 69692855.42,
+              "balance": {
+                "ib": 28370385.55,
+                "endring": 41322469.870000005,
+                "ub": 69692855.42
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 28370385.55,
+            "endring": 41322469.870000005,
+            "ub": 69692855.42
+          }
         },
         {
           "post": "B.III.2",
@@ -2442,9 +2617,19 @@
               "name": "Andre kortsiktige fordringer",
               "factor": 1,
               "rawAmount": 14161829.690000003,
-              "amount": 14161829.690000003
+              "amount": 14161829.690000003,
+              "balance": {
+                "ib": 55139690.8,
+                "endring": -40977861.11000007,
+                "ub": 14161829.690000003
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 55139690.8,
+            "endring": -40977861.11000007,
+            "ub": 14161829.690000003
+          }
         },
         {
           "post": "B.III.3",
@@ -2461,9 +2646,19 @@
               "name": "Premieavvik (K)",
               "factor": 1,
               "rawAmount": 91372607.64000002,
-              "amount": 91372607.64000002
+              "amount": 91372607.64000002,
+              "balance": {
+                "ib": 102207247.49,
+                "endring": -10834639.849999992,
+                "ub": 91372607.64000002
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 102207247.49,
+            "endring": -10834639.849999992,
+            "ub": 91372607.64000002
+          }
         },
         {
           "post": "SUM_EIENDELER",
@@ -2473,7 +2668,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 6460134645.489999,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 6205654732.019999,
+            "endring": 254479913.4699998,
+            "ub": 6460134645.489999
+          }
         },
         {
           "post": "C",
@@ -2483,7 +2683,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": -1180105865.58,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": -1175558418.82,
+            "endring": -4547446.759999998,
+            "ub": -1180105865.58
+          }
         },
         {
           "post": "C.I",
@@ -2500,7 +2705,12 @@
               "name": "Bundne driftsfond",
               "factor": 1,
               "rawAmount": -17039833.08,
-              "amount": -17039833.08
+              "amount": -17039833.08,
+              "balance": {
+                "ib": -13242554.48,
+                "endring": -3797278.5999999978,
+                "ub": -17039833.08
+              }
             },
             {
               "type": "balansekapittel",
@@ -2508,7 +2718,12 @@
               "name": "Disposisjonsfond (K)",
               "factor": 1,
               "rawAmount": -66571260.39,
-              "amount": -66571260.39
+              "amount": -66571260.39,
+              "balance": {
+                "ib": -49615267.02,
+                "endring": -16955993.369999997,
+                "ub": -66571260.39
+              }
             },
             {
               "type": "balansekapittel",
@@ -2516,9 +2731,19 @@
               "name": "Regnskapsmessig merforbruk",
               "factor": 1,
               "rawAmount": 1.21,
-              "amount": 1.21
+              "amount": 1.21,
+              "balance": {
+                "ib": 1.21,
+                "endring": 0,
+                "ub": 1.21
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -62857820.29,
+            "endring": -20753271.969999995,
+            "ub": -83611092.26
+          }
         },
         {
           "post": "C.I.1",
@@ -2535,9 +2760,19 @@
               "name": "Disposisjonsfond (K)",
               "factor": 1,
               "rawAmount": -66571260.39,
-              "amount": -66571260.39
+              "amount": -66571260.39,
+              "balance": {
+                "ib": -49615267.02,
+                "endring": -16955993.369999997,
+                "ub": -66571260.39
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -49615267.02,
+            "endring": -16955993.369999997,
+            "ub": -66571260.39
+          }
         },
         {
           "post": "C.I.2",
@@ -2554,9 +2789,19 @@
               "name": "Bundne driftsfond",
               "factor": 1,
               "rawAmount": -17039833.08,
-              "amount": -17039833.08
+              "amount": -17039833.08,
+              "balance": {
+                "ib": -13242554.48,
+                "endring": -3797278.5999999978,
+                "ub": -17039833.08
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -13242554.48,
+            "endring": -3797278.5999999978,
+            "ub": -17039833.08
+          }
         },
         {
           "post": "C.I.3",
@@ -2573,9 +2818,19 @@
               "name": "Regnskapsmessig merforbruk",
               "factor": 1,
               "rawAmount": 1.21,
-              "amount": 1.21
+              "amount": 1.21,
+              "balance": {
+                "ib": 1.21,
+                "endring": 0,
+                "ub": 1.21
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 1.21,
+            "endring": 0,
+            "ub": 1.21
+          }
         },
         {
           "post": "C.II",
@@ -2592,7 +2847,12 @@
               "name": "Ubundne investeringsfond (K)",
               "factor": 1,
               "rawAmount": -20758644.94,
-              "amount": -20758644.94
+              "amount": -20758644.94,
+              "balance": {
+                "ib": -20758644.94,
+                "endring": 0,
+                "ub": -20758644.94
+              }
             },
             {
               "type": "balansekapittel",
@@ -2600,7 +2860,12 @@
               "name": "Bundne investeringsfond (K)",
               "factor": 1,
               "rawAmount": -242652.08999999613,
-              "amount": -242652.08999999613
+              "amount": -242652.08999999613,
+              "balance": {
+                "ib": -14331429.65,
+                "endring": 14088777.560000002,
+                "ub": -242652.08999999613
+              }
             },
             {
               "type": "balansekapittel",
@@ -2608,9 +2873,19 @@
               "name": "Udekket i investeringsregnskapet",
               "factor": 1,
               "rawAmount": 9652937.09,
-              "amount": 9652937.09
+              "amount": 9652937.09,
+              "balance": {
+                "ib": 0,
+                "endring": 9652937.09,
+                "ub": 9652937.09
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -35090074.59,
+            "endring": 23741714.650000002,
+            "ub": -11348359.939999998
+          }
         },
         {
           "post": "C.II.1",
@@ -2627,9 +2902,19 @@
               "name": "Ubundne investeringsfond (K)",
               "factor": 1,
               "rawAmount": -20758644.94,
-              "amount": -20758644.94
+              "amount": -20758644.94,
+              "balance": {
+                "ib": -20758644.94,
+                "endring": 0,
+                "ub": -20758644.94
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -20758644.94,
+            "endring": 0,
+            "ub": -20758644.94
+          }
         },
         {
           "post": "C.II.2",
@@ -2646,9 +2931,19 @@
               "name": "Bundne investeringsfond (K)",
               "factor": 1,
               "rawAmount": -242652.08999999613,
-              "amount": -242652.08999999613
+              "amount": -242652.08999999613,
+              "balance": {
+                "ib": -14331429.65,
+                "endring": 14088777.560000002,
+                "ub": -242652.08999999613
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -14331429.65,
+            "endring": 14088777.560000002,
+            "ub": -242652.08999999613
+          }
         },
         {
           "post": "C.II.3",
@@ -2665,9 +2960,19 @@
               "name": "Udekket i investeringsregnskapet",
               "factor": 1,
               "rawAmount": 9652937.09,
-              "amount": 9652937.09
+              "amount": 9652937.09,
+              "balance": {
+                "ib": 0,
+                "endring": 9652937.09,
+                "ub": 9652937.09
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 0,
+            "endring": 9652937.09,
+            "ub": 9652937.09
+          }
         },
         {
           "post": "C.III",
@@ -2684,7 +2989,12 @@
               "name": "Endring i regnskapsprinsipp som påvirker AK drift",
               "factor": 1,
               "rawAmount": -11751080,
-              "amount": -11751080
+              "amount": -11751080,
+              "balance": {
+                "ib": -11751080,
+                "endring": 0,
+                "ub": -11751080
+              }
             },
             {
               "type": "balansekapittel",
@@ -2692,9 +3002,19 @@
               "name": "Kapitalkonto",
               "factor": 1,
               "rawAmount": -978435881.18,
-              "amount": -978435881.18
+              "amount": -978435881.18,
+              "balance": {
+                "ib": -967911549.06,
+                "endring": -10524332.12000002,
+                "ub": -978435881.18
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -979662629.06,
+            "endring": -10524332.12000002,
+            "ub": -990186961.18
+          }
         },
         {
           "post": "C.III.1",
@@ -2711,9 +3031,19 @@
               "name": "Kapitalkonto",
               "factor": 1,
               "rawAmount": -978435881.18,
-              "amount": -978435881.18
+              "amount": -978435881.18,
+              "balance": {
+                "ib": -967911549.06,
+                "endring": -10524332.12000002,
+                "ub": -978435881.18
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -967911549.06,
+            "endring": -10524332.12000002,
+            "ub": -978435881.18
+          }
         },
         {
           "post": "C.III.2",
@@ -2730,9 +3060,19 @@
               "name": "Endring i regnskapsprinsipp som påvirker AK drift",
               "factor": 1,
               "rawAmount": -11751080,
-              "amount": -11751080
+              "amount": -11751080,
+              "balance": {
+                "ib": -11751080,
+                "endring": 0,
+                "ub": -11751080
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -11751080,
+            "endring": 0,
+            "ub": -11751080
+          }
         },
         {
           "post": "C.III.3",
@@ -2742,7 +3082,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "D",
@@ -2752,7 +3097,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": -4098670570,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": -3913538830.38,
+            "endring": -185131739.61999995,
+            "ub": -4098670570
+          }
         },
         {
           "post": "D.I",
@@ -2769,7 +3119,12 @@
               "name": "Utestående obligasjonslån med forfall i neste regnskapsår Interim",
               "factor": 1,
               "rawAmount": -97000000,
-              "amount": -97000000
+              "amount": -97000000,
+              "balance": {
+                "ib": -97000000,
+                "endring": 0,
+                "ub": -97000000
+              }
             },
             {
               "type": "balansekapittel",
@@ -2777,7 +3132,12 @@
               "name": "Sertifikatlån interim",
               "factor": 1,
               "rawAmount": -441123000,
-              "amount": -441123000
+              "amount": -441123000,
+              "balance": {
+                "ib": -447428000,
+                "endring": 6305000,
+                "ub": -441123000
+              }
             },
             {
               "type": "balansekapittel",
@@ -2785,9 +3145,19 @@
               "name": "Lån i kredittinstitusjon med avdragsprofil 320 Banker",
               "factor": 1,
               "rawAmount": -821593919.6,
-              "amount": -821593919.6
+              "amount": -821593919.6,
+              "balance": {
+                "ib": -816313484.6,
+                "endring": -5280435,
+                "ub": -821593919.6
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -1360741484.6,
+            "endring": 1024565,
+            "ub": -1359716919.6
+          }
         },
         {
           "post": "D.I.1",
@@ -2804,9 +3174,19 @@
               "name": "Lån i kredittinstitusjon med avdragsprofil 320 Banker",
               "factor": 1,
               "rawAmount": -821593919.6,
-              "amount": -821593919.6
+              "amount": -821593919.6,
+              "balance": {
+                "ib": -816313484.6,
+                "endring": -5280435,
+                "ub": -821593919.6
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -816313484.6,
+            "endring": -5280435,
+            "ub": -821593919.6
+          }
         },
         {
           "post": "D.I.2",
@@ -2823,9 +3203,19 @@
               "name": "Utestående obligasjonslån med forfall i neste regnskapsår Interim",
               "factor": 1,
               "rawAmount": -97000000,
-              "amount": -97000000
+              "amount": -97000000,
+              "balance": {
+                "ib": -97000000,
+                "endring": 0,
+                "ub": -97000000
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -97000000,
+            "endring": 0,
+            "ub": -97000000
+          }
         },
         {
           "post": "D.I.3",
@@ -2842,9 +3232,19 @@
               "name": "Sertifikatlån interim",
               "factor": 1,
               "rawAmount": -441123000,
-              "amount": -441123000
+              "amount": -441123000,
+              "balance": {
+                "ib": -447428000,
+                "endring": 6305000,
+                "ub": -441123000
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -447428000,
+            "endring": 6305000,
+            "ub": -441123000
+          }
         },
         {
           "post": "D.II",
@@ -2861,9 +3261,19 @@
               "name": "Pensjonsforpliktelse",
               "factor": 1,
               "rawAmount": -1379236730.8,
-              "amount": -1379236730.8
+              "amount": -1379236730.8,
+              "balance": {
+                "ib": -1192055861.18,
+                "endring": -187180869.61999995,
+                "ub": -1379236730.8
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -1192055861.18,
+            "endring": -187180869.61999995,
+            "ub": -1379236730.8
+          }
         },
         {
           "post": "E",
@@ -2873,7 +3283,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": -190021940.06,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": -181892978.98000002,
+            "endring": -8128961.079999993,
+            "ub": -190021940.06
+          }
         },
         {
           "post": "E.I",
@@ -2890,7 +3305,12 @@
               "name": "Annen kortsiktig gjeld",
               "factor": 1,
               "rawAmount": -142095334.84,
-              "amount": -142095334.84
+              "amount": -142095334.84,
+              "balance": {
+                "ib": -132612362.36000001,
+                "endring": -9482972.479999991,
+                "ub": -142095334.84
+              }
             },
             {
               "type": "balansekapittel",
@@ -2898,9 +3318,19 @@
               "name": "Leverandørgjeld",
               "factor": 1,
               "rawAmount": -47926605.22,
-              "amount": -47926605.22
+              "amount": -47926605.22,
+              "balance": {
+                "ib": -49280616.62,
+                "endring": 1354011.3999999985,
+                "ub": -47926605.22
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -181892978.98000002,
+            "endring": -8128961.079999993,
+            "ub": -190021940.06
+          }
         },
         {
           "post": "E.I.1",
@@ -2917,9 +3347,19 @@
               "name": "Leverandørgjeld",
               "factor": 1,
               "rawAmount": -47926605.22,
-              "amount": -47926605.22
+              "amount": -47926605.22,
+              "balance": {
+                "ib": -49280616.62,
+                "endring": 1354011.3999999985,
+                "ub": -47926605.22
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -49280616.62,
+            "endring": 1354011.3999999985,
+            "ub": -47926605.22
+          }
         },
         {
           "post": "E.I.2",
@@ -2929,7 +3369,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "E.I.3",
@@ -2939,7 +3384,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "E.I.4",
@@ -2956,9 +3406,19 @@
               "name": "Annen kortsiktig gjeld",
               "factor": 1,
               "rawAmount": -142095334.84,
-              "amount": -142095334.84
+              "amount": -142095334.84,
+              "balance": {
+                "ib": -132612362.36000001,
+                "endring": -9482972.479999991,
+                "ub": -142095334.84
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -132612362.36000001,
+            "endring": -9482972.479999991,
+            "ub": -142095334.84
+          }
         },
         {
           "post": "E.I.5",
@@ -2968,7 +3428,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "SUM_EGENKAPITAL_GJELD",
@@ -2978,7 +3443,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": -5468798375.64,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": -5270990228.18,
+            "endring": -197808147.45999992,
+            "ub": -5468798375.64
+          }
         },
         {
           "post": "F",
@@ -2988,7 +3458,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 0,
+            "endring": 0,
+            "ub": 0
+          }
         },
         {
           "post": "F.I",
@@ -2998,7 +3473,12 @@
           "valueType": "amount",
           "canCalculate": true,
           "amount": 0,
-          "children": []
+          "children": [],
+          "balance": {
+            "ib": 29635389.86,
+            "endring": -29635389.86,
+            "ub": 0
+          }
         },
         {
           "post": "F.II",
@@ -3015,9 +3495,19 @@
               "name": "Andre memoriakonti",
               "factor": 1,
               "rawAmount": 1217745,
-              "amount": 1217745
+              "amount": 1217745,
+              "balance": {
+                "ib": 1523676,
+                "endring": -305931,
+                "ub": 1217745
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": 1523676,
+            "endring": -305931,
+            "ub": 1217745
+          }
         },
         {
           "post": "F.III",
@@ -3034,9 +3524,19 @@
               "name": "Motkonto for memoriakont",
               "factor": 1,
               "rawAmount": -1217745,
-              "amount": -1217745
+              "amount": -1217745,
+              "balance": {
+                "ib": -31159065.86,
+                "endring": 29941320.86,
+                "ub": -1217745
+              }
             }
-          ]
+          ],
+          "balance": {
+            "ib": -31159065.86,
+            "endring": 29941320.86,
+            "ub": -1217745
+          }
         }
       ]
     }

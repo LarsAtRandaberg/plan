@@ -289,10 +289,19 @@ function makeBalanceIndex(rows) {
           map.set(key.code, {
             code: key.code,
             name: key.name,
-            rawAmount: 0
+            rawAmount: 0,
+            ib: 0,
+            endring: 0,
+            ub: 0
           });
         }
-        map.get(key.code).rawAmount += row.belop;
+        const item = map.get(key.code);
+        const ib = row.perioder?.find((periode) => periode.period === 0)?.hittilBelop || 0;
+        const ub = row.perioder?.find((periode) => periode.period === 12)?.hittilBelop ?? row.belop;
+        item.rawAmount += row.belop;
+        item.ib += ib;
+        item.ub += ub;
+        item.endring += ub - ib;
       });
     });
   return map;
@@ -313,18 +322,24 @@ function amountForCode(sourceIndex, amountSource, code) {
   return sourceIndex.get(normalizeSourceCode(amountSource, code))?.rawAmount || 0;
 }
 
-function sumRange(sourceIndex, from, to) {
+function sourceMeasure(item, measure) {
+  if (!item) return 0;
+  if (measure === "rawAmount") return item.rawAmount || 0;
+  return item[measure] || 0;
+}
+
+function sumRange(sourceIndex, from, to, measure = "rawAmount") {
   let total = 0;
   for (const [code, item] of sourceIndex.entries()) {
     if (/^\d+$/.test(code) && Number(code) >= Number(from) && Number(code) <= Number(to)) {
-      total += item.rawAmount;
+      total += sourceMeasure(item, measure);
     }
   }
   return total;
 }
 
-function sourceValue(sourceIndex, amountSource, code) {
-  return amountForCode(sourceIndex, amountSource, code);
+function sourceValue(sourceIndex, amountSource, code, measure = "rawAmount") {
+  return sourceMeasure(sourceIndex.get(normalizeSourceCode(amountSource, code)), measure);
 }
 
 function rowDisplayMultiplier(tableId, post) {
@@ -388,8 +403,8 @@ function directSourceContributions(rule, sourceIndex, amountSource, multiplier) 
   return [...contributions.entries()]
     .map(([code, factor]) => {
       const item = sourceIndex.get(code);
-      const rawAmount = item.rawAmount * factor;
-      return {
+      const rawAmount = sourceMeasure(item, "rawAmount") * factor;
+      const contribution = {
         type: amountSource,
         code,
         name: item.name,
@@ -397,12 +412,20 @@ function directSourceContributions(rule, sourceIndex, amountSource, multiplier) 
         rawAmount,
         amount: rawAmount * multiplier
       };
+      if (amountSource === "balansekapittel") {
+        contribution.balance = {
+          ib: sourceMeasure(item, "ib") * factor * multiplier,
+          endring: sourceMeasure(item, "endring") * factor * multiplier,
+          ub: sourceMeasure(item, "ub") * factor * multiplier
+        };
+      }
+      return contribution;
     })
     .filter((item) => item.amount !== 0)
     .sort((a, b) => Number(a.code) - Number(b.code));
 }
 
-function evalSourceRule(rule, sourceIndex, amountSource) {
+function evalSourceRule(rule, sourceIndex, amountSource, measure = "rawAmount") {
   if (!rule || /post\(|fra_/.test(rule)) return null;
   let expr = rule.replace(/;.*$/, "");
   const values = [];
@@ -411,13 +434,39 @@ function evalSourceRule(rule, sourceIndex, amountSource) {
     values.push(value);
     return token;
   };
-  expr = expr.replace(/sum\((\d+):(\d+)\)/g, (_, from, to) => addValue(sumRange(sourceIndex, from, to)));
+  expr = expr.replace(/sum\((\d+):(\d+)\)/g, (_, from, to) => addValue(sumRange(sourceIndex, from, to, measure)));
   expr = expr.replace(/(?<![A-Za-z_])\b(\d+)\b/g, (_, code) =>
-    addValue(sourceValue(sourceIndex, amountSource, code))
+    addValue(sourceValue(sourceIndex, amountSource, code, measure))
   );
   expr = expr.replace(/__value_(\d+)__/g, (_, index) => String(values[Number(index)]));
   if (!/^[0-9+\-*/ ().]+$/.test(expr)) return null;
   return Function(`return (${expr})`)();
+}
+
+function calculateMeasureValues(table, sourceIndex, hasSourceRows, measure) {
+  const values = new Map();
+  const postOrder = table.rows.map((row) => row.post);
+  table.rows.forEach((row) => {
+    const multiplier = rowDisplayMultiplier(table.id, row.post);
+    const rawAmount = hasSourceRows ? evalSourceRule(row.rule, sourceIndex, table.amountSource, measure) : null;
+    if (rawAmount != null && Number.isFinite(rawAmount)) {
+      values.set(row.post, rawAmount * multiplier);
+    }
+  });
+
+  for (let i = 0; i < table.rows.length; i += 1) {
+    let changed = false;
+    table.rows.forEach((row) => {
+      if (values.has(row.post) || !hasSourceRows) return;
+      const rawAmount = evalPostRule(row.rule, values, postOrder);
+      if (rawAmount == null || !Number.isFinite(rawAmount)) return;
+      values.set(row.post, rawAmount);
+      changed = true;
+    });
+    if (!changed) break;
+  }
+
+  return values;
 }
 
 function evalPostRule(rule, values, postOrder) {
@@ -515,6 +564,23 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
     rows.forEach((row) => {
       delete row.isSourceRule;
     });
+
+    if (table.amountSource === "balansekapittel" && variant === "regnskap") {
+      const balanceValues = {
+        ib: calculateMeasureValues(table, sourceIndex, hasSourceRows, "ib"),
+        endring: calculateMeasureValues(table, sourceIndex, hasSourceRows, "endring"),
+        ub: calculateMeasureValues(table, sourceIndex, hasSourceRows, "ub")
+      };
+
+      rows.forEach((row) => {
+        row.balance = {
+          ib: balanceValues.ib.get(row.post) ?? null,
+          endring: balanceValues.endring.get(row.post) ?? null,
+          ub: balanceValues.ub.get(row.post) ?? null
+        };
+        row.amount = row.balance.ub;
+      });
+    }
 
     return {
       id: table.id,
