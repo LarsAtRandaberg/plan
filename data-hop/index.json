@@ -73,13 +73,14 @@
       "id": "regnskap-2026",
       "kind": "faktisk-regnskap",
       "year": 2026,
-      "format": "xledger-adv-json",
+      "format": "xledger-adv-xlsx",
       "source": "Xledger Flex export",
-      "path": "data-hop/regnskap/2026.adv.json",
+      "path": "data-hop/regnskap/2026.adv.xlsx",
+      "convertedPath": "data-hop/regnskap/2026.adv.json",
       "status": "live-until-2027-05",
-      "rows": 373,
+      "rows": 3858,
       "amountField": "Totalt",
-      "periods": 12
+      "periods": 13
     },
     {
       "id": "normalisert-regnskap-2026",
@@ -89,8 +90,8 @@
       "source": "data-hop/regnskap/2026.adv.json",
       "path": "data-hop/normalisert/regnskap-2026.json",
       "status": "generated",
-      "rows": 373,
-      "periods": 12
+      "rows": 3858,
+      "periods": 13
     },
     {
       "id": "obligatoriske-tabeller-2025-vedtatt",
