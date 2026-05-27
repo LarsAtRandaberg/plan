@@ -359,7 +359,10 @@ function evalPostRule(rule, values) {
 }
 
 function calculateStatements(year, normalized, variant = "vedtatt") {
-  const statements = readJson("data-hop/oppstillinger/obligatoriske-tabeller-2026.json");
+  const statementDefinition = fs.existsSync(path.join(DATA_HOP, "oppstillinger", `obligatoriske-tabeller-${year}.json`))
+    ? `data-hop/oppstillinger/obligatoriske-tabeller-${year}.json`
+    : "data-hop/oppstillinger/obligatoriske-tabeller-2026.json";
+  const statements = readJson(statementDefinition);
   const tables = statements.tables.map((table) => {
     const artIndex = makeArtIndex(normalized.rows, table.klasse);
     const hasSourceRows = normalized.rows.some((row) => row.klasse === table.klasse);
@@ -401,7 +404,7 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
     version: 1,
     year,
     source: `data-hop/normalisert/${variant}-${year}.json`,
-    statementDefinition: "data-hop/oppstillinger/obligatoriske-tabeller-2026.json",
+    statementDefinition,
     generated: new Date().toISOString().slice(0, 10),
     tables
   };

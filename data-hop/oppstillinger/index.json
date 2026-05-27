@@ -1,8 +1,14 @@
 {
   "type": "hop-statement-index",
   "version": 1,
-  "updated": "2026-05-26",
+  "updated": "2026-05-27",
   "statements": [
+    {
+      "id": "obligatoriske-tabeller-2025",
+      "name": "Obligatoriske regnskapsoppstillinger 2025",
+      "path": "data-hop/oppstillinger/obligatoriske-tabeller-2025.json",
+      "source": "Veileder til kontoplanen i KOSTRA, rapporteringsaret 2025, kapittel 12"
+    },
     {
       "id": "obligatoriske-tabeller-2026",
       "name": "Obligatoriske regnskapsoppstillinger 2026",

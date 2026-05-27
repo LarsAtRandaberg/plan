@@ -3,7 +3,7 @@
   "version": 1,
   "year": 2025,
   "source": "data-hop/normalisert/regnskap-2025.json",
-  "statementDefinition": "data-hop/oppstillinger/obligatoriske-tabeller-2026.json",
+  "statementDefinition": "data-hop/oppstillinger/obligatoriske-tabeller-2025.json",
   "generated": "2026-05-27",
   "tables": [
     {

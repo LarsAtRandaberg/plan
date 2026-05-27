@@ -52,19 +52,11 @@
         {
           "post": "3",
           "label": "Eiendomsskatt",
-          "rule": "sum(871:873) + sum(875:879)",
+          "rule": "sum(871:873) + 876 + sum(878:879)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 20906000,
+          "amount": 9921000,
           "children": [
-            {
-              "type": "kostraart",
-              "code": "875",
-              "name": "Eiendomsskatt boliger og fritidseiendommer (Utgår f.o.m 2025)",
-              "factor": 1,
-              "rawAmount": -10985000,
-              "amount": 10985000
-            },
             {
               "type": "kostraart",
               "code": "876",
@@ -266,7 +258,7 @@
           "rule": "post(1:8)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 1322229045,
+          "amount": 1311244045,
           "children": []
         },
         {
@@ -710,7 +702,7 @@
           "rule": "post(9) - post(15)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 31927000,
+          "amount": 20942000,
           "children": []
         },
         {
@@ -827,7 +819,7 @@
           "rule": "post(16) - post(22) + post(23)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 35622000,
+          "amount": 24637000,
           "children": []
         },
         {
@@ -935,7 +927,7 @@
           "rule": "980; post(24) - post(31)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 0,
+          "amount": -10985000,
           "children": []
         }
       ]
@@ -986,19 +978,11 @@
         {
           "post": "3",
           "label": "Eiendomsskatt",
-          "rule": "sum(871:873) + sum(875:879)",
+          "rule": "sum(871:873) + 876 + sum(878:879)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 20906000,
+          "amount": 9921000,
           "children": [
-            {
-              "type": "kostraart",
-              "code": "875",
-              "name": "Eiendomsskatt boliger og fritidseiendommer (Utgår f.o.m 2025)",
-              "factor": 1,
-              "rawAmount": -10985000,
-              "amount": 10985000
-            },
             {
               "type": "kostraart",
               "code": "876",
@@ -1049,7 +1033,7 @@
           "rule": "post(1:4)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 1042454000,
+          "amount": 1031469000,
           "children": []
         },
         {

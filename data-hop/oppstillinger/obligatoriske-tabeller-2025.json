@@ -1,12 +1,12 @@
 {
   "type": "hop-obligatoriske-tabeller",
   "version": 1,
-  "year": 2026,
-  "updated": "2026-05-26",
+  "year": 2025,
+  "updated": "2026-05-27",
   "source": {
-    "title": "Veileder til kontoplanen i KOSTRA, rapporteringsaret 2026",
+    "title": "Veileder til kontoplanen i KOSTRA, rapporteringsaret 2025",
     "chapter": "12 Regnskapsoppstillinger med tilordnete arter",
-    "url": "https://www.regjeringen.no/contentassets/6c6489a12cc14a32ac784028155ef403/veileder-til-kontoplanen-i-kostra-for-2026.pdf"
+    "file": "veileder-til-kontoplanen-i-kostra-for-2025.pdf"
   },
   "tables": [
     {
@@ -18,7 +18,7 @@
       "rows": [
         { "post": "1", "label": "Rammetilskudd", "rule": "800" },
         { "post": "2", "label": "Inntekts- og formuesskatt", "rule": "870" },
-        { "post": "3", "label": "Eiendomsskatt", "rule": "sum(871:873) + 876 + sum(878:879)" },
+        { "post": "3", "label": "Eiendomsskatt", "rule": "sum(871:873) + sum(875:879)" },
         { "post": "4", "label": "Andre skatteinntekter", "rule": "877" },
         { "post": "5", "label": "Andre overforinger og tilskudd fra staten", "rule": "810" },
         { "post": "6", "label": "Overforinger og tilskudd fra andre", "rule": "sum(700:780) + sum(830:850) + sum(880:890) + 920" },
@@ -59,7 +59,7 @@
       "rows": [
         { "post": "1", "label": "Rammetilskudd", "rule": "800" },
         { "post": "2", "label": "Inntekts- og formuesskatt", "rule": "870" },
-        { "post": "3", "label": "Eiendomsskatt", "rule": "sum(871:873) + 876 + sum(878:879)" },
+        { "post": "3", "label": "Eiendomsskatt", "rule": "sum(871:873) + sum(875:879)" },
         { "post": "4", "label": "Andre generelle driftsinntekter", "rule": "810 + 877" },
         { "post": "5", "label": "Sum generelle driftsinntekter", "rule": "post(1:4)", "rowType": "sum" },
         { "post": "6", "label": "Sum bevilgninger drift, netto", "rule": "fra_bevilgningsoversikt_5_4_andre_ledd" },
