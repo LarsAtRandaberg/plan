@@ -1489,7 +1489,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 106874668.85,
+          "amount": 106874922.85,
           "children": [
             {
               "type": "kostraart",
@@ -1743,7 +1743,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 111959231.93,
+          "amount": 111959485.93,
           "children": []
         },
         {
@@ -2085,7 +2085,7 @@
           "rowType": "result",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -19652682.75,
+          "amount": -19652936.75,
           "children": []
         }
       ]
@@ -2103,8 +2103,8 @@
           "rule": "post(A.I:A.IV)",
           "rowType": "sum",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": 6091866719.039999,
           "children": []
         },
         {
@@ -2114,8 +2114,25 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 51,
-          "children": []
+          "amount": 2033503569.4299996,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "24",
+              "name": "Utstyr, maskiner og transportmidler",
+              "factor": 1,
+              "rawAmount": 63434963.95,
+              "amount": 63434963.95
+            },
+            {
+              "type": "balansekapittel",
+              "code": "27",
+              "name": "Faste eiendommer og anlegg",
+              "factor": 1,
+              "rawAmount": 1970068605.4799995,
+              "amount": 1970068605.4799995
+            }
+          ]
         },
         {
           "post": "A.I.1",
@@ -2124,8 +2141,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 27,
-          "children": []
+          "amount": 1970068605.4799995,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "27",
+              "name": "Faste eiendommer og anlegg",
+              "factor": 1,
+              "rawAmount": 1970068605.4799995,
+              "amount": 1970068605.4799995
+            }
+          ]
         },
         {
           "post": "A.I.2",
@@ -2134,8 +2160,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 24,
-          "children": []
+          "amount": 63434963.95,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "24",
+              "name": "Utstyr, maskiner og transportmidler",
+              "factor": 1,
+              "rawAmount": 63434963.95,
+              "amount": 63434963.95
+            }
+          ]
         },
         {
           "post": "A.II",
@@ -2144,8 +2179,25 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 29,
-          "children": []
+          "amount": 340973530.31000006,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "21",
+              "name": "Aksjer og andeler (anleggsmidler)",
+              "factor": 1,
+              "rawAmount": 73081984,
+              "amount": 73081984
+            },
+            {
+              "type": "balansekapittel",
+              "code": "22",
+              "name": "Utlån (anleggsmidler)",
+              "factor": 1,
+              "rawAmount": 267891546.31000003,
+              "amount": 267891546.31000003
+            }
+          ]
         },
         {
           "post": "A.II.1",
@@ -2154,8 +2206,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 21,
-          "children": []
+          "amount": 73081984,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "21",
+              "name": "Aksjer og andeler (anleggsmidler)",
+              "factor": 1,
+              "rawAmount": 73081984,
+              "amount": 73081984
+            }
+          ]
         },
         {
           "post": "A.II.2",
@@ -2164,7 +2225,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 29,
+          "amount": 0,
           "children": []
         },
         {
@@ -2174,8 +2235,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 0,
-          "children": []
+          "amount": 267891546.31000003,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "22",
+              "name": "Utlån (anleggsmidler)",
+              "factor": 1,
+              "rawAmount": 267891546.31000003,
+              "amount": 267891546.31000003
+            }
+          ]
         },
         {
           "post": "A.III",
@@ -2184,7 +2254,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 28,
+          "amount": 0,
           "children": []
         },
         {
@@ -2194,8 +2264,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 20,
-          "children": []
+          "amount": 1342912519.56,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "20",
+              "name": "Pensjonsmidler (K)",
+              "factor": 1,
+              "rawAmount": 1342912519.56,
+              "amount": 1342912519.56
+            }
+          ]
         },
         {
           "post": "B",
@@ -2203,8 +2282,8 @@
           "rule": "post(B.I:B.III)",
           "rowType": "sum",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": 368267926.45,
           "children": []
         },
         {
@@ -2214,8 +2293,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 10,
-          "children": []
+          "amount": 49969551.31999999,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "10",
+              "name": "Bankinnskudd og kontanter",
+              "factor": 1,
+              "rawAmount": 49969551.31999999,
+              "amount": 49969551.31999999
+            }
+          ]
         },
         {
           "post": "B.II",
@@ -2224,8 +2312,17 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 33,
-          "children": []
+          "amount": 71535541.19,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "18",
+              "name": "Aksjer og andeler (omløpsmidler)",
+              "factor": 1,
+              "rawAmount": 71535541.19,
+              "amount": 71535541.19
+            }
+          ]
         },
         {
           "post": "B.II.1",
@@ -2234,8 +2331,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 18,
-          "children": []
+          "amount": 71535541.19,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "18",
+              "name": "Aksjer og andeler (omløpsmidler)",
+              "factor": 1,
+              "rawAmount": 71535541.19,
+              "amount": 71535541.19
+            }
+          ]
         },
         {
           "post": "B.II.2",
@@ -2244,7 +2350,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 11,
+          "amount": 0,
           "children": []
         },
         {
@@ -2254,7 +2360,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 12,
+          "amount": 0,
           "children": []
         },
         {
@@ -2264,7 +2370,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 15,
+          "amount": 0,
           "children": []
         },
         {
@@ -2274,8 +2380,33 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 35,
-          "children": []
+          "amount": 175227292.75,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "13",
+              "name": "Kundefordringer",
+              "factor": 1,
+              "rawAmount": 69692855.42,
+              "amount": 69692855.42
+            },
+            {
+              "type": "balansekapittel",
+              "code": "16",
+              "name": "Andre kortsiktige fordringer",
+              "factor": 1,
+              "rawAmount": 14161829.690000003,
+              "amount": 14161829.690000003
+            },
+            {
+              "type": "balansekapittel",
+              "code": "19",
+              "name": "Premieavvik (K)",
+              "factor": 1,
+              "rawAmount": 91372607.64000002,
+              "amount": 91372607.64000002
+            }
+          ]
         },
         {
           "post": "B.III.1",
@@ -2284,8 +2415,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 27,
-          "children": []
+          "amount": 69692855.42,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "13",
+              "name": "Kundefordringer",
+              "factor": 1,
+              "rawAmount": 69692855.42,
+              "amount": 69692855.42
+            }
+          ]
         },
         {
           "post": "B.III.2",
@@ -2294,8 +2434,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 16,
-          "children": []
+          "amount": 14161829.690000003,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "16",
+              "name": "Andre kortsiktige fordringer",
+              "factor": 1,
+              "rawAmount": 14161829.690000003,
+              "amount": 14161829.690000003
+            }
+          ]
         },
         {
           "post": "B.III.3",
@@ -2304,8 +2453,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 19,
-          "children": []
+          "amount": 91372607.64000002,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "19",
+              "name": "Premieavvik (K)",
+              "factor": 1,
+              "rawAmount": 91372607.64000002,
+              "amount": 91372607.64000002
+            }
+          ]
         },
         {
           "post": "SUM_EIENDELER",
@@ -2313,8 +2471,8 @@
           "rule": "post(A) + post(B)",
           "rowType": "result",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": 6460134645.489999,
           "children": []
         },
         {
@@ -2323,8 +2481,8 @@
           "rule": "post(C.I:C.III)",
           "rowType": "sum",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": -1180105865.58,
           "children": []
         },
         {
@@ -2334,8 +2492,33 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 6007,
-          "children": []
+          "amount": -83611092.26,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "51",
+              "name": "Bundne driftsfond",
+              "factor": 1,
+              "rawAmount": -17039833.08,
+              "amount": -17039833.08
+            },
+            {
+              "type": "balansekapittel",
+              "code": "56",
+              "name": "Disposisjonsfond (K)",
+              "factor": 1,
+              "rawAmount": -66571260.39,
+              "amount": -66571260.39
+            },
+            {
+              "type": "balansekapittel",
+              "code": "5900",
+              "name": "Regnskapsmessig merforbruk",
+              "factor": 1,
+              "rawAmount": 1.21,
+              "amount": 1.21
+            }
+          ]
         },
         {
           "post": "C.I.1",
@@ -2344,8 +2527,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 56,
-          "children": []
+          "amount": -66571260.39,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "56",
+              "name": "Disposisjonsfond (K)",
+              "factor": 1,
+              "rawAmount": -66571260.39,
+              "amount": -66571260.39
+            }
+          ]
         },
         {
           "post": "C.I.2",
@@ -2354,8 +2546,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 51,
-          "children": []
+          "amount": -17039833.08,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "51",
+              "name": "Bundne driftsfond",
+              "factor": 1,
+              "rawAmount": -17039833.08,
+              "amount": -17039833.08
+            }
+          ]
         },
         {
           "post": "C.I.3",
@@ -2364,8 +2565,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 5900,
-          "children": []
+          "amount": 1.21,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "5900",
+              "name": "Regnskapsmessig merforbruk",
+              "factor": 1,
+              "rawAmount": 1.21,
+              "amount": 1.21
+            }
+          ]
         },
         {
           "post": "C.II",
@@ -2374,8 +2584,33 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 6078,
-          "children": []
+          "amount": -11348359.939999998,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "53",
+              "name": "Ubundne investeringsfond (K)",
+              "factor": 1,
+              "rawAmount": -20758644.94,
+              "amount": -20758644.94
+            },
+            {
+              "type": "balansekapittel",
+              "code": "55",
+              "name": "Bundne investeringsfond (K)",
+              "factor": 1,
+              "rawAmount": -242652.08999999613,
+              "amount": -242652.08999999613
+            },
+            {
+              "type": "balansekapittel",
+              "code": "5970",
+              "name": "Udekket i investeringsregnskapet",
+              "factor": 1,
+              "rawAmount": 9652937.09,
+              "amount": 9652937.09
+            }
+          ]
         },
         {
           "post": "C.II.1",
@@ -2384,8 +2619,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 53,
-          "children": []
+          "amount": -20758644.94,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "53",
+              "name": "Ubundne investeringsfond (K)",
+              "factor": 1,
+              "rawAmount": -20758644.94,
+              "amount": -20758644.94
+            }
+          ]
         },
         {
           "post": "C.II.2",
@@ -2394,8 +2638,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 55,
-          "children": []
+          "amount": -242652.08999999613,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "55",
+              "name": "Bundne investeringsfond (K)",
+              "factor": 1,
+              "rawAmount": -242652.08999999613,
+              "amount": -242652.08999999613
+            }
+          ]
         },
         {
           "post": "C.II.3",
@@ -2404,8 +2657,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 5970,
-          "children": []
+          "amount": 9652937.09,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "5970",
+              "name": "Udekket i investeringsregnskapet",
+              "factor": 1,
+              "rawAmount": 9652937.09,
+              "amount": 9652937.09
+            }
+          ]
         },
         {
           "post": "C.III",
@@ -2414,8 +2676,25 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 5990,
-          "children": []
+          "amount": -990186961.18,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "581",
+              "name": "Endring i regnskapsprinsipp som påvirker AK drift",
+              "factor": 1,
+              "rawAmount": -11751080,
+              "amount": -11751080
+            },
+            {
+              "type": "balansekapittel",
+              "code": "5990",
+              "name": "Kapitalkonto",
+              "factor": 1,
+              "rawAmount": -978435881.18,
+              "amount": -978435881.18
+            }
+          ]
         },
         {
           "post": "C.III.1",
@@ -2424,8 +2703,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 5990,
-          "children": []
+          "amount": -978435881.18,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "5990",
+              "name": "Kapitalkonto",
+              "factor": 1,
+              "rawAmount": -978435881.18,
+              "amount": -978435881.18
+            }
+          ]
         },
         {
           "post": "C.III.2",
@@ -2434,8 +2722,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 0,
-          "children": []
+          "amount": -11751080,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "581",
+              "name": "Endring i regnskapsprinsipp som påvirker AK drift",
+              "factor": 1,
+              "rawAmount": -11751080,
+              "amount": -11751080
+            }
+          ]
         },
         {
           "post": "C.III.3",
@@ -2453,8 +2750,8 @@
           "rule": "post(D.I:D.II)",
           "rowType": "sum",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": -4098670570,
           "children": []
         },
         {
@@ -2464,8 +2761,33 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 47,
-          "children": []
+          "amount": -1359716919.6,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "412",
+              "name": "Utestående obligasjonslån med forfall i neste regnskapsår Interim",
+              "factor": 1,
+              "rawAmount": -97000000,
+              "amount": -97000000
+            },
+            {
+              "type": "balansekapittel",
+              "code": "431",
+              "name": "Sertifikatlån interim",
+              "factor": 1,
+              "rawAmount": -441123000,
+              "amount": -441123000
+            },
+            {
+              "type": "balansekapittel",
+              "code": "451",
+              "name": "Lån i kredittinstitusjon med avdragsprofil 320 Banker",
+              "factor": 1,
+              "rawAmount": -821593919.6,
+              "amount": -821593919.6
+            }
+          ]
         },
         {
           "post": "D.I.1",
@@ -2474,8 +2796,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 47,
-          "children": []
+          "amount": -821593919.6,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "451",
+              "name": "Lån i kredittinstitusjon med avdragsprofil 320 Banker",
+              "factor": 1,
+              "rawAmount": -821593919.6,
+              "amount": -821593919.6
+            }
+          ]
         },
         {
           "post": "D.I.2",
@@ -2484,8 +2815,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 0,
-          "children": []
+          "amount": -97000000,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "412",
+              "name": "Utestående obligasjonslån med forfall i neste regnskapsår Interim",
+              "factor": 1,
+              "rawAmount": -97000000,
+              "amount": -97000000
+            }
+          ]
         },
         {
           "post": "D.I.3",
@@ -2494,8 +2834,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 0,
-          "children": []
+          "amount": -441123000,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "431",
+              "name": "Sertifikatlån interim",
+              "factor": 1,
+              "rawAmount": -441123000,
+              "amount": -441123000
+            }
+          ]
         },
         {
           "post": "D.II",
@@ -2504,8 +2853,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 40,
-          "children": []
+          "amount": -1379236730.8,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "40",
+              "name": "Pensjonsforpliktelse",
+              "factor": 1,
+              "rawAmount": -1379236730.8,
+              "amount": -1379236730.8
+            }
+          ]
         },
         {
           "post": "E",
@@ -2513,8 +2871,8 @@
           "rule": "post(E.I)",
           "rowType": "sum",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": -190021940.06,
           "children": []
         },
         {
@@ -2524,8 +2882,25 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 39,
-          "children": []
+          "amount": -190021940.06,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "32",
+              "name": "Annen kortsiktig gjeld",
+              "factor": 1,
+              "rawAmount": -142095334.84,
+              "amount": -142095334.84
+            },
+            {
+              "type": "balansekapittel",
+              "code": "35",
+              "name": "Leverandørgjeld",
+              "factor": 1,
+              "rawAmount": -47926605.22,
+              "amount": -47926605.22
+            }
+          ]
         },
         {
           "post": "E.I.1",
@@ -2534,8 +2909,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 68,
-          "children": []
+          "amount": -47926605.22,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "35",
+              "name": "Leverandørgjeld",
+              "factor": 1,
+              "rawAmount": -47926605.22,
+              "amount": -47926605.22
+            }
+          ]
         },
         {
           "post": "E.I.2",
@@ -2544,7 +2928,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 31,
+          "amount": 0,
           "children": []
         },
         {
@@ -2554,7 +2938,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 34,
+          "amount": 0,
           "children": []
         },
         {
@@ -2564,8 +2948,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 32,
-          "children": []
+          "amount": -142095334.84,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "32",
+              "name": "Annen kortsiktig gjeld",
+              "factor": 1,
+              "rawAmount": -142095334.84,
+              "amount": -142095334.84
+            }
+          ]
         },
         {
           "post": "E.I.5",
@@ -2574,7 +2967,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 39,
+          "amount": 0,
           "children": []
         },
         {
@@ -2583,8 +2976,8 @@
           "rule": "post(C) + post(D) + post(E)",
           "rowType": "result",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": -5468798375.64,
           "children": []
         },
         {
@@ -2593,8 +2986,8 @@
           "rule": "post(F.I:F.III)",
           "rowType": "sum",
           "valueType": "amount",
-          "canCalculate": false,
-          "amount": null,
+          "canCalculate": true,
+          "amount": 0,
           "children": []
         },
         {
@@ -2614,8 +3007,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 9200,
-          "children": []
+          "amount": 1217745,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "9200",
+              "name": "Andre memoriakonti",
+              "factor": 1,
+              "rawAmount": 1217745,
+              "amount": 1217745
+            }
+          ]
         },
         {
           "post": "F.III",
@@ -2624,8 +3026,17 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 9999,
-          "children": []
+          "amount": -1217745,
+          "children": [
+            {
+              "type": "balansekapittel",
+              "code": "9999",
+              "name": "Motkonto for memoriakont",
+              "factor": 1,
+              "rawAmount": -1217745,
+              "amount": -1217745
+            }
+          ]
         }
       ]
     }

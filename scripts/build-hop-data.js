@@ -264,13 +264,58 @@ function makeArtIndex(rows, klasse) {
   return map;
 }
 
-function amountForArt(artIndex, code) {
-  return artIndex.get(String(code).padStart(3, "0"))?.rawAmount || 0;
+function makeBalanceIndex(rows) {
+  const map = new Map();
+  rows
+    .filter((row) => row.klasse === "2")
+    .forEach((row) => {
+      const keys = [
+        {
+          code: row.kapittel,
+          name: row.kapittelNavn || row.systemkontoNavn || ""
+        },
+        {
+          code: row.systemkontoKode.slice(1, 4),
+          name: row.systemkontoNavn || row.kapittelNavn || ""
+        },
+        {
+          code: row.systemkontoKode.slice(1, 5),
+          name: row.systemkontoNavn || row.kapittelNavn || ""
+        }
+      ].filter((item) => item.code);
+
+      keys.forEach((key) => {
+        if (!map.has(key.code)) {
+          map.set(key.code, {
+            code: key.code,
+            name: key.name,
+            rawAmount: 0
+          });
+        }
+        map.get(key.code).rawAmount += row.belop;
+      });
+    });
+  return map;
 }
 
-function sumRange(artIndex, from, to) {
+function makeSourceIndex(rows, table) {
+  if (table.amountSource === "balansekapittel") return makeBalanceIndex(rows);
+  return makeArtIndex(rows, table.klasse);
+}
+
+function normalizeSourceCode(amountSource, code) {
+  const text = String(code);
+  if (amountSource === "balansekapittel") return text;
+  return text.padStart(3, "0");
+}
+
+function amountForCode(sourceIndex, amountSource, code) {
+  return sourceIndex.get(normalizeSourceCode(amountSource, code))?.rawAmount || 0;
+}
+
+function sumRange(sourceIndex, from, to) {
   let total = 0;
-  for (const [code, item] of artIndex.entries()) {
+  for (const [code, item] of sourceIndex.entries()) {
     if (/^\d+$/.test(code) && Number(code) >= Number(from) && Number(code) <= Number(to)) {
       total += item.rawAmount;
     }
@@ -278,8 +323,8 @@ function sumRange(artIndex, from, to) {
   return total;
 }
 
-function artValue(artIndex, code) {
-  return amountForArt(artIndex, code);
+function sourceValue(sourceIndex, amountSource, code) {
+  return amountForCode(sourceIndex, amountSource, code);
 }
 
 function rowDisplayMultiplier(tableId, post) {
@@ -303,13 +348,13 @@ function rowDisplayMultiplier(tableId, post) {
   return 1;
 }
 
-function artCodesInRange(artIndex, from, to) {
-  return [...artIndex.keys()]
+function sourceCodesInRange(sourceIndex, from, to) {
+  return [...sourceIndex.keys()]
     .filter((code) => /^\d+$/.test(code) && Number(code) >= Number(from) && Number(code) <= Number(to))
     .sort((a, b) => Number(a) - Number(b));
 }
 
-function directArtContributions(rule, artIndex, multiplier) {
+function directSourceContributions(rule, sourceIndex, amountSource, multiplier) {
   if (!rule || /post\(|fra_/.test(rule)) return [];
   const expr = rule.replace(/;.*$/, "");
   const normalized = expr.replace(/-/g, "+-");
@@ -328,24 +373,24 @@ function directArtContributions(rule, artIndex, multiplier) {
 
     const rangeMatch = term.match(/^sum\((\d+):(\d+)\)$/);
     if (rangeMatch) {
-      artCodesInRange(artIndex, rangeMatch[1], rangeMatch[2]).forEach((code) => {
+      sourceCodesInRange(sourceIndex, rangeMatch[1], rangeMatch[2]).forEach((code) => {
         contributions.set(code, (contributions.get(code) || 0) + sign);
       });
       return;
     }
 
-    if (/^\d{3}$/.test(term)) {
-      const code = term.padStart(3, "0");
-      if (artIndex.has(code)) contributions.set(code, (contributions.get(code) || 0) + sign);
+    if (/^\d+$/.test(term)) {
+      const code = normalizeSourceCode(amountSource, term);
+      if (sourceIndex.has(code)) contributions.set(code, (contributions.get(code) || 0) + sign);
     }
   });
 
   return [...contributions.entries()]
     .map(([code, factor]) => {
-      const item = artIndex.get(code);
+      const item = sourceIndex.get(code);
       const rawAmount = item.rawAmount * factor;
       return {
-        type: "kostraart",
+        type: amountSource,
         code,
         name: item.name,
         factor,
@@ -357,30 +402,52 @@ function directArtContributions(rule, artIndex, multiplier) {
     .sort((a, b) => Number(a.code) - Number(b.code));
 }
 
-function evalArtRule(rule, artIndex) {
+function evalSourceRule(rule, sourceIndex, amountSource) {
   if (!rule || /post\(|fra_/.test(rule)) return null;
   let expr = rule.replace(/;.*$/, "");
-  expr = expr.replace(/sum\((\d+):(\d+)\)/g, (_, from, to) => String(sumRange(artIndex, from, to)));
-  expr = expr.replace(/(?<![A-Za-z])\b(\d{3})\b/g, (_, code) => String(artValue(artIndex, code)));
+  const values = [];
+  const addValue = (value) => {
+    const token = `__value_${values.length}__`;
+    values.push(value);
+    return token;
+  };
+  expr = expr.replace(/sum\((\d+):(\d+)\)/g, (_, from, to) => addValue(sumRange(sourceIndex, from, to)));
+  expr = expr.replace(/(?<![A-Za-z_])\b(\d+)\b/g, (_, code) =>
+    addValue(sourceValue(sourceIndex, amountSource, code))
+  );
+  expr = expr.replace(/__value_(\d+)__/g, (_, index) => String(values[Number(index)]));
   if (!/^[0-9+\-*/ ().]+$/.test(expr)) return null;
   return Function(`return (${expr})`)();
 }
 
-function evalPostRule(rule, values) {
+function evalPostRule(rule, values, postOrder) {
   if (!rule || /fra_/.test(rule)) return null;
   let expr = rule.replace(/.*;/, "").trim();
   let missingPostReference = false;
-  expr = expr.replace(/post\((\d+):(\d+)\)/g, (_, from, to) => {
+  expr = expr.replace(/post\(([^():]+):([^()]+)\)/g, (_, from, to) => {
     let total = 0;
-    for (let post = Number(from); post <= Number(to); post += 1) {
-      const key = String(post);
-      if (!values.has(key)) missingPostReference = true;
-      total += values.get(key) || 0;
+    if (/^\d+$/.test(from) && /^\d+$/.test(to)) {
+      for (let post = Number(from); post <= Number(to); post += 1) {
+        const key = String(post);
+        if (!values.has(key)) missingPostReference = true;
+        total += values.get(key) || 0;
+      }
+    } else {
+      const fromIndex = postOrder.indexOf(from);
+      const toIndex = postOrder.indexOf(to);
+      if (fromIndex === -1 || toIndex === -1 || fromIndex > toIndex) {
+        missingPostReference = true;
+        return "0";
+      }
+      postOrder.slice(fromIndex, toIndex + 1).forEach((key) => {
+        if (!values.has(key)) missingPostReference = true;
+        total += values.get(key) || 0;
+      });
     }
     return String(total);
   });
-  expr = expr.replace(/post\((\d+)\)/g, (_, post) => {
-    const key = String(Number(post));
+  expr = expr.replace(/post\(([^()]+)\)/g, (_, post) => {
+    const key = /^\d+$/.test(post) ? String(Number(post)) : post;
     if (!values.has(key)) missingPostReference = true;
     return String(values.get(key) || 0);
   });
@@ -395,17 +462,17 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
     : "data-hop/oppstillinger/obligatoriske-tabeller-2026.json";
   const statements = readJson(statementDefinition);
   const tables = statements.tables.map((table) => {
-    const artIndex = makeArtIndex(normalized.rows, table.klasse);
+    const sourceIndex = makeSourceIndex(normalized.rows, table);
     const hasSourceRows = normalized.rows.some((row) => row.klasse === table.klasse);
     const values = new Map();
+    const postOrder = table.rows.map((row) => row.post);
     const rows = table.rows.map((row) => {
       const multiplier = rowDisplayMultiplier(table.id, row.post);
-      let rawAmount = hasSourceRows ? evalArtRule(row.rule, artIndex) : null;
-      const isArtRule = rawAmount != null;
-      if (rawAmount == null && hasSourceRows) rawAmount = evalPostRule(row.rule, values);
+      let rawAmount = hasSourceRows ? evalSourceRule(row.rule, sourceIndex, table.amountSource) : null;
+      const isSourceRule = rawAmount != null;
       const canCalculate = rawAmount != null && Number.isFinite(rawAmount);
       const displayAmount = canCalculate
-        ? isArtRule
+        ? isSourceRule
           ? rawAmount * multiplier
           : rawAmount
         : null;
@@ -418,9 +485,37 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
         valueType: row.valueType || "amount",
         canCalculate,
         amount: displayAmount,
-        children: isArtRule ? directArtContributions(row.rule, artIndex, multiplier) : []
+        isSourceRule,
+        children: isSourceRule
+          ? directSourceContributions(row.rule, sourceIndex, table.amountSource || "kostraart", multiplier)
+          : []
       };
     });
+
+    rows.forEach((row) => {
+      if (row.canCalculate) values.set(row.post, row.amount);
+    });
+
+    for (let i = 0; i < rows.length; i += 1) {
+      let changed = false;
+      rows.forEach((calculatedRow, index) => {
+        if (calculatedRow.canCalculate || !hasSourceRows) return;
+        const definitionRow = table.rows[index];
+        const rawAmount = evalPostRule(definitionRow.rule, values, postOrder);
+        const canCalculate = rawAmount != null && Number.isFinite(rawAmount);
+        if (!canCalculate) return;
+        calculatedRow.canCalculate = true;
+        calculatedRow.amount = rawAmount;
+        values.set(calculatedRow.post, rawAmount);
+        changed = true;
+      });
+      if (!changed) break;
+    }
+
+    rows.forEach((row) => {
+      delete row.isSourceRule;
+    });
+
     return {
       id: table.id,
       name: table.name,
