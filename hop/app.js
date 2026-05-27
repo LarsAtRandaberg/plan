@@ -20,7 +20,14 @@
 
   function formatAmount(amount) {
     if (amount === null || amount === undefined || isNaN(Number(amount))) return "Ikke beregnet";
-    return Math.round(Number(amount) / amountScale()).toLocaleString("nb-NO");
+    const scaled = Number(amount) / amountScale();
+    if (mobileQuery.matches) {
+      return scaled.toLocaleString("nb-NO", {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1
+      });
+    }
+    return Math.round(scaled).toLocaleString("nb-NO");
   }
 
   function formatFullAmount(amount) {
