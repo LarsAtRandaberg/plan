@@ -369,7 +369,7 @@ function sourceCodesInRange(sourceIndex, from, to) {
     .sort((a, b) => Number(a) - Number(b));
 }
 
-function directSourceContributions(rule, sourceIndex, amountSource, multiplier) {
+function directSourceContributions(rule, sourceIndex, amountSource, multiplier, parentPost) {
   if (!rule || /post\(|fra_/.test(rule)) return [];
   const expr = rule.replace(/;.*$/, "");
   const normalized = expr.replace(/-/g, "+-");
@@ -413,9 +413,10 @@ function directSourceContributions(rule, sourceIndex, amountSource, multiplier) 
         amount: rawAmount * multiplier
       };
       if (amountSource === "balansekapittel") {
+        const endringMultiplier = balanceChangeMultiplier(parentPost);
         contribution.balance = {
           ib: sourceMeasure(item, "ib") * factor * multiplier,
-          endring: sourceMeasure(item, "endring") * factor * multiplier,
+          endring: sourceMeasure(item, "endring") * factor * multiplier * endringMultiplier,
           ub: sourceMeasure(item, "ub") * factor * multiplier
         };
       }
@@ -488,7 +489,9 @@ function evalPostRule(rule, values, postOrder) {
         missingPostReference = true;
         return "0";
       }
+      const fromDepth = from.split(".").length;
       postOrder.slice(fromIndex, toIndex + 1).forEach((key) => {
+        if (key.split(".").length !== fromDepth) return;
         if (!values.has(key)) missingPostReference = true;
         total += values.get(key) || 0;
       });
@@ -503,6 +506,10 @@ function evalPostRule(rule, values, postOrder) {
   if (missingPostReference) return null;
   if (!/^[0-9+\-*/ ().]+$/.test(expr)) return null;
   return Function(`return (${expr})`)();
+}
+
+function balanceChangeMultiplier(post) {
+  return /^[CDEF](\.|$)/.test(String(post)) || String(post) === "SUM_EGENKAPITAL_GJELD" ? -1 : 1;
 }
 
 function calculateStatements(year, normalized, variant = "vedtatt") {
@@ -536,7 +543,7 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
         amount: displayAmount,
         isSourceRule,
         children: isSourceRule
-          ? directSourceContributions(row.rule, sourceIndex, table.amountSource || "kostraart", multiplier)
+          ? directSourceContributions(row.rule, sourceIndex, table.amountSource || "kostraart", multiplier, row.post)
           : []
       };
     });
@@ -573,9 +580,10 @@ function calculateStatements(year, normalized, variant = "vedtatt") {
       };
 
       rows.forEach((row) => {
+        const endringMultiplier = balanceChangeMultiplier(row.post);
         row.balance = {
           ib: balanceValues.ib.get(row.post) ?? null,
-          endring: balanceValues.endring.get(row.post) ?? null,
+          endring: balanceValues.endring.has(row.post) ? balanceValues.endring.get(row.post) * endringMultiplier : null,
           ub: balanceValues.ub.get(row.post) ?? null
         };
         row.amount = row.balance.ub;

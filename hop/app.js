@@ -6,8 +6,24 @@
   const summaryGrid = document.getElementById("summary-grid");
   const tabsEl = document.getElementById("statement-tabs");
   const panelsEl = document.getElementById("statement-panels");
+  const mobileQuery = window.matchMedia("(max-width: 700px)");
+  let loadedYear = null;
+  let lastIsMobile = mobileQuery.matches;
+
+  function amountScale() {
+    return mobileQuery.matches ? 1000000 : 1000;
+  }
+
+  function amountUnitLabel() {
+    return mobileQuery.matches ? "Tall i hele millioner" : "Tall i hele tusen";
+  }
 
   function formatAmount(amount) {
+    if (amount === null || amount === undefined || isNaN(Number(amount))) return "Ikke beregnet";
+    return Math.round(Number(amount) / amountScale()).toLocaleString("nb-NO");
+  }
+
+  function formatFullAmount(amount) {
     if (amount === null || amount === undefined || isNaN(Number(amount))) return "Ikke beregnet";
     return Math.round(Number(amount)).toLocaleString("nb-NO");
   }
@@ -73,7 +89,7 @@
       const label = document.createElement("span");
       label.textContent = item.label;
       const value = document.createElement("strong");
-      value.textContent = item.row ? formatAmount(item.row.amount) : "Ikke beregnet";
+      value.textContent = item.row ? formatFullAmount(item.row.amount) : "Ikke beregnet";
       card.appendChild(icon);
       card.appendChild(label);
       card.appendChild(value);
@@ -93,8 +109,9 @@
     const toggle = document.createElement("button");
     toggle.type = "button";
     toggle.className = hasChildren ? "row-toggle" : "row-toggle placeholder";
-    toggle.textContent = hasChildren ? "▸" : "";
+    toggle.textContent = hasChildren ? "+" : "";
     toggle.setAttribute("aria-label", "Vis detaljer for " + row.label);
+    toggle.setAttribute("aria-expanded", "false");
     labelWrap.appendChild(toggle);
 
     const text = document.createElement("span");
@@ -118,7 +135,8 @@
     if (hasChildren) {
       toggle.addEventListener("click", () => {
         const open = tr.classList.toggle("open");
-        toggle.textContent = open ? "▾" : "▸";
+        toggle.textContent = open ? "-" : "+";
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
         tr.parentElement.querySelectorAll(`tr[data-parent="${tableKey}-${row.post}"]`).forEach((childRow) => {
           childRow.classList.toggle("open", open);
         });
@@ -173,8 +191,9 @@
     const toggle = document.createElement("button");
     toggle.type = "button";
     toggle.className = hasChildren ? "row-toggle" : "row-toggle placeholder";
-    toggle.textContent = hasChildren ? "â–¸" : "";
+    toggle.textContent = hasChildren ? "+" : "";
     toggle.setAttribute("aria-label", "Vis detaljer for " + row.label);
+    toggle.setAttribute("aria-expanded", "false");
     labelWrap.appendChild(toggle);
 
     const text = document.createElement("span");
@@ -187,7 +206,8 @@
     if (hasChildren) {
       toggle.addEventListener("click", () => {
         const open = tr.classList.toggle("open");
-        toggle.textContent = open ? "â–¾" : "â–¸";
+        toggle.textContent = open ? "-" : "+";
+        toggle.setAttribute("aria-expanded", open ? "true" : "false");
         tr.parentElement.querySelectorAll(`tr[data-parent="${tableKey}-${row.post}"]`).forEach((childRow) => {
           childRow.classList.toggle("open", open);
         });
@@ -246,7 +266,7 @@
       const h2 = document.createElement("h2");
       h2.textContent = tableData.name;
       const ref = document.createElement("span");
-      ref.textContent = tableData.legalRef || "";
+      ref.textContent = [tableData.legalRef, amountUnitLabel()].filter(Boolean).join(" · ");
       header.appendChild(h2);
       header.appendChild(ref);
       panel.appendChild(header);
@@ -319,6 +339,7 @@
   }
 
   async function loadYear(year) {
+    loadedYear = year;
     const indexData = await fetch(DATA_INDEX_URL, { cache: "no-store" }).then((r) => r.json());
     const datasets = indexData.datasets.filter((dataset) => dataset.kind === "beregnet-obligatoriske-tabeller");
     const comparisonDatasets = indexData.datasets.filter(
@@ -349,5 +370,10 @@
     console.error(error);
     heroSubtitle.textContent = "Kunne ikke laste HØP-data.";
     panelsEl.innerHTML = "<div class=\"error\">HØP-data kunne ikke lastes.</div>";
+  });
+  mobileQuery.addEventListener("change", () => {
+    if (mobileQuery.matches === lastIsMobile || !loadedYear) return;
+    lastIsMobile = mobileQuery.matches;
+    loadYear(loadedYear);
   });
 })();
