@@ -88,6 +88,38 @@
     reportMeta.appendChild(wrap);
   }
 
+  function setActiveMenuLink(activeSectionId) {
+    reportMenu.querySelectorAll("a").forEach((link) => {
+      const isActive = link.getAttribute("href") === "#" + activeSectionId;
+      link.classList.toggle("active", isActive);
+      if (isActive) link.setAttribute("aria-current", "true");
+      else link.removeAttribute("aria-current");
+    });
+
+    const activeLink = reportMenu.querySelector("a[href='#" + activeSectionId + "']");
+    if (!activeLink) return;
+    try {
+      activeLink.scrollIntoView({ block: "nearest", inline: "nearest" });
+    } catch (e) {}
+  }
+
+  function setupScrollSpy(report) {
+    const sections = report.sections
+      .map((section) => document.getElementById(section.id))
+      .filter(Boolean);
+    if (!sections.length) return;
+
+    const observer = new IntersectionObserver((entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActiveMenuLink(visible[0].target.id);
+    }, { rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
+
+    sections.forEach((section) => observer.observe(section));
+    setActiveMenuLink(sections[0].id);
+  }
+
   function renderMenu(report) {
     reportMenu.innerHTML = "";
     report.sections.forEach((section) => {
@@ -96,21 +128,7 @@
       link.textContent = section.label;
       reportMenu.appendChild(link);
     });
-
-    const observer = new IntersectionObserver((entries) => {
-      const visible = entries
-        .filter((entry) => entry.isIntersecting)
-        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-      if (!visible.length) return;
-      reportMenu.querySelectorAll("a").forEach((link) => {
-        link.classList.toggle("active", link.getAttribute("href") === "#" + visible[0].target.id);
-      });
-    }, { rootMargin: "-120px 0px -72% 0px", threshold: 0.01 });
-
-    report.sections.forEach((section) => {
-      const el = document.getElementById(section.id);
-      if (el) observer.observe(el);
-    });
+    setupScrollSpy(report);
   }
 
   function renderHero(report) {

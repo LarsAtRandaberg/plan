@@ -190,6 +190,7 @@ body {
 .report-section {
   max-width: 1180px;
   margin: 0 auto 18px;
+  scroll-margin-top: 78px;
 }
 
 .report-hero {
