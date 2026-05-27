@@ -9,6 +9,7 @@
   const mobileQuery = window.matchMedia("(max-width: 700px)");
   let loadedYear = null;
   let lastIsMobile = mobileQuery.matches;
+  let activeTableId = null;
 
   function amountScale() {
     return mobileQuery.matches ? 1000000 : 1000;
@@ -241,29 +242,37 @@
     tabsEl.innerHTML = "";
     panelsEl.innerHTML = "";
 
-    data.tables.forEach((tableData, index) => {
+    const visibleTables = data.tables.filter((tableData) => {
+      const isBalanceTable = tableData.id === "balanseregnskap-5-8";
+      return !isBalanceTable || Boolean(findTable(comparisonData, tableData));
+    });
+    if (!visibleTables.some((tableData) => tableData.id === activeTableId)) {
+      activeTableId = visibleTables[0]?.id || null;
+    }
+
+    visibleTables.forEach((tableData, index) => {
       const comparisonTable = findTable(comparisonData, tableData);
       const comparisonRows = makeRowLookup(comparisonTable);
       const hasComparison = Boolean(comparisonTable);
       const isBalanceTable = tableData.id === "balanseregnskap-5-8";
-      if (isBalanceTable && !comparisonTable) return;
       const displayTable = isBalanceTable && comparisonTable ? comparisonTable : tableData;
+      const isActive = tableData.id === activeTableId || (!activeTableId && index === 0);
       const tableKey = safeId(tableData.id || tableData.name || index);
       const tabId = "tab-" + tableKey;
       const panelId = "panel-" + tableKey;
 
       const tab = document.createElement("button");
       tab.type = "button";
-      tab.className = "statement-tab" + (index === 0 ? " active" : "");
+      tab.className = "statement-tab" + (isActive ? " active" : "");
       tab.id = tabId;
       tab.setAttribute("role", "tab");
-      tab.setAttribute("aria-selected", index === 0 ? "true" : "false");
+      tab.setAttribute("aria-selected", isActive ? "true" : "false");
       tab.setAttribute("aria-controls", panelId);
       tab.textContent = tableData.name;
       tabsEl.appendChild(tab);
 
       const panel = document.createElement("section");
-      panel.className = "statement-panel" + (index === 0 ? " active" : "");
+      panel.className = "statement-panel" + (isActive ? " active" : "");
       panel.id = panelId;
       panel.setAttribute("role", "tabpanel");
       panel.setAttribute("aria-labelledby", tabId);
@@ -319,6 +328,7 @@
       panelsEl.appendChild(panel);
 
       tab.addEventListener("click", () => {
+        activeTableId = tableData.id;
         tabsEl.querySelectorAll(".statement-tab").forEach((btn) => {
           const active = btn === tab;
           btn.classList.toggle("active", active);
