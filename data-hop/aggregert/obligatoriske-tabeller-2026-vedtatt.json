@@ -847,6 +847,16 @@
           "children": []
         },
         {
+          "post": "24a",
+          "label": "Netto driftsresultat i prosent av driftsinntekter",
+          "rule": "post(24) / post(9)",
+          "rowType": "metric",
+          "valueType": "percent",
+          "canCalculate": true,
+          "amount": 0.018789027179147266,
+          "children": []
+        },
+        {
           "post": "25",
           "label": "Overforing til investering",
           "rule": "570",
@@ -864,16 +874,6 @@
               "amount": 14319000
             }
           ]
-        },
-        {
-          "post": "25a",
-          "label": "Netto driftsresultat i prosent av driftsinntekter",
-          "rule": "post(24) / post(9)",
-          "rowType": "metric",
-          "valueType": "percent",
-          "canCalculate": true,
-          "amount": 0.018789027179147266,
-          "children": []
         },
         {
           "post": "26",
