@@ -4,7 +4,8 @@ Denne mappen inneholder datakilder for handlings- og okonomiplaner.
 
 - `index.json` er en enkel oversikt over tilgjengelige datasett.
 - `vedtatt/` inneholder opprinnelig vedtatte budsjetter, frosset per ar.
-- `normalisert/` inneholder bearbeidede budsjettlinjer med klasse, KOSTRA-art og KOSTRA-funksjon splittet ut.
+- `regnskap/` inneholder faktiske regnskapstall fra Xledger Flex.
+- `normalisert/` inneholder bearbeidede budsjett- og regnskapslinjer med klasse, KOSTRA-art og KOSTRA-funksjon splittet ut.
 - `justeringer/` er reservert for budsjettjusteringer fra Dataverse.
 - `aggregert/` inneholder ferdig summerte visninger, blant annet obligatoriske tabeller.
 - `referanse/` inneholder eksterne kodeverk, forelopig KOSTRA-arter, KOSTRA arter/kapitler og KOSTRA-funksjoner fra SSB Klass.

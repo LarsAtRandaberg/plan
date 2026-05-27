@@ -1,0 +1,2486 @@
+{
+  "type": "hop-beregnet-obligatoriske-tabeller",
+  "version": 1,
+  "year": 2025,
+  "source": "data-hop/normalisert/regnskap-2025.json",
+  "statementDefinition": "data-hop/oppstillinger/obligatoriske-tabeller-2026.json",
+  "generated": "2026-05-27",
+  "tables": [
+    {
+      "id": "okonomisk-oversikt-drift-5-6",
+      "name": "Okonomisk oversikt drift",
+      "legalRef": "Budsjett- og regnskapsforskriften § 5-6",
+      "klasse": "1",
+      "klasseNavn": "Drift",
+      "rows": [
+        {
+          "post": "1",
+          "label": "Rammetilskudd",
+          "rule": "800",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 370438848,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "800",
+              "name": "Rammetilskudd",
+              "factor": 1,
+              "rawAmount": -370438848,
+              "amount": 370438848
+            }
+          ]
+        },
+        {
+          "post": "2",
+          "label": "Inntekts- og formuesskatt",
+          "rule": "870",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 543327858.11,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "870",
+              "name": "Skatt på inntekt og formue",
+              "factor": 1,
+              "rawAmount": -543327858.11,
+              "amount": 543327858.11
+            }
+          ]
+        },
+        {
+          "post": "3",
+          "label": "Eiendomsskatt",
+          "rule": "sum(871:873) + 876 + sum(878:879)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 20755301.66,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "876",
+              "name": "Eiendomsskatt kraftnett og næringseiendom m.m.",
+              "factor": 1,
+              "rawAmount": -9632920.33,
+              "amount": 9632920.33
+            },
+            {
+              "type": "kostraart",
+              "code": "878",
+              "name": "Eiendomsskatt boliger",
+              "factor": 1,
+              "rawAmount": -10960109.33,
+              "amount": 10960109.33
+            },
+            {
+              "type": "kostraart",
+              "code": "879",
+              "name": "Eiendomsskatt fritidsboliger",
+              "factor": 1,
+              "rawAmount": -162272,
+              "amount": 162272
+            }
+          ]
+        },
+        {
+          "post": "4",
+          "label": "Andre skatteinntekter",
+          "rule": "877",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "5",
+          "label": "Andre overforinger og tilskudd fra staten",
+          "rule": "810",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 100904142.72000001,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "810",
+              "name": "Andre statlige overføringer",
+              "factor": 1,
+              "rawAmount": -100904142.72000001,
+              "amount": 100904142.72000001
+            }
+          ]
+        },
+        {
+          "post": "6",
+          "label": "Overforinger og tilskudd fra andre",
+          "rule": "sum(700:780) + sum(830:850) + sum(880:890) + 920",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 150605376.59,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "700",
+              "name": "Refusjon fra staten",
+              "factor": 1,
+              "rawAmount": -64288647.39,
+              "amount": 64288647.39
+            },
+            {
+              "type": "kostraart",
+              "code": "710",
+              "name": "Sykelønnsrefusjon",
+              "factor": 1,
+              "rawAmount": -39647010,
+              "amount": 39647010
+            },
+            {
+              "type": "kostraart",
+              "code": "729",
+              "name": "Momskomp. inv. innt.",
+              "factor": 1,
+              "rawAmount": -23774602.710000012,
+              "amount": 23774602.710000012
+            },
+            {
+              "type": "kostraart",
+              "code": "730",
+              "name": "Refusjon fra fylkeskommuner",
+              "factor": 1,
+              "rawAmount": -2988223.42,
+              "amount": 2988223.42
+            },
+            {
+              "type": "kostraart",
+              "code": "750",
+              "name": "Refusjon fra kommuner",
+              "factor": 1,
+              "rawAmount": -10838839.95,
+              "amount": 10838839.95
+            },
+            {
+              "type": "kostraart",
+              "code": "770",
+              "name": "Refusjon fra andre",
+              "factor": 1,
+              "rawAmount": -6606746.04,
+              "amount": 6606746.04
+            },
+            {
+              "type": "kostraart",
+              "code": "850",
+              "name": "Overføring fra kommuner",
+              "factor": 1,
+              "rawAmount": -63776,
+              "amount": 63776
+            },
+            {
+              "type": "kostraart",
+              "code": "880",
+              "name": "Overføringer fra andre regnskapsenheter som inngår i KOSTRA konsern",
+              "factor": 1,
+              "rawAmount": -831600,
+              "amount": 831600
+            },
+            {
+              "type": "kostraart",
+              "code": "890",
+              "name": "Overføringer fra andre",
+              "factor": 1,
+              "rawAmount": -1516512.75,
+              "amount": 1516512.75
+            },
+            {
+              "type": "kostraart",
+              "code": "920",
+              "name": "Mottatte avdrag på utlån",
+              "factor": 1,
+              "rawAmount": -49418.33,
+              "amount": 49418.33
+            }
+          ]
+        },
+        {
+          "post": "7",
+          "label": "Brukerbetalinger",
+          "rule": "600",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 34925064.11,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "600",
+              "name": "Brukerbetalinger",
+              "factor": 1,
+              "rawAmount": -34925064.11,
+              "amount": 34925064.11
+            }
+          ]
+        },
+        {
+          "post": "8",
+          "label": "Salgs- og leieinntekter",
+          "rule": "sum(620:660)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 130386721.21999998,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "620",
+              "name": "Annet salg av varer og tjenester, gebyrer",
+              "factor": 1,
+              "rawAmount": -5649204.999999999,
+              "amount": 5649204.999999999
+            },
+            {
+              "type": "kostraart",
+              "code": "629",
+              "name": "Billettinntekter",
+              "factor": 1,
+              "rawAmount": -3416120.05,
+              "amount": 3416120.05
+            },
+            {
+              "type": "kostraart",
+              "code": "630",
+              "name": "Utleie av boliger og lokaler mv. og festeavgifter",
+              "factor": 1,
+              "rawAmount": -47921722.96,
+              "amount": 47921722.96
+            },
+            {
+              "type": "kostraart",
+              "code": "640",
+              "name": "Merverdiavgiftspliktige gebyrer",
+              "factor": 1,
+              "rawAmount": -71909272.75,
+              "amount": 71909272.75
+            },
+            {
+              "type": "kostraart",
+              "code": "650",
+              "name": "Annet merverdiavgiftspliktig salg av varer og tjenester",
+              "factor": 1,
+              "rawAmount": -1490400.4600000002,
+              "amount": 1490400.4600000002
+            }
+          ]
+        },
+        {
+          "post": "9",
+          "label": "Sum driftsinntekter",
+          "rule": "post(1:8)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 1351343312.4099998,
+          "children": []
+        },
+        {
+          "post": "10",
+          "label": "Lonnsutgifter",
+          "rule": "sum(010:089) + sum(160:165)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 672444948.41,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "010",
+              "name": "Fastlønn",
+              "factor": 1,
+              "rawAmount": 529425493.88000005,
+              "amount": 529425493.88000005
+            },
+            {
+              "type": "kostraart",
+              "code": "020",
+              "name": "Lønn til vikarer",
+              "factor": 1,
+              "rawAmount": 45218473.31999999,
+              "amount": 45218473.31999999
+            },
+            {
+              "type": "kostraart",
+              "code": "030",
+              "name": "Lønn til ekstrahjelp",
+              "factor": 1,
+              "rawAmount": 8889956.350000003,
+              "amount": 8889956.350000003
+            },
+            {
+              "type": "kostraart",
+              "code": "040",
+              "name": "Overtidslønn",
+              "factor": 1,
+              "rawAmount": 11618829.009999998,
+              "amount": 11618829.009999998
+            },
+            {
+              "type": "kostraart",
+              "code": "050",
+              "name": "Annen lønn og trekkpliktige godtgjørelser",
+              "factor": 1,
+              "rawAmount": 18315274.659999996,
+              "amount": 18315274.659999996
+            },
+            {
+              "type": "kostraart",
+              "code": "070",
+              "name": "Lønn til vedlikehold",
+              "factor": 1,
+              "rawAmount": 2409470.64,
+              "amount": 2409470.64
+            },
+            {
+              "type": "kostraart",
+              "code": "075",
+              "name": "Lønn renhold",
+              "factor": 1,
+              "rawAmount": 15809618.700000003,
+              "amount": 15809618.700000003
+            },
+            {
+              "type": "kostraart",
+              "code": "080",
+              "name": "Godtgjørelse folkevalgte",
+              "factor": 1,
+              "rawAmount": 4303676.3,
+              "amount": 4303676.3
+            },
+            {
+              "type": "kostraart",
+              "code": "089",
+              "name": "Trekkpliktig/oppgavepliktig, ikke arbeidsgiveravgiftspliktig lønn drift",
+              "factor": 1,
+              "rawAmount": 31661606.009999998,
+              "amount": 31661606.009999998
+            },
+            {
+              "type": "kostraart",
+              "code": "160",
+              "name": "Utgifter og godtgjørelser for reiser, diett, bil m.v. som er opplysningspliktige",
+              "factor": 1,
+              "rawAmount": 1134624.4500000002,
+              "amount": 1134624.4500000002
+            },
+            {
+              "type": "kostraart",
+              "code": "165",
+              "name": "Andre opplysningspliktige godtgjørelser",
+              "factor": 1,
+              "rawAmount": 3657925.09,
+              "amount": 3657925.09
+            }
+          ]
+        },
+        {
+          "post": "11",
+          "label": "Sosiale utgifter",
+          "rule": "sum(090:099)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 176116172.14,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "090",
+              "name": "Pensjonsinnskudd og trekkpl. fors.ordn.",
+              "factor": 1,
+              "rawAmount": 80380668.56000002,
+              "amount": 80380668.56000002
+            },
+            {
+              "type": "kostraart",
+              "code": "099",
+              "name": "Arbeidsgiveravgift",
+              "factor": 1,
+              "rawAmount": 95735503.57999997,
+              "amount": 95735503.57999997
+            }
+          ]
+        },
+        {
+          "post": "12",
+          "label": "Kjop av varer og tjenester",
+          "rule": "sum(100:285) - sum(160:165) + sum(300:380)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 318352651.26,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "100",
+              "name": "Kontormateriell",
+              "factor": 1,
+              "rawAmount": 1457517.3400000003,
+              "amount": 1457517.3400000003
+            },
+            {
+              "type": "kostraart",
+              "code": "105",
+              "name": "Undervisningsmateriell",
+              "factor": 1,
+              "rawAmount": 2921111.7100000014,
+              "amount": 2921111.7100000014
+            },
+            {
+              "type": "kostraart",
+              "code": "110",
+              "name": "Medisinsk forbruksmateriell",
+              "factor": 1,
+              "rawAmount": 1869433.05,
+              "amount": 1869433.05
+            },
+            {
+              "type": "kostraart",
+              "code": "114",
+              "name": "Medikamenter",
+              "factor": 1,
+              "rawAmount": 803999.3799999999,
+              "amount": 803999.3799999999
+            },
+            {
+              "type": "kostraart",
+              "code": "115",
+              "name": "Matvarer",
+              "factor": 1,
+              "rawAmount": 12047493.009999998,
+              "amount": 12047493.009999998
+            },
+            {
+              "type": "kostraart",
+              "code": "120",
+              "name": "Samlepost for annet forbruksmateriell, varer og tjenester",
+              "factor": 1,
+              "rawAmount": 10914850.939999998,
+              "amount": 10914850.939999998
+            },
+            {
+              "type": "kostraart",
+              "code": "130",
+              "name": "Post, banktjenester, telefon, internett, -bredbånd",
+              "factor": 1,
+              "rawAmount": 2079199.0100000002,
+              "amount": 2079199.0100000002
+            },
+            {
+              "type": "kostraart",
+              "code": "140",
+              "name": "Annonse, reklame, informasjon",
+              "factor": 1,
+              "rawAmount": 1709788.18,
+              "amount": 1709788.18
+            },
+            {
+              "type": "kostraart",
+              "code": "150",
+              "name": "Opplæring og kurs",
+              "factor": 1,
+              "rawAmount": 2072895.3499999996,
+              "amount": 2072895.3499999996
+            },
+            {
+              "type": "kostraart",
+              "code": "170",
+              "name": "Transport og reise",
+              "factor": 1,
+              "rawAmount": 9053563.889999999,
+              "amount": 9053563.889999999
+            },
+            {
+              "type": "kostraart",
+              "code": "180",
+              "name": "Strøm",
+              "factor": 1,
+              "rawAmount": 14227997.36,
+              "amount": 14227997.36
+            },
+            {
+              "type": "kostraart",
+              "code": "181",
+              "name": "Fjernvarme og fjernkjøling",
+              "factor": 1,
+              "rawAmount": 5381.11,
+              "amount": 5381.11
+            },
+            {
+              "type": "kostraart",
+              "code": "183",
+              "name": "Naturgass",
+              "factor": 1,
+              "rawAmount": 73926.72,
+              "amount": 73926.72
+            },
+            {
+              "type": "kostraart",
+              "code": "185",
+              "name": "Forsikringer, vakthold og sikring",
+              "factor": 1,
+              "rawAmount": 4924225.3100000005,
+              "amount": 4924225.3100000005
+            },
+            {
+              "type": "kostraart",
+              "code": "190",
+              "name": "Husleie, leie av lokaler og grunn",
+              "factor": 1,
+              "rawAmount": 28970167.34,
+              "amount": 28970167.34
+            },
+            {
+              "type": "kostraart",
+              "code": "195",
+              "name": "Avgifter, gebyrer, lisenser o.l.",
+              "factor": 1,
+              "rawAmount": 25669582.93000001,
+              "amount": 25669582.93000001
+            },
+            {
+              "type": "kostraart",
+              "code": "200",
+              "name": "Kjøp og finansiell leie av driftsmidler",
+              "factor": 1,
+              "rawAmount": 6635521.73,
+              "amount": 6635521.73
+            },
+            {
+              "type": "kostraart",
+              "code": "209",
+              "name": "Medisinsk utstyr",
+              "factor": 1,
+              "rawAmount": 129066.49,
+              "amount": 129066.49
+            },
+            {
+              "type": "kostraart",
+              "code": "210",
+              "name": "Kjøp og leie av transportmidler",
+              "factor": 1,
+              "rawAmount": 2022293.8000000003,
+              "amount": 2022293.8000000003
+            },
+            {
+              "type": "kostraart",
+              "code": "220",
+              "name": "Leie av driftsmidler",
+              "factor": 1,
+              "rawAmount": 199648.89,
+              "amount": 199648.89
+            },
+            {
+              "type": "kostraart",
+              "code": "230",
+              "name": "Vedlikehold, påkostninger nybygg og nyanlegg",
+              "factor": 1,
+              "rawAmount": 13972639.2,
+              "amount": 13972639.2
+            },
+            {
+              "type": "kostraart",
+              "code": "240",
+              "name": "Driftsavtaler, reparasjoner og vaktmestertjenester",
+              "factor": 1,
+              "rawAmount": 3806477.2899999996,
+              "amount": 3806477.2899999996
+            },
+            {
+              "type": "kostraart",
+              "code": "250",
+              "name": "Materialer til vedlikehold",
+              "factor": 1,
+              "rawAmount": 2086801.0900000003,
+              "amount": 2086801.0900000003
+            },
+            {
+              "type": "kostraart",
+              "code": "260",
+              "name": "Renhold og vaskeritjenester",
+              "factor": 1,
+              "rawAmount": 3019467.4399999995,
+              "amount": 3019467.4399999995
+            },
+            {
+              "type": "kostraart",
+              "code": "270",
+              "name": "Andre tjenester (Utgår f.o.m 2026)",
+              "factor": 1,
+              "rawAmount": 13428013.639999991,
+              "amount": 13428013.639999991
+            },
+            {
+              "type": "kostraart",
+              "code": "300",
+              "name": "Kjøp fra staten",
+              "factor": 1,
+              "rawAmount": 403531.64999999997,
+              "amount": 403531.64999999997
+            },
+            {
+              "type": "kostraart",
+              "code": "330",
+              "name": "Kjøp fra fylkeskommuner",
+              "factor": 1,
+              "rawAmount": 172942,
+              "amount": 172942
+            },
+            {
+              "type": "kostraart",
+              "code": "350",
+              "name": "Kjøp fra andre kommuner/komm. inst.",
+              "factor": 1,
+              "rawAmount": 34890975.010000005,
+              "amount": 34890975.010000005
+            },
+            {
+              "type": "kostraart",
+              "code": "370",
+              "name": "Kjøp fra andre",
+              "factor": 1,
+              "rawAmount": 76669858.2,
+              "amount": 76669858.2
+            },
+            {
+              "type": "kostraart",
+              "code": "380",
+              "name": "Kjøp fra andre regnskapsenheter som inngår i KOSTRA konsern",
+              "factor": 1,
+              "rawAmount": 42114282.2,
+              "amount": 42114282.2
+            }
+          ]
+        },
+        {
+          "post": "13",
+          "label": "Overforinger og tilskudd til andre",
+          "rule": "sum(400:480) + 520",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 102425101.34,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "400",
+              "name": "Overføring til staten",
+              "factor": 1,
+              "rawAmount": 11114926.83,
+              "amount": 11114926.83
+            },
+            {
+              "type": "kostraart",
+              "code": "429",
+              "name": "Merverdiavgift som gir rett til merverdiavgiftskompensasjon",
+              "factor": 1,
+              "rawAmount": 23774602.710000012,
+              "amount": 23774602.710000012
+            },
+            {
+              "type": "kostraart",
+              "code": "430",
+              "name": "Overføring til fylkeskommuner",
+              "factor": 1,
+              "rawAmount": 700000,
+              "amount": 700000
+            },
+            {
+              "type": "kostraart",
+              "code": "450",
+              "name": "Overføring til kommuner",
+              "factor": 1,
+              "rawAmount": 501833,
+              "amount": 501833
+            },
+            {
+              "type": "kostraart",
+              "code": "470",
+              "name": "Overføring til andre (private) ",
+              "factor": 1,
+              "rawAmount": 65445981.480000004,
+              "amount": 65445981.480000004
+            },
+            {
+              "type": "kostraart",
+              "code": "480",
+              "name": "Overføring til andre regnskapsenheter som inngår i KOSTRA konsern",
+              "factor": 1,
+              "rawAmount": 831600,
+              "amount": 831600
+            },
+            {
+              "type": "kostraart",
+              "code": "520",
+              "name": "Utlån",
+              "factor": 1,
+              "rawAmount": 56157.32,
+              "amount": 56157.32
+            }
+          ]
+        },
+        {
+          "post": "14",
+          "label": "Avskrivninger",
+          "rule": "590",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 77507573.49999997,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "590",
+              "name": "Avskrivninger",
+              "factor": 1,
+              "rawAmount": 77507573.49999997,
+              "amount": 77507573.49999997
+            }
+          ]
+        },
+        {
+          "post": "15",
+          "label": "Sum driftsutgifter",
+          "rule": "post(10:14)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 1346846446.6499999,
+          "children": []
+        },
+        {
+          "post": "16",
+          "label": "Brutto driftsresultat",
+          "rule": "post(9) - post(15)",
+          "rowType": "result",
+          "canCalculate": true,
+          "amount": 4496865.75999999,
+          "children": []
+        },
+        {
+          "post": "17",
+          "label": "Renteinntekter",
+          "rule": "sum(900:901)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 24752654.9,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "900",
+              "name": "Renteinntekter",
+              "factor": 1,
+              "rawAmount": -24752654.9,
+              "amount": 24752654.9
+            }
+          ]
+        },
+        {
+          "post": "18",
+          "label": "Utbytter",
+          "rule": "905",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 25613877,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "905",
+              "name": "Utbytte fra selskaper",
+              "factor": 1,
+              "rawAmount": -25613877,
+              "amount": 25613877
+            }
+          ]
+        },
+        {
+          "post": "19",
+          "label": "Gevinster og tap pa finansielle omlopsmidler",
+          "rule": "909 - 509",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": -5424669.84,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "509",
+              "name": "Tap på finansielle instrumenter",
+              "factor": -1,
+              "rawAmount": -26.709999999999997,
+              "amount": -26.709999999999997
+            },
+            {
+              "type": "kostraart",
+              "code": "909",
+              "name": "Gevinst på finansielle instrumenter",
+              "factor": 1,
+              "rawAmount": -5424643.13,
+              "amount": -5424643.13
+            }
+          ]
+        },
+        {
+          "post": "20",
+          "label": "Renteutgifter",
+          "rule": "sum(500:501)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 63017751.10999998,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "500",
+              "name": "Renteutgifter, provisjoner og andre finansutgifter",
+              "factor": 1,
+              "rawAmount": 63017751.10999998,
+              "amount": 63017751.10999998
+            }
+          ]
+        },
+        {
+          "post": "21",
+          "label": "Avdrag pa lan",
+          "rule": "sum(510:511)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 49024565,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "510",
+              "name": "Avdrag på lån",
+              "factor": 1,
+              "rawAmount": 49024565,
+              "amount": 49024565
+            }
+          ]
+        },
+        {
+          "post": "22",
+          "label": "Netto finansutgifter",
+          "rule": "post(20) + post(21) - post(17) - post(18) - post(19)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 67100454.04999998,
+          "children": []
+        },
+        {
+          "post": "23",
+          "label": "Motpost avskrivninger",
+          "rule": "990",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 77507574,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "990",
+              "name": "Motpost avskrivninger",
+              "factor": 1,
+              "rawAmount": -77507574,
+              "amount": 77507574
+            }
+          ]
+        },
+        {
+          "post": "24",
+          "label": "Netto driftsresultat",
+          "rule": "post(16) - post(22) + post(23)",
+          "rowType": "result",
+          "canCalculate": true,
+          "amount": 14903985.710000008,
+          "children": []
+        },
+        {
+          "post": "25",
+          "label": "Overforing til investering",
+          "rule": "570",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 5000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "570",
+              "name": "Overføring til investering (K)",
+              "factor": 1,
+              "rawAmount": 5000000,
+              "amount": 5000000
+            }
+          ]
+        },
+        {
+          "post": "26",
+          "label": "Avsetninger til bundne driftsfond",
+          "rule": "550",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 7161352.6,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "550",
+              "name": "Avsetninger til bundne fond",
+              "factor": 1,
+              "rawAmount": 7161352.6,
+              "amount": 7161352.6
+            }
+          ]
+        },
+        {
+          "post": "27",
+          "label": "Bruk av bundne driftsfond",
+          "rule": "950",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 3364074,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "950",
+              "name": "Bruk av bundne fond",
+              "factor": 1,
+              "rawAmount": -3364074,
+              "amount": 3364074
+            }
+          ]
+        },
+        {
+          "post": "28",
+          "label": "Avsetninger til disposisjonsfond",
+          "rule": "540",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 24784999.66,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "540",
+              "name": "Avsetninger til ubundne fond",
+              "factor": 1,
+              "rawAmount": 24784999.66,
+              "amount": 24784999.66
+            }
+          ]
+        },
+        {
+          "post": "29",
+          "label": "Bruk av disposisjonsfond",
+          "rule": "940",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 7829006.29,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "940",
+              "name": "Bruk av ubundne fond",
+              "factor": 1,
+              "rawAmount": -7829006.29,
+              "amount": 7829006.29
+            }
+          ]
+        },
+        {
+          "post": "30",
+          "label": "Dekning av tidligere ars merforbruk",
+          "rule": "530",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "31",
+          "label": "Sum disponeringer eller dekning av netto driftsresultat",
+          "rule": "post(25) + post(26) - post(27) + post(28) - post(29) + post(30)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 25753271.97,
+          "children": []
+        },
+        {
+          "post": "32",
+          "label": "Fremfort til inndekning i senere ar (merforbruk)",
+          "rule": "980; post(24) - post(31)",
+          "rowType": "result",
+          "canCalculate": true,
+          "amount": -10849286.25999999,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bevilgningsoversikt-drift-5-4-forste-ledd",
+      "name": "Bevilgningsoversikt drift",
+      "legalRef": "Budsjett- og regnskapsforskriften § 5-4 forste ledd",
+      "klasse": "1",
+      "klasseNavn": "Drift",
+      "rows": [
+        {
+          "post": "1",
+          "label": "Rammetilskudd",
+          "rule": "800",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 370438848,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "800",
+              "name": "Rammetilskudd",
+              "factor": 1,
+              "rawAmount": -370438848,
+              "amount": 370438848
+            }
+          ]
+        },
+        {
+          "post": "2",
+          "label": "Inntekts- og formuesskatt",
+          "rule": "870",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 543327858.11,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "870",
+              "name": "Skatt på inntekt og formue",
+              "factor": 1,
+              "rawAmount": -543327858.11,
+              "amount": 543327858.11
+            }
+          ]
+        },
+        {
+          "post": "3",
+          "label": "Eiendomsskatt",
+          "rule": "sum(871:873) + 876 + sum(878:879)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 20755301.66,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "876",
+              "name": "Eiendomsskatt kraftnett og næringseiendom m.m.",
+              "factor": 1,
+              "rawAmount": -9632920.33,
+              "amount": 9632920.33
+            },
+            {
+              "type": "kostraart",
+              "code": "878",
+              "name": "Eiendomsskatt boliger",
+              "factor": 1,
+              "rawAmount": -10960109.33,
+              "amount": 10960109.33
+            },
+            {
+              "type": "kostraart",
+              "code": "879",
+              "name": "Eiendomsskatt fritidsboliger",
+              "factor": 1,
+              "rawAmount": -162272,
+              "amount": 162272
+            }
+          ]
+        },
+        {
+          "post": "4",
+          "label": "Andre generelle driftsinntekter",
+          "rule": "810 + 877",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 100904142.72000001,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "810",
+              "name": "Andre statlige overføringer",
+              "factor": 1,
+              "rawAmount": -100904142.72000001,
+              "amount": 100904142.72000001
+            }
+          ]
+        },
+        {
+          "post": "5",
+          "label": "Sum generelle driftsinntekter",
+          "rule": "post(1:4)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 1035426150.49,
+          "children": []
+        },
+        {
+          "post": "6",
+          "label": "Sum bevilgninger drift, netto",
+          "rule": "fra_bevilgningsoversikt_5_4_andre_ledd",
+          "rowType": "line",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "7",
+          "label": "Avskrivninger",
+          "rule": "590",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 77507573.49999997,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "590",
+              "name": "Avskrivninger",
+              "factor": 1,
+              "rawAmount": 77507573.49999997,
+              "amount": 77507573.49999997
+            }
+          ]
+        },
+        {
+          "post": "8",
+          "label": "Sum netto driftsutgifter",
+          "rule": "post(6:7)",
+          "rowType": "sum",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "9",
+          "label": "Brutto driftsresultat",
+          "rule": "post(5) - post(8)",
+          "rowType": "result",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "10",
+          "label": "Renteinntekter",
+          "rule": "sum(900:901)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 24752654.9,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "900",
+              "name": "Renteinntekter",
+              "factor": 1,
+              "rawAmount": -24752654.9,
+              "amount": 24752654.9
+            }
+          ]
+        },
+        {
+          "post": "11",
+          "label": "Utbytter",
+          "rule": "905",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 25613877,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "905",
+              "name": "Utbytte fra selskaper",
+              "factor": 1,
+              "rawAmount": -25613877,
+              "amount": 25613877
+            }
+          ]
+        },
+        {
+          "post": "12",
+          "label": "Gevinster og tap pa finansielle omlopsmidler",
+          "rule": "909 - 509",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": -5424669.84,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "509",
+              "name": "Tap på finansielle instrumenter",
+              "factor": -1,
+              "rawAmount": -26.709999999999997,
+              "amount": -26.709999999999997
+            },
+            {
+              "type": "kostraart",
+              "code": "909",
+              "name": "Gevinst på finansielle instrumenter",
+              "factor": 1,
+              "rawAmount": -5424643.13,
+              "amount": -5424643.13
+            }
+          ]
+        },
+        {
+          "post": "13",
+          "label": "Renteutgifter",
+          "rule": "sum(500:501)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 63017751.10999998,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "500",
+              "name": "Renteutgifter, provisjoner og andre finansutgifter",
+              "factor": 1,
+              "rawAmount": 63017751.10999998,
+              "amount": 63017751.10999998
+            }
+          ]
+        },
+        {
+          "post": "14",
+          "label": "Avdrag pa lan",
+          "rule": "sum(510:511)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 49024565,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "510",
+              "name": "Avdrag på lån",
+              "factor": 1,
+              "rawAmount": 49024565,
+              "amount": 49024565
+            }
+          ]
+        },
+        {
+          "post": "15",
+          "label": "Netto finansutgifter",
+          "rule": "post(13) + post(14) - post(10) - post(11) - post(12)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 67100454.04999998,
+          "children": []
+        },
+        {
+          "post": "16",
+          "label": "Motpost avskrivninger",
+          "rule": "990",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 77507574,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "990",
+              "name": "Motpost avskrivninger",
+              "factor": 1,
+              "rawAmount": -77507574,
+              "amount": 77507574
+            }
+          ]
+        },
+        {
+          "post": "17",
+          "label": "Netto driftsresultat",
+          "rule": "post(9) - post(15) + post(16)",
+          "rowType": "result",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "18",
+          "label": "Overforing til investering",
+          "rule": "570",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 5000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "570",
+              "name": "Overføring til investering (K)",
+              "factor": 1,
+              "rawAmount": 5000000,
+              "amount": 5000000
+            }
+          ]
+        },
+        {
+          "post": "19",
+          "label": "Avsetninger til bundne driftsfond",
+          "rule": "550",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 7161352.6,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "550",
+              "name": "Avsetninger til bundne fond",
+              "factor": 1,
+              "rawAmount": 7161352.6,
+              "amount": 7161352.6
+            }
+          ]
+        },
+        {
+          "post": "20",
+          "label": "Bruk av bundne driftsfond",
+          "rule": "950",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 3364074,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "950",
+              "name": "Bruk av bundne fond",
+              "factor": 1,
+              "rawAmount": -3364074,
+              "amount": 3364074
+            }
+          ]
+        },
+        {
+          "post": "21",
+          "label": "Avsetninger til disposisjonsfond",
+          "rule": "540",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 24784999.66,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "540",
+              "name": "Avsetninger til ubundne fond",
+              "factor": 1,
+              "rawAmount": 24784999.66,
+              "amount": 24784999.66
+            }
+          ]
+        },
+        {
+          "post": "22",
+          "label": "Bruk av disposisjonsfond",
+          "rule": "940",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 7829006.29,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "940",
+              "name": "Bruk av ubundne fond",
+              "factor": 1,
+              "rawAmount": -7829006.29,
+              "amount": 7829006.29
+            }
+          ]
+        },
+        {
+          "post": "23",
+          "label": "Dekning av tidligere ars merforbruk",
+          "rule": "530",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "24",
+          "label": "Sum disponeringer eller dekning av netto driftsresultat",
+          "rule": "post(18) + post(19) - post(20) + post(21) - post(22) + post(23)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 25753271.97,
+          "children": []
+        },
+        {
+          "post": "25",
+          "label": "Fremfort til inndekning i senere ar (merforbruk)",
+          "rule": "980; post(17) - post(24)",
+          "rowType": "result",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "bevilgningsoversikt-investering-5-5-forste-ledd",
+      "name": "Bevilgningsoversikt investering",
+      "legalRef": "Budsjett- og regnskapsforskriften § 5-5 forste ledd",
+      "klasse": "0",
+      "klasseNavn": "Investering",
+      "rows": [
+        {
+          "post": "1",
+          "label": "Investeringer i varige driftsmidler",
+          "rule": "sum(010:099) + sum(100:285) + sum(300:380) + 429 + sum(500:501)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 106874668.85,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "010",
+              "name": "Fastlønn",
+              "factor": 1,
+              "rawAmount": 4941721.89,
+              "amount": 4941721.89
+            },
+            {
+              "type": "kostraart",
+              "code": "090",
+              "name": "Pensjonsinnskudd og trekkpliktige forsikringsordninger",
+              "factor": 1,
+              "rawAmount": 1049730.7299999997,
+              "amount": 1049730.7299999997
+            },
+            {
+              "type": "kostraart",
+              "code": "099",
+              "name": "Arbeidsgiveravgift",
+              "factor": 1,
+              "rawAmount": 749084.23,
+              "amount": 749084.23
+            },
+            {
+              "type": "kostraart",
+              "code": "100",
+              "name": "Kontormateriell",
+              "factor": 1,
+              "rawAmount": 3002,
+              "amount": 3002
+            },
+            {
+              "type": "kostraart",
+              "code": "115",
+              "name": "Matvarer",
+              "factor": 1,
+              "rawAmount": 6575.46,
+              "amount": 6575.46
+            },
+            {
+              "type": "kostraart",
+              "code": "120",
+              "name": "Samlepost for annet forbruksmateriell, varer og tjenester",
+              "factor": 1,
+              "rawAmount": 16626.39,
+              "amount": 16626.39
+            },
+            {
+              "type": "kostraart",
+              "code": "130",
+              "name": "Post, banktjenester, telefon, internett, -bredbånd",
+              "factor": 1,
+              "rawAmount": 475620,
+              "amount": 475620
+            },
+            {
+              "type": "kostraart",
+              "code": "140",
+              "name": "Annonse, reklame, informasjon",
+              "factor": 1,
+              "rawAmount": 27598.6,
+              "amount": 27598.6
+            },
+            {
+              "type": "kostraart",
+              "code": "150",
+              "name": "Opplæring og kurs",
+              "factor": 1,
+              "rawAmount": 13309.59,
+              "amount": 13309.59
+            },
+            {
+              "type": "kostraart",
+              "code": "190",
+              "name": "Leie av lokaler og grunn",
+              "factor": 1,
+              "rawAmount": 1200,
+              "amount": 1200
+            },
+            {
+              "type": "kostraart",
+              "code": "195",
+              "name": "Avgifter, gebyrer, lisenser o.l.",
+              "factor": 1,
+              "rawAmount": 1079156.0699999998,
+              "amount": 1079156.0699999998
+            },
+            {
+              "type": "kostraart",
+              "code": "200",
+              "name": "Kjøp og finansiell leasing av driftsmidler",
+              "factor": 1,
+              "rawAmount": 3444495.9200000004,
+              "amount": 3444495.9200000004
+            },
+            {
+              "type": "kostraart",
+              "code": "210",
+              "name": "Kjøp og leie av transportmidler",
+              "factor": 1,
+              "rawAmount": 349513,
+              "amount": 349513
+            },
+            {
+              "type": "kostraart",
+              "code": "230",
+              "name": "Vedlikehold, påkostning nybygg og nyanlegg",
+              "factor": 1,
+              "rawAmount": 69417083.77,
+              "amount": 69417083.77
+            },
+            {
+              "type": "kostraart",
+              "code": "250",
+              "name": "Materialer til vedlikehold, påkostning, nybygg, nyanlegg",
+              "factor": 1,
+              "rawAmount": 2700170.97,
+              "amount": 2700170.97
+            },
+            {
+              "type": "kostraart",
+              "code": "260",
+              "name": "Renholds- og vaskeritjenester",
+              "factor": 1,
+              "rawAmount": 9266,
+              "amount": 9266
+            },
+            {
+              "type": "kostraart",
+              "code": "270",
+              "name": "Andre tjenester",
+              "factor": 1,
+              "rawAmount": 2186098.83,
+              "amount": 2186098.83
+            },
+            {
+              "type": "kostraart",
+              "code": "280",
+              "name": "Grunnerverv",
+              "factor": 1,
+              "rawAmount": 800000,
+              "amount": 800000
+            },
+            {
+              "type": "kostraart",
+              "code": "285",
+              "name": "Kjøp av eksisterende bygninger og anlegg",
+              "factor": 1,
+              "rawAmount": 3791696.63,
+              "amount": 3791696.63
+            },
+            {
+              "type": "kostraart",
+              "code": "370",
+              "name": "Kjøp fra andre",
+              "factor": 1,
+              "rawAmount": 2031955,
+              "amount": 2031955
+            },
+            {
+              "type": "kostraart",
+              "code": "429",
+              "name": "Merverdiavgift som gir rett til merverdiavgiftskompensasjon",
+              "factor": 1,
+              "rawAmount": 13780763.229999999,
+              "amount": 13780763.229999999
+            },
+            {
+              "type": "kostraart",
+              "code": "500",
+              "name": "Renteutgifter, provisjoner og andre finansutgifter",
+              "factor": 1,
+              "rawAmount": 254.54,
+              "amount": 254.54
+            }
+          ]
+        },
+        {
+          "post": "2",
+          "label": "Tilskudd til andres investeringer",
+          "rule": "400 + sum(430:480)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 1523573.68,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "470",
+              "name": "Overføring til andre",
+              "factor": 1,
+              "rawAmount": 1523573.68,
+              "amount": 1523573.68
+            }
+          ]
+        },
+        {
+          "post": "3",
+          "label": "Investeringer i aksjer og andeler i selskaper",
+          "rule": "529",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 2465965,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "529",
+              "name": "Kjøp av aksjer og andeler",
+              "factor": 1,
+              "rawAmount": 2465965,
+              "amount": 2465965
+            }
+          ]
+        },
+        {
+          "post": "4",
+          "label": "Utlan av egne midler",
+          "rule": "sum(520:521)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 1095024.4,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "520",
+              "name": "Utlån",
+              "factor": 1,
+              "rawAmount": 1095024.4,
+              "amount": 1095024.4
+            }
+          ]
+        },
+        {
+          "post": "5",
+          "label": "Avdrag pa lan",
+          "rule": "sum(510:511)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "6",
+          "label": "Sum investeringsutgifter",
+          "rule": "post(1:5)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 111959231.93,
+          "children": []
+        },
+        {
+          "post": "7",
+          "label": "Kompensasjon for merverdiavgift",
+          "rule": "729",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 13780763.23,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "729",
+              "name": "Kompensasjon for merverdiavgift ",
+              "factor": 1,
+              "rawAmount": -13780763.23,
+              "amount": 13780763.23
+            }
+          ]
+        },
+        {
+          "post": "8",
+          "label": "Tilskudd fra andre",
+          "rule": "sum(700:780) - 729 + sum(810:850) + sum(880:890) + sum(900:901)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 6653320.09,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "700",
+              "name": "Refusjon fra staten",
+              "factor": 1,
+              "rawAmount": -1520290.69,
+              "amount": 1520290.69
+            },
+            {
+              "type": "kostraart",
+              "code": "730",
+              "name": "Refusjon fra fylkeskommuner",
+              "factor": 1,
+              "rawAmount": -3937669,
+              "amount": 3937669
+            },
+            {
+              "type": "kostraart",
+              "code": "770",
+              "name": "Refusjon fra andre ",
+              "factor": 1,
+              "rawAmount": -695360.4,
+              "amount": 695360.4
+            },
+            {
+              "type": "kostraart",
+              "code": "890",
+              "name": "Overføringer fra andre",
+              "factor": 1,
+              "rawAmount": -500000,
+              "amount": 500000
+            }
+          ]
+        },
+        {
+          "post": "9",
+          "label": "Salg av varige driftsmidler",
+          "rule": "620 + 650 + sum(660:670)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 110000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "660",
+              "name": "Salg av driftsmidler",
+              "factor": 1,
+              "rawAmount": -110000,
+              "amount": 110000
+            }
+          ]
+        },
+        {
+          "post": "10",
+          "label": "Salg av finansielle anleggsmidler",
+          "rule": "929",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "11",
+          "label": "Utdeling fra selskaper",
+          "rule": "905",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "12",
+          "label": "Mottatte avdrag pa utlan av egne midler",
+          "rule": "sum(920:921)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 4590600,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "920",
+              "name": "Mottatte avdrag på utlån",
+              "factor": 1,
+              "rawAmount": -4590600,
+              "amount": 4590600
+            }
+          ]
+        },
+        {
+          "post": "13",
+          "label": "Bruk av lan",
+          "rule": "sum(910:911)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 74635389.86,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "910",
+              "name": "Bruk av lån (I)",
+              "factor": 1,
+              "rawAmount": -74635389.86,
+              "amount": 74635389.86
+            }
+          ]
+        },
+        {
+          "post": "14",
+          "label": "Sum investeringsinntekter",
+          "rule": "post(7:13)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 99770073.18,
+          "children": []
+        },
+        {
+          "post": "15",
+          "label": "Videreutlan",
+          "rule": "sum(521:522)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 37819353.6,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "522",
+              "name": "Videreutlån",
+              "factor": 1,
+              "rawAmount": 37819353.6,
+              "amount": 37819353.6
+            }
+          ]
+        },
+        {
+          "post": "16",
+          "label": "Bruk av lan til videreutlan",
+          "rule": "sum(911:912)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 10000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "912",
+              "name": "Bruk av lån til videreutlån",
+              "factor": 1,
+              "rawAmount": -10000000,
+              "amount": 10000000
+            }
+          ]
+        },
+        {
+          "post": "17",
+          "label": "Avdrag pa lan til videreutlan",
+          "rule": "512",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 7000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "512",
+              "name": "Avdrag på lån til videreutlån",
+              "factor": 1,
+              "rawAmount": 7000000,
+              "amount": 7000000
+            }
+          ]
+        },
+        {
+          "post": "18",
+          "label": "Mottatte avdrag pa videreutlan",
+          "rule": "922",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 18267052.04,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "922",
+              "name": "Mottatte avdrag på videreutlån",
+              "factor": 1,
+              "rawAmount": -18267052.04,
+              "amount": 18267052.04
+            }
+          ]
+        },
+        {
+          "post": "19",
+          "label": "Netto utgifter videreutlan",
+          "rule": "post(15) - post(16) + post(17) - post(18)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 16552301.560000002,
+          "children": []
+        },
+        {
+          "post": "20",
+          "label": "Overforing fra drift",
+          "rule": "970",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 5000000,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "970",
+              "name": "Overføring fra drift",
+              "factor": 1,
+              "rawAmount": -5000000,
+              "amount": 5000000
+            }
+          ]
+        },
+        {
+          "post": "21",
+          "label": "Avsetninger til bundne investeringsfond",
+          "rule": "550",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 18267052.04,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "550",
+              "name": "Avsetninger til bundne fond",
+              "factor": 1,
+              "rawAmount": 18267052.04,
+              "amount": 18267052.04
+            }
+          ]
+        },
+        {
+          "post": "22",
+          "label": "Bruk av bundne investeringsfond",
+          "rule": "950",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 32355829.6,
+          "children": [
+            {
+              "type": "kostraart",
+              "code": "950",
+              "name": "Bruk av bundne fond",
+              "factor": 1,
+              "rawAmount": -32355829.6,
+              "amount": 32355829.6
+            }
+          ]
+        },
+        {
+          "post": "23",
+          "label": "Avsetninger til ubundet investeringsfond",
+          "rule": "540",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "24",
+          "label": "Bruk av ubundet investeringsfond",
+          "rule": "940",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "25",
+          "label": "Dekning av tidligere ars udekket belop",
+          "rule": "530",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "26",
+          "label": "Sum overforing fra drift og netto avsetninger",
+          "rule": "post(20) + post(21) - post(22) + post(23) - post(24) + post(25)",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": -9088777.560000002,
+          "children": []
+        },
+        {
+          "post": "27",
+          "label": "Fremfort til inndekning (udekket belop)",
+          "rule": "980; -post(6) + post(14) - post(19) - post(26)",
+          "rowType": "result",
+          "canCalculate": true,
+          "amount": -19652682.75,
+          "children": []
+        }
+      ]
+    },
+    {
+      "id": "balanseregnskap-5-8",
+      "name": "Balanseregnskap",
+      "legalRef": "Budsjett- og regnskapsforskriften § 5-8",
+      "klasse": "2",
+      "klasseNavn": "Balanse",
+      "rows": [
+        {
+          "post": "A",
+          "label": "Anleggsmidler",
+          "rule": "post(A.I:A.IV)",
+          "rowType": "sum",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "A.I",
+          "label": "Varige driftsmidler",
+          "rule": "24 + 27",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 51,
+          "children": []
+        },
+        {
+          "post": "A.I.1",
+          "label": "Faste eiendommer og anlegg",
+          "rule": "27",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 27,
+          "children": []
+        },
+        {
+          "post": "A.I.2",
+          "label": "Utstyr, maskiner og transportmidler",
+          "rule": "24",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 24,
+          "children": []
+        },
+        {
+          "post": "A.II",
+          "label": "Finansielle anleggsmidler",
+          "rule": "sum(21:23) + 29",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 29,
+          "children": []
+        },
+        {
+          "post": "A.II.1",
+          "label": "Aksjer og andeler",
+          "rule": "21",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 21,
+          "children": []
+        },
+        {
+          "post": "A.II.2",
+          "label": "Obligasjoner",
+          "rule": "29",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 29,
+          "children": []
+        },
+        {
+          "post": "A.II.3",
+          "label": "Utlan",
+          "rule": "sum(22:23)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "A.III",
+          "label": "Immaterielle eiendeler",
+          "rule": "28",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 28,
+          "children": []
+        },
+        {
+          "post": "A.IV",
+          "label": "Pensjonsmidler",
+          "rule": "20",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 20,
+          "children": []
+        },
+        {
+          "post": "B",
+          "label": "Omlopsmidler",
+          "rule": "post(B.I:B.III)",
+          "rowType": "sum",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "B.I",
+          "label": "Bankinnskudd",
+          "rule": "10",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 10,
+          "children": []
+        },
+        {
+          "post": "B.II",
+          "label": "Finansielle omlopsmidler",
+          "rule": "sum(11:12) + 15 + 18",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 33,
+          "children": []
+        },
+        {
+          "post": "B.II.1",
+          "label": "Aksjer og andeler",
+          "rule": "18",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 18,
+          "children": []
+        },
+        {
+          "post": "B.II.2",
+          "label": "Obligasjoner",
+          "rule": "11",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 11,
+          "children": []
+        },
+        {
+          "post": "B.II.3",
+          "label": "Sertifikater",
+          "rule": "12",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 12,
+          "children": []
+        },
+        {
+          "post": "B.II.4",
+          "label": "Derivater",
+          "rule": "15",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 15,
+          "children": []
+        },
+        {
+          "post": "B.III",
+          "label": "Kortsiktige fordringer",
+          "rule": "sum(13:14) + 16 + 19",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 35,
+          "children": []
+        },
+        {
+          "post": "B.III.1",
+          "label": "Kundefordringer",
+          "rule": "13 + 14",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 27,
+          "children": []
+        },
+        {
+          "post": "B.III.2",
+          "label": "Andre kortsiktige fordringer",
+          "rule": "16",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 16,
+          "children": []
+        },
+        {
+          "post": "B.III.3",
+          "label": "Premieavvik",
+          "rule": "19",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 19,
+          "children": []
+        },
+        {
+          "post": "SUM_EIENDELER",
+          "label": "Sum eiendeler",
+          "rule": "post(A) + post(B)",
+          "rowType": "result",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "C",
+          "label": "Egenkapital",
+          "rule": "post(C.I:C.III)",
+          "rowType": "sum",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "C.I",
+          "label": "Egenkapital drift",
+          "rule": "51 + 56 + 5900",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 6007,
+          "children": []
+        },
+        {
+          "post": "C.I.1",
+          "label": "Disposisjonsfond",
+          "rule": "56",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 56,
+          "children": []
+        },
+        {
+          "post": "C.I.2",
+          "label": "Bundne driftsfond",
+          "rule": "51",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 51,
+          "children": []
+        },
+        {
+          "post": "C.I.3",
+          "label": "Merforbruk i driftsregnskapet",
+          "rule": "5900",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 5900,
+          "children": []
+        },
+        {
+          "post": "C.II",
+          "label": "Egenkapital investering",
+          "rule": "53 + 55 + 5970",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 6078,
+          "children": []
+        },
+        {
+          "post": "C.II.1",
+          "label": "Ubundet investeringsfond",
+          "rule": "53",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 53,
+          "children": []
+        },
+        {
+          "post": "C.II.2",
+          "label": "Bundne investeringsfond",
+          "rule": "55",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 55,
+          "children": []
+        },
+        {
+          "post": "C.II.3",
+          "label": "Udekket belop i investeringsregnskapet",
+          "rule": "5970",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 5970,
+          "children": []
+        },
+        {
+          "post": "C.III",
+          "label": "Annen egenkapital",
+          "rule": "580 + 581 + 5990",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 5990,
+          "children": []
+        },
+        {
+          "post": "C.III.1",
+          "label": "Kapitalkonto",
+          "rule": "5990",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 5990,
+          "children": []
+        },
+        {
+          "post": "C.III.2",
+          "label": "Prinsippendringer som pavirker arbeidskapitalen drift",
+          "rule": "581",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "C.III.3",
+          "label": "Prinsippendringer som pavirker arbeidskapitalen investering",
+          "rule": "580",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "D",
+          "label": "Langsiktig gjeld",
+          "rule": "post(D.I:D.II)",
+          "rowType": "sum",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "D.I",
+          "label": "Lan",
+          "rule": "sum(411:412) + 431 + sum(451:454) + 47",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 47,
+          "children": []
+        },
+        {
+          "post": "D.I.1",
+          "label": "Gjeld til kredittinstitusjoner",
+          "rule": "sum(451:454) + 47",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 47,
+          "children": []
+        },
+        {
+          "post": "D.I.2",
+          "label": "Obligasjonslan",
+          "rule": "sum(411:412)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "D.I.3",
+          "label": "Sertifikatlan",
+          "rule": "431",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "D.II",
+          "label": "Pensjonsforpliktelse",
+          "rule": "40",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 40,
+          "children": []
+        },
+        {
+          "post": "E",
+          "label": "Kortsiktig gjeld",
+          "rule": "post(E.I)",
+          "rowType": "sum",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "E.I",
+          "label": "Kortsiktig gjeld",
+          "rule": "sum(31:32) + sum(34:35) + 39",
+          "rowType": "sum",
+          "canCalculate": true,
+          "amount": 39,
+          "children": []
+        },
+        {
+          "post": "E.I.1",
+          "label": "Leverandorgjeld",
+          "rule": "33 + 35",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 68,
+          "children": []
+        },
+        {
+          "post": "E.I.2",
+          "label": "Likviditetslan",
+          "rule": "31",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 31,
+          "children": []
+        },
+        {
+          "post": "E.I.3",
+          "label": "Derivater",
+          "rule": "34",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 34,
+          "children": []
+        },
+        {
+          "post": "E.I.4",
+          "label": "Annen kortsiktig gjeld",
+          "rule": "32",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 32,
+          "children": []
+        },
+        {
+          "post": "E.I.5",
+          "label": "Premieavvik",
+          "rule": "39",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 39,
+          "children": []
+        },
+        {
+          "post": "SUM_EGENKAPITAL_GJELD",
+          "label": "Sum egenkapital og gjeld",
+          "rule": "post(C) + post(D) + post(E)",
+          "rowType": "result",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "F",
+          "label": "Memoriakonti",
+          "rule": "post(F.I:F.III)",
+          "rowType": "sum",
+          "canCalculate": false,
+          "amount": null,
+          "children": []
+        },
+        {
+          "post": "F.I",
+          "label": "Ubrukte lanemidler",
+          "rule": "sum(9100:9110)",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 0,
+          "children": []
+        },
+        {
+          "post": "F.II",
+          "label": "Andre memoriakonti",
+          "rule": "9200",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 9200,
+          "children": []
+        },
+        {
+          "post": "F.III",
+          "label": "Motkonto for memoriakontiene",
+          "rule": "9999",
+          "rowType": "line",
+          "canCalculate": true,
+          "amount": 9999,
+          "children": []
+        }
+      ]
+    }
+  ]
+}

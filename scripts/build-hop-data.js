@@ -127,6 +127,95 @@ function normalizeBudget(year) {
   return result;
 }
 
+function normalizeAccounting(year) {
+  const source = `data-hop/regnskap/${year}.adv.json`;
+  const accounting = readJson(source);
+  const kostraArtsMap = codeNameMap("data-hop/referanse/kostra-regnskapsarter-2025.json");
+  const begrepMap = codeNameMap("data-hop/referanse/kostra-regnskapsbegrep-arter-kapitler-2025.json");
+  const funksjonMap = codeNameMap("data-hop/referanse/kostra-regnskapsfunksjoner-2025.json");
+
+  const groups = accounting.field_groups || [];
+  const groupIndex = Object.fromEntries(groups.map((group, index) => [group.title, index]));
+  const totalIndex = groupIndex.Totalt;
+
+  if (totalIndex == null) {
+    throw new Error(`Fant ikke Totalt-gruppe i ${source}`);
+  }
+
+  const periodGroups = groups
+    .map((group, index) => ({ ...group, index }))
+    .filter((group) => group.fields?.[0]?.title === "Beløp" && group.title !== "Totalt");
+
+  const rows = (accounting.rows || []).map((row, index) => {
+    const systemkonto = parseSystemkonto(row[groupIndex.Systemkonto], kostraArtsMap, begrepMap);
+    const ansvar = parseDim(row[groupIndex.Ansvar]);
+    const prosjekt = parseDim(row[groupIndex.Prosjekt]);
+    const funksjon = parseDim(row[groupIndex["Funksjon (K)"]]);
+    const fridimensjon = parseDim(row[groupIndex.Fridimensjon]);
+    const totalBelop = Number(row[totalIndex]?.[0] || 0);
+    const count = Number(row[groupIndex.Count]?.[0] || 0);
+    let previousCumulative = 0;
+    const perioder = periodGroups.map((group) => {
+      const cumulative = Number(row[group.index]?.[0] || 0);
+      const period = group.periods?.[group.periods.length - 1] || {};
+      const periodBelop = cumulative - previousCumulative;
+      previousCumulative = cumulative;
+      return {
+        title: group.title,
+        fiscalYear: period.fiscal_year || year,
+        period: period.period ?? null,
+        description: period.description || group.title,
+        hittilBelop: cumulative,
+        periodBelop
+      };
+    });
+
+    return {
+      row: index + 1,
+      aar: year,
+      belop: totalBelop,
+      totalBelop,
+      count,
+      ...systemkonto,
+      ansvarKode: ansvar.kode,
+      ansvarNavn: ansvar.navn,
+      ansvarTekst: ansvar.tekst,
+      prosjektKode: prosjekt.kode,
+      prosjektNavn: prosjekt.navn,
+      prosjektTekst: prosjekt.tekst,
+      funksjonKode: funksjon.kode,
+      funksjonNavn: funksjonMap.get(funksjon.kode) || funksjon.navn,
+      funksjonTekst: funksjon.tekst,
+      fridimensjonKode: fridimensjon.kode,
+      fridimensjonNavn: fridimensjon.navn,
+      fridimensjonTekst: fridimensjon.tekst,
+      perioder
+    };
+  });
+
+  const result = {
+    type: "hop-normalisert-regnskap",
+    version: 1,
+    year,
+    source,
+    generated: new Date().toISOString().slice(0, 10),
+    rowCount: rows.length,
+    perioder: periodGroups.map((group) => {
+      const period = group.periods?.[group.periods.length - 1] || {};
+      return {
+        title: group.title,
+        fiscalYear: period.fiscal_year || year,
+        period: period.period ?? null,
+        description: period.description || group.title
+      };
+    }),
+    rows
+  };
+
+  writeJson(`data-hop/normalisert/regnskap-${year}.json`, result);
+  return result;
+}
+
 function makeArtIndex(rows, klasse) {
   const map = new Map();
   rows
@@ -269,7 +358,7 @@ function evalPostRule(rule, values) {
   return Function(`return (${expr})`)();
 }
 
-function calculateStatements(year, normalized) {
+function calculateStatements(year, normalized, variant = "vedtatt") {
   const statements = readJson("data-hop/oppstillinger/obligatoriske-tabeller-2026.json");
   const tables = statements.tables.map((table) => {
     const artIndex = makeArtIndex(normalized.rows, table.klasse);
@@ -311,13 +400,13 @@ function calculateStatements(year, normalized) {
     type: "hop-beregnet-obligatoriske-tabeller",
     version: 1,
     year,
-    source: `data-hop/normalisert/vedtatt-${year}.json`,
+    source: `data-hop/normalisert/${variant}-${year}.json`,
     statementDefinition: "data-hop/oppstillinger/obligatoriske-tabeller-2026.json",
     generated: new Date().toISOString().slice(0, 10),
     tables
   };
 
-  writeJson(`data-hop/aggregert/obligatoriske-tabeller-${year}-vedtatt.json`, result);
+  writeJson(`data-hop/aggregert/obligatoriske-tabeller-${year}-${variant}.json`, result);
   return result;
 }
 
@@ -328,4 +417,13 @@ for (const year of targetYears) {
   const normalized = normalizeBudget(year);
   const calculated = calculateStatements(year, normalized);
   console.log(`${year}: normaliserte ${normalized.rowCount} linjer, beregnet ${calculated.tables.length} oppstillinger`);
+
+  const accountingSource = path.join(DATA_HOP, "regnskap", `${year}.adv.json`);
+  if (fs.existsSync(accountingSource)) {
+    const accounting = normalizeAccounting(year);
+    const calculatedAccounting = calculateStatements(year, accounting, "regnskap");
+    console.log(
+      `${year}: normaliserte ${accounting.rowCount} regnskapslinjer, beregnet ${calculatedAccounting.tables.length} regnskapsoppstillinger`
+    );
+  }
 }

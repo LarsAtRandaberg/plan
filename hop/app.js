@@ -26,6 +26,21 @@
     return table && table.rows ? table.rows.find((row) => row.post === post) : null;
   }
 
+  function findTable(data, table) {
+    if (!data || !Array.isArray(data.tables) || !table) return null;
+    return data.tables.find((candidate) => candidate.id === table.id) || null;
+  }
+
+  function makeRowLookup(table) {
+    const rows = table && Array.isArray(table.rows) ? table.rows : [];
+    return new Map(rows.map((row) => [String(row.post), row]));
+  }
+
+  function makeChildLookup(row) {
+    const children = row && Array.isArray(row.children) ? row.children : [];
+    return new Map(children.map((child) => [String(child.code), child]));
+  }
+
   function makeSummary(data) {
     const drift = data.tables.find((table) => table.id === "okonomisk-oversikt-drift-5-6");
     const investering = data.tables.find((table) => table.id === "bevilgningsoversikt-investering-5-5-forste-ledd");
@@ -54,7 +69,7 @@
     });
   }
 
-  function makeTableRow(row, tableKey) {
+  function makeTableRow(row, tableKey, comparisonRow, hasComparison) {
     const hasChildren = Array.isArray(row.children) && row.children.length > 0;
     const tr = document.createElement("tr");
     tr.className = "statement-row statement-row-" + (row.rowType || "line");
@@ -81,6 +96,13 @@
     amountTd.textContent = formatAmount(row.amount);
     tr.appendChild(amountTd);
 
+    if (hasComparison) {
+      const comparisonTd = document.createElement("td");
+      comparisonTd.className = "amount comparison-amount";
+      comparisonTd.textContent = comparisonRow ? formatAmount(comparisonRow.amount) : "";
+      tr.appendChild(comparisonTd);
+    }
+
     if (hasChildren) {
       toggle.addEventListener("click", () => {
         const open = tr.classList.toggle("open");
@@ -94,7 +116,7 @@
     return tr;
   }
 
-  function makeChildRow(parentPost, child, tableKey) {
+  function makeChildRow(parentPost, child, tableKey, comparisonChild, hasComparison) {
     const tr = document.createElement("tr");
     tr.className = "child-row";
     tr.dataset.parent = tableKey + "-" + parentPost;
@@ -108,14 +130,24 @@
     amountTd.className = "amount";
     amountTd.textContent = formatAmount(child.amount);
     tr.appendChild(amountTd);
+
+    if (hasComparison) {
+      const comparisonTd = document.createElement("td");
+      comparisonTd.className = "amount comparison-amount";
+      comparisonTd.textContent = comparisonChild ? formatAmount(comparisonChild.amount) : "";
+      tr.appendChild(comparisonTd);
+    }
     return tr;
   }
 
-  function renderStatements(data) {
+  function renderStatements(data, comparisonData) {
     tabsEl.innerHTML = "";
     panelsEl.innerHTML = "";
 
     data.tables.forEach((tableData, index) => {
+      const comparisonTable = findTable(comparisonData, tableData);
+      const comparisonRows = makeRowLookup(comparisonTable);
+      const hasComparison = Boolean(comparisonTable);
       const tableKey = safeId(tableData.id || tableData.name || index);
       const tabId = "tab-" + tableKey;
       const panelId = "panel-" + tableKey;
@@ -151,7 +183,9 @@
       const table = document.createElement("table");
       const thead = document.createElement("thead");
       const headRow = document.createElement("tr");
-      ["Post", "Beløp"].forEach((label) => {
+      const headers = ["Post", "Vedtatt budsjett"];
+      if (hasComparison) headers.push("Regnskap");
+      headers.forEach((label) => {
         const th = document.createElement("th");
         th.textContent = label;
         headRow.appendChild(th);
@@ -161,8 +195,14 @@
 
       const tbody = document.createElement("tbody");
       tableData.rows.forEach((row) => {
-        tbody.appendChild(makeTableRow(row, tableKey));
-        (row.children || []).forEach((child) => tbody.appendChild(makeChildRow(row.post, child, tableKey)));
+        const comparisonRow = comparisonRows.get(String(row.post));
+        const comparisonChildren = makeChildLookup(comparisonRow);
+        tbody.appendChild(makeTableRow(row, tableKey, comparisonRow, hasComparison));
+        (row.children || []).forEach((child) => {
+          tbody.appendChild(
+            makeChildRow(row.post, child, tableKey, comparisonChildren.get(String(child.code)), hasComparison)
+          );
+        });
       });
       table.appendChild(tbody);
       tableWrap.appendChild(table);
@@ -199,18 +239,27 @@
   async function loadYear(year) {
     const indexData = await fetch(DATA_INDEX_URL, { cache: "no-store" }).then((r) => r.json());
     const datasets = indexData.datasets.filter((dataset) => dataset.kind === "beregnet-obligatoriske-tabeller");
+    const comparisonDatasets = indexData.datasets.filter(
+      (dataset) => dataset.kind === "beregnet-obligatoriske-tabeller-regnskap"
+    );
     const active = datasets.find((dataset) => dataset.year === year) || datasets[datasets.length - 1];
+    const comparison = active ? comparisonDatasets.find((dataset) => dataset.year === active.year) : null;
     if (!active) throw new Error("Fant ingen beregnede HØP-tabeller.");
 
     setUrlYear(active.year);
     renderYearSwitcher(indexData, active.year);
-    heroSubtitle.textContent = "Opprinnelig vedtatt budsjett " + active.year;
+    heroSubtitle.textContent = comparison
+      ? "Opprinnelig vedtatt budsjett og regnskap " + active.year
+      : "Opprinnelig vedtatt budsjett " + active.year;
 
     tabsEl.innerHTML = "";
     panelsEl.innerHTML = "<div class=\"loading\">Laster tabeller...</div>";
     const data = await fetch("../" + active.path, { cache: "no-store" }).then((r) => r.json());
+    const comparisonData = comparison
+      ? await fetch("../" + comparison.path, { cache: "no-store" }).then((r) => r.json())
+      : null;
     makeSummary(data);
-    renderStatements(data);
+    renderStatements(data, comparisonData);
   }
 
   const requestedYear = Number(new URLSearchParams(location.search).get("year"));

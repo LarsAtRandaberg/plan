@@ -1,7 +1,7 @@
 {
   "type": "hop-data-index",
   "version": 1,
-  "updated": "2026-05-26",
+  "updated": "2026-05-27",
   "description": "Datakilder for handlings- og okonomiplan i planportalen.",
   "datasets": [
     {
@@ -47,12 +47,44 @@
       "rows": 2341
     },
     {
+      "id": "regnskap-2025",
+      "kind": "faktisk-regnskap",
+      "year": 2025,
+      "format": "xledger-adv-json",
+      "source": "Xledger Flex export",
+      "path": "data-hop/regnskap/2025.adv.json",
+      "status": "source",
+      "rows": 6398,
+      "amountField": "Totalt",
+      "periods": 13
+    },
+    {
+      "id": "normalisert-regnskap-2025",
+      "kind": "normalisert-regnskap",
+      "year": 2025,
+      "format": "hop-normalisert-json",
+      "source": "data-hop/regnskap/2025.adv.json",
+      "path": "data-hop/normalisert/regnskap-2025.json",
+      "status": "generated",
+      "rows": 6398,
+      "periods": 13
+    },
+    {
       "id": "obligatoriske-tabeller-2025-vedtatt",
       "kind": "beregnet-obligatoriske-tabeller",
       "year": 2025,
       "format": "hop-beregnet-json",
       "source": "data-hop/normalisert/vedtatt-2025.json",
       "path": "data-hop/aggregert/obligatoriske-tabeller-2025-vedtatt.json",
+      "status": "generated"
+    },
+    {
+      "id": "obligatoriske-tabeller-2025-regnskap",
+      "kind": "beregnet-obligatoriske-tabeller-regnskap",
+      "year": 2025,
+      "format": "hop-beregnet-json",
+      "source": "data-hop/normalisert/regnskap-2025.json",
+      "path": "data-hop/aggregert/obligatoriske-tabeller-2025-regnskap.json",
       "status": "generated"
     },
     {
