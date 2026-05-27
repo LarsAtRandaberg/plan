@@ -4,7 +4,7 @@
   "year": 2026,
   "source": "data-hop/normalisert/vedtatt-2026.json",
   "statementDefinition": "data-hop/oppstillinger/obligatoriske-tabeller-2026.json",
-  "generated": "2026-05-26",
+  "generated": "2026-05-27",
   "tables": [
     {
       "id": "okonomisk-oversikt-drift-5-6",
@@ -52,11 +52,19 @@
         {
           "post": "3",
           "label": "Eiendomsskatt",
-          "rule": "sum(871:873) + 876 + sum(878:879)",
+          "rule": "sum(871:873) + sum(875:879)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 9921000,
+          "amount": 20906000,
           "children": [
+            {
+              "type": "kostraart",
+              "code": "875",
+              "name": "Eiendomsskatt boliger og fritidseiendommer (Utgår f.o.m 2025)",
+              "factor": 1,
+              "rawAmount": -10985000,
+              "amount": 10985000
+            },
             {
               "type": "kostraart",
               "code": "876",
@@ -258,7 +266,7 @@
           "rule": "post(1:8)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 1311244045,
+          "amount": 1322229045,
           "children": []
         },
         {
@@ -702,7 +710,7 @@
           "rule": "post(9) - post(15)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 20942000,
+          "amount": 31927000,
           "children": []
         },
         {
@@ -744,7 +752,7 @@
         {
           "post": "19",
           "label": "Gevinster og tap pa finansielle omlopsmidler",
-          "rule": "909 - 509",
+          "rule": "909 + 509",
           "rowType": "line",
           "canCalculate": true,
           "amount": 0,
@@ -789,7 +797,7 @@
         {
           "post": "22",
           "label": "Netto finansutgifter",
-          "rule": "post(20) + post(21) - post(17) - post(18) - post(19)",
+          "rule": "post(20) + post(21) - post(17) - post(18) + post(19)",
           "rowType": "sum",
           "canCalculate": true,
           "amount": 63305000,
@@ -819,7 +827,7 @@
           "rule": "post(16) - post(22) + post(23)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 24637000,
+          "amount": 35622000,
           "children": []
         },
         {
@@ -927,7 +935,7 @@
           "rule": "980; post(24) - post(31)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": -10985000,
+          "amount": 0,
           "children": []
         }
       ]
@@ -978,11 +986,19 @@
         {
           "post": "3",
           "label": "Eiendomsskatt",
-          "rule": "sum(871:873) + 876 + sum(878:879)",
+          "rule": "sum(871:873) + sum(875:879)",
           "rowType": "line",
           "canCalculate": true,
-          "amount": 9921000,
+          "amount": 20906000,
           "children": [
+            {
+              "type": "kostraart",
+              "code": "875",
+              "name": "Eiendomsskatt boliger og fritidseiendommer (Utgår f.o.m 2025)",
+              "factor": 1,
+              "rawAmount": -10985000,
+              "amount": 10985000
+            },
             {
               "type": "kostraart",
               "code": "876",
@@ -1033,7 +1049,7 @@
           "rule": "post(1:4)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 1031469000,
+          "amount": 1042454000,
           "children": []
         },
         {
@@ -1120,7 +1136,7 @@
         {
           "post": "12",
           "label": "Gevinster og tap pa finansielle omlopsmidler",
-          "rule": "909 - 509",
+          "rule": "909 + 509",
           "rowType": "line",
           "canCalculate": true,
           "amount": 0,

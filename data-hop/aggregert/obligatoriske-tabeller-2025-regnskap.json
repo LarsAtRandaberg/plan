@@ -52,7 +52,7 @@
         {
           "post": "3",
           "label": "Eiendomsskatt",
-          "rule": "sum(871:873) + 876 + sum(878:879)",
+          "rule": "sum(871:873) + sum(875:879)",
           "rowType": "line",
           "canCalculate": true,
           "amount": 20755301.66,
@@ -792,18 +792,18 @@
         {
           "post": "19",
           "label": "Gevinster og tap pa finansielle omlopsmidler",
-          "rule": "909 - 509",
+          "rule": "909 + 509",
           "rowType": "line",
           "canCalculate": true,
-          "amount": -5424669.84,
+          "amount": -5424616.42,
           "children": [
             {
               "type": "kostraart",
               "code": "509",
               "name": "Tap på finansielle instrumenter",
-              "factor": -1,
-              "rawAmount": -26.709999999999997,
-              "amount": -26.709999999999997
+              "factor": 1,
+              "rawAmount": 26.709999999999997,
+              "amount": 26.709999999999997
             },
             {
               "type": "kostraart",
@@ -854,10 +854,10 @@
         {
           "post": "22",
           "label": "Netto finansutgifter",
-          "rule": "post(20) + post(21) - post(17) - post(18) - post(19)",
+          "rule": "post(20) + post(21) - post(17) - post(18) + post(19)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 67100454.04999998,
+          "amount": 56251167.78999998,
           "children": []
         },
         {
@@ -884,7 +884,7 @@
           "rule": "post(16) - post(22) + post(23)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": 14903985.710000008,
+          "amount": 25753271.970000014,
           "children": []
         },
         {
@@ -1001,7 +1001,7 @@
           "rule": "980; post(24) - post(31)",
           "rowType": "result",
           "canCalculate": true,
-          "amount": -10849286.25999999,
+          "amount": 1.4901161193847656e-8,
           "children": []
         }
       ]
@@ -1052,7 +1052,7 @@
         {
           "post": "3",
           "label": "Eiendomsskatt",
-          "rule": "sum(871:873) + 876 + sum(878:879)",
+          "rule": "sum(871:873) + sum(875:879)",
           "rowType": "line",
           "canCalculate": true,
           "amount": 20755301.66,
@@ -1194,18 +1194,18 @@
         {
           "post": "12",
           "label": "Gevinster og tap pa finansielle omlopsmidler",
-          "rule": "909 - 509",
+          "rule": "909 + 509",
           "rowType": "line",
           "canCalculate": true,
-          "amount": -5424669.84,
+          "amount": -5424616.42,
           "children": [
             {
               "type": "kostraart",
               "code": "509",
               "name": "Tap på finansielle instrumenter",
-              "factor": -1,
-              "rawAmount": -26.709999999999997,
-              "amount": -26.709999999999997
+              "factor": 1,
+              "rawAmount": 26.709999999999997,
+              "amount": 26.709999999999997
             },
             {
               "type": "kostraart",
@@ -1259,7 +1259,7 @@
           "rule": "post(13) + post(14) - post(10) - post(11) - post(12)",
           "rowType": "sum",
           "canCalculate": true,
-          "amount": 67100454.04999998,
+          "amount": 67100400.62999998,
           "children": []
         },
         {
