@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Tertialrapport - Randaberg kommune</title>
+  <link rel="icon" href="data:," />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="report-topbar">
+    <a class="brand-link" href="../">
+      <img src="../EPSHovedlogo_Våpen_PNG.png" alt="Randaberg kommune" class="brand-logo" />
+      <span class="brand-name">Randaberg<br />kommune</span>
+    </a>
+    <nav class="top-actions" aria-label="Hovednavigasjon">
+      <a href="../">Planportal</a>
+      <a href="../hop/">HØP</a>
+      <a href="../data-hop/rapporter/index.json">Data</a>
+    </nav>
+  </header>
+
+  <main class="locked-shell" id="locked-shell" hidden>
+    <section class="locked-panel">
+      <p class="eyebrow">Rapport under arbeid</p>
+      <h1 id="locked-title">Tertialrapport</h1>
+      <p>Rapporten ligger foreløpig bak en nøkkel.</p>
+      <form class="key-form" id="key-form">
+        <input id="key-input" type="text" autocomplete="off" placeholder="Lim inn nøkkel" aria-label="Nøkkel" />
+        <button type="submit">Åpne</button>
+      </form>
+    </section>
+  </main>
+
+  <div class="report-layout" id="report-layout" hidden>
+    <aside class="report-sidebar">
+      <div class="sidebar-heading">
+        <span id="sidebar-report-id">Rapport</span>
+        <strong id="sidebar-title">Tertialrapport</strong>
+      </div>
+      <nav id="report-menu" class="report-menu" aria-label="Rapportmeny"></nav>
+    </aside>
+
+    <main class="report-main">
+      <section id="sammendrag" class="report-hero">
+        <p class="eyebrow" id="report-kicker">Tertialrapport</p>
+        <h1 id="report-title">Laster rapport...</h1>
+        <p id="report-intro"></p>
+        <dl class="report-meta" id="report-meta"></dl>
+      </section>
+
+      <section id="nokkeltall" class="report-section">
+        <div class="section-heading">
+          <p class="eyebrow">Økonomi</p>
+          <h2>Nøkkeltall</h2>
+        </div>
+        <div class="summary-grid" id="summary-grid"></div>
+      </section>
+
+      <section id="drift" class="report-section">
+        <div class="section-heading">
+          <p class="eyebrow">Status</p>
+          <h2>Drift og investering</h2>
+        </div>
+        <div class="status-grid" id="status-grid"></div>
+      </section>
+
+      <section id="tabeller" class="report-section">
+        <div class="section-heading split">
+          <div>
+            <p class="eyebrow">Forskriftstabeller</p>
+            <h2>Obligatoriske tabeller</h2>
+          </div>
+          <div class="source-switcher" id="source-switcher" aria-label="Velg datakilde"></div>
+        </div>
+        <div class="statements-card">
+          <div class="statement-tabs" id="statement-tabs" role="tablist" aria-label="Tabeller"></div>
+          <div class="statement-panels" id="statement-panels"></div>
+        </div>
+      </section>
+
+      <section id="publisering" class="report-section">
+        <div class="section-heading">
+          <p class="eyebrow">Kontroll</p>
+          <h2>Publisering</h2>
+        </div>
+        <div class="publish-panel" id="publish-panel"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

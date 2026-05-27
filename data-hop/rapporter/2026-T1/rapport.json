@@ -1,0 +1,32 @@
+{
+  "type": "hop-tertialrapport",
+  "version": 1,
+  "id": "2026.T1",
+  "title": "Første tertialrapport 2026",
+  "subtitle": "Økonomisk status etter første tertial",
+  "year": 2026,
+  "period": {
+    "code": "T1",
+    "label": "Januar-april",
+    "monthTo": 4,
+    "reportingDate": "2026-04-30"
+  },
+  "status": "draft",
+  "requiresKey": true,
+  "plannedPublishDate": "2026-05-25",
+  "lockedAt": null,
+  "dataMode": "live-until-publish",
+  "intro": "Rapporten samler tertialstatus, økonomiske hovedtall og obligatoriske tabeller på én side. I kladd oppdateres tallgrunnlaget frem til rapporten låses og publiseres.",
+  "sections": [
+    { "id": "sammendrag", "label": "Sammendrag" },
+    { "id": "nokkeltall", "label": "Nøkkeltall" },
+    { "id": "drift", "label": "Drift" },
+    { "id": "tabeller", "label": "Obligatoriske tabeller" },
+    { "id": "publisering", "label": "Publisering" }
+  ],
+  "sources": {
+    "statementRegnskap": "data-hop/aggregert/obligatoriske-tabeller-2026-regnskap.json",
+    "statementVedtatt": "data-hop/aggregert/obligatoriske-tabeller-2026-vedtatt.json",
+    "normalisertRegnskap": "data-hop/normalisert/regnskap-2026.json"
+  }
+}

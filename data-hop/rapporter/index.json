@@ -1,0 +1,18 @@
+{
+  "type": "hop-report-index",
+  "version": 1,
+  "updated": "2026-05-27",
+  "reports": [
+    {
+      "id": "2026.T1",
+      "title": "Første tertialrapport 2026",
+      "year": 2026,
+      "period": "T1",
+      "status": "draft",
+      "requiresKey": true,
+      "accessKey": "t1-2026-7b7f0d8c9a5b",
+      "plannedPublishDate": "2026-05-25",
+      "path": "data-hop/rapporter/2026-T1/rapport.json"
+    }
+  ]
+}
