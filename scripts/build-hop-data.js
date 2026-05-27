@@ -76,11 +76,11 @@ function parseDim(cell) {
 }
 
 function parseSystemkonto(cell, kostraArtsMap, begrepMap) {
-  const text = Array.isArray(cell) ? String(cell[1] || "") : String(cell || "");
+  const text = Array.isArray(cell) ? String(cell[2] || cell[1] || "") : String(cell || "");
   const parsed = splitCodeAndName(text);
   const systemkonto = String(parsed.kode || "").padStart(4, "0");
   const klasse = systemkonto.slice(0, 1);
-  const kostraart = systemkonto.slice(1);
+  const kostraart = systemkonto.slice(1, 4);
   const kapittel = systemkonto.slice(1, 3);
 
   return {
@@ -166,8 +166,12 @@ function normalizeAccounting(year) {
 
   const groups = accounting.field_groups || [];
   const groupIndex = Object.fromEntries(groups.map((group, index) => [group.title, index]));
+  const systemkontoIndex = groupIndex.Systemkonto ?? groupIndex.Konto;
   const totalIndex = groupIndex.Totalt;
 
+  if (systemkontoIndex == null) {
+    throw new Error(`Fant ikke Systemkonto/Konto-gruppe i ${source}`);
+  }
   if (totalIndex == null) {
     throw new Error(`Fant ikke Totalt-gruppe i ${source}`);
   }
@@ -177,7 +181,7 @@ function normalizeAccounting(year) {
     .filter((group) => group.fields?.[0]?.title === "Beløp" && group.title !== "Totalt");
 
   const rows = (accounting.rows || []).map((row, index) => {
-    const systemkonto = parseSystemkonto(row[groupIndex.Systemkonto], kostraArtsMap, begrepMap);
+    const systemkonto = parseSystemkonto(row[systemkontoIndex], kostraArtsMap, begrepMap);
     const ansvar = parseDim(row[groupIndex.Ansvar]);
     const prosjekt = parseDim(row[groupIndex.Prosjekt]);
     const funksjon = parseDim(row[groupIndex["Funksjon (K)"]]);

@@ -244,7 +244,8 @@
 
     const visibleTables = data.tables.filter((tableData) => {
       const isBalanceTable = tableData.id === "balanseregnskap-5-8";
-      return !isBalanceTable || Boolean(findTable(comparisonData, tableData));
+      const comparisonTable = findTable(comparisonData, tableData);
+      return !isBalanceTable || Boolean(comparisonTable?.rows?.some((row) => row.canCalculate));
     });
     if (!visibleTables.some((tableData) => tableData.id === activeTableId)) {
       activeTableId = visibleTables[0]?.id || null;
