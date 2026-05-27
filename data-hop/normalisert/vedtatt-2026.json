@@ -3,6 +3,11 @@
   "version": 1,
   "year": 2026,
   "source": "data-hop/vedtatt/2026.adv.json",
+  "references": {
+    "kostraArter": "data-hop/referanse/kostra-regnskapsarter-2025.json",
+    "kostraBegrepArterKapitler": "data-hop/referanse/kostra-regnskapsbegrep-arter-kapitler-2025.json",
+    "kostraFunksjoner": "data-hop/referanse/kostra-regnskapsfunksjoner-2025.json"
+  },
   "generated": "2026-05-26",
   "rowCount": 2341,
   "rows": [

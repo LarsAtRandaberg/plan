@@ -29,6 +29,33 @@ function codeNameMap(relativePath) {
   return map;
 }
 
+function referencePathForYear(prefix, year) {
+  const referanseDir = path.join(DATA_HOP, "referanse");
+  const candidates = fs
+    .readdirSync(referanseDir)
+    .map((fileName) => {
+      const match = fileName.match(new RegExp(`^${prefix}-(\\d{4})\\.json$`));
+      return match ? { year: Number(match[1]), path: `data-hop/referanse/${fileName}` } : null;
+    })
+    .filter(Boolean)
+    .filter((candidate) => candidate.year <= year)
+    .sort((a, b) => b.year - a.year);
+
+  if (!candidates.length) {
+    throw new Error(`Fant ingen referansefil for ${prefix} for ${year} eller tidligere`);
+  }
+
+  return candidates[0].path;
+}
+
+function referencePathsForYear(year) {
+  return {
+    kostraArter: referencePathForYear("kostra-regnskapsarter", year),
+    kostraBegrepArterKapitler: referencePathForYear("kostra-regnskapsbegrep-arter-kapitler", year),
+    kostraFunksjoner: referencePathForYear("kostra-regnskapsfunksjoner", year)
+  };
+}
+
 function splitCodeAndName(value) {
   const text = String(value || "");
   const match = text.match(/^([^\s]+)\s+-\s*(.*)$/);
@@ -71,9 +98,10 @@ function parseSystemkonto(cell, kostraArtsMap, begrepMap) {
 
 function normalizeBudget(year) {
   const budget = readJson(`data-hop/vedtatt/${year}.adv.json`);
-  const kostraArtsMap = codeNameMap("data-hop/referanse/kostra-regnskapsarter-2025.json");
-  const begrepMap = codeNameMap("data-hop/referanse/kostra-regnskapsbegrep-arter-kapitler-2025.json");
-  const funksjonMap = codeNameMap("data-hop/referanse/kostra-regnskapsfunksjoner-2025.json");
+  const references = referencePathsForYear(year);
+  const kostraArtsMap = codeNameMap(references.kostraArter);
+  const begrepMap = codeNameMap(references.kostraBegrepArterKapitler);
+  const funksjonMap = codeNameMap(references.kostraFunksjoner);
 
   const groups = budget.field_groups || [];
   const groupIndex = Object.fromEntries(groups.map((group, index) => [group.title, index]));
@@ -118,6 +146,7 @@ function normalizeBudget(year) {
     version: 1,
     year,
     source: `data-hop/vedtatt/${year}.adv.json`,
+    references,
     generated: new Date().toISOString().slice(0, 10),
     rowCount: rows.length,
     rows
@@ -130,9 +159,10 @@ function normalizeBudget(year) {
 function normalizeAccounting(year) {
   const source = `data-hop/regnskap/${year}.adv.json`;
   const accounting = readJson(source);
-  const kostraArtsMap = codeNameMap("data-hop/referanse/kostra-regnskapsarter-2025.json");
-  const begrepMap = codeNameMap("data-hop/referanse/kostra-regnskapsbegrep-arter-kapitler-2025.json");
-  const funksjonMap = codeNameMap("data-hop/referanse/kostra-regnskapsfunksjoner-2025.json");
+  const references = referencePathsForYear(year);
+  const kostraArtsMap = codeNameMap(references.kostraArter);
+  const begrepMap = codeNameMap(references.kostraBegrepArterKapitler);
+  const funksjonMap = codeNameMap(references.kostraFunksjoner);
 
   const groups = accounting.field_groups || [];
   const groupIndex = Object.fromEntries(groups.map((group, index) => [group.title, index]));
@@ -198,6 +228,7 @@ function normalizeAccounting(year) {
     version: 1,
     year,
     source,
+    references,
     generated: new Date().toISOString().slice(0, 10),
     rowCount: rows.length,
     perioder: periodGroups.map((group) => {
