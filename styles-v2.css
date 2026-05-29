@@ -141,13 +141,21 @@ body.page-v2[data-mode="rapport"] {
   min-height: calc(100vh - 96px);
 }
 
+.page-v2 .content {
+  order: 2;
+  flex: 1;
+  min-width: 0;
+}
+
 .page-v2 .sidebar {
+  order: 1;
   top: 76px;
   height: calc(100vh - 76px);
   transition: left 0.25s, right 0.25s, box-shadow 0.25s;
 }
 
 .page-v2 .report-sidebar {
+  order: 3;
   width: 290px;
   border-left: 1px solid var(--line);
   padding: 16px 14px;
