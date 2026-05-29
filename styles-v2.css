@@ -721,16 +721,22 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-node {
+  display: block;
+  width: 100%;
   padding: 10px 12px;
   font-size: 13px;
   line-height: 1.35;
   font-weight: 600;
   color: var(--ink-900);
   max-width: 170px;
+  text-align: left;
 }
 
 .page-v2 .plan-map-list-node {
   position: relative;
+  background: rgba(255,255,255,0.46);
+  border-color: rgba(0, 82, 40, 0.1);
+  box-shadow: none;
 }
 
 .page-v2 .plan-map-list-node::before {
@@ -738,9 +744,9 @@ body.page-v2[data-mode="rapport"] #menu {
   position: absolute;
   top: 50%;
   left: -14px;
-  width: 10px;
+  width: 8px;
   height: 1px;
-  background: rgba(63, 125, 102, 0.46);
+  background: rgba(63, 125, 102, 0.32);
   border-radius: 999px;
 }
 
@@ -756,9 +762,9 @@ body.page-v2[data-mode="rapport"] #menu {
   position: absolute;
   top: 50%;
   right: -14px;
-  width: 10px;
+  width: 8px;
   height: 1px;
-  background: rgba(63, 125, 102, 0.46);
+  background: rgba(63, 125, 102, 0.32);
   border-radius: 999px;
 }
 
@@ -777,7 +783,7 @@ body.page-v2[data-mode="rapport"] #menu {
   top: 14px;
   bottom: 14px;
   width: 1px;
-  background: linear-gradient(180deg, rgba(63, 125, 102, 0.18), rgba(63, 125, 102, 0.42), rgba(63, 125, 102, 0.18));
+  background: linear-gradient(180deg, rgba(63, 125, 102, 0.12), rgba(63, 125, 102, 0.28), rgba(63, 125, 102, 0.12));
   border-radius: 999px;
 }
 
@@ -796,7 +802,7 @@ body.page-v2[data-mode="rapport"] #menu {
   top: 14px;
   bottom: 14px;
   width: 1px;
-  background: linear-gradient(180deg, rgba(63, 125, 102, 0.16), rgba(63, 125, 102, 0.34), rgba(63, 125, 102, 0.16));
+  background: linear-gradient(180deg, rgba(63, 125, 102, 0.1), rgba(63, 125, 102, 0.22), rgba(63, 125, 102, 0.1));
   border-radius: 999px;
 }
 
@@ -812,6 +818,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-hop-card.is-active,
 .page-v2 .plan-map-node.plan-map-list-node.plan-map-node-selected {
+  background: rgba(255,255,255,0.94);
   border-color: rgba(0, 82, 40, 0.18);
   box-shadow: 0 14px 30px rgba(12, 40, 21, 0.07);
 }
@@ -847,7 +854,7 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-line,
 .page-v2 .plan-map-joint {
   position: absolute;
-  background: rgba(63, 125, 102, 0.42);
+  background: rgba(63, 125, 102, 0.26);
   border-radius: 999px;
 }
 
