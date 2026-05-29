@@ -156,7 +156,14 @@ body.page-v2[data-mode="rapport"] {
   transition: left 0.25s, right 0.25s, box-shadow 0.25s;
   overflow-y: auto;
   overflow-x: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   background: #f5f7f2;
+}
+
+.page-v2 .sidebar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .page-v2 .sidebar[data-depth="1"] {
