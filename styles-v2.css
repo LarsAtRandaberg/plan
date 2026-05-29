@@ -151,8 +151,8 @@ body.page-v2[data-mode="rapport"] {
   order: 1;
   top: 76px;
   height: calc(100vh - 76px);
-  width: 28vw;
-  min-width: 340px;
+  width: 24vw;
+  min-width: 300px;
   transition: left 0.25s, right 0.25s, box-shadow 0.25s;
   overflow-y: auto;
   overflow-x: hidden;
@@ -167,18 +167,18 @@ body.page-v2[data-mode="rapport"] {
 }
 
 .page-v2 .sidebar[data-depth="1"] {
-  width: 28vw;
-  min-width: 340px;
+  width: 24vw;
+  min-width: 300px;
 }
 
 .page-v2 .sidebar[data-depth="2"] {
-  width: 46vw;
-  min-width: 620px;
+  width: 39vw;
+  min-width: 520px;
 }
 
 .page-v2 .sidebar[data-depth="3"] {
-  width: 62vw;
-  min-width: 780px;
+  width: 54vw;
+  min-width: 720px;
 }
 
 .page-v2 .desktop-mode-rail {
@@ -292,15 +292,17 @@ body.page-v2[data-mode="rapport"] #menu {
   border-radius: 0;
   border: 0;
   box-shadow: none;
+  padding: 0;
+  background: transparent;
 }
 
 .page-v2 .plan-map-prototype {
-  margin-bottom: 22px;
-  padding: 22px;
-  border-radius: 20px;
-  border: 0.5px solid var(--line);
-  background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(246,248,244,0.92));
-  box-shadow: 0 14px 34px rgba(23, 52, 4, 0.06);
+  margin-bottom: 0;
+  padding: 0;
+  border-radius: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .page-v2 .plan-map-header {
@@ -340,12 +342,12 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-workspace {
   position: relative;
   display: grid;
-  grid-template-columns: 1.05fr 1.1fr 0.95fr;
+  grid-template-columns: 1fr 1fr 1fr;
   gap: 0;
-  border-radius: 18px;
+  border-radius: 0;
   overflow: hidden;
   min-height: 560px;
-  border: 1px solid rgba(59,109,17,0.12);
+  border: 0;
 }
 
 .page-v2 .plan-map-workspace[data-depth="1"] {
@@ -353,16 +355,16 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-workspace[data-depth="2"] {
-  grid-template-columns: 1fr 1.12fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .page-v2 .plan-map-workspace[data-depth="3"] {
-  grid-template-columns: 1.05fr 1.1fr 0.95fr;
+  grid-template-columns: 1fr 1fr 1fr;
 }
 
 .page-v2 .plan-map-column {
   position: relative;
-  padding: 22px 20px;
+  padding: 18px 16px;
   min-height: 560px;
   z-index: 2;
 }
@@ -393,7 +395,7 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-panel-title {
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1.15;
   color: var(--green-900);
   margin: 0 0 16px;
