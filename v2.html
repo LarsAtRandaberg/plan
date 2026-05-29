@@ -82,6 +82,34 @@
     <div id="menu"></div>
   </aside>
 
+  <aside class="report-sidebar" id="reportSidebar" aria-label="Rapportmeny">
+    <div class="sidebar-v2-header">
+      <div>
+        <div class="sidebar-v2-kicker">Rapport</div>
+        <strong>Rapportmeny</strong>
+      </div>
+      <button type="button" class="sidebar-close-btn" id="reportSidebarCloseBtn" aria-label="Lukk rapportmeny">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="report-sidebar-inner">
+      <div class="report-sidebar-group">
+        <div class="report-sidebar-label">Rapporter</div>
+        <a href="#rapport-sammendrag" class="report-nav-link is-active">1. tertialrapport 2026</a>
+        <a href="#rapport-prioriteringer" class="report-nav-link">2. tertialrapport 2026</a>
+        <a href="#rapport-arsrapport" class="report-nav-link">Årsrapport 2026</a>
+      </div>
+      <div class="report-sidebar-group">
+        <div class="report-sidebar-label">Denne rapporten</div>
+        <a href="#rapport-sammendrag" class="report-nav-link">Sammendrag</a>
+        <a href="#rapport-okonomi" class="report-nav-link">Økonomi</a>
+        <a href="#rapport-prioriteringer" class="report-nav-link">Prioriterte forhold</a>
+        <a href="#rapport-risiko" class="report-nav-link">Risiko og avvik</a>
+        <a href="#rapport-unntak" class="report-nav-link">Mål med særskilt oppfølging</a>
+      </div>
+    </div>
+  </aside>
+
   <main class="content">
     <div class="mode-intro-card" id="mode-intro-card">
       <div class="mode-intro-kicker">Plan</div>
@@ -89,6 +117,85 @@
       <p>I planmodus er planhierarkiet primærnavigasjon. På mobil blir toppbaren komprimert til en trygg, synlig stripe når du scroller ned.</p>
     </div>
     <div id="innhold"></div>
+    <div class="report-content" id="reportContent" hidden>
+      <section class="report-section" id="rapport-sammendrag">
+        <div class="report-section-kicker">1. tertial 2026</div>
+        <h2>Styringsbilde for valgt år</h2>
+        <p>Rapportmodus samler økonomi, vesentlige avvik og prioriterte forhold. Den skal ikke skape forventning om full tertialrapportering på hvert mål.</p>
+        <div class="report-kpi-grid">
+          <article class="report-kpi-card">
+            <span class="report-kpi-label">Økonomi</span>
+            <strong>I rute</strong>
+            <p>Netto driftsnivå følger periodisert budsjett.</p>
+          </article>
+          <article class="report-kpi-card">
+            <span class="report-kpi-label">Avvik</span>
+            <strong>2 forhold</strong>
+            <p>To områder trenger tydelig ledelsesoppfølging.</p>
+          </article>
+          <article class="report-kpi-card">
+            <span class="report-kpi-label">Risiko</span>
+            <strong>Moderat</strong>
+            <p>Framdrift er god, men enkelte tiltak er sårbare.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="report-section" id="rapport-okonomi">
+        <div class="report-section-kicker">Økonomi</div>
+        <h2>Økonomiske nøkkeltall og kommentarer</h2>
+        <div class="report-split-card">
+          <div>
+            <h3>Hva rapporteres i tertial</h3>
+            <p>Her skal økonomi stå tydeligst. Brukeren skal raskt kunne se avvik, prognose og hvilke forhold som krever styringsgrep.</p>
+          </div>
+          <ul class="report-bullet-list">
+            <li>Periodisert budsjett mot regnskap</li>
+            <li>Prognose for året</li>
+            <li>Vesentlige forklaringer</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="report-section" id="rapport-prioriteringer">
+        <div class="report-section-kicker">Prioriterte forhold</div>
+        <h2>Det viktigste å følge opp nå</h2>
+        <div class="report-status-list">
+          <article class="report-status-item">
+            <span class="report-status-dot"></span>
+            <div>
+              <strong>Bemanning og kapasitet</strong>
+              <p>Utvalgte tiltak følges særskilt i tertial fordi de påvirker tjenestekvalitet og økonomi.</p>
+            </div>
+          </article>
+          <article class="report-status-item">
+            <span class="report-status-dot is-soft"></span>
+            <div>
+              <strong>Investeringsframdrift</strong>
+              <p>Framdrift rapporteres når forsinkelser eller kostnadsrisiko har styringsrelevans.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="report-section" id="rapport-risiko">
+        <div class="report-section-kicker">Avvik og risiko</div>
+        <h2>Risikoer som bør løftes fram</h2>
+        <p>Dette feltet er for forhold med konsekvens, ikke for å fylle ut rapportering på alle mål. Det gir en mer ærlig og mer brukbar tertialrapport.</p>
+      </section>
+
+      <section class="report-section" id="rapport-unntak">
+        <div class="report-section-kicker">Unntak</div>
+        <h2>Mål med særskilt oppfølging</h2>
+        <p>Enkelte mål kan vises i tertial når de har økonomiske måltall, tydelige avvik eller eksplisitt politisk interesse. Årsrapporten er fortsatt hovedstedet for bred måloppfølging.</p>
+      </section>
+
+      <section class="report-section" id="rapport-arsrapport">
+        <div class="report-section-kicker">Årsrapport</div>
+        <h2>Bred måloppnåelse hører hjemme her</h2>
+        <p>Årsrapporten kan bruke samme struktur, men utvide med måloppnåelse, vurderinger og helhetlige resultater på tvers av planområdene.</p>
+      </section>
+    </div>
   </main>
 </div>
 
