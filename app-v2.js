@@ -32,6 +32,8 @@
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
   let planGoalsData = [];
+  let planScrollSpyObserver = null;
+  let suppressPlanScrollSpy = false;
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
       entryColumn: "kommune",
@@ -317,6 +319,11 @@
     return item.key || item.id || slugify(item.label || item.title || "");
   }
 
+  function getGoalIdFromAnchor(anchorId) {
+    if (!anchorId || !anchorId.startsWith("maal-")) return null;
+    return anchorId.slice(5);
+  }
+
   function getLeafByKey(leafKey) {
     for (const section of planMenuModel.sections) {
       const leaf = section.leaves.find((item) => item.key === leafKey);
@@ -439,6 +446,99 @@
     return "full";
   }
 
+  function buildPlanGoalLookup() {
+    const lookup = new Map();
+
+    planMenuModel.sections.forEach((section) => {
+      section.leaves.forEach((leaf) => {
+        (leaf.subgoals || []).forEach((goal) => {
+          if (!goal.id) return;
+          lookup.set(goal.id, {
+            focusColumn: "kommune",
+            sectionKey: section.key,
+            leafKey: leaf.key,
+            selectedSubgoalKey: goal.key,
+            strategyKey: null,
+            hopKey: null
+          });
+        });
+
+        (leaf.strategies || []).forEach((strategy) => {
+          if (!strategy.id) return;
+          lookup.set(strategy.id, {
+            focusColumn: "full",
+            sectionKey: section.key,
+            leafKey: leaf.key,
+            selectedSubgoalKey: leaf.selectedSubgoalKey,
+            strategyKey: strategy.key,
+            hopKey: null
+          });
+        });
+      });
+    });
+
+    return lookup;
+  }
+
+  function applyScrollSpySelection(goalId) {
+    const next = buildPlanGoalLookup().get(goalId);
+    if (!next) return;
+
+    const leaf = getLeafByKey(next.leafKey);
+    if (!leaf) return;
+
+    const changed =
+      planSelection.focusColumn !== next.focusColumn ||
+      planSelection.sectionKey !== next.sectionKey ||
+      planSelection.leafKey !== next.leafKey ||
+      planSelection.strategyKey !== next.strategyKey;
+
+    leaf.selectedSubgoalKey = next.selectedSubgoalKey;
+    planSelection.focusColumn = next.focusColumn;
+    planSelection.sectionKey = next.sectionKey;
+    planSelection.leafKey = next.leafKey;
+    planSelection.strategyKey = next.strategyKey;
+    planSelection.hopKey = next.hopKey;
+
+    refreshDynamicLeafData();
+
+    if (changed) {
+      renderPlanMenus();
+    }
+  }
+
+  function setupPlanScrollSpy() {
+    if (planScrollSpyObserver) {
+      planScrollSpyObserver.disconnect();
+      planScrollSpyObserver = null;
+    }
+
+    const sections = Array.from(document.querySelectorAll("main section[id]"));
+    if (!sections.length) return;
+
+    planScrollSpyObserver = new IntersectionObserver((entries) => {
+      if (body.dataset.mode !== "plan" || suppressPlanScrollSpy) return;
+
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (!visible.length) return;
+
+      const goalId = getGoalIdFromAnchor(visible[0].target.id);
+      if (!goalId) return;
+
+      applyScrollSpySelection(goalId);
+    }, { rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
+
+    sections.forEach((section) => planScrollSpyObserver.observe(section));
+
+    const firstGoalId = getGoalIdFromAnchor(sections[0].id);
+    if (firstGoalId) {
+      applyScrollSpySelection(firstGoalId);
+    }
+  }
+
   function createButton(className, label, onClick) {
     const button = document.createElement("button");
     button.type = "button";
@@ -525,6 +625,7 @@
     const planId = params.get("id");
     const context = planId ? planContextsById[planId] : null;
     if (!context) return;
+    suppressPlanScrollSpy = true;
     planSelection.focusColumn = context.entryColumn || "kommune";
     planSelection.sectionKey = context.sectionKey;
     planSelection.leafKey = context.leafKey;
@@ -534,9 +635,14 @@
     ensureValidHopSelection();
     if (body.dataset.mode === "rapport") {
       setMode("plan");
+      suppressPlanScrollSpy = false;
       return;
     }
     renderPlanMenus();
+    window.setTimeout(() => {
+      suppressPlanScrollSpy = false;
+      setupPlanScrollSpy();
+    }, 0);
   }
 
   function renderPlanTree() {
@@ -803,6 +909,8 @@
     closeSidebar();
     if (isReport) {
       setActiveReportLink(location.hash || "#rapport-sammendrag");
+    } else {
+      setupPlanScrollSpy();
     }
   }
 
@@ -874,6 +982,7 @@
     await hydratePlanModelFromData();
     syncPlanContextFromLocation();
     renderPlanMenus();
+    setupPlanScrollSpy();
     syncOverlay();
     setMode(body.dataset.mode || "plan");
   }
