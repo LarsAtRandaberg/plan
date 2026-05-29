@@ -124,6 +124,46 @@
     setActiveLink(sections[0].id);
   }
 
+  function scrollToAnchor(anchorId, behavior, attempt) {
+    var el = document.getElementById(anchorId);
+    var tries = typeof attempt === "number" ? attempt : 0;
+    if (!el) {
+      if (tries >= 10) return false;
+      window.setTimeout(function() { scrollToAnchor(anchorId, behavior, tries + 1); }, 60);
+      return false;
+    }
+    if (topbar) topbar.classList.remove("is-hidden");
+    var topbarOffset = topbar ? Math.max(topbar.getBoundingClientRect().height, topbar.offsetHeight || 0) : 0;
+    var targetTop = window.pageYOffset + el.getBoundingClientRect().top - topbarOffset - 12;
+    try {
+      window.scrollTo({ top: Math.max(targetTop, 0), behavior: behavior || "smooth" });
+    } catch(e) {
+      window.scrollTo(0, Math.max(targetTop, 0));
+    }
+    setActiveLink(anchorId);
+    return true;
+  }
+
+  function openSearchResult(planId, anchorId) {
+    if (!anchorId) return;
+    if (searchResults) searchResults.classList.remove("open");
+    if (searchInput) searchInput.value = "";
+    if (sidebar && window.matchMedia("(max-width: 768px)").matches) sidebar.classList.remove("open");
+
+    if (planId !== currentPlanId) {
+      currentPlanId = planId;
+      updateKommuneplanButtonState();
+      history.pushState(null, "", "?id=" + encodeURIComponent(planId) + "#" + anchorId);
+      init().then(function(ok) {
+        if (ok !== false) scrollToAnchor(anchorId, "smooth");
+      });
+      return;
+    }
+
+    history.replaceState(null, "", "?id=" + encodeURIComponent(currentPlanId) + "#" + anchorId);
+    scrollToAnchor(anchorId, "smooth");
+  }
+
   function updateKommuneplanButtonState() {
     const btn = document.getElementById("btnKommuneplan");
     if (!btn) return;
@@ -273,7 +313,10 @@
         a.appendChild(icon);
       }
       a.appendChild(document.createTextNode(goal.maalNavn || "(uten navn)"));
-      a.addEventListener("click", function() {
+      a.addEventListener("click", function(e) {
+        e.preventDefault();
+        history.replaceState(null, "", "?id=" + encodeURIComponent(currentPlanId) + "#" + anchorId);
+        scrollToAnchor(anchorId, "smooth");
         if (window.matchMedia("(max-width: 768px)").matches && sidebar) sidebar.classList.remove("open");
       });
       row.appendChild(toggle); row.appendChild(a); node.appendChild(row);
@@ -1223,17 +1266,14 @@
     groups.forEach(function(group, pid) {
       var label = document.createElement("div"); label.className = "search-group-label"; label.textContent = group.planNavn; searchResults.appendChild(label);
       function makeItem(iconClass, title, sub, anchorId) {
-        var item = document.createElement("div"); item.className = "search-result-item";
+        var item = document.createElement("button");
+        item.type = "button";
+        item.className = "search-result-item";
         item.innerHTML = "<i class=\"ti " + iconClass + " search-result-icon\" aria-hidden=\"true\"></i><div><div class=\"search-result-title\">" + title + "</div><div class=\"search-result-sub\">" + sub + "</div></div>";
-        item.addEventListener("click", function() {
-          searchResults.classList.remove("open"); if (searchInput) searchInput.value = "";
-          if (pid !== currentPlanId) {
-            history.pushState(null, "", "?id=" + encodeURIComponent(pid) + "#" + anchorId);
-            currentPlanId = pid;
-            init().then(function() { var el = document.getElementById(anchorId); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" }); });
-          } else {
-            var el = document.getElementById(anchorId); if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-          }
+        item.addEventListener("click", function(e) {
+          e.preventDefault();
+          e.stopPropagation();
+          openSearchResult(pid, anchorId);
         });
         return item;
       }
@@ -1325,8 +1365,7 @@
       setupScrollSpy();
 
       if (location.hash) {
-        var el = document.getElementById(location.hash.substring(1));
-        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+        scrollToAnchor(location.hash.substring(1), "auto");
       }
       return true;
     } catch(e) {
