@@ -741,12 +741,10 @@
 
     const leftRect = leftNode.getBoundingClientRect();
     const firstStrategyRect = strategyNodes[0].getBoundingClientRect();
-    const lastStrategyRect = strategyNodes[strategyNodes.length - 1].getBoundingClientRect();
     const leftAnchorX = leftRect.right - workspaceRect.left;
     const leftAnchorY = leftRect.top + (leftRect.height / 2) - workspaceRect.top;
-    const strategySpineX = firstStrategyRect.left - workspaceRect.left - 14;
+    const strategySpineX = firstStrategyRect.left - workspaceRect.left - 10;
     const strategyFirstY = firstStrategyRect.top + (firstStrategyRect.height / 2) - workspaceRect.top;
-    const strategyLastY = lastStrategyRect.top + (lastStrategyRect.height / 2) - workspaceRect.top;
 
     setConnectorBox(
       planMapLineLeft,
@@ -756,25 +754,13 @@
       2
     );
 
-    setConnectorBox(
-      planMapJointCenter,
-      strategySpineX - 1,
-      Math.min(leftAnchorY, strategyFirstY),
-      2,
-      Math.max(0, Math.max(leftAnchorY, strategyLastY) - Math.min(leftAnchorY, strategyFirstY))
-    );
-
     if (!shouldShowRightConnector || !middleNode || !hopNodes.length) return;
 
     const rightRect = hopNodes[0].getBoundingClientRect();
     const strategyRect = middleNode.getBoundingClientRect();
     const strategyAnchorX = strategyRect.right - workspaceRect.left;
     const strategyAnchorY = strategyRect.top + (strategyRect.height / 2) - workspaceRect.top;
-    const hopSpineX = rightRect.left - workspaceRect.left - 14;
-    const firstHopRect = hopNodes[0].getBoundingClientRect();
-    const lastHopRect = hopNodes[hopNodes.length - 1].getBoundingClientRect();
-    const hopFirstY = firstHopRect.top + (firstHopRect.height / 2) - workspaceRect.top;
-    const hopLastY = lastHopRect.top + (lastHopRect.height / 2) - workspaceRect.top;
+    const hopSpineX = rightRect.left - workspaceRect.left - 10;
 
     setConnectorBox(
       planMapLineMiddleRight,
@@ -782,14 +768,6 @@
       strategyAnchorY - 1,
       Math.max(0, hopSpineX - strategyAnchorX),
       2
-    );
-
-    setConnectorBox(
-      planMapJointRight,
-      hopSpineX - 1,
-      Math.min(strategyAnchorY, hopFirstY),
-      2,
-      Math.max(0, Math.max(strategyAnchorY, hopLastY) - Math.min(strategyAnchorY, hopFirstY))
     );
   }
 

@@ -744,9 +744,9 @@ body.page-v2[data-mode="rapport"] #menu {
   position: absolute;
   top: 50%;
   left: -14px;
-  width: 8px;
+  width: 6px;
   height: 1px;
-  background: rgba(63, 125, 102, 0.32);
+  background: rgba(63, 125, 102, 0.24);
   border-radius: 999px;
 }
 
@@ -762,9 +762,9 @@ body.page-v2[data-mode="rapport"] #menu {
   position: absolute;
   top: 50%;
   right: -14px;
-  width: 8px;
+  width: 6px;
   height: 1px;
-  background: rgba(63, 125, 102, 0.32);
+  background: rgba(63, 125, 102, 0.24);
   border-radius: 999px;
 }
 
@@ -779,11 +779,11 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-strategy-list::before {
   content: "";
   position: absolute;
-  left: 4px;
+  left: 6px;
   top: 14px;
   bottom: 14px;
   width: 1px;
-  background: linear-gradient(180deg, rgba(63, 125, 102, 0.12), rgba(63, 125, 102, 0.28), rgba(63, 125, 102, 0.12));
+  background: linear-gradient(180deg, rgba(63, 125, 102, 0.08), rgba(63, 125, 102, 0.2), rgba(63, 125, 102, 0.08));
   border-radius: 999px;
 }
 
@@ -798,11 +798,11 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-hop-stack::before {
   content: "";
   position: absolute;
-  left: 4px;
+  left: 6px;
   top: 14px;
   bottom: 14px;
   width: 1px;
-  background: linear-gradient(180deg, rgba(63, 125, 102, 0.1), rgba(63, 125, 102, 0.22), rgba(63, 125, 102, 0.1));
+  background: linear-gradient(180deg, rgba(63, 125, 102, 0.07), rgba(63, 125, 102, 0.16), rgba(63, 125, 102, 0.07));
   border-radius: 999px;
 }
 
@@ -854,7 +854,7 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-line,
 .page-v2 .plan-map-joint {
   position: absolute;
-  background: rgba(63, 125, 102, 0.26);
+  background: rgba(63, 125, 102, 0.18);
   border-radius: 999px;
 }
 
