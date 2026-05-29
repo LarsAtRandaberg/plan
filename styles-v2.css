@@ -446,6 +446,20 @@ body.page-v2[data-mode="rapport"] #menu {
   box-shadow: none;
 }
 
+.page-v2 .plan-orgchart {
+  display: none;
+  min-height: 640px;
+  background: rgba(255,255,255,0.96);
+}
+
+.page-v2[data-plan-tree-engine="orgchart"] .plan-map-workspace {
+  display: none;
+}
+
+.page-v2[data-plan-tree-engine="orgchart"] .plan-orgchart {
+  display: block;
+}
+
 .page-v2 .plan-map-header {
   display: flex;
   align-items: flex-start;

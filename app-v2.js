@@ -22,6 +22,7 @@
   const reportNavLinks = Array.from(document.querySelectorAll(".report-nav-link"));
   const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
   const planMapWorkspace = document.querySelector(".plan-map-workspace");
+  const planOrgChartContainer = document.getElementById("planOrgChart");
   const planMapTree = document.getElementById("planMapTree");
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
   const planMapHopColumn = document.querySelector(".plan-map-column-hop");
@@ -30,7 +31,7 @@
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
   const planMapHopList = document.getElementById("planMapHopList");
-  const d3lib = globalThis.d3;
+  const OrgChartLib = globalThis.OrgChart;
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
   let planGoalsData = [];
@@ -292,6 +293,10 @@
       if (leaf) return { section, leaf };
     }
     return null;
+  }
+
+  function getCurrentSection() {
+    return planMenuModel.sections.find((item) => item.key === planSelection.sectionKey) || null;
   }
 
   function getCurrentStrategy() {
@@ -693,135 +698,103 @@
     });
   }
 
-  function buildRoundedConnectorPath(points) {
-    if (!d3lib || !points?.length) return "";
-
-    const path = d3lib.path();
-    const radius = 14;
-    path.moveTo(points[0][0], points[0][1]);
-
-    for (let index = 1; index < points.length; index += 1) {
-      const prev = points[index - 1];
-      const current = points[index];
-      const next = points[index + 1];
-
-      if (!next) {
-        path.lineTo(current[0], current[1]);
-        continue;
-      }
-
-      const dx1 = current[0] - prev[0];
-      const dy1 = current[1] - prev[1];
-      const dx2 = next[0] - current[0];
-      const dy2 = next[1] - current[1];
-      const len1 = Math.hypot(dx1, dy1);
-      const len2 = Math.hypot(dx2, dy2);
-      const cornerRadius = Math.min(radius, len1 / 2, len2 / 2);
-
-      const startX = current[0] - ((dx1 / len1) * cornerRadius || 0);
-      const startY = current[1] - ((dy1 / len1) * cornerRadius || 0);
-      const endX = current[0] + ((dx2 / len2) * cornerRadius || 0);
-      const endY = current[1] + ((dy2 / len2) * cornerRadius || 0);
-
-      path.lineTo(startX, startY);
-      path.quadraticCurveTo(current[0], current[1], endX, endY);
-    }
-
-    return path.toString();
-  }
-
-  function drawConnectorGroup(svgSelection, sourceNode, targetNodes, workspaceRect, extraClass = "") {
-    if (!d3lib || !svgSelection || !sourceNode || !targetNodes.length || !workspaceRect) return;
-
-    const sourceRect = sourceNode.getBoundingClientRect();
-    const targetRects = targetNodes.map((node) => node.getBoundingClientRect());
-    const targetLeft = Math.min(...targetRects.map((rect) => rect.left - workspaceRect.left));
-    const sourceX = sourceRect.right - workspaceRect.left + 8;
-    const sourceY = sourceRect.top + (sourceRect.height / 2) - workspaceRect.top;
-    const trunkX = targetLeft - 18;
-    const branchEndX = targetLeft - 6;
-    const targetCenters = targetRects.map((rect) => rect.top + (rect.height / 2) - workspaceRect.top);
-    const trunkTop = Math.min(...targetCenters);
-    const trunkBottom = Math.max(...targetCenters);
-    const classes = {
-      source: `plan-map-connector ${extraClass} plan-map-connector--source`,
-      trunk: `plan-map-connector ${extraClass} plan-map-connector--trunk`,
-      branch: `plan-map-connector ${extraClass} plan-map-connector--branch`
-    };
-
-    svgSelection.append("path")
-      .attr("class", classes.source)
-      .attr("d", buildRoundedConnectorPath([
-        [sourceX, sourceY],
-        [trunkX - 18, sourceY],
-        [trunkX, sourceY]
-      ]));
-
-    svgSelection.append("path")
-      .attr("class", classes.trunk)
-      .attr("d", buildRoundedConnectorPath([
-        [trunkX, trunkTop],
-        [trunkX, trunkBottom]
-      ]));
-
-    targetCenters.forEach((targetY) => {
-      const direction = targetY >= sourceY ? 1 : -1;
-      const branchStartY = Math.abs(targetY - sourceY) < 1 ? targetY : targetY - (direction * 10);
-
-      svgSelection.append("path")
-        .attr("class", classes.branch)
-        .attr("d", buildRoundedConnectorPath([
-          [trunkX, branchStartY],
-          [trunkX, targetY],
-          [branchEndX, targetY]
-        ]));
-    });
-  }
-
-  function updatePlanConnectors(layoutState) {
-    if (!planMapLines) return;
-
-    const shouldShowLeftConnector = layoutState === "kommune-plus-strategi" || layoutState === "full";
-    const shouldShowRightConnector = layoutState === "full" && planMapHopList?.querySelector(".plan-map-list-node");
-    const showAny = shouldShowLeftConnector || shouldShowRightConnector;
-
-    planMapLines.replaceChildren();
-    planMapLines.classList.toggle("is-visible", showAny);
-    planMapLines.setAttribute("aria-hidden", showAny ? "false" : "true");
-
-    if (!showAny) return;
-
-    const workspaceRect = planMapWorkspace?.getBoundingClientRect();
-    const leftNode = planMapWorkspace?.querySelector(".plan-map-column-kommune .plan-map-node-selected");
-    const middleNode = planMapWorkspace?.querySelector(".plan-map-column-strategi .plan-map-node-selected");
-    const strategyNodes = Array.from(planMapWorkspace?.querySelectorAll(".plan-map-column-strategi .plan-map-list-node") || []);
-    const hopNodes = Array.from(planMapWorkspace?.querySelectorAll(".plan-map-column-hop .plan-map-list-node") || []);
-
-    if (!workspaceRect || !leftNode || !strategyNodes.length) return;
-
-    if (!d3lib) return;
-
-    const svg = d3lib.select(planMapLines)
-      .append("svg")
-      .attr("class", "plan-map-connectors")
-      .attr("viewBox", `0 0 ${workspaceRect.width} ${workspaceRect.height}`)
-      .attr("width", workspaceRect.width)
-      .attr("height", workspaceRect.height);
-
-    drawConnectorGroup(svg, leftNode, strategyNodes, workspaceRect, "plan-map-connector--left-group");
-
-    if (!shouldShowRightConnector || !middleNode || !hopNodes.length) return;
-
-    drawConnectorGroup(svg, middleNode, hopNodes, workspaceRect, "plan-map-connector--right-group");
-  }
-
   function scheduleConnectorUpdate() {
-    const layoutState = getLayoutState();
-    requestAnimationFrame(() => updatePlanConnectors(layoutState));
     if (connectorUpdateTimer) {
       clearTimeout(connectorUpdateTimer);
     }
-    connectorUpdateTimer = setTimeout(() => updatePlanConnectors(getLayoutState()), 1050);
+  }
+
+  function buildOrgChartNodes() {
+    const nodes = [
+      { id: "root", name: "Kommuneplanens samfunnsdel 2026-2040", title: "Plan" }
+    ];
+
+    planMenuModel.sections.forEach((section) => {
+      nodes.push({
+        id: `section:${section.key}`,
+        pid: "root",
+        name: section.label,
+        title: "Satsingsområde"
+      });
+
+      section.leaves.forEach((leaf) => {
+        nodes.push({
+          id: `leaf:${leaf.key}`,
+          pid: `section:${section.key}`,
+          name: leaf.label,
+          title: "Delmål"
+        });
+      });
+    });
+
+    const currentLeaf = getCurrentLeaf();
+    if (!currentLeaf) return nodes;
+
+    currentLeaf.leaf.subgoals.forEach((subgoal) => {
+      nodes.push({
+        id: `subgoal:${subgoal.key}`,
+        pid: `leaf:${currentLeaf.leaf.key}`,
+        name: subgoal.label,
+        title: "Kommuneplanmål"
+      });
+    });
+
+    const selectedSubgoal = currentLeaf.leaf.subgoals.find((item) => item.key === currentLeaf.leaf.selectedSubgoalKey);
+    if (!selectedSubgoal) return nodes;
+
+    nodes.push({
+      id: "strategy-plan",
+      pid: `subgoal:${selectedSubgoal.key}`,
+      name: currentLeaf.leaf.strategyPlanTitle,
+      title: "Strategi / temaplan"
+    });
+
+    currentLeaf.leaf.strategies.forEach((strategy) => {
+      nodes.push({
+        id: `strategy:${strategy.key}`,
+        pid: "strategy-plan",
+        name: strategy.label,
+        title: "Strategimål"
+      });
+    });
+
+    const currentStrategy = getCurrentStrategy();
+    if (!currentStrategy) return nodes;
+
+    nodes.push({
+      id: "hop-plan",
+      pid: `strategy:${currentStrategy.key}`,
+      name: currentLeaf.leaf.hopPlanTitle,
+      title: "Handlings- og økonomiplan"
+    });
+
+    currentStrategy.hopItems.forEach((item) => {
+      nodes.push({
+        id: `hop:${getNodeKey(item)}`,
+        pid: "hop-plan",
+        name: item.title,
+        title: item.description || "Tiltak"
+      });
+    });
+
+    return nodes;
+  }
+
+  function renderOrgChartPrototype() {
+    if (!planOrgChartContainer || !OrgChartLib) return;
+
+    body.dataset.planTreeEngine = "orgchart";
+    planOrgChartContainer.hidden = false;
+    planOrgChartContainer.innerHTML = "";
+
+    new OrgChartLib(planOrgChartContainer, {
+      mouseScrool: OrgChartLib.action.ctrlZoom,
+      nodeBinding: {
+        field_0: "name",
+        field_1: "title"
+      },
+      nodes: buildOrgChartNodes()
+    });
   }
 
   function renderPlanMenus() {
@@ -857,6 +830,12 @@
       column.classList.toggle("is-hidden", state === "hidden");
       column.setAttribute("aria-hidden", state === "hidden" ? "true" : "false");
     });
+
+    if (OrgChartLib && planOrgChartContainer) {
+      renderOrgChartPrototype();
+      scheduleConnectorUpdate();
+      return;
+    }
 
     renderPlanTree();
     renderStrategyMenu();
