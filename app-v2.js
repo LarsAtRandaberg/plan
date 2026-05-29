@@ -471,7 +471,10 @@
   function renderMenuNodes(container, nodes, options = {}, level = 0) {
     const {
       selectedKey = null,
-      onSelect = () => {}
+      onSelect = () => {},
+      leafClassName = "plan-map-tree-leaf",
+      activeLeafClassName = "plan-map-node plan-map-node-selected",
+      childLeafClassName = "plan-map-tree-subleaf"
     } = options;
 
     nodes.forEach((node) => {
@@ -491,9 +494,11 @@
       if (hasChildren) {
         controlClass = "plan-map-tree-branch" + (isOpen ? " is-open is-active" : "");
       } else if (isActive) {
-        controlClass = "plan-map-node plan-map-node-selected";
+        controlClass = activeLeafClassName;
       } else if (level > 0) {
-        controlClass = "plan-map-tree-subleaf";
+        controlClass = childLeafClassName;
+      } else {
+        controlClass = leafClassName;
       }
 
       const control = createButton(controlClass, getNodeLabel(node), () => onSelect(node));
@@ -649,6 +654,9 @@
     }
     renderMenuNodes(planMapStrategyList, leaf.strategies, {
       selectedKey: activeStrategy ? activeStrategy.key : null,
+      leafClassName: "plan-map-node plan-map-list-node",
+      activeLeafClassName: "plan-map-node plan-map-list-node plan-map-node-selected",
+      childLeafClassName: "plan-map-tree-subleaf",
       onSelect: (strategy) => {
         planSelection.strategyKey = getNodeKey(strategy);
         planSelection.hopKey = null;
@@ -679,6 +687,9 @@
     }
     renderMenuNodes(planMapHopList, activeStrategy.hopItems, {
       selectedKey: planSelection.hopKey,
+      leafClassName: "plan-map-hop-card plan-map-list-node",
+      activeLeafClassName: "plan-map-hop-card plan-map-list-node is-active",
+      childLeafClassName: "plan-map-tree-subleaf",
       onSelect: (item) => {
         planSelection.hopKey = getNodeKey(item);
         planSelection.focusColumn = "full";
@@ -700,8 +711,8 @@
   function updatePlanConnectors(layoutState) {
     if (!planMapLines) return;
 
-    const shouldShowLeftConnector = layoutState === "full";
-    const shouldShowRightConnector = layoutState === "full" && !!getCurrentHopItem();
+    const shouldShowLeftConnector = layoutState === "kommune-plus-strategi" || layoutState === "full";
+    const shouldShowRightConnector = layoutState === "full" && planMapHopList?.querySelector(".plan-map-list-node");
     const showAny = shouldShowLeftConnector || shouldShowRightConnector;
 
     planMapLines.classList.toggle("is-visible", showAny);
@@ -723,74 +734,62 @@
     const workspaceRect = planMapWorkspace?.getBoundingClientRect();
     const leftNode = planMapWorkspace?.querySelector(".plan-map-column-kommune .plan-map-node-selected");
     const middleNode = planMapWorkspace?.querySelector(".plan-map-column-strategi .plan-map-node-selected");
-    const rightNode = planMapWorkspace?.querySelector(".plan-map-column-hop .plan-map-node-selected");
+    const strategyNodes = Array.from(planMapWorkspace?.querySelectorAll(".plan-map-column-strategi .plan-map-list-node") || []);
+    const hopNodes = Array.from(planMapWorkspace?.querySelectorAll(".plan-map-column-hop .plan-map-list-node") || []);
 
-    if (!workspaceRect || !leftNode || !middleNode) return;
+    if (!workspaceRect || !leftNode || !strategyNodes.length) return;
 
     const leftRect = leftNode.getBoundingClientRect();
-    const middleRect = middleNode.getBoundingClientRect();
+    const firstStrategyRect = strategyNodes[0].getBoundingClientRect();
+    const lastStrategyRect = strategyNodes[strategyNodes.length - 1].getBoundingClientRect();
     const leftAnchorX = leftRect.right - workspaceRect.left;
     const leftAnchorY = leftRect.top + (leftRect.height / 2) - workspaceRect.top;
-    const middleAnchorX = middleRect.left - workspaceRect.left;
-    const middleAnchorY = middleRect.top + (middleRect.height / 2) - workspaceRect.top;
-    const centerJointX = leftAnchorX + 20;
+    const strategySpineX = firstStrategyRect.left - workspaceRect.left - 14;
+    const strategyFirstY = firstStrategyRect.top + (firstStrategyRect.height / 2) - workspaceRect.top;
+    const strategyLastY = lastStrategyRect.top + (lastStrategyRect.height / 2) - workspaceRect.top;
 
     setConnectorBox(
       planMapLineLeft,
       leftAnchorX,
       leftAnchorY - 1,
-      Math.max(0, centerJointX - leftAnchorX),
+      Math.max(0, strategySpineX - leftAnchorX),
       2
     );
 
     setConnectorBox(
       planMapJointCenter,
-      centerJointX - 1,
-      Math.min(leftAnchorY, middleAnchorY),
+      strategySpineX - 1,
+      Math.min(leftAnchorY, strategyFirstY),
       2,
-      Math.abs(middleAnchorY - leftAnchorY)
+      Math.max(0, Math.max(leftAnchorY, strategyLastY) - Math.min(leftAnchorY, strategyFirstY))
     );
 
-    setConnectorBox(
-      planMapLineRightTop,
-      Math.min(centerJointX, middleAnchorX),
-      middleAnchorY - 1,
-      Math.max(0, middleAnchorX - centerJointX),
-      2
-    );
+    if (!shouldShowRightConnector || !middleNode || !hopNodes.length) return;
 
-    if (!shouldShowRightConnector || !rightNode) return;
-
-    const rightRect = rightNode.getBoundingClientRect();
+    const rightRect = hopNodes[0].getBoundingClientRect();
     const strategyRect = middleNode.getBoundingClientRect();
     const strategyAnchorX = strategyRect.right - workspaceRect.left;
     const strategyAnchorY = strategyRect.top + (strategyRect.height / 2) - workspaceRect.top;
-    const rightAnchorX = rightRect.left - workspaceRect.left;
-    const rightAnchorY = rightRect.top + (rightRect.height / 2) - workspaceRect.top;
-    const rightJointX = strategyAnchorX + 18;
+    const hopSpineX = rightRect.left - workspaceRect.left - 14;
+    const firstHopRect = hopNodes[0].getBoundingClientRect();
+    const lastHopRect = hopNodes[hopNodes.length - 1].getBoundingClientRect();
+    const hopFirstY = firstHopRect.top + (firstHopRect.height / 2) - workspaceRect.top;
+    const hopLastY = lastHopRect.top + (lastHopRect.height / 2) - workspaceRect.top;
 
     setConnectorBox(
       planMapLineMiddleRight,
       strategyAnchorX,
       strategyAnchorY - 1,
-      Math.max(0, rightJointX - strategyAnchorX),
+      Math.max(0, hopSpineX - strategyAnchorX),
       2
     );
 
     setConnectorBox(
       planMapJointRight,
-      rightJointX - 1,
-      Math.min(strategyAnchorY, rightAnchorY),
+      hopSpineX - 1,
+      Math.min(strategyAnchorY, hopFirstY),
       2,
-      Math.abs(rightAnchorY - strategyAnchorY)
-    );
-
-    setConnectorBox(
-      planMapLineRightBottom,
-      Math.min(rightJointX, rightAnchorX),
-      rightAnchorY - 1,
-      Math.max(0, rightAnchorX - rightJointX),
-      2
+      Math.max(0, Math.max(strategyAnchorY, hopLastY) - Math.min(strategyAnchorY, hopFirstY))
     );
   }
 

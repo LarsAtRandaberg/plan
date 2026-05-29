@@ -714,10 +714,10 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-node,
 .page-v2 .plan-map-hop-card {
-  border-radius: 22px;
+  border-radius: 20px;
   background: rgba(255,255,255,0.92);
-  border: 1px solid rgba(0, 82, 40, 0.16);
-  box-shadow: 0 14px 30px rgba(12, 40, 21, 0.06);
+  border: 1px solid rgba(0, 82, 40, 0.12);
+  box-shadow: 0 10px 24px rgba(12, 40, 21, 0.05);
 }
 
 .page-v2 .plan-map-node {
@@ -727,6 +727,21 @@ body.page-v2[data-mode="rapport"] #menu {
   font-weight: 600;
   color: var(--ink-900);
   max-width: 170px;
+}
+
+.page-v2 .plan-map-list-node {
+  position: relative;
+}
+
+.page-v2 .plan-map-list-node::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -14px;
+  width: 10px;
+  height: 1px;
+  background: rgba(63, 125, 102, 0.46);
+  border-radius: 999px;
 }
 
 .page-v2 .plan-map-node-selected {
@@ -741,20 +756,79 @@ body.page-v2[data-mode="rapport"] #menu {
   position: absolute;
   top: 50%;
   right: -14px;
-  width: 14px;
-  border-top: 2px solid rgba(0, 82, 40, 0.58);
+  width: 10px;
+  height: 1px;
+  background: rgba(63, 125, 102, 0.46);
+  border-radius: 999px;
 }
 
 .page-v2 .plan-map-strategy-list {
   display: grid;
   gap: 10px;
   margin-top: 8px;
+  position: relative;
+  padding-left: 18px;
+}
+
+.page-v2 .plan-map-strategy-list::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(63, 125, 102, 0.18), rgba(63, 125, 102, 0.42), rgba(63, 125, 102, 0.18));
+  border-radius: 999px;
 }
 
 .page-v2 .plan-map-hop-stack {
   display: grid;
   gap: 10px;
   margin-top: 8px;
+  position: relative;
+  padding-left: 18px;
+}
+
+.page-v2 .plan-map-hop-stack::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 14px;
+  bottom: 14px;
+  width: 1px;
+  background: linear-gradient(180deg, rgba(63, 125, 102, 0.16), rgba(63, 125, 102, 0.34), rgba(63, 125, 102, 0.16));
+  border-radius: 999px;
+}
+
+.page-v2 .plan-map-hop-card {
+  display: block;
+  width: 100%;
+  max-width: 182px;
+  padding: 10px 12px;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
+}
+
+.page-v2 .plan-map-hop-card.is-active,
+.page-v2 .plan-map-node.plan-map-list-node.plan-map-node-selected {
+  border-color: rgba(0, 82, 40, 0.18);
+  box-shadow: 0 14px 30px rgba(12, 40, 21, 0.07);
+}
+
+.page-v2 .plan-map-hop-card strong {
+  display: block;
+  font-size: 13px;
+  color: var(--ink-900);
+  margin: 0 0 4px;
+  letter-spacing: -0.01em;
+}
+
+.page-v2 .plan-map-hop-card p {
+  margin: 0;
+  color: rgba(21, 51, 33, 0.72);
+  line-height: 1.45;
+  font-size: 12px;
 }
 
 .page-v2 .plan-map-lines {
@@ -773,7 +847,8 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-line,
 .page-v2 .plan-map-joint {
   position: absolute;
-  background: rgba(0, 82, 40, 0.52);
+  background: rgba(63, 125, 102, 0.42);
+  border-radius: 999px;
 }
 
 .page-v2 .plan-map-line-left {
