@@ -30,6 +30,7 @@
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
   const planMapHopList = document.getElementById("planMapHopList");
+  const d3lib = globalThis.d3;
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
   let planGoalsData = [];
@@ -692,59 +693,88 @@
     });
   }
 
-  function appendConnectorPath(svg, d, extraClass = "") {
-    if (!svg || !d) return;
+  function buildRoundedConnectorPath(points) {
+    if (!d3lib || !points?.length) return "";
 
-    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    path.setAttribute("d", d);
-    path.setAttribute("class", `plan-map-connector${extraClass ? ` ${extraClass}` : ""}`);
-    svg.appendChild(path);
+    const path = d3lib.path();
+    const radius = 14;
+    path.moveTo(points[0][0], points[0][1]);
+
+    for (let index = 1; index < points.length; index += 1) {
+      const prev = points[index - 1];
+      const current = points[index];
+      const next = points[index + 1];
+
+      if (!next) {
+        path.lineTo(current[0], current[1]);
+        continue;
+      }
+
+      const dx1 = current[0] - prev[0];
+      const dy1 = current[1] - prev[1];
+      const dx2 = next[0] - current[0];
+      const dy2 = next[1] - current[1];
+      const len1 = Math.hypot(dx1, dy1);
+      const len2 = Math.hypot(dx2, dy2);
+      const cornerRadius = Math.min(radius, len1 / 2, len2 / 2);
+
+      const startX = current[0] - ((dx1 / len1) * cornerRadius || 0);
+      const startY = current[1] - ((dy1 / len1) * cornerRadius || 0);
+      const endX = current[0] + ((dx2 / len2) * cornerRadius || 0);
+      const endY = current[1] + ((dy2 / len2) * cornerRadius || 0);
+
+      path.lineTo(startX, startY);
+      path.quadraticCurveTo(current[0], current[1], endX, endY);
+    }
+
+    return path.toString();
   }
 
-  function drawConnectorGroup(svg, sourceNode, targetNodes, workspaceRect, extraClass = "") {
-    if (!svg || !sourceNode || !targetNodes.length || !workspaceRect) return;
+  function drawConnectorGroup(svgSelection, sourceNode, targetNodes, workspaceRect, extraClass = "") {
+    if (!d3lib || !svgSelection || !sourceNode || !targetNodes.length || !workspaceRect) return;
 
     const sourceRect = sourceNode.getBoundingClientRect();
     const targetRects = targetNodes.map((node) => node.getBoundingClientRect());
     const targetLeft = Math.min(...targetRects.map((rect) => rect.left - workspaceRect.left));
-    const sourceX = sourceRect.right - workspaceRect.left + 10;
+    const sourceX = sourceRect.right - workspaceRect.left + 8;
     const sourceY = sourceRect.top + (sourceRect.height / 2) - workspaceRect.top;
-    const trunkX = targetLeft - 22;
-    const branchEndX = targetLeft - 8;
+    const trunkX = targetLeft - 18;
+    const branchEndX = targetLeft - 6;
     const targetCenters = targetRects.map((rect) => rect.top + (rect.height / 2) - workspaceRect.top);
-    const trunkTop = Math.min(sourceY, ...targetCenters);
-    const trunkBottom = Math.max(sourceY, ...targetCenters);
-    const connectorClassPrefix = extraClass ? `${extraClass} ` : "";
+    const trunkTop = Math.min(...targetCenters);
+    const trunkBottom = Math.max(...targetCenters);
+    const classes = {
+      source: `plan-map-connector ${extraClass} plan-map-connector--source`,
+      trunk: `plan-map-connector ${extraClass} plan-map-connector--trunk`,
+      branch: `plan-map-connector ${extraClass} plan-map-connector--branch`
+    };
 
-    appendConnectorPath(
-      svg,
-      `M ${sourceX} ${sourceY} H ${trunkX}`,
-      `${connectorClassPrefix}plan-map-connector--source`
-    );
+    svgSelection.append("path")
+      .attr("class", classes.source)
+      .attr("d", buildRoundedConnectorPath([
+        [sourceX, sourceY],
+        [trunkX - 18, sourceY],
+        [trunkX, sourceY]
+      ]));
 
-    appendConnectorPath(
-      svg,
-      `M ${trunkX} ${trunkTop} V ${trunkBottom}`,
-      `${connectorClassPrefix}plan-map-connector--trunk`
-    );
+    svgSelection.append("path")
+      .attr("class", classes.trunk)
+      .attr("d", buildRoundedConnectorPath([
+        [trunkX, trunkTop],
+        [trunkX, trunkBottom]
+      ]));
 
     targetCenters.forEach((targetY) => {
-      if (Math.abs(targetY - sourceY) < 1) {
-        appendConnectorPath(
-          svg,
-          `M ${trunkX} ${targetY} H ${branchEndX}`,
-          `${connectorClassPrefix}plan-map-connector--branch`
-        );
-        return;
-      }
+      const direction = targetY >= sourceY ? 1 : -1;
+      const branchStartY = Math.abs(targetY - sourceY) < 1 ? targetY : targetY - (direction * 10);
 
-      const direction = targetY > sourceY ? 1 : -1;
-      const radius = Math.min(14, Math.max(6, Math.abs(targetY - sourceY) / 2));
-      appendConnectorPath(
-        svg,
-        `M ${trunkX} ${targetY - (direction * radius)} Q ${trunkX} ${targetY} ${trunkX + radius} ${targetY} H ${branchEndX}`,
-        `${connectorClassPrefix}plan-map-connector--branch`
-      );
+      svgSelection.append("path")
+        .attr("class", classes.branch)
+        .attr("d", buildRoundedConnectorPath([
+          [trunkX, branchStartY],
+          [trunkX, targetY],
+          [branchEndX, targetY]
+        ]));
     });
   }
 
@@ -769,12 +799,14 @@
 
     if (!workspaceRect || !leftNode || !strategyNodes.length) return;
 
-    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svg.setAttribute("class", "plan-map-connectors");
-    svg.setAttribute("viewBox", `0 0 ${workspaceRect.width} ${workspaceRect.height}`);
-    svg.setAttribute("width", `${workspaceRect.width}`);
-    svg.setAttribute("height", `${workspaceRect.height}`);
-    planMapLines.appendChild(svg);
+    if (!d3lib) return;
+
+    const svg = d3lib.select(planMapLines)
+      .append("svg")
+      .attr("class", "plan-map-connectors")
+      .attr("viewBox", `0 0 ${workspaceRect.width} ${workspaceRect.height}`)
+      .attr("width", workspaceRect.width)
+      .attr("height", workspaceRect.height);
 
     drawConnectorGroup(svg, leftNode, strategyNodes, workspaceRect, "plan-map-connector--left-group");
 
