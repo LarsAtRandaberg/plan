@@ -22,20 +22,16 @@
   const reportNavLinks = Array.from(document.querySelectorAll(".report-nav-link"));
   const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
   const planMapWorkspace = document.querySelector(".plan-map-workspace");
-  const planOrgChartContainer = document.getElementById("planOrgChart");
   const planMapTree = document.getElementById("planMapTree");
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
   const planMapHopColumn = document.querySelector(".plan-map-column-hop");
-  const planMapLines = document.querySelector(".plan-map-lines");
   const planMapStrategyTitle = document.getElementById("planMapStrategyTitle");
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
   const planMapHopList = document.getElementById("planMapHopList");
-  const OrgChartLib = globalThis.OrgChart;
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
   let planGoalsData = [];
-  let connectorUpdateTimer = null;
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
       entryColumn: "kommune",
@@ -293,10 +289,6 @@
       if (leaf) return { section, leaf };
     }
     return null;
-  }
-
-  function getCurrentSection() {
-    return planMenuModel.sections.find((item) => item.key === planSelection.sectionKey) || null;
   }
 
   function getCurrentStrategy() {
@@ -698,105 +690,6 @@
     });
   }
 
-  function scheduleConnectorUpdate() {
-    if (connectorUpdateTimer) {
-      clearTimeout(connectorUpdateTimer);
-    }
-  }
-
-  function buildOrgChartNodes() {
-    const nodes = [
-      { id: "root", name: "Kommuneplanens samfunnsdel 2026-2040", title: "Plan" }
-    ];
-
-    planMenuModel.sections.forEach((section) => {
-      nodes.push({
-        id: `section:${section.key}`,
-        pid: "root",
-        name: section.label,
-        title: "Satsingsområde"
-      });
-
-      section.leaves.forEach((leaf) => {
-        nodes.push({
-          id: `leaf:${leaf.key}`,
-          pid: `section:${section.key}`,
-          name: leaf.label,
-          title: "Delmål"
-        });
-      });
-    });
-
-    const currentLeaf = getCurrentLeaf();
-    if (!currentLeaf) return nodes;
-
-    currentLeaf.leaf.subgoals.forEach((subgoal) => {
-      nodes.push({
-        id: `subgoal:${subgoal.key}`,
-        pid: `leaf:${currentLeaf.leaf.key}`,
-        name: subgoal.label,
-        title: "Kommuneplanmål"
-      });
-    });
-
-    const selectedSubgoal = currentLeaf.leaf.subgoals.find((item) => item.key === currentLeaf.leaf.selectedSubgoalKey);
-    if (!selectedSubgoal) return nodes;
-
-    nodes.push({
-      id: "strategy-plan",
-      pid: `subgoal:${selectedSubgoal.key}`,
-      name: currentLeaf.leaf.strategyPlanTitle,
-      title: "Strategi / temaplan"
-    });
-
-    currentLeaf.leaf.strategies.forEach((strategy) => {
-      nodes.push({
-        id: `strategy:${strategy.key}`,
-        pid: "strategy-plan",
-        name: strategy.label,
-        title: "Strategimål"
-      });
-    });
-
-    const currentStrategy = getCurrentStrategy();
-    if (!currentStrategy) return nodes;
-
-    nodes.push({
-      id: "hop-plan",
-      pid: `strategy:${currentStrategy.key}`,
-      name: currentLeaf.leaf.hopPlanTitle,
-      title: "Handlings- og økonomiplan"
-    });
-
-    currentStrategy.hopItems.forEach((item) => {
-      nodes.push({
-        id: `hop:${getNodeKey(item)}`,
-        pid: "hop-plan",
-        name: item.title,
-        title: item.description || "Tiltak"
-      });
-    });
-
-    return nodes;
-  }
-
-  function renderOrgChartPrototype() {
-    if (!planOrgChartContainer || !OrgChartLib) return;
-
-    body.dataset.planTreeEngine = "orgchart";
-    planOrgChartContainer.hidden = false;
-    planOrgChartContainer.innerHTML = "";
-
-    new OrgChartLib(planOrgChartContainer, {
-      mouseScrool: OrgChartLib.action.ctrlZoom,
-      nodeBinding: {
-        field_0: "name",
-        field_1: "title"
-      },
-      nodes: buildOrgChartNodes()
-    });
-  }
-
   function renderPlanMenus() {
     const layoutState = getLayoutState();
     if (sidebar) {
@@ -831,16 +724,9 @@
       column.setAttribute("aria-hidden", state === "hidden" ? "true" : "false");
     });
 
-    if (OrgChartLib && planOrgChartContainer) {
-      renderOrgChartPrototype();
-      scheduleConnectorUpdate();
-      return;
-    }
-
     renderPlanTree();
     renderStrategyMenu();
     renderHopMenu();
-    scheduleConnectorUpdate();
   }
 
   function closeSidebar() {
@@ -979,9 +865,6 @@
   window.addEventListener("resize", () => {
     applyModeVisibility(body.dataset.mode === "rapport");
     syncOverlay();
-    if (body.dataset.mode === "plan") {
-      scheduleConnectorUpdate();
-    }
   });
 
   window.addEventListener("popstate", syncPlanContextFromLocation);
