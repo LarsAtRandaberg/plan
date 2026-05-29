@@ -378,13 +378,24 @@ body.page-v2[data-mode="rapport"] #menu {
   border-left: 2px solid rgba(99,153,34,0.35);
 }
 
+.page-v2 .plan-map-tree-group.is-active {
+  border-left-color: rgba(59,109,17,0.72);
+}
+
 .page-v2 .plan-map-tree-branch {
   position: relative;
+  display: block;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
   font-size: 22px;
   font-weight: 600;
   color: var(--green-800);
-  padding-left: 16px;
+  padding: 0 0 0 16px;
   margin-bottom: 8px;
+  cursor: pointer;
 }
 
 .page-v2 .plan-map-tree-branch::before {
@@ -401,6 +412,10 @@ body.page-v2[data-mode="rapport"] #menu {
   content: "▾";
 }
 
+.page-v2 .plan-map-tree-branch.is-active {
+  color: var(--green-900);
+}
+
 .page-v2 .plan-map-tree-children {
   display: grid;
   gap: 10px;
@@ -408,13 +423,19 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-tree-leaf {
+  display: inline-flex;
+  width: fit-content;
+  border: 0;
+  background: transparent;
+  padding: 2px 0;
+  text-align: left;
+  font: inherit;
   font-size: 20px;
   color: var(--green-700, var(--green-800));
+  cursor: pointer;
 }
 
 .page-v2 .plan-map-tree-leaf.is-active {
-  display: inline-flex;
-  width: fit-content;
   padding: 4px 8px;
   border-radius: 10px;
   background: rgba(192,221,151,0.42);
@@ -451,6 +472,9 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-node-selected {
   position: relative;
+  display: block;
+  text-align: left;
+  cursor: pointer;
 }
 
 .page-v2 .plan-map-node-selected::after {
@@ -469,15 +493,27 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-strategy-item {
+  display: block;
+  width: 100%;
+  border: 0;
+  background: rgba(255,255,255,0.18);
+  padding: 10px 12px;
+  border-radius: 14px;
+  text-align: left;
+  font: inherit;
   font-size: 18px;
   line-height: 1.35;
   color: var(--green-900);
+  cursor: pointer;
+  transition: background 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.page-v2 .plan-map-strategy-item:hover {
+  background: rgba(255,255,255,0.34);
+  transform: translateX(2px);
 }
 
 .page-v2 .plan-map-strategy-item.is-active {
-  width: fit-content;
-  max-width: 100%;
-  padding: 10px 12px;
   border-radius: 16px;
   background: rgba(222,245,208,0.95);
   border: 2px solid rgba(59,109,17,0.72);
@@ -511,10 +547,16 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-hop-card {
+  display: block;
   width: 220px;
+  border: 2px solid rgba(59,109,17,0.72);
+  background: rgba(255,255,255,0.97);
   padding: 10px 14px;
   margin-left: 26px;
   position: relative;
+  text-align: left;
+  font: inherit;
+  cursor: pointer;
 }
 
 .page-v2 .plan-map-hop-card strong {

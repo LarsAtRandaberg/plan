@@ -21,9 +21,338 @@
   const reportContent = document.getElementById("reportContent");
   const reportNavLinks = Array.from(document.querySelectorAll(".report-nav-link"));
   const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
+  const planMapTree = document.getElementById("planMapTree");
+  const planMapStrategyTitle = document.getElementById("planMapStrategyTitle");
+  const planMapStrategyList = document.getElementById("planMapStrategyList");
+  const planMapHopTitle = document.getElementById("planMapHopTitle");
+  const planMapHopList = document.getElementById("planMapHopList");
+
+  const planMenuModel = {
+    rootLabel: "Sammen skaper vi den grønne landsbyen",
+    sections: [
+      {
+        key: "areal-utvikling",
+        label: "Areal og utvikling",
+        leaves: [
+          {
+            key: "attraktivt-sentrum",
+            label: "Attraktivt sentrum",
+            subpath: ["Helhetlig stedsutvikling og bokvalitet"],
+            strategyPlanTitle: "Arealstrategien",
+            hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
+            strategies: [
+              {
+                key: "boligvekst",
+                label: "Øke andelen boliger nær sentrum og tjenester.",
+                hopItems: [
+                  { id: "3021", title: "Tiltak 3021", description: "Fortetting og reguleringsoppfølging i sentrumsaksen." },
+                  { id: "3024", title: "Tiltak 3024", description: "Utvikle møteplasser og forbindelser mellom bolig og sentrum." }
+                ]
+              },
+              {
+                key: "gang-sykkel",
+                label: "Styrke gang- og sykkelforbindelser i prioriterte områder.",
+                hopItems: [
+                  { id: "3030", title: "Tiltak 3030", description: "Prioritere trygg skolevei og forbindelser til kollektivknutepunkt." },
+                  { id: "3032", title: "Tiltak 3032", description: "Oppgradere gang- og sykkeltraseer i sentrumsområdet." }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        key: "gode-hverdagsliv",
+        label: "Gode hverdagsliv",
+        leaves: [
+          {
+            key: "god-alderdom",
+            label: "God alderdom",
+            subpath: ["Aktive og trygge liv gjennom hele livsløpet"],
+            strategyPlanTitle: "Leve hele livet",
+            hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
+            strategies: [
+              {
+                key: "forebyggende-helse",
+                label: "Styrke forebyggende hjemmebesøk og tidlig oppfølging.",
+                hopItems: [
+                  { id: "4104", title: "Tiltak 4104", description: "Styrke forebyggende oppfølging og hjemmebaserte tjenester." },
+                  { id: "4109", title: "Tiltak 4109", description: "Utvikle møteplasser og aktivitetstilbud for eldre." }
+                ]
+              }
+            ]
+          },
+          {
+            key: "gode-arbeidsplasser",
+            label: "Gode arbeidsplasser",
+            subpath: ["Kompetanse, rekruttering og heltidskultur"],
+            strategyPlanTitle: "Arbeidsgiverstrategien",
+            hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
+            strategies: [
+              {
+                key: "heltid",
+                label: "Øke heltidsandelen i prioriterte tjenester.",
+                hopItems: [
+                  { id: "2211", title: "Tiltak 2211", description: "Teste nye turnusmodeller og kompetanseplaner." },
+                  { id: "2216", title: "Tiltak 2216", description: "Målrettet rekruttering innen helse og oppvekst." }
+                ]
+              }
+            ]
+          },
+          {
+            key: "gode-fellesskap",
+            label: "Gode fellesskap",
+            subpath: ["Tilhørighet og deltakelse i nærmiljøet"],
+            strategyPlanTitle: "Frivillighetsstrategien",
+            hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
+            strategies: [
+              {
+                key: "frivillighet",
+                label: "Styrke samarbeid mellom kommune og frivillighet.",
+                hopItems: [
+                  { id: "5122", title: "Tiltak 5122", description: "Felles møteplasser og samordning for lag og foreninger." },
+                  { id: "5128", title: "Tiltak 5128", description: "Støtteordninger for deltakelse og inkludering." }
+                ]
+              }
+            ]
+          },
+          {
+            key: "gode-oppvekstvilkar",
+            label: "Gode oppvekstvilkår",
+            subpath: ["Tidlig innsats, helsefremmende og forebyggende arbeid"],
+            strategyPlanTitle: "Oppvekstplanen",
+            hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
+            strategies: [
+              {
+                key: "95-prosent",
+                label: "95 prosent av elevene få opplæringen sin innenfor det ordinære tilbudet med nødvendige universelle tilpasninger.",
+                hopItems: [
+                  { id: "4524", title: "Tiltak 4524", description: "Styrke tidlig innsats og tverrfaglig oppfølging i skoleløpet." },
+                  { id: "4532", title: "Tiltak 4532", description: "Videreutvikle universelle læringsmiljø og støttesystem i skolene." }
+                ]
+              },
+              {
+                key: "naervaer",
+                label: "Øke nærvær og tidlig oppfølging rundt barn og unge med sammensatte behov.",
+                hopItems: [
+                  { id: "4541", title: "Tiltak 4541", description: "Tydelig oppfølgingsløp for nærvær og tverrfaglig innsats." },
+                  { id: "4548", title: "Tiltak 4548", description: "Kompetanseløft i forebyggende arbeid og foreldresamarbeid." }
+                ]
+              },
+              {
+                key: "laget-rundt-barnet",
+                label: "Styrke laget rundt barnet i overgangene mellom barnehage, skole og hjelpetjenester.",
+                hopItems: [
+                  { id: "4554", title: "Tiltak 4554", description: "Felles overgangsrutiner mellom barnehage, skole og støttetjenester." },
+                  { id: "4560", title: "Tiltak 4560", description: "Samordne innsats rundt barn med behov for tilrettelegging." }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        key: "kommunen-er-vi",
+        label: "Kommunen er vi",
+        leaves: [
+          {
+            key: "god-tjenestekvalitet",
+            label: "God tjenestekvalitet",
+            subpath: ["Åpen, samordnet og lærende organisasjon"],
+            strategyPlanTitle: "Digitaliseringsstrategien",
+            hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
+            strategies: [
+              {
+                key: "digitale-tjenester",
+                label: "Forenkle tjenester og innsikt for innbyggere og ansatte.",
+                hopItems: [
+                  { id: "1120", title: "Tiltak 1120", description: "Modernisere digitale arbeidsflater og selvbetjening." },
+                  { id: "1128", title: "Tiltak 1128", description: "Bedre datagrunnlag for styring og oppfølging." }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      {
+        key: "lokalsamfunnet",
+        label: "Lokalsamfunnet",
+        leaves: [
+          {
+            key: "tryggt-naermiljo",
+            label: "Trygt nærmiljø",
+            subpath: ["Nærhet, beredskap og sosial bærekraft"],
+            strategyPlanTitle: "Beredskapsplanen",
+            hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
+            strategies: [
+              {
+                key: "beredskap",
+                label: "Styrke samhandling og robusthet i lokalsamfunnet.",
+                hopItems: [
+                  { id: "6203", title: "Tiltak 6203", description: "Trening, samøving og forebyggende beredskapstiltak." },
+                  { id: "6208", title: "Tiltak 6208", description: "Bedre informasjonsberedskap og lokalt samarbeid." }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+
+  const planSelection = {
+    leafKey: "gode-oppvekstvilkar",
+    strategyKey: "95-prosent"
+  };
 
   function isMobile() {
     return window.matchMedia("(max-width: 768px)").matches;
+  }
+
+  function getCurrentLeaf() {
+    for (const section of planMenuModel.sections) {
+      const leaf = section.leaves.find((item) => item.key === planSelection.leafKey);
+      if (leaf) return { section, leaf };
+    }
+    const fallbackSection = planMenuModel.sections[0];
+    return { section: fallbackSection, leaf: fallbackSection.leaves[0] };
+  }
+
+  function getCurrentStrategy() {
+    const { leaf } = getCurrentLeaf();
+    return leaf.strategies.find((item) => item.key === planSelection.strategyKey) || leaf.strategies[0];
+  }
+
+  function createButton(className, label, onClick) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = className;
+    button.textContent = label;
+    button.addEventListener("click", onClick);
+    return button;
+  }
+
+  function renderPlanTree() {
+    if (!planMapTree) return;
+    const { section: activeSection, leaf: activeLeaf } = getCurrentLeaf();
+    planMapTree.innerHTML = "";
+
+    const root = document.createElement("div");
+    root.className = "plan-map-tree-root";
+    root.textContent = planMenuModel.rootLabel;
+    planMapTree.appendChild(root);
+
+    planMenuModel.sections.forEach((section) => {
+      const group = document.createElement("section");
+      group.className = "plan-map-tree-group";
+      if (section.key === activeSection.key) {
+        group.classList.add("is-active");
+      }
+
+      const branch = createButton(
+        "plan-map-tree-branch" + (section.key === activeSection.key ? " is-open is-active" : ""),
+        section.label,
+        () => {
+          const firstLeaf = section.leaves[0];
+          planSelection.leafKey = firstLeaf.key;
+          planSelection.strategyKey = firstLeaf.strategies[0].key;
+          renderPlanMenus();
+        }
+      );
+      branch.setAttribute("aria-expanded", section.key === activeSection.key ? "true" : "false");
+      group.appendChild(branch);
+
+      if (section.key === activeSection.key) {
+        const children = document.createElement("div");
+        children.className = "plan-map-tree-children";
+
+        section.leaves.forEach((leaf) => {
+          const leafButton = createButton(
+            "plan-map-tree-leaf" + (leaf.key === activeLeaf.key ? " is-active" : ""),
+            leaf.label,
+            () => {
+              planSelection.leafKey = leaf.key;
+              planSelection.strategyKey = leaf.strategies[0].key;
+              renderPlanMenus();
+            }
+          );
+          if (leaf.key === activeLeaf.key) {
+            leafButton.setAttribute("aria-current", "true");
+          }
+          children.appendChild(leafButton);
+
+          if (leaf.key === activeLeaf.key && Array.isArray(leaf.subpath) && leaf.subpath.length) {
+            const subpath = document.createElement("div");
+            subpath.className = "plan-map-tree-subpath";
+
+            leaf.subpath.forEach((step, index) => {
+              const subLeaf = document.createElement(index === leaf.subpath.length - 1 ? "button" : "div");
+              subLeaf.className = index === leaf.subpath.length - 1 ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf";
+              subLeaf.textContent = step;
+              if (subLeaf.tagName === "BUTTON") {
+                subLeaf.type = "button";
+                subLeaf.addEventListener("click", () => {
+                  planSelection.leafKey = leaf.key;
+                  renderPlanMenus();
+                });
+              }
+              subpath.appendChild(subLeaf);
+            });
+
+            children.appendChild(subpath);
+          }
+        });
+
+        group.appendChild(children);
+      }
+
+      planMapTree.appendChild(group);
+    });
+  }
+
+  function renderStrategyMenu() {
+    if (!planMapStrategyList || !planMapStrategyTitle) return;
+    const { leaf } = getCurrentLeaf();
+    const activeStrategy = getCurrentStrategy();
+    planMapStrategyTitle.textContent = leaf.strategyPlanTitle;
+    planMapStrategyList.innerHTML = "";
+
+    leaf.strategies.forEach((strategy) => {
+      const button = createButton(
+        "plan-map-strategy-item" + (strategy.key === activeStrategy.key ? " is-active" : ""),
+        strategy.label,
+        () => {
+          planSelection.strategyKey = strategy.key;
+          renderPlanMenus();
+        }
+      );
+      if (strategy.key === activeStrategy.key) {
+        button.setAttribute("aria-current", "true");
+      }
+      planMapStrategyList.appendChild(button);
+    });
+  }
+
+  function renderHopMenu() {
+    if (!planMapHopList || !planMapHopTitle) return;
+    const { leaf } = getCurrentLeaf();
+    const activeStrategy = getCurrentStrategy();
+    planMapHopTitle.textContent = leaf.hopPlanTitle;
+    planMapHopList.innerHTML = "";
+
+    activeStrategy.hopItems.forEach((item) => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "plan-map-hop-card is-linked";
+      card.innerHTML = `<strong>${item.title}</strong><p>${item.description}</p>`;
+      planMapHopList.appendChild(card);
+    });
+  }
+
+  function renderPlanMenus() {
+    renderPlanTree();
+    renderStrategyMenu();
+    renderHopMenu();
   }
 
   function closeSidebar() {
@@ -40,7 +369,7 @@
 
   function setActiveReportLink(hash) {
     const activeHash = hash || "#rapport-sammendrag";
-    reportNavLinks.forEach(function(link) {
+    reportNavLinks.forEach((link) => {
       link.classList.toggle("is-active", link.getAttribute("href") === activeHash);
     });
   }
@@ -67,7 +396,7 @@
     const isReport = mode === "rapport";
     body.dataset.mode = isReport ? "rapport" : "plan";
 
-    modeButtons.forEach(function(button) {
+    modeButtons.forEach((button) => {
       const active = button.dataset.modeTarget === body.dataset.mode;
       button.classList.toggle("is-active", active);
       button.setAttribute("aria-selected", active ? "true" : "false");
@@ -93,30 +422,32 @@
     if (modeIntroCard) {
       modeIntroCard.innerHTML = isReport
         ? "<div class=\"mode-intro-kicker\">Rapport</div><div class=\"mode-intro-title\">Styring og oppfølging</div><p>Rapportmodus skal ikke skape forventning om tertialrapportering på alle mål. Her er fokus økonomi, avvik, risiko og prioriterte forhold.</p>"
-        : "<div class=\"mode-intro-kicker\">Plan</div><div class=\"mode-intro-title\">Planstruktur og mål</div><p>I planmodus er planhierarkiet primærnavigasjon. På mobil blir toppbaren komprimert til en trygg, synlig stripe når du scroller ned.</p>";
+        : "<div class=\"mode-intro-kicker\">Plan</div><div class=\"mode-intro-title\">Planstruktur og mål</div><p>I planmodus er planhierarkiet primærnavigasjon. På desktop viser venstresiden nå tre samtidige menyflater som henger sammen.</p>";
     }
 
     applyModeVisibility(isReport);
     closeSidebar();
-    if (isReport) setActiveReportLink(location.hash || "#rapport-sammendrag");
+    if (isReport) {
+      setActiveReportLink(location.hash || "#rapport-sammendrag");
+    }
   }
 
-  modeButtons.forEach(function(button) {
-    button.addEventListener("click", function() {
+  modeButtons.forEach((button) => {
+    button.addEventListener("click", () => {
       setMode(button.dataset.modeTarget);
     });
   });
 
-  [planRail, reportRail].forEach(function(rail) {
+  [planRail, reportRail].forEach((rail) => {
     if (!rail) return;
-    rail.addEventListener("click", function() {
+    rail.addEventListener("click", () => {
       setMode(rail.dataset.modeTarget);
     });
   });
 
   if (menuBtn) {
-    menuBtn.addEventListener("click", function(e) {
-      e.preventDefault();
+    menuBtn.addEventListener("click", (event) => {
+      event.preventDefault();
       openCurrentMenu();
     });
   }
@@ -125,14 +456,14 @@
   if (pageOverlay) pageOverlay.addEventListener("click", closeSidebar);
   if (peekButton) peekButton.addEventListener("click", openCurrentMenu);
 
-  reportNavLinks.forEach(function(link) {
-    link.addEventListener("click", function() {
+  reportNavLinks.forEach((link) => {
+    link.addEventListener("click", () => {
       setActiveReportLink(link.getAttribute("href"));
       if (isMobile()) closeSidebar();
     });
   });
 
-  window.addEventListener("hashchange", function() {
+  window.addEventListener("hashchange", () => {
     if (body.dataset.mode === "rapport") setActiveReportLink(location.hash || "#rapport-sammendrag");
   });
 
@@ -145,11 +476,12 @@
     observer.observe(reportSidebar, { attributes: true, attributeFilter: ["class"] });
   }
 
-  window.addEventListener("resize", function() {
+  window.addEventListener("resize", () => {
     applyModeVisibility(body.dataset.mode === "rapport");
     syncOverlay();
   });
 
+  renderPlanMenus();
   syncOverlay();
   setMode(body.dataset.mode || "plan");
 })();
