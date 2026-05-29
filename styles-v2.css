@@ -1,5 +1,5 @@
 body.page-v2 {
-  --page-bg: #f6f8f3;
+  --page-bg: #ffffff;
   --panel-0: #edf3e3;
   --panel-1: #f5f8ef;
   --panel-2: #fbfcf8;
@@ -269,7 +269,7 @@ body.page-v2[data-mode="rapport"] {
 
 .page-v2 .layout {
   min-height: calc(100vh - 96px);
-  margin-top: -1px;
+  margin-top: 0;
 }
 
 .page-v2 .content {
