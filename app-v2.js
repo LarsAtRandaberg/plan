@@ -30,6 +30,28 @@
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
   const planMapHopList = document.getElementById("planMapHopList");
+  const planContextsById = {
+    "063a2e01-35e6-f011-8407-000d3add2e1a": {
+      sectionKey: null,
+      leafKey: null,
+      strategyKey: null
+    },
+    "e3112baa-7858-f111-bec7-7c1e52370ef7": {
+      sectionKey: "gode-hverdagsliv",
+      leafKey: "gode-oppvekstvilkar",
+      strategyKey: null
+    },
+    "7df8f7f0-e0e7-f011-8407-000d3add2e1a": {
+      sectionKey: "gode-hverdagsliv",
+      leafKey: "gode-oppvekstvilkar",
+      strategyKey: "95-prosent"
+    },
+    "c18f1e69-6a49-f111-bec7-7c1e52370ef7": {
+      sectionKey: "gode-hverdagsliv",
+      leafKey: "gode-oppvekstvilkar",
+      strategyKey: "95-prosent"
+    }
+  };
 
   const planMenuModel = {
     rootLabel: "Sammen skaper vi den grønne landsbyen",
@@ -242,6 +264,21 @@
     button.textContent = label;
     button.addEventListener("click", onClick);
     return button;
+  }
+
+  function syncPlanContextFromLocation() {
+    const params = new URLSearchParams(location.search);
+    const planId = params.get("id");
+    const context = planId ? planContextsById[planId] : null;
+    if (!context) return;
+    planSelection.sectionKey = context.sectionKey;
+    planSelection.leafKey = context.leafKey;
+    planSelection.strategyKey = context.strategyKey;
+    if (body.dataset.mode === "rapport") {
+      setMode("plan");
+      return;
+    }
+    renderPlanMenus();
   }
 
   function renderPlanTree() {
@@ -518,6 +555,18 @@
     if (body.dataset.mode === "rapport") setActiveReportLink(location.hash || "#rapport-sammendrag");
   });
 
+  const originalPushState = history.pushState.bind(history);
+  history.pushState = function(...args) {
+    originalPushState(...args);
+    syncPlanContextFromLocation();
+  };
+
+  const originalReplaceState = history.replaceState.bind(history);
+  history.replaceState = function(...args) {
+    originalReplaceState(...args);
+    syncPlanContextFromLocation();
+  };
+
   if (sidebar) {
     const observer = new MutationObserver(syncOverlay);
     observer.observe(sidebar, { attributes: true, attributeFilter: ["class"] });
@@ -532,6 +581,9 @@
     syncOverlay();
   });
 
+  window.addEventListener("popstate", syncPlanContextFromLocation);
+
+  syncPlanContextFromLocation();
   renderPlanMenus();
   syncOverlay();
   setMode(body.dataset.mode || "plan");
