@@ -26,6 +26,12 @@
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
   const planMapHopColumn = document.querySelector(".plan-map-column-hop");
   const planMapLines = document.querySelector(".plan-map-lines");
+  const planMapLineLeft = document.querySelector(".plan-map-line-left");
+  const planMapLineRightTop = document.querySelector(".plan-map-line-right-top");
+  const planMapLineMiddleRight = document.querySelector(".plan-map-line-middle-right");
+  const planMapLineRightBottom = document.querySelector(".plan-map-line-right-bottom");
+  const planMapJointCenter = document.querySelector(".plan-map-joint-center");
+  const planMapJointRight = document.querySelector(".plan-map-joint-right");
   const planMapStrategyTitle = document.getElementById("planMapStrategyTitle");
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
@@ -33,6 +39,7 @@
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
   let planGoalsData = [];
+  let connectorUpdateTimer = null;
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
       entryColumn: "kommune",
@@ -680,6 +687,122 @@
     });
   }
 
+  function setConnectorBox(element, left, top, width, height) {
+    if (!element) return;
+    element.style.display = width <= 0 || height < 0 ? "none" : "block";
+    if (width <= 0 || height < 0) return;
+    element.style.left = `${left}px`;
+    element.style.top = `${top}px`;
+    element.style.width = `${width}px`;
+    element.style.height = `${height}px`;
+  }
+
+  function updatePlanConnectors(layoutState) {
+    if (!planMapLines) return;
+
+    const shouldShowLeftConnector = layoutState === "full";
+    const shouldShowRightConnector = layoutState === "full" && !!getCurrentHopItem();
+    const showAny = shouldShowLeftConnector || shouldShowRightConnector;
+
+    planMapLines.classList.toggle("is-visible", showAny);
+    planMapLines.setAttribute("aria-hidden", showAny ? "false" : "true");
+
+    [
+      planMapLineLeft,
+      planMapLineRightTop,
+      planMapLineMiddleRight,
+      planMapLineRightBottom,
+      planMapJointCenter,
+      planMapJointRight
+    ].forEach((element) => {
+      if (element) element.style.display = "none";
+    });
+
+    if (!showAny) return;
+
+    const workspaceRect = planMapWorkspace?.getBoundingClientRect();
+    const leftNode = planMapWorkspace?.querySelector(".plan-map-column-kommune .plan-map-node-selected");
+    const middleNode = planMapWorkspace?.querySelector(".plan-map-column-strategi .plan-map-node-selected");
+    const rightNode = planMapWorkspace?.querySelector(".plan-map-column-hop .plan-map-node-selected");
+
+    if (!workspaceRect || !leftNode || !middleNode) return;
+
+    const leftRect = leftNode.getBoundingClientRect();
+    const middleRect = middleNode.getBoundingClientRect();
+    const leftAnchorX = leftRect.right - workspaceRect.left;
+    const leftAnchorY = leftRect.top + (leftRect.height / 2) - workspaceRect.top;
+    const middleAnchorX = middleRect.left - workspaceRect.left;
+    const middleAnchorY = middleRect.top + (middleRect.height / 2) - workspaceRect.top;
+    const centerJointX = leftAnchorX + 20;
+
+    setConnectorBox(
+      planMapLineLeft,
+      leftAnchorX,
+      leftAnchorY - 1,
+      Math.max(0, centerJointX - leftAnchorX),
+      2
+    );
+
+    setConnectorBox(
+      planMapJointCenter,
+      centerJointX - 1,
+      Math.min(leftAnchorY, middleAnchorY),
+      2,
+      Math.abs(middleAnchorY - leftAnchorY)
+    );
+
+    setConnectorBox(
+      planMapLineRightTop,
+      Math.min(centerJointX, middleAnchorX),
+      middleAnchorY - 1,
+      Math.max(0, middleAnchorX - centerJointX),
+      2
+    );
+
+    if (!shouldShowRightConnector || !rightNode) return;
+
+    const rightRect = rightNode.getBoundingClientRect();
+    const strategyRect = middleNode.getBoundingClientRect();
+    const strategyAnchorX = strategyRect.right - workspaceRect.left;
+    const strategyAnchorY = strategyRect.top + (strategyRect.height / 2) - workspaceRect.top;
+    const rightAnchorX = rightRect.left - workspaceRect.left;
+    const rightAnchorY = rightRect.top + (rightRect.height / 2) - workspaceRect.top;
+    const rightJointX = strategyAnchorX + 18;
+
+    setConnectorBox(
+      planMapLineMiddleRight,
+      strategyAnchorX,
+      strategyAnchorY - 1,
+      Math.max(0, rightJointX - strategyAnchorX),
+      2
+    );
+
+    setConnectorBox(
+      planMapJointRight,
+      rightJointX - 1,
+      Math.min(strategyAnchorY, rightAnchorY),
+      2,
+      Math.abs(rightAnchorY - strategyAnchorY)
+    );
+
+    setConnectorBox(
+      planMapLineRightBottom,
+      Math.min(rightJointX, rightAnchorX),
+      rightAnchorY - 1,
+      Math.max(0, rightAnchorX - rightJointX),
+      2
+    );
+  }
+
+  function scheduleConnectorUpdate() {
+    const layoutState = getLayoutState();
+    requestAnimationFrame(() => updatePlanConnectors(layoutState));
+    if (connectorUpdateTimer) {
+      clearTimeout(connectorUpdateTimer);
+    }
+    connectorUpdateTimer = setTimeout(() => updatePlanConnectors(getLayoutState()), 1050);
+  }
+
   function renderPlanMenus() {
     const layoutState = getLayoutState();
     if (sidebar) {
@@ -714,14 +837,10 @@
       column.setAttribute("aria-hidden", state === "hidden" ? "true" : "false");
     });
 
-    if (planMapLines) {
-      const showLines = layoutState === "full";
-      planMapLines.classList.toggle("is-visible", showLines);
-      planMapLines.setAttribute("aria-hidden", showLines ? "false" : "true");
-    }
     renderPlanTree();
     renderStrategyMenu();
     renderHopMenu();
+    scheduleConnectorUpdate();
   }
 
   function closeSidebar() {
@@ -860,6 +979,9 @@
   window.addEventListener("resize", () => {
     applyModeVisibility(body.dataset.mode === "rapport");
     syncOverlay();
+    if (body.dataset.mode === "plan") {
+      scheduleConnectorUpdate();
+    }
   });
 
   window.addEventListener("popstate", syncPlanContextFromLocation);
