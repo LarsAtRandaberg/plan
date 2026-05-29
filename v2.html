@@ -83,7 +83,7 @@
   </aside>
 
   <button type="button" class="desktop-mode-rail desktop-mode-rail-plan" id="planRail" data-mode-target="plan" aria-label="Åpne planmodus">
-    <span class="desktop-mode-rail-label">Plan</span>
+    <span class="desktop-mode-rail-label">Planer</span>
   </button>
 
   <aside class="report-sidebar" id="reportSidebar" aria-label="Rapportmeny">
@@ -120,6 +120,54 @@
       <div class="mode-intro-title">Planstruktur og mål</div>
       <p>I planmodus er planhierarkiet primærnavigasjon. På mobil blir toppbaren komprimert til en trygg, synlig stripe når du scroller ned.</p>
     </div>
+    <section class="plan-map-prototype" id="planMapPrototype" aria-labelledby="plan-map-title">
+      <div class="plan-map-header">
+        <div>
+          <div class="plan-map-kicker">Prototype</div>
+          <h2 id="plan-map-title">Slik kan Oppvekstplanen kobles til kommuneplan og HØP</h2>
+        </div>
+        <p class="plan-map-note">Eksempelet bruker faktiske navn fra datafilene. Selve «95 prosent»-målet vises her som illustrasjon, siden teksten ikke finnes i denne checkouten ennå.</p>
+      </div>
+      <div class="plan-map-grid">
+        <div class="plan-map-column plan-map-column-kommune">
+          <div class="plan-map-column-title">Kommuneplan</div>
+          <div class="plan-map-node plan-map-node-root">Kommuneplanens samfunnsdel 2026-2040</div>
+          <div class="plan-map-path">
+            <div class="plan-map-node">Gode hverdagsliv</div>
+            <div class="plan-map-connector"></div>
+            <div class="plan-map-node">Gode oppvekstvilkår</div>
+            <div class="plan-map-connector"></div>
+            <div class="plan-map-node is-highlighted">Tidlig innsats, helsefremmende og forebyggende arbeid</div>
+          </div>
+        </div>
+
+        <div class="plan-map-column plan-map-column-strategi">
+          <div class="plan-map-column-title">Strategier og temaplaner</div>
+          <button type="button" class="plan-map-strategy-card is-active">
+            <span class="plan-map-strategy-name">Oppvekstplanen</span>
+            <span class="plan-map-strategy-state">hover / fokus</span>
+            <span class="plan-map-strategy-detail">95 prosent av elevene skal få opplæringen innenfor det ordinære tilbudet med nødvendige universelle tilpasninger.</span>
+          </button>
+          <div class="plan-map-related-list">
+            <span class="plan-map-related-pill">Barnehagebruksplan 2026</span>
+            <span class="plan-map-related-pill is-muted">Andre strategier kan ligge her</span>
+          </div>
+        </div>
+
+        <div class="plan-map-column plan-map-column-hop">
+          <div class="plan-map-column-title">Handlings- og økonomiplan</div>
+          <div class="plan-map-hop-card">
+            <div class="plan-map-hop-kicker">Eksempel på tiltak</div>
+            <strong>Styrke tidlig innsats i laget rundt barnet</strong>
+            <p>Høyre laget kan vise tiltak, økonomiske prioriteringer eller oppfølgingspunkter som konkret støtter strategimålet.</p>
+          </div>
+          <div class="plan-map-hop-card is-secondary">
+            <div class="plan-map-hop-kicker">Mulig rapportkobling</div>
+            <p>I rapportmodus kan samme spor brukes til å vise status bare når målet faktisk har styringsrelevant oppfølging.</p>
+          </div>
+        </div>
+      </div>
+    </section>
     <div id="innhold"></div>
     <div class="report-content" id="reportContent" hidden>
       <section class="report-section" id="rapport-sammendrag">
@@ -203,7 +251,7 @@
   </main>
 
   <button type="button" class="desktop-mode-rail desktop-mode-rail-report" id="reportRail" data-mode-target="rapport" aria-label="Åpne rapportmodus">
-    <span class="desktop-mode-rail-label">Rapport</span>
+    <span class="desktop-mode-rail-label">Rapporter</span>
   </button>
 </div>
 
