@@ -386,6 +386,9 @@
 
   function renderPlanMenus() {
     const depth = getVisibleDepth();
+    if (sidebar) {
+      sidebar.dataset.depth = String(depth);
+    }
     if (planMapWorkspace) {
       planMapWorkspace.dataset.depth = String(depth);
     }
