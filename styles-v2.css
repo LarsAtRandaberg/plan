@@ -524,20 +524,20 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-column-kommune {
-  background: var(--panel-0);
+  background: transparent;
   z-index: 3;
 }
 
 .page-v2 .plan-map-column-strategi {
-  background: var(--panel-1);
+  background: transparent;
   z-index: 2;
-  box-shadow: inset 14px 0 18px rgba(0, 82, 40, 0.04);
+  box-shadow: none;
 }
 
 .page-v2 .plan-map-column-hop {
-  background: var(--panel-2);
+  background: transparent;
   z-index: 1;
-  box-shadow: inset 14px 0 18px rgba(0, 82, 40, 0.03);
+  box-shadow: none;
 }
 
 .page-v2 .plan-map-column[data-state="open"] {
