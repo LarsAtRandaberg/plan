@@ -10,6 +10,8 @@
   const pageOverlay = document.getElementById("pageOverlay");
   const peekButton = document.getElementById("peekButton");
   const peekButtonLabel = document.getElementById("peekButtonLabel");
+  const planRail = document.getElementById("planRail");
+  const reportRail = document.getElementById("reportRail");
   const modeBadge = document.getElementById("mode-badge");
   const modeSummary = document.getElementById("mode-summary");
   const modeIntroCard = document.getElementById("mode-intro-card");
@@ -102,6 +104,13 @@
   modeButtons.forEach(function(button) {
     button.addEventListener("click", function() {
       setMode(button.dataset.modeTarget);
+    });
+  });
+
+  [planRail, reportRail].forEach(function(rail) {
+    if (!rail) return;
+    rail.addEventListener("click", function() {
+      setMode(rail.dataset.modeTarget);
     });
   });
 

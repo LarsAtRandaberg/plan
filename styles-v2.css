@@ -70,7 +70,7 @@ body.page-v2[data-mode="rapport"] {
 }
 
 .page-v2 .mode-switch {
-  display: inline-flex;
+  display: none;
   align-items: center;
   gap: 4px;
   padding: 4px;
@@ -142,7 +142,7 @@ body.page-v2[data-mode="rapport"] {
 }
 
 .page-v2 .content {
-  order: 2;
+  order: 3;
   flex: 1;
   min-width: 0;
 }
@@ -154,8 +154,46 @@ body.page-v2[data-mode="rapport"] {
   transition: left 0.25s, right 0.25s, box-shadow 0.25s;
 }
 
+.page-v2 .desktop-mode-rail {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  width: 28px;
+  border: 0;
+  padding: 16px 4px;
+  cursor: pointer;
+  transition: width 0.18s ease, background 0.18s ease, color 0.18s ease;
+}
+
+.page-v2 .desktop-mode-rail:hover {
+  width: 42px;
+}
+
+.page-v2 .desktop-mode-rail-label {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 12px;
+}
+
+.page-v2 .desktop-mode-rail-plan {
+  order: 2;
+  background: linear-gradient(180deg, rgba(234,243,222,0.88), rgba(192,221,151,0.78));
+  color: var(--rapport-900);
+  border-right: 1px solid rgba(18, 56, 95, 0.12);
+}
+
+.page-v2 .desktop-mode-rail-report {
+  order: 4;
+  background: linear-gradient(180deg, rgba(233,243,251,0.96), rgba(191,216,242,0.84));
+  color: var(--rapport-900);
+  border-left: 1px solid rgba(18, 56, 95, 0.12);
+}
+
 .page-v2 .report-sidebar {
-  order: 3;
+  order: 5;
   width: 290px;
   border-left: 1px solid var(--line);
   padding: 16px 14px;
@@ -383,6 +421,11 @@ body.page-v2[data-mode="rapport"] .search-result-item:hover {
   background: var(--green-100);
 }
 
+body.page-v2[data-mode="plan"] .desktop-mode-rail-plan,
+body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
+  display: none;
+}
+
 @media (max-width: 768px) {
   .page-v2 .topbar {
     display: block;
@@ -447,6 +490,7 @@ body.page-v2[data-mode="rapport"] .search-result-item:hover {
   }
 
   .page-v2 .mode-switch {
+    display: inline-flex;
     gap: 2px;
     padding: 3px;
   }
@@ -522,6 +566,10 @@ body.page-v2[data-mode="rapport"] .search-result-item:hover {
 
   .page-v2 .layout {
     display: block;
+  }
+
+  .page-v2 .desktop-mode-rail {
+    display: none !important;
   }
 
   .page-v2 .sidebar {
