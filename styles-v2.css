@@ -642,7 +642,7 @@ body.page-v2[data-mode="rapport"] #menu {
   position: absolute;
   left: 0;
   top: 0;
-  color: var(--accent-green);
+  color: rgba(16, 25, 38, 0.38);
   font-size: 11px;
   transform: translateY(4px);
 }
@@ -677,8 +677,8 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-tree-leaf.is-active {
   padding: 3px 7px;
   border-radius: 999px;
-  background: rgba(135, 190, 27, 0.16);
-  color: var(--accent-green-dark);
+  background: rgba(16, 25, 38, 0.08);
+  color: rgba(16, 25, 38, 0.9);
   font-weight: 700;
 }
 
@@ -712,8 +712,8 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-hop-card {
   border-radius: 20px;
   background: rgba(255,255,255,0.92);
-  border: 1px solid rgba(0, 82, 40, 0.12);
-  box-shadow: 0 10px 24px rgba(12, 40, 21, 0.05);
+  border: 1px solid rgba(16, 25, 38, 0.10);
+  box-shadow: 0 10px 24px rgba(16, 25, 38, 0.04);
 }
 
 .page-v2 .plan-map-node {
@@ -731,7 +731,7 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-list-node {
   position: relative;
   background: rgba(255,255,255,0.46);
-  border-color: rgba(0, 82, 40, 0.1);
+  border-color: rgba(16, 25, 38, 0.08);
   box-shadow: none;
 }
 
@@ -775,8 +775,8 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-hop-card.is-active,
 .page-v2 .plan-map-node.plan-map-list-node.plan-map-node-selected {
   background: rgba(255,255,255,0.94);
-  border-color: rgba(0, 82, 40, 0.18);
-  box-shadow: 0 14px 30px rgba(12, 40, 21, 0.07);
+  border-color: rgba(16, 25, 38, 0.14);
+  box-shadow: 0 14px 30px rgba(16, 25, 38, 0.05);
 }
 
 .page-v2 .plan-map-hop-card strong {
