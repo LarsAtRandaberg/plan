@@ -692,55 +692,58 @@
     });
   }
 
-  function appendConnectorSegment(left, top, width, height, extraClass = "") {
-    if (!planMapLines || width <= 0 || height <= 0) return;
+  function appendConnectorPath(svg, d, extraClass = "") {
+    if (!svg || !d) return;
 
-    const segment = document.createElement("div");
-    segment.className = `plan-map-line${extraClass ? ` ${extraClass}` : ""}`;
-    segment.style.left = `${left}px`;
-    segment.style.top = `${top}px`;
-    segment.style.width = `${width}px`;
-    segment.style.height = `${height}px`;
-    planMapLines.appendChild(segment);
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", d);
+    path.setAttribute("class", `plan-map-connector${extraClass ? ` ${extraClass}` : ""}`);
+    svg.appendChild(path);
   }
 
-  function drawConnectorGroup(sourceNode, targetNodes, workspaceRect, extraClass = "") {
-    if (!sourceNode || !targetNodes.length || !workspaceRect) return;
+  function drawConnectorGroup(svg, sourceNode, targetNodes, workspaceRect, extraClass = "") {
+    if (!svg || !sourceNode || !targetNodes.length || !workspaceRect) return;
 
     const sourceRect = sourceNode.getBoundingClientRect();
     const targetRects = targetNodes.map((node) => node.getBoundingClientRect());
     const targetLeft = Math.min(...targetRects.map((rect) => rect.left - workspaceRect.left));
     const sourceX = sourceRect.right - workspaceRect.left + 10;
     const sourceY = sourceRect.top + (sourceRect.height / 2) - workspaceRect.top;
-    const branchStartX = targetLeft - 24;
+    const trunkX = targetLeft - 22;
     const branchEndX = targetLeft - 8;
     const targetCenters = targetRects.map((rect) => rect.top + (rect.height / 2) - workspaceRect.top);
     const trunkTop = Math.min(sourceY, ...targetCenters);
     const trunkBottom = Math.max(sourceY, ...targetCenters);
+    const connectorClassPrefix = extraClass ? `${extraClass} ` : "";
 
-    appendConnectorSegment(
-      sourceX,
-      sourceY - 1,
-      Math.max(0, branchStartX - sourceX),
-      2,
-      extraClass ? `${extraClass} plan-map-line--source` : "plan-map-line--source"
+    appendConnectorPath(
+      svg,
+      `M ${sourceX} ${sourceY} H ${trunkX}`,
+      `${connectorClassPrefix}plan-map-connector--source`
     );
 
-    appendConnectorSegment(
-      branchStartX,
-      trunkTop,
-      2,
-      Math.max(2, trunkBottom - trunkTop),
-      extraClass ? `${extraClass} plan-map-line--trunk` : "plan-map-line--trunk"
+    appendConnectorPath(
+      svg,
+      `M ${trunkX} ${trunkTop} V ${trunkBottom}`,
+      `${connectorClassPrefix}plan-map-connector--trunk`
     );
 
     targetCenters.forEach((targetY) => {
-      appendConnectorSegment(
-        branchStartX,
-        targetY - 1,
-        Math.max(0, branchEndX - branchStartX),
-        2,
-        extraClass ? `${extraClass} plan-map-line--branch` : "plan-map-line--branch"
+      if (Math.abs(targetY - sourceY) < 1) {
+        appendConnectorPath(
+          svg,
+          `M ${trunkX} ${targetY} H ${branchEndX}`,
+          `${connectorClassPrefix}plan-map-connector--branch`
+        );
+        return;
+      }
+
+      const direction = targetY > sourceY ? 1 : -1;
+      const radius = Math.min(14, Math.max(6, Math.abs(targetY - sourceY) / 2));
+      appendConnectorPath(
+        svg,
+        `M ${trunkX} ${targetY - (direction * radius)} Q ${trunkX} ${targetY} ${trunkX + radius} ${targetY} H ${branchEndX}`,
+        `${connectorClassPrefix}plan-map-connector--branch`
       );
     });
   }
@@ -766,11 +769,18 @@
 
     if (!workspaceRect || !leftNode || !strategyNodes.length) return;
 
-    drawConnectorGroup(leftNode, strategyNodes, workspaceRect, "plan-map-line--left-group");
+    const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    svg.setAttribute("class", "plan-map-connectors");
+    svg.setAttribute("viewBox", `0 0 ${workspaceRect.width} ${workspaceRect.height}`);
+    svg.setAttribute("width", `${workspaceRect.width}`);
+    svg.setAttribute("height", `${workspaceRect.height}`);
+    planMapLines.appendChild(svg);
+
+    drawConnectorGroup(svg, leftNode, strategyNodes, workspaceRect, "plan-map-connector--left-group");
 
     if (!shouldShowRightConnector || !middleNode || !hopNodes.length) return;
 
-    drawConnectorGroup(middleNode, hopNodes, workspaceRect, "plan-map-line--right-group");
+    drawConnectorGroup(svg, middleNode, hopNodes, workspaceRect, "plan-map-connector--right-group");
   }
 
   function scheduleConnectorUpdate() {
