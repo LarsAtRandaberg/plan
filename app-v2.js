@@ -21,7 +21,11 @@
   const reportContent = document.getElementById("reportContent");
   const reportNavLinks = Array.from(document.querySelectorAll(".report-nav-link"));
   const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
+  const planMapWorkspace = document.querySelector(".plan-map-workspace");
   const planMapTree = document.getElementById("planMapTree");
+  const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
+  const planMapHopColumn = document.querySelector(".plan-map-column-hop");
+  const planMapLines = document.querySelector(".plan-map-lines");
   const planMapStrategyTitle = document.getElementById("planMapStrategyTitle");
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
@@ -201,8 +205,9 @@
   };
 
   const planSelection = {
-    leafKey: "gode-oppvekstvilkar",
-    strategyKey: "95-prosent"
+    sectionKey: null,
+    leafKey: null,
+    strategyKey: null
   };
 
   function isMobile() {
@@ -210,17 +215,24 @@
   }
 
   function getCurrentLeaf() {
+    if (!planSelection.leafKey) return null;
     for (const section of planMenuModel.sections) {
       const leaf = section.leaves.find((item) => item.key === planSelection.leafKey);
       if (leaf) return { section, leaf };
     }
-    const fallbackSection = planMenuModel.sections[0];
-    return { section: fallbackSection, leaf: fallbackSection.leaves[0] };
+    return null;
   }
 
   function getCurrentStrategy() {
-    const { leaf } = getCurrentLeaf();
-    return leaf.strategies.find((item) => item.key === planSelection.strategyKey) || leaf.strategies[0];
+    const currentLeaf = getCurrentLeaf();
+    if (!currentLeaf || !planSelection.strategyKey) return null;
+    return currentLeaf.leaf.strategies.find((item) => item.key === planSelection.strategyKey) || null;
+  }
+
+  function getVisibleDepth() {
+    if (!planSelection.leafKey) return 1;
+    if (!planSelection.strategyKey) return 2;
+    return 3;
   }
 
   function createButton(className, label, onClick) {
@@ -234,7 +246,9 @@
 
   function renderPlanTree() {
     if (!planMapTree) return;
-    const { section: activeSection, leaf: activeLeaf } = getCurrentLeaf();
+    const currentLeaf = getCurrentLeaf();
+    const activeSectionKey = planSelection.sectionKey || (currentLeaf ? currentLeaf.section.key : null);
+    const activeLeafKey = currentLeaf ? currentLeaf.leaf.key : null;
     planMapTree.innerHTML = "";
 
     const root = document.createElement("div");
@@ -245,43 +259,48 @@
     planMenuModel.sections.forEach((section) => {
       const group = document.createElement("section");
       group.className = "plan-map-tree-group";
-      if (section.key === activeSection.key) {
+      if (section.key === activeSectionKey) {
         group.classList.add("is-active");
       }
 
       const branch = createButton(
-        "plan-map-tree-branch" + (section.key === activeSection.key ? " is-open is-active" : ""),
+        "plan-map-tree-branch" + (section.key === activeSectionKey ? " is-open is-active" : ""),
         section.label,
         () => {
-          const firstLeaf = section.leaves[0];
-          planSelection.leafKey = firstLeaf.key;
-          planSelection.strategyKey = firstLeaf.strategies[0].key;
+          if (planSelection.sectionKey === section.key && !planSelection.leafKey) {
+            planSelection.sectionKey = null;
+          } else {
+            planSelection.sectionKey = section.key;
+          }
+          planSelection.leafKey = null;
+          planSelection.strategyKey = null;
           renderPlanMenus();
         }
       );
-      branch.setAttribute("aria-expanded", section.key === activeSection.key ? "true" : "false");
+      branch.setAttribute("aria-expanded", section.key === activeSectionKey ? "true" : "false");
       group.appendChild(branch);
 
-      if (section.key === activeSection.key) {
+      if (section.key === activeSectionKey) {
         const children = document.createElement("div");
         children.className = "plan-map-tree-children";
 
         section.leaves.forEach((leaf) => {
           const leafButton = createButton(
-            "plan-map-tree-leaf" + (leaf.key === activeLeaf.key ? " is-active" : ""),
+            "plan-map-tree-leaf" + (leaf.key === activeLeafKey ? " is-active" : ""),
             leaf.label,
             () => {
+              planSelection.sectionKey = section.key;
               planSelection.leafKey = leaf.key;
-              planSelection.strategyKey = leaf.strategies[0].key;
+              planSelection.strategyKey = null;
               renderPlanMenus();
             }
           );
-          if (leaf.key === activeLeaf.key) {
+          if (leaf.key === activeLeafKey) {
             leafButton.setAttribute("aria-current", "true");
           }
           children.appendChild(leafButton);
 
-          if (leaf.key === activeLeaf.key && Array.isArray(leaf.subpath) && leaf.subpath.length) {
+          if (leaf.key === activeLeafKey && Array.isArray(leaf.subpath) && leaf.subpath.length) {
             const subpath = document.createElement("div");
             subpath.className = "plan-map-tree-subpath";
 
@@ -292,6 +311,7 @@
               if (subLeaf.tagName === "BUTTON") {
                 subLeaf.type = "button";
                 subLeaf.addEventListener("click", () => {
+                  planSelection.sectionKey = section.key;
                   planSelection.leafKey = leaf.key;
                   renderPlanMenus();
                 });
@@ -312,21 +332,27 @@
 
   function renderStrategyMenu() {
     if (!planMapStrategyList || !planMapStrategyTitle) return;
-    const { leaf } = getCurrentLeaf();
+    const currentLeaf = getCurrentLeaf();
+    if (!currentLeaf) {
+      planMapStrategyTitle.textContent = "";
+      planMapStrategyList.innerHTML = "";
+      return;
+    }
+    const { leaf } = currentLeaf;
     const activeStrategy = getCurrentStrategy();
     planMapStrategyTitle.textContent = leaf.strategyPlanTitle;
     planMapStrategyList.innerHTML = "";
 
     leaf.strategies.forEach((strategy) => {
       const button = createButton(
-        "plan-map-strategy-item" + (strategy.key === activeStrategy.key ? " is-active" : ""),
+        "plan-map-strategy-item" + (activeStrategy && strategy.key === activeStrategy.key ? " is-active" : ""),
         strategy.label,
         () => {
           planSelection.strategyKey = strategy.key;
           renderPlanMenus();
         }
       );
-      if (strategy.key === activeStrategy.key) {
+      if (activeStrategy && strategy.key === activeStrategy.key) {
         button.setAttribute("aria-current", "true");
       }
       planMapStrategyList.appendChild(button);
@@ -335,10 +361,19 @@
 
   function renderHopMenu() {
     if (!planMapHopList || !planMapHopTitle) return;
-    const { leaf } = getCurrentLeaf();
+    const currentLeaf = getCurrentLeaf();
+    if (!currentLeaf) {
+      planMapHopTitle.textContent = "";
+      planMapHopList.innerHTML = "";
+      return;
+    }
+    const { leaf } = currentLeaf;
     const activeStrategy = getCurrentStrategy();
     planMapHopTitle.textContent = leaf.hopPlanTitle;
     planMapHopList.innerHTML = "";
+    if (!activeStrategy) {
+      return;
+    }
 
     activeStrategy.hopItems.forEach((item) => {
       const card = document.createElement("button");
@@ -350,6 +385,19 @@
   }
 
   function renderPlanMenus() {
+    const depth = getVisibleDepth();
+    if (planMapWorkspace) {
+      planMapWorkspace.dataset.depth = String(depth);
+    }
+    if (planMapStrategyColumn) {
+      planMapStrategyColumn.hidden = depth < 2;
+    }
+    if (planMapHopColumn) {
+      planMapHopColumn.hidden = depth < 3;
+    }
+    if (planMapLines) {
+      planMapLines.hidden = depth < 3;
+    }
     renderPlanTree();
     renderStrategyMenu();
     renderHopMenu();

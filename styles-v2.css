@@ -325,11 +325,28 @@ body.page-v2[data-mode="rapport"] #menu {
   border: 1px solid rgba(59,109,17,0.12);
 }
 
+.page-v2 .plan-map-workspace[data-depth="1"] {
+  grid-template-columns: 1fr;
+}
+
+.page-v2 .plan-map-workspace[data-depth="2"] {
+  grid-template-columns: 1fr 1.12fr;
+}
+
+.page-v2 .plan-map-workspace[data-depth="3"] {
+  grid-template-columns: 1.05fr 1.1fr 0.95fr;
+}
+
 .page-v2 .plan-map-column {
   position: relative;
   padding: 22px 20px;
   min-height: 560px;
   z-index: 2;
+}
+
+.page-v2 .plan-map-column[hidden],
+.page-v2 .plan-map-lines[hidden] {
+  display: none !important;
 }
 
 .page-v2 .plan-map-column-kommune {
