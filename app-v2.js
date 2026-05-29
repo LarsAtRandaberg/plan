@@ -35,24 +35,28 @@
   let planGoalsData = [];
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
+      entryColumn: "kommune",
       sectionKey: null,
       leafKey: null,
       strategyKey: null
     },
     "e3112baa-7858-f111-bec7-7c1e52370ef7": {
+      entryColumn: "strategi",
       sectionKey: "gode-hverdagsliv",
       leafKey: "gode-oppvekstvilkar",
       strategyKey: null
     },
     "7df8f7f0-e0e7-f011-8407-000d3add2e1a": {
+      entryColumn: "hop",
       sectionKey: "gode-hverdagsliv",
       leafKey: "gode-oppvekstvilkar",
-      strategyKey: "95-prosent"
+      strategyKey: null
     },
     "c18f1e69-6a49-f111-bec7-7c1e52370ef7": {
+      entryColumn: "hop",
       sectionKey: "gode-hverdagsliv",
       leafKey: "gode-oppvekstvilkar",
-      strategyKey: "95-prosent"
+      strategyKey: null
     }
   };
 
@@ -268,9 +272,11 @@
   };
 
   const planSelection = {
+    focusColumn: "kommune",
     sectionKey: null,
     leafKey: null,
-    strategyKey: null
+    strategyKey: null,
+    hopKey: null
   };
 
   function isMobile() {
@@ -292,6 +298,12 @@
     return currentLeaf.leaf.strategies.find((item) => item.key === planSelection.strategyKey) || null;
   }
 
+  function getCurrentHopItem() {
+    const currentStrategy = getCurrentStrategy();
+    if (!currentStrategy || !planSelection.hopKey || !Array.isArray(currentStrategy.hopItems)) return null;
+    return currentStrategy.hopItems.find((item) => getNodeKey(item) === planSelection.hopKey) || null;
+  }
+
   function slugify(value) {
     return String(value || "")
       .toLowerCase()
@@ -300,6 +312,10 @@
       .replace(/[^a-z0-9]+/g, "-")
       .replace(/^-+|-+$/g, "")
       .slice(0, 64);
+  }
+
+  function getNodeKey(item) {
+    return item.key || item.id || slugify(item.label || item.title || "");
   }
 
   function getLeafByKey(leafKey) {
@@ -319,6 +335,18 @@
     const hasSelectedStrategy = currentLeaf.leaf.strategies.some((item) => item.key === planSelection.strategyKey);
     if (!hasSelectedStrategy) {
       planSelection.strategyKey = null;
+    }
+  }
+
+  function ensureValidHopSelection() {
+    const currentStrategy = getCurrentStrategy();
+    if (!currentStrategy || !Array.isArray(currentStrategy.hopItems)) {
+      planSelection.hopKey = null;
+      return;
+    }
+    const hasSelectedHop = currentStrategy.hopItems.some((item) => getNodeKey(item) === planSelection.hopKey);
+    if (!hasSelectedHop) {
+      planSelection.hopKey = null;
     }
   }
 
@@ -365,6 +393,7 @@
     if (planGoalsData.length) {
       buildOppvekstStrategiesFromMaal(planGoalsData);
       ensureValidStrategySelection();
+      ensureValidHopSelection();
     }
   }
 
@@ -389,15 +418,26 @@
       }
 
       ensureValidStrategySelection();
+      ensureValidHopSelection();
     } catch (error) {
       console.warn("Kunne ikke laste maal.json for v2-planmenyen", error);
     }
   }
 
-  function getVisibleDepth() {
-    if (!planSelection.leafKey) return 1;
-    if (!planSelection.strategyKey) return 2;
-    return 3;
+  function getLayoutState() {
+    if (planSelection.focusColumn === "hop" && !planSelection.hopKey) {
+      return "hop-entry";
+    }
+    if (planSelection.focusColumn === "strategi" && !planSelection.strategyKey) {
+      return "strategi-entry";
+    }
+    if (!planSelection.leafKey) {
+      return "kommune-only";
+    }
+    if (!planSelection.strategyKey) {
+      return "kommune-plus-strategi";
+    }
+    return "full";
   }
 
   function createButton(className, label, onClick) {
@@ -409,14 +449,85 @@
     return button;
   }
 
+  function getNodeLabel(node) {
+    return node.label || node.title || "";
+  }
+
+  function hasSelectedDescendant(node, selectedKey) {
+    if (!node || !selectedKey) return false;
+    const nodeKey = getNodeKey(node);
+    if (nodeKey === selectedKey) return true;
+    if (!Array.isArray(node.children)) return false;
+    return node.children.some((child) => hasSelectedDescendant(child, selectedKey));
+  }
+
+  function renderMenuNodes(container, nodes, options = {}, level = 0) {
+    const {
+      selectedKey = null,
+      onSelect = () => {}
+    } = options;
+
+    nodes.forEach((node) => {
+      const nodeKey = getNodeKey(node);
+      const children = Array.isArray(node.children) ? node.children : [];
+      const hasChildren = children.length > 0;
+      const isActive = nodeKey === selectedKey;
+      const isOpen = hasChildren && hasSelectedDescendant(node, selectedKey);
+
+      const group = document.createElement("section");
+      group.className = "plan-map-tree-group";
+      if (isActive || isOpen) {
+        group.classList.add("is-active");
+      }
+
+      let controlClass = "plan-map-tree-leaf";
+      if (hasChildren) {
+        controlClass = "plan-map-tree-branch" + (isOpen ? " is-open is-active" : "");
+      } else if (isActive) {
+        controlClass = "plan-map-node plan-map-node-selected";
+      } else if (level > 0) {
+        controlClass = "plan-map-tree-subleaf";
+      }
+
+      const control = createButton(controlClass, getNodeLabel(node), () => onSelect(node));
+      if (hasChildren) {
+        control.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      }
+      if (isActive) {
+        control.setAttribute("aria-current", "true");
+      }
+      group.appendChild(control);
+
+      if (!hasChildren && node.description) {
+        const description = document.createElement("div");
+        description.className = "plan-map-tree-meta";
+        description.textContent = node.description;
+        group.appendChild(description);
+      }
+
+      if (hasChildren && isOpen) {
+        const childContainer = document.createElement("div");
+        childContainer.className = "plan-map-tree-children";
+        renderMenuNodes(childContainer, children, options, level + 1);
+        group.appendChild(childContainer);
+      }
+
+      container.appendChild(group);
+    });
+  }
+
   function syncPlanContextFromLocation() {
     const params = new URLSearchParams(location.search);
     const planId = params.get("id");
     const context = planId ? planContextsById[planId] : null;
     if (!context) return;
+    planSelection.focusColumn = context.entryColumn || "kommune";
     planSelection.sectionKey = context.sectionKey;
     planSelection.leafKey = context.leafKey;
     planSelection.strategyKey = context.strategyKey;
+    planSelection.hopKey = null;
+    ensureValidStrategySelection();
+    ensureValidHopSelection();
     if (body.dataset.mode === "rapport") {
       setMode("plan");
       return;
@@ -442,6 +553,7 @@
         "plan-map-tree-branch" + (section.key === activeSectionKey ? " is-open is-active" : ""),
         section.label,
         () => {
+          planSelection.focusColumn = "kommune";
           if (planSelection.sectionKey === section.key && !planSelection.leafKey) {
             planSelection.sectionKey = null;
           } else {
@@ -449,6 +561,7 @@
           }
           planSelection.leafKey = null;
           planSelection.strategyKey = null;
+          planSelection.hopKey = null;
           renderPlanMenus();
         }
       );
@@ -464,9 +577,11 @@
             "plan-map-tree-leaf" + (leaf.key === activeLeafKey ? " is-active" : ""),
             leaf.label,
             () => {
+              planSelection.focusColumn = "kommune";
               planSelection.sectionKey = section.key;
               planSelection.leafKey = leaf.key;
               planSelection.strategyKey = null;
+              planSelection.hopKey = null;
               renderPlanMenus();
             }
           );
@@ -486,10 +601,12 @@
               subLeaf.className = isSelectedSubgoal ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf";
               subLeaf.textContent = goal.label;
               subLeaf.addEventListener("click", () => {
+                planSelection.focusColumn = "kommune";
                 planSelection.sectionKey = section.key;
                 planSelection.leafKey = leaf.key;
                 leaf.selectedSubgoalKey = goal.key;
                 planSelection.strategyKey = null;
+                planSelection.hopKey = null;
                 refreshDynamicLeafData();
                 renderPlanMenus();
               });
@@ -523,20 +640,14 @@
     if (!Array.isArray(leaf.strategies) || leaf.strategies.length === 0) {
       return;
     }
-
-    leaf.strategies.forEach((strategy) => {
-      const button = createButton(
-        "plan-map-strategy-item" + (activeStrategy && strategy.key === activeStrategy.key ? " is-active" : ""),
-        strategy.label,
-        () => {
-          planSelection.strategyKey = strategy.key;
-          renderPlanMenus();
-        }
-      );
-      if (activeStrategy && strategy.key === activeStrategy.key) {
-        button.setAttribute("aria-current", "true");
+    renderMenuNodes(planMapStrategyList, leaf.strategies, {
+      selectedKey: activeStrategy ? activeStrategy.key : null,
+      onSelect: (strategy) => {
+        planSelection.strategyKey = getNodeKey(strategy);
+        planSelection.hopKey = null;
+        planSelection.focusColumn = "full";
+        renderPlanMenus();
       }
-      planMapStrategyList.appendChild(button);
     });
   }
 
@@ -559,35 +670,54 @@
     if (!Array.isArray(activeStrategy.hopItems) || activeStrategy.hopItems.length === 0) {
       return;
     }
-
-    activeStrategy.hopItems.forEach((item) => {
-      const card = document.createElement("button");
-      card.type = "button";
-      card.className = "plan-map-hop-card is-linked";
-      card.innerHTML = `<strong>${item.title}</strong><p>${item.description}</p>`;
-      planMapHopList.appendChild(card);
+    renderMenuNodes(planMapHopList, activeStrategy.hopItems, {
+      selectedKey: planSelection.hopKey,
+      onSelect: (item) => {
+        planSelection.hopKey = getNodeKey(item);
+        planSelection.focusColumn = "full";
+        renderPlanMenus();
+      }
     });
   }
 
   function renderPlanMenus() {
-    const depth = getVisibleDepth();
+    const layoutState = getLayoutState();
     if (sidebar) {
-      sidebar.dataset.depth = String(depth);
+      sidebar.dataset.layout = layoutState;
     }
     if (planMapWorkspace) {
-      planMapWorkspace.dataset.depth = String(depth);
+      planMapWorkspace.dataset.layout = layoutState;
     }
-    if (planMapStrategyColumn) {
-      planMapStrategyColumn.classList.toggle("is-visible", depth >= 2);
-      planMapStrategyColumn.setAttribute("aria-hidden", depth >= 2 ? "false" : "true");
-    }
-    if (planMapHopColumn) {
-      planMapHopColumn.classList.toggle("is-visible", depth >= 3);
-      planMapHopColumn.setAttribute("aria-hidden", depth >= 3 ? "false" : "true");
-    }
+
+    const columnStatesByLayout = {
+      "kommune-only": { kommune: "open", strategi: "hidden", hop: "hidden" },
+      "kommune-plus-strategi": { kommune: "open", strategi: "open", hop: "hidden" },
+      "strategi-entry": { kommune: "collapsed", strategi: "open", hop: "hidden" },
+      "hop-entry": { kommune: "collapsed", strategi: "hidden", hop: "open" },
+      "full": { kommune: "open", strategi: "open", hop: "open" }
+    };
+
+    const columnStates = columnStatesByLayout[layoutState] || columnStatesByLayout["kommune-only"];
+    const columnMap = {
+      kommune: planMapTree ? planMapTree.closest(".plan-map-column") : null,
+      strategi: planMapStrategyColumn,
+      hop: planMapHopColumn
+    };
+
+    Object.entries(columnMap).forEach(([key, column]) => {
+      if (!column) return;
+      const state = columnStates[key];
+      column.dataset.state = state;
+      column.classList.toggle("is-visible", state !== "hidden");
+      column.classList.toggle("is-collapsed", state === "collapsed");
+      column.classList.toggle("is-hidden", state === "hidden");
+      column.setAttribute("aria-hidden", state === "hidden" ? "true" : "false");
+    });
+
     if (planMapLines) {
-      planMapLines.classList.toggle("is-visible", depth >= 3);
-      planMapLines.setAttribute("aria-hidden", depth >= 3 ? "false" : "true");
+      const showLines = layoutState === "full";
+      planMapLines.classList.toggle("is-visible", showLines);
+      planMapLines.setAttribute("aria-hidden", showLines ? "false" : "true");
     }
     renderPlanTree();
     renderStrategyMenu();
