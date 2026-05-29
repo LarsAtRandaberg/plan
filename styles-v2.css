@@ -151,7 +151,11 @@ body.page-v2[data-mode="rapport"] {
   order: 1;
   top: 76px;
   height: calc(100vh - 76px);
+  width: 62vw;
+  min-width: 780px;
   transition: left 0.25s, right 0.25s, box-shadow 0.25s;
+  overflow: auto;
+  background: #f5f7f2;
 }
 
 .page-v2 .desktop-mode-rail {
@@ -205,6 +209,26 @@ body.page-v2[data-mode="rapport"] {
   background: rgba(255,255,255,0.94);
 }
 
+.page-v2 #menu-topnav,
+.page-v2 #menu {
+  display: none;
+}
+
+body.page-v2[data-mode="rapport"] .sidebar {
+  width: 240px;
+  min-width: 240px;
+  background: rgba(255,255,255,0.98);
+}
+
+body.page-v2[data-mode="rapport"] .plan-map-prototype-sidebar {
+  display: none;
+}
+
+body.page-v2[data-mode="rapport"] #menu-topnav,
+body.page-v2[data-mode="rapport"] #menu {
+  display: block;
+}
+
 .page-v2 .sidebar-v2-header {
   display: none;
 }
@@ -237,6 +261,14 @@ body.page-v2[data-mode="rapport"] {
   margin: 0;
   color: color-mix(in srgb, var(--green-900) 78%, #ffffff);
   max-width: 70ch;
+}
+
+.page-v2 .plan-map-prototype-sidebar {
+  margin: 0;
+  min-height: 100%;
+  border-radius: 0;
+  border: 0;
+  box-shadow: none;
 }
 
 .page-v2 .plan-map-prototype {
@@ -908,6 +940,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     left: -288px;
     right: auto;
     width: 272px;
+    min-width: 272px;
     height: calc(100vh - 44px);
     padding-top: 0;
     z-index: 1200;
@@ -991,6 +1024,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 
   .page-v2 #menu {
     padding: 4px 10px 16px;
+    display: block;
+  }
+
+  .page-v2 .plan-map-prototype-sidebar {
+    display: none;
   }
 
   .page-v2 .report-sidebar-inner {

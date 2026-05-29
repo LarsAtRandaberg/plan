@@ -78,49 +78,7 @@
         <i class="ti ti-x" aria-hidden="true"></i>
       </button>
     </div>
-    <div id="menu-topnav"></div>
-    <div id="menu"></div>
-  </aside>
-
-  <button type="button" class="desktop-mode-rail desktop-mode-rail-plan" id="planRail" data-mode-target="plan" aria-label="Åpne planmodus">
-    <span class="desktop-mode-rail-label">Planer</span>
-  </button>
-
-  <aside class="report-sidebar" id="reportSidebar" aria-label="Rapportmeny">
-    <div class="sidebar-v2-header">
-      <div>
-        <div class="sidebar-v2-kicker">Rapport</div>
-        <strong>Rapportmeny</strong>
-      </div>
-      <button type="button" class="sidebar-close-btn" id="reportSidebarCloseBtn" aria-label="Lukk rapportmeny">
-        <i class="ti ti-x" aria-hidden="true"></i>
-      </button>
-    </div>
-    <div class="report-sidebar-inner">
-      <div class="report-sidebar-group">
-        <div class="report-sidebar-label">Rapporter</div>
-        <a href="#rapport-sammendrag" class="report-nav-link is-active">1. tertialrapport 2026</a>
-        <a href="#rapport-prioriteringer" class="report-nav-link">2. tertialrapport 2026</a>
-        <a href="#rapport-arsrapport" class="report-nav-link">Årsrapport 2026</a>
-      </div>
-      <div class="report-sidebar-group">
-        <div class="report-sidebar-label">Denne rapporten</div>
-        <a href="#rapport-sammendrag" class="report-nav-link">Sammendrag</a>
-        <a href="#rapport-okonomi" class="report-nav-link">Økonomi</a>
-        <a href="#rapport-prioriteringer" class="report-nav-link">Prioriterte forhold</a>
-        <a href="#rapport-risiko" class="report-nav-link">Risiko og avvik</a>
-        <a href="#rapport-unntak" class="report-nav-link">Mål med særskilt oppfølging</a>
-      </div>
-    </div>
-  </aside>
-
-  <main class="content">
-    <div class="mode-intro-card" id="mode-intro-card">
-      <div class="mode-intro-kicker">Plan</div>
-      <div class="mode-intro-title">Planstruktur og mål</div>
-      <p>I planmodus er planhierarkiet primærnavigasjon. På mobil blir toppbaren komprimert til en trygg, synlig stripe når du scroller ned.</p>
-    </div>
-    <section class="plan-map-prototype" id="planMapPrototype" aria-labelledby="plan-map-title">
+    <section class="plan-map-prototype plan-map-prototype-sidebar" id="planMapPrototype" aria-labelledby="plan-map-title">
       <div class="plan-map-header">
         <div>
           <div class="plan-map-kicker">Prototype</div>
@@ -202,6 +160,48 @@
         <p>Dette er en visuell arbeidsprototype. Neste steg vil være å koble midtlaget til faktiske strategidata og høyrelaget til virkelige HØP-tiltak.</p>
       </div>
     </section>
+    <div id="menu-topnav"></div>
+    <div id="menu"></div>
+  </aside>
+
+  <button type="button" class="desktop-mode-rail desktop-mode-rail-plan" id="planRail" data-mode-target="plan" aria-label="Åpne planmodus">
+    <span class="desktop-mode-rail-label">Planer</span>
+  </button>
+
+  <aside class="report-sidebar" id="reportSidebar" aria-label="Rapportmeny">
+    <div class="sidebar-v2-header">
+      <div>
+        <div class="sidebar-v2-kicker">Rapport</div>
+        <strong>Rapportmeny</strong>
+      </div>
+      <button type="button" class="sidebar-close-btn" id="reportSidebarCloseBtn" aria-label="Lukk rapportmeny">
+        <i class="ti ti-x" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="report-sidebar-inner">
+      <div class="report-sidebar-group">
+        <div class="report-sidebar-label">Rapporter</div>
+        <a href="#rapport-sammendrag" class="report-nav-link is-active">1. tertialrapport 2026</a>
+        <a href="#rapport-prioriteringer" class="report-nav-link">2. tertialrapport 2026</a>
+        <a href="#rapport-arsrapport" class="report-nav-link">Årsrapport 2026</a>
+      </div>
+      <div class="report-sidebar-group">
+        <div class="report-sidebar-label">Denne rapporten</div>
+        <a href="#rapport-sammendrag" class="report-nav-link">Sammendrag</a>
+        <a href="#rapport-okonomi" class="report-nav-link">Økonomi</a>
+        <a href="#rapport-prioriteringer" class="report-nav-link">Prioriterte forhold</a>
+        <a href="#rapport-risiko" class="report-nav-link">Risiko og avvik</a>
+        <a href="#rapport-unntak" class="report-nav-link">Mål med særskilt oppfølging</a>
+      </div>
+    </div>
+  </aside>
+
+  <main class="content">
+    <div class="mode-intro-card" id="mode-intro-card">
+      <div class="mode-intro-kicker">Plan</div>
+      <div class="mode-intro-title">Planstruktur og mål</div>
+      <p>I planmodus er planhierarkiet primærnavigasjon. På mobil blir toppbaren komprimert til en trygg, synlig stripe når du scroller ned.</p>
+    </div>
     <div id="innhold"></div>
     <div class="report-content" id="reportContent" hidden>
       <section class="report-section" id="rapport-sammendrag">
