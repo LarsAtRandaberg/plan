@@ -30,6 +30,9 @@
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
   const planMapHopList = document.getElementById("planMapHopList");
+  const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
+  const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
+  let planGoalsData = [];
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
       sectionKey: null,
@@ -289,6 +292,108 @@
     return currentLeaf.leaf.strategies.find((item) => item.key === planSelection.strategyKey) || null;
   }
 
+  function slugify(value) {
+    return String(value || "")
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "")
+      .slice(0, 64);
+  }
+
+  function getLeafByKey(leafKey) {
+    for (const section of planMenuModel.sections) {
+      const leaf = section.leaves.find((item) => item.key === leafKey);
+      if (leaf) return leaf;
+    }
+    return null;
+  }
+
+  function ensureValidStrategySelection() {
+    const currentLeaf = getCurrentLeaf();
+    if (!currentLeaf) {
+      planSelection.strategyKey = null;
+      return;
+    }
+    const hasSelectedStrategy = currentLeaf.leaf.strategies.some((item) => item.key === planSelection.strategyKey);
+    if (!hasSelectedStrategy) {
+      planSelection.strategyKey = null;
+    }
+  }
+
+  function assignOppvekstSubgoalIds() {
+    const oppvekstLeaf = getLeafByKey("gode-oppvekstvilkar");
+    if (!oppvekstLeaf || !Array.isArray(oppvekstLeaf.subgoals)) return;
+
+    const subgoalIdByKey = {
+      "bygge-boliger": "f0276f4c-7149-f111-bec7-7c1e52370ef7",
+      "aktiviteter-robusthet": "6069035b-7149-f111-bec7-7c1e52370ef7",
+      "tidlig-innsats": "6169035b-7149-f111-bec7-7c1e52370ef7",
+      "sterke-fellesskap": "34b4f963-7149-f111-bec7-7c1e52370ef7",
+      "mestring-tilhoerighet": "6edb91e7-7149-f111-bec7-7c1e52370ef7"
+    };
+
+    oppvekstLeaf.subgoals.forEach((item) => {
+      item.id = subgoalIdByKey[item.key] || item.id || null;
+    });
+  }
+
+  function buildOppvekstStrategiesFromMaal(goals) {
+    const oppvekstLeaf = getLeafByKey("gode-oppvekstvilkar");
+    if (!oppvekstLeaf) return;
+
+    const selectedSubgoal = oppvekstLeaf.subgoals.find((item) => item.key === oppvekstLeaf.selectedSubgoalKey);
+    const selectedSubgoalId = selectedSubgoal?.id || null;
+
+    if (!selectedSubgoalId) {
+      oppvekstLeaf.strategies = [];
+      return;
+    }
+
+    oppvekstLeaf.strategies = goals
+      .filter((goal) => goal.maalPlan === OPPVEKSTPLAN_ID && goal.maalOverordnet === selectedSubgoalId)
+      .map((goal) => ({
+        key: slugify(goal.maalID || goal.maalNavn),
+        id: goal.maalID,
+        label: goal.maalNavn,
+        hopItems: []
+      }));
+  }
+
+  function refreshDynamicLeafData() {
+    if (planGoalsData.length) {
+      buildOppvekstStrategiesFromMaal(planGoalsData);
+      ensureValidStrategySelection();
+    }
+  }
+
+  async function hydratePlanModelFromData() {
+    try {
+      const response = await fetch("data/maal.json", { cache: "no-store" });
+      if (!response.ok) return;
+      const goals = await response.json();
+      if (!Array.isArray(goals)) return;
+
+      planGoalsData = goals;
+      buildOppvekstStrategiesFromMaal(planGoalsData);
+
+      const oppvekstLeaf = getLeafByKey("gode-oppvekstvilkar");
+      if (oppvekstLeaf && oppvekstLeaf.strategies.length) {
+        const firstStrategyKey = oppvekstLeaf.strategies[0].key;
+        [HOP_PLAN_ID, "7df8f7f0-e0e7-f011-8407-000d3add2e1a"].forEach((planId) => {
+          if (planContextsById[planId]) {
+            planContextsById[planId].strategyKey = firstStrategyKey;
+          }
+        });
+      }
+
+      ensureValidStrategySelection();
+    } catch (error) {
+      console.warn("Kunne ikke laste maal.json for v2-planmenyen", error);
+    }
+  }
+
   function getVisibleDepth() {
     if (!planSelection.leafKey) return 1;
     if (!planSelection.strategyKey) return 2;
@@ -376,17 +481,18 @@
 
             leaf.subgoals.forEach((goal) => {
               const isSelectedSubgoal = goal.key === leaf.selectedSubgoalKey;
-              const subLeaf = document.createElement(isSelectedSubgoal ? "button" : "div");
+              const subLeaf = document.createElement("button");
+              subLeaf.type = "button";
               subLeaf.className = isSelectedSubgoal ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf";
               subLeaf.textContent = goal.label;
-              if (isSelectedSubgoal) {
-                subLeaf.type = "button";
-                subLeaf.addEventListener("click", () => {
-                  planSelection.sectionKey = section.key;
-                  planSelection.leafKey = leaf.key;
-                  renderPlanMenus();
-                });
-              }
+              subLeaf.addEventListener("click", () => {
+                planSelection.sectionKey = section.key;
+                planSelection.leafKey = leaf.key;
+                leaf.selectedSubgoalKey = goal.key;
+                planSelection.strategyKey = null;
+                refreshDynamicLeafData();
+                renderPlanMenus();
+              });
               subpath.appendChild(subLeaf);
             });
 
@@ -413,6 +519,10 @@
     const activeStrategy = getCurrentStrategy();
     planMapStrategyTitle.textContent = leaf.strategyPlanTitle;
     planMapStrategyList.innerHTML = "";
+
+    if (!Array.isArray(leaf.strategies) || leaf.strategies.length === 0) {
+      return;
+    }
 
     leaf.strategies.forEach((strategy) => {
       const button = createButton(
@@ -443,6 +553,10 @@
     planMapHopTitle.textContent = leaf.hopPlanTitle;
     planMapHopList.innerHTML = "";
     if (!activeStrategy) {
+      return;
+    }
+
+    if (!Array.isArray(activeStrategy.hopItems) || activeStrategy.hopItems.length === 0) {
       return;
     }
 
@@ -620,8 +734,14 @@
 
   window.addEventListener("popstate", syncPlanContextFromLocation);
 
-  syncPlanContextFromLocation();
-  renderPlanMenus();
-  syncOverlay();
-  setMode(body.dataset.mode || "plan");
+  async function init() {
+    assignOppvekstSubgoalIds();
+    await hydratePlanModelFromData();
+    syncPlanContextFromLocation();
+    renderPlanMenus();
+    syncOverlay();
+    setMode(body.dataset.mode || "plan");
+  }
+
+  init();
 })();
