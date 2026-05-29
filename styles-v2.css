@@ -827,46 +827,24 @@ body.page-v2[data-mode="rapport"] #menu {
   opacity: 1;
 }
 
-.page-v2 .plan-map-line,
-.page-v2 .plan-map-joint {
+.page-v2 .plan-map-line {
   position: absolute;
-  background: rgba(63, 125, 102, 0.34);
+  background: rgba(63, 125, 102, 0.32);
   border-radius: 999px;
+  box-shadow: 0 0 0 1px rgba(63, 125, 102, 0.04);
 }
 
-.page-v2 .plan-map-line-left {
-  top: 356px;
-  left: 31%;
-  width: 48px;
-  height: 2px;
+.page-v2 .plan-map-line--source,
+.page-v2 .plan-map-line--branch {
+  background: rgba(63, 125, 102, 0.36);
 }
 
-.page-v2 .plan-map-line-right-top {
-  top: 358px;
-  left: 66.1%;
-  width: 22px;
-  height: 2px;
+.page-v2 .plan-map-line--trunk {
+  background: rgba(63, 125, 102, 0.22);
 }
 
-.page-v2 .plan-map-line-right-bottom {
-  top: 392px;
-  left: 66.1%;
-  width: 22px;
-  height: 2px;
-}
-
-.page-v2 .plan-map-joint-center {
-  top: 350px;
-  left: calc(31% + 48px);
-  width: 2px;
-  height: 46px;
-}
-
-.page-v2 .plan-map-joint-right {
-  top: 358px;
-  left: 66.1%;
-  width: 2px;
-  height: 37px;
+.page-v2 .plan-map-line--left-group {
+  filter: saturate(0.92);
 }
 
 .page-v2 .plan-map-mobile-caption {

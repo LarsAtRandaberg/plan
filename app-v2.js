@@ -26,12 +26,6 @@
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
   const planMapHopColumn = document.querySelector(".plan-map-column-hop");
   const planMapLines = document.querySelector(".plan-map-lines");
-  const planMapLineLeft = document.querySelector(".plan-map-line-left");
-  const planMapLineRightTop = document.querySelector(".plan-map-line-right-top");
-  const planMapLineMiddleRight = document.querySelector(".plan-map-line-middle-right");
-  const planMapLineRightBottom = document.querySelector(".plan-map-line-right-bottom");
-  const planMapJointCenter = document.querySelector(".plan-map-joint-center");
-  const planMapJointRight = document.querySelector(".plan-map-joint-right");
   const planMapStrategyTitle = document.getElementById("planMapStrategyTitle");
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
@@ -698,14 +692,57 @@
     });
   }
 
-  function setConnectorBox(element, left, top, width, height) {
-    if (!element) return;
-    element.style.display = width <= 0 || height < 0 ? "none" : "block";
-    if (width <= 0 || height < 0) return;
-    element.style.left = `${left}px`;
-    element.style.top = `${top}px`;
-    element.style.width = `${width}px`;
-    element.style.height = `${height}px`;
+  function appendConnectorSegment(left, top, width, height, extraClass = "") {
+    if (!planMapLines || width <= 0 || height <= 0) return;
+
+    const segment = document.createElement("div");
+    segment.className = `plan-map-line${extraClass ? ` ${extraClass}` : ""}`;
+    segment.style.left = `${left}px`;
+    segment.style.top = `${top}px`;
+    segment.style.width = `${width}px`;
+    segment.style.height = `${height}px`;
+    planMapLines.appendChild(segment);
+  }
+
+  function drawConnectorGroup(sourceNode, targetNodes, workspaceRect, extraClass = "") {
+    if (!sourceNode || !targetNodes.length || !workspaceRect) return;
+
+    const sourceRect = sourceNode.getBoundingClientRect();
+    const targetRects = targetNodes.map((node) => node.getBoundingClientRect());
+    const targetLeft = Math.min(...targetRects.map((rect) => rect.left - workspaceRect.left));
+    const sourceX = sourceRect.right - workspaceRect.left + 10;
+    const sourceY = sourceRect.top + (sourceRect.height / 2) - workspaceRect.top;
+    const branchStartX = targetLeft - 24;
+    const branchEndX = targetLeft - 8;
+    const targetCenters = targetRects.map((rect) => rect.top + (rect.height / 2) - workspaceRect.top);
+    const trunkTop = Math.min(sourceY, ...targetCenters);
+    const trunkBottom = Math.max(sourceY, ...targetCenters);
+
+    appendConnectorSegment(
+      sourceX,
+      sourceY - 1,
+      Math.max(0, branchStartX - sourceX),
+      2,
+      extraClass ? `${extraClass} plan-map-line--source` : "plan-map-line--source"
+    );
+
+    appendConnectorSegment(
+      branchStartX,
+      trunkTop,
+      2,
+      Math.max(2, trunkBottom - trunkTop),
+      extraClass ? `${extraClass} plan-map-line--trunk` : "plan-map-line--trunk"
+    );
+
+    targetCenters.forEach((targetY) => {
+      appendConnectorSegment(
+        branchStartX,
+        targetY - 1,
+        Math.max(0, branchEndX - branchStartX),
+        2,
+        extraClass ? `${extraClass} plan-map-line--branch` : "plan-map-line--branch"
+      );
+    });
   }
 
   function updatePlanConnectors(layoutState) {
@@ -715,19 +752,9 @@
     const shouldShowRightConnector = layoutState === "full" && planMapHopList?.querySelector(".plan-map-list-node");
     const showAny = shouldShowLeftConnector || shouldShowRightConnector;
 
+    planMapLines.replaceChildren();
     planMapLines.classList.toggle("is-visible", showAny);
     planMapLines.setAttribute("aria-hidden", showAny ? "false" : "true");
-
-    [
-      planMapLineLeft,
-      planMapLineRightTop,
-      planMapLineMiddleRight,
-      planMapLineRightBottom,
-      planMapJointCenter,
-      planMapJointRight
-    ].forEach((element) => {
-      if (element) element.style.display = "none";
-    });
 
     if (!showAny) return;
 
@@ -739,36 +766,11 @@
 
     if (!workspaceRect || !leftNode || !strategyNodes.length) return;
 
-    const leftRect = leftNode.getBoundingClientRect();
-    const firstStrategyRect = strategyNodes[0].getBoundingClientRect();
-    const leftAnchorX = leftRect.right - workspaceRect.left;
-    const leftAnchorY = leftRect.top + (leftRect.height / 2) - workspaceRect.top;
-    const strategySpineX = firstStrategyRect.left - workspaceRect.left - 10;
-    const strategyFirstY = firstStrategyRect.top + (firstStrategyRect.height / 2) - workspaceRect.top;
-
-    setConnectorBox(
-      planMapLineLeft,
-      leftAnchorX,
-      leftAnchorY - 1,
-      Math.max(0, strategySpineX - leftAnchorX),
-      2
-    );
+    drawConnectorGroup(leftNode, strategyNodes, workspaceRect, "plan-map-line--left-group");
 
     if (!shouldShowRightConnector || !middleNode || !hopNodes.length) return;
 
-    const rightRect = hopNodes[0].getBoundingClientRect();
-    const strategyRect = middleNode.getBoundingClientRect();
-    const strategyAnchorX = strategyRect.right - workspaceRect.left;
-    const strategyAnchorY = strategyRect.top + (strategyRect.height / 2) - workspaceRect.top;
-    const hopSpineX = rightRect.left - workspaceRect.left - 10;
-
-    setConnectorBox(
-      planMapLineMiddleRight,
-      strategyAnchorX,
-      strategyAnchorY - 1,
-      Math.max(0, hopSpineX - strategyAnchorX),
-      2
-    );
+    drawConnectorGroup(middleNode, hopNodes, workspaceRect, "plan-map-line--right-group");
   }
 
   function scheduleConnectorUpdate() {
