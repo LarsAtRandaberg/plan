@@ -351,6 +351,10 @@ body.page-v2[data-mode="rapport"] {
   border-right: 0;
 }
 
+body.page-v2[data-mode="plan"] .desktop-mode-rail-plan {
+  display: none;
+}
+
 .page-v2 .desktop-mode-rail-report {
   order: 4;
   background: linear-gradient(180deg, rgba(239,246,252,0.96), rgba(225,238,249,0.96));
