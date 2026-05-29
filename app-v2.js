@@ -54,7 +54,6 @@
   };
 
   const planMenuModel = {
-    rootLabel: "Sammen skaper vi den grønne landsbyen",
     sections: [
       {
         key: "areal-utvikling",
@@ -63,7 +62,10 @@
           {
             key: "attraktivt-sentrum",
             label: "Attraktivt sentrum",
-            subpath: ["Helhetlig stedsutvikling og bokvalitet"],
+            selectedSubgoalKey: "stedsutvikling",
+            subgoals: [
+              { key: "stedsutvikling", label: "Helhetlig stedsutvikling og bokvalitet" }
+            ],
             strategyPlanTitle: "Arealstrategien",
             hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
             strategies: [
@@ -94,7 +96,14 @@
           {
             key: "god-alderdom",
             label: "God alderdom",
-            subpath: ["Aktive og trygge liv gjennom hele livsløpet"],
+            selectedSubgoalKey: "aktive-trygge-liv",
+            subgoals: [
+              { key: "aktive-trygge-liv", label: "Legge til rette for at innbyggerne er aktive, kan bo godt hjemme og opplever økt grad av egenmestring og dermed utsatt hjelpebehov" },
+              { key: "aldersvennlige-boliger", label: "Planlegge slik at en tilstrekkelig andel av ny boligmasse i kommunen blir aldersvennlige boliger" },
+              { key: "teknologi-kompetanse", label: "Ta i bruk ny teknologi, økt kompetanse og tverrfaglig samhandling" },
+              { key: "aldersvennlig-samfunn", label: "Legge til rette for et aldersvennlig samfunn" },
+              { key: "helsefremmende-omgivelser", label: "Legge til rette for omgivelser som fremmer helse og livskvalitet og forebygger sykdommer" }
+            ],
             strategyPlanTitle: "Leve hele livet",
             hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
             strategies: [
@@ -111,7 +120,14 @@
           {
             key: "gode-arbeidsplasser",
             label: "Gode arbeidsplasser",
-            subpath: ["Kompetanse, rekruttering og heltidskultur"],
+            selectedSubgoalKey: "inkludering-arbeid",
+            subgoals: [
+              { key: "inkludering-arbeid", label: "Arbeide for inkludering og arbeidsdeltakelse for flere" },
+              { key: "tidlig-innsats-unge", label: "Prioritere tidlig innsats og gi unge muligheter" },
+              { key: "trygge-naermiljo", label: "Styrke fellesskapet og legge til rette for trygge, helsefremmende nærmiljøer" },
+              { key: "samarbeid-naeringsliv", label: "Samarbeide tett med næringslivet, frivillighet og innbyggere" },
+              { key: "flere-arbeidsplasser", label: "Skape flere og mer varierte arbeidsplasser" }
+            ],
             strategyPlanTitle: "Arbeidsgiverstrategien",
             hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
             strategies: [
@@ -128,7 +144,12 @@
           {
             key: "gode-fellesskap",
             label: "Gode fellesskap",
-            subpath: ["Tilhørighet og deltakelse i nærmiljøet"],
+            selectedSubgoalKey: "livskvalitet-tilhoerighet",
+            subgoals: [
+              { key: "livskvalitet-tilhoerighet", label: "Sammen arbeide for at alle innbyggerne skal oppleve god livskvalitet, tilhørighet, trygghet, inkludering og kan bidra i samfunnet" },
+              { key: "idrett-kultur", label: "Legge til rette for et inkluderende og nyskapende idretts- og kulturtilbud som fremmer fellesskap og utvikling og styrker stedsutviklingen" },
+              { key: "delta-i-fellesskapet", label: "Legge til rette for at alle innbyggere i alle livsfaser kan delta i fellesskapet" }
+            ],
             strategyPlanTitle: "Frivillighetsstrategien",
             hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
             strategies: [
@@ -145,7 +166,14 @@
           {
             key: "gode-oppvekstvilkar",
             label: "Gode oppvekstvilkår",
-            subpath: ["Tidlig innsats, helsefremmende og forebyggende arbeid"],
+            selectedSubgoalKey: "tidlig-innsats",
+            subgoals: [
+              { key: "bygge-boliger", label: "Bygge boliger og fysiske omgivelser som det er godt og trygt å vokse opp i" },
+              { key: "aktiviteter-robusthet", label: "Legge til rette for aktiviteter som fremmer robusthet og sosialt samhold" },
+              { key: "tidlig-innsats", label: "Tidlig innsats, helsefremmende og forebyggende arbeid" },
+              { key: "sterke-fellesskap", label: "Bygge sterke og inkluderende fellesskap hvor barn og unge ferdes" },
+              { key: "mestring-tilhoerighet", label: "Fremme mestring og tilhørighet, hvor barn kan utvikle selvtillit og delta aktivt i samfunnet" }
+            ],
             strategyPlanTitle: "Oppvekstplanen",
             hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
             strategies: [
@@ -184,7 +212,14 @@
           {
             key: "god-tjenestekvalitet",
             label: "God tjenestekvalitet",
-            subpath: ["Åpen, samordnet og lærende organisasjon"],
+            selectedSubgoalKey: "helhetlig-organisasjon",
+            subgoals: [
+              { key: "helhetlig-organisasjon", label: "Vi setter felleskapet først og tenker helhetlig." },
+              { key: "kompetente-medarbeidere", label: "Vi er et lag av kompetente og engasjerte medarbeidere." },
+              { key: "myndiggjorte-medarbeidere", label: "Gjennom tillit og myndiggjorte medarbeidere utvikler vi organisasjonen og den enkelte." },
+              { key: "forbedre-forenkle", label: "Alle medarbeidere har ansvar for å forbedre og forenkle arbeidsoppgaver." },
+              { key: "innovative-losninger", label: "Vi tar i bruk innovative løsninger på en trygg og sikker måte." }
+            ],
             strategyPlanTitle: "Digitaliseringsstrategien",
             hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
             strategies: [
@@ -207,7 +242,10 @@
           {
             key: "tryggt-naermiljo",
             label: "Trygt nærmiljø",
-            subpath: ["Nærhet, beredskap og sosial bærekraft"],
+            selectedSubgoalKey: "samhandling-beredskap",
+            subgoals: [
+              { key: "samhandling-beredskap", label: "Styrke samhandling og robusthet i lokalsamfunnet." }
+            ],
             strategyPlanTitle: "Beredskapsplanen",
             hopPlanTitle: "Handlings- og økonomiplanen 2027-2030",
             strategies: [
@@ -288,11 +326,6 @@
     const activeLeafKey = currentLeaf ? currentLeaf.leaf.key : null;
     planMapTree.innerHTML = "";
 
-    const root = document.createElement("div");
-    root.className = "plan-map-tree-root";
-    root.textContent = planMenuModel.rootLabel;
-    planMapTree.appendChild(root);
-
     planMenuModel.sections.forEach((section) => {
       const group = document.createElement("section");
       group.className = "plan-map-tree-group";
@@ -337,15 +370,16 @@
           }
           children.appendChild(leafButton);
 
-          if (leaf.key === activeLeafKey && Array.isArray(leaf.subpath) && leaf.subpath.length) {
+          if (leaf.key === activeLeafKey && Array.isArray(leaf.subgoals) && leaf.subgoals.length) {
             const subpath = document.createElement("div");
             subpath.className = "plan-map-tree-subpath";
 
-            leaf.subpath.forEach((step, index) => {
-              const subLeaf = document.createElement(index === leaf.subpath.length - 1 ? "button" : "div");
-              subLeaf.className = index === leaf.subpath.length - 1 ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf";
-              subLeaf.textContent = step;
-              if (subLeaf.tagName === "BUTTON") {
+            leaf.subgoals.forEach((goal) => {
+              const isSelectedSubgoal = goal.key === leaf.selectedSubgoalKey;
+              const subLeaf = document.createElement(isSelectedSubgoal ? "button" : "div");
+              subLeaf.className = isSelectedSubgoal ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf";
+              subLeaf.textContent = goal.label;
+              if (isSelectedSubgoal) {
                 subLeaf.type = "button";
                 subLeaf.addEventListener("click", () => {
                   planSelection.sectionKey = section.key;
