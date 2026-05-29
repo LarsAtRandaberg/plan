@@ -342,48 +342,69 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-workspace {
   position: relative;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
   gap: 0;
   border-radius: 0;
   overflow: hidden;
   min-height: 560px;
   border: 0;
+  transition: grid-template-columns 1s ease;
 }
 
 .page-v2 .plan-map-workspace[data-depth="1"] {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 0fr) minmax(0, 0fr);
 }
 
 .page-v2 .plan-map-workspace[data-depth="2"] {
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 0fr);
 }
 
 .page-v2 .plan-map-workspace[data-depth="3"] {
-  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1fr);
 }
 
 .page-v2 .plan-map-column {
   position: relative;
   padding: 14px 12px;
   min-height: 560px;
+  min-width: 0;
   z-index: 2;
-}
-
-.page-v2 .plan-map-column[hidden],
-.page-v2 .plan-map-lines[hidden] {
-  display: none !important;
+  overflow: hidden;
+  transition: transform 1s ease, opacity 1s ease, padding 1s ease, box-shadow 1s ease;
 }
 
 .page-v2 .plan-map-column-kommune {
   background: rgba(255,255,255,0.96);
+  z-index: 3;
 }
 
 .page-v2 .plan-map-column-strategi {
   background: linear-gradient(180deg, rgba(179,224,153,0.78), rgba(165,216,137,0.78));
+  z-index: 2;
+  transform: translateX(-22px);
+  opacity: 0;
+  box-shadow: inset 18px 0 24px rgba(79, 129, 29, 0.1);
 }
 
 .page-v2 .plan-map-column-hop {
   background: linear-gradient(180deg, rgba(215,239,198,0.88), rgba(229,245,217,0.94));
+  z-index: 1;
+  transform: translateX(-22px);
+  opacity: 0;
+  box-shadow: inset 18px 0 24px rgba(79, 129, 29, 0.08);
+}
+
+.page-v2 .plan-map-column-strategi.is-visible,
+.page-v2 .plan-map-column-hop.is-visible {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.page-v2 .plan-map-workspace[data-depth="1"] .plan-map-column-strategi,
+.page-v2 .plan-map-workspace[data-depth="1"] .plan-map-column-hop,
+.page-v2 .plan-map-workspace[data-depth="2"] .plan-map-column-hop {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .page-v2 .plan-map-column-title {
@@ -630,6 +651,12 @@ body.page-v2[data-mode="rapport"] #menu {
   inset: 0;
   z-index: 1;
   pointer-events: none;
+  opacity: 0;
+  transition: opacity 1s ease;
+}
+
+.page-v2 .plan-map-lines.is-visible {
+  opacity: 1;
 }
 
 .page-v2 .plan-map-line,
@@ -1171,10 +1198,12 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   .page-v2 .plan-map-workspace {
     grid-template-columns: 1fr;
     min-height: auto;
+    transition: none;
   }
 
   .page-v2 .plan-map-column {
     min-height: auto;
+    transition: none;
   }
 
   .page-v2 .plan-map-tree-root {
@@ -1194,6 +1223,13 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     display: none;
   }
 
+  .page-v2 .plan-map-column-strategi,
+  .page-v2 .plan-map-column-hop {
+    transform: none;
+    opacity: 1;
+    box-shadow: none;
+  }
+
   .page-v2 .plan-map-hop-card {
     width: auto;
     margin-left: 0;
@@ -1208,5 +1244,13 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     margin: 0;
     font-size: 13px;
     color: color-mix(in srgb, var(--green-900) 72%, white);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-v2 .plan-map-workspace,
+  .page-v2 .plan-map-column,
+  .page-v2 .plan-map-lines {
+    transition: none;
   }
 }

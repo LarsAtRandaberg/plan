@@ -430,13 +430,16 @@
       planMapWorkspace.dataset.depth = String(depth);
     }
     if (planMapStrategyColumn) {
-      planMapStrategyColumn.hidden = depth < 2;
+      planMapStrategyColumn.classList.toggle("is-visible", depth >= 2);
+      planMapStrategyColumn.setAttribute("aria-hidden", depth >= 2 ? "false" : "true");
     }
     if (planMapHopColumn) {
-      planMapHopColumn.hidden = depth < 3;
+      planMapHopColumn.classList.toggle("is-visible", depth >= 3);
+      planMapHopColumn.setAttribute("aria-hidden", depth >= 3 ? "false" : "true");
     }
     if (planMapLines) {
-      planMapLines.hidden = depth < 3;
+      planMapLines.classList.toggle("is-visible", depth >= 3);
+      planMapLines.setAttribute("aria-hidden", depth >= 3 ? "false" : "true");
     }
     renderPlanTree();
     renderStrategyMenu();
