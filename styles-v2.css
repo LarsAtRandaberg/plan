@@ -773,18 +773,7 @@ body.page-v2[data-mode="rapport"] #menu {
   gap: 10px;
   margin-top: 8px;
   position: relative;
-  padding-left: 18px;
-}
-
-.page-v2 .plan-map-strategy-list::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 14px;
-  bottom: 14px;
-  width: 1px;
-  background: linear-gradient(180deg, rgba(63, 125, 102, 0.08), rgba(63, 125, 102, 0.2), rgba(63, 125, 102, 0.08));
-  border-radius: 999px;
+  padding-left: 14px;
 }
 
 .page-v2 .plan-map-hop-stack {
@@ -792,18 +781,7 @@ body.page-v2[data-mode="rapport"] #menu {
   gap: 10px;
   margin-top: 8px;
   position: relative;
-  padding-left: 18px;
-}
-
-.page-v2 .plan-map-hop-stack::before {
-  content: "";
-  position: absolute;
-  left: 6px;
-  top: 14px;
-  bottom: 14px;
-  width: 1px;
-  background: linear-gradient(180deg, rgba(63, 125, 102, 0.07), rgba(63, 125, 102, 0.16), rgba(63, 125, 102, 0.07));
-  border-radius: 999px;
+  padding-left: 14px;
 }
 
 .page-v2 .plan-map-hop-card {
