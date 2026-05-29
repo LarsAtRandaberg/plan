@@ -124,48 +124,82 @@
       <div class="plan-map-header">
         <div>
           <div class="plan-map-kicker">Prototype</div>
-          <h2 id="plan-map-title">Slik kan Oppvekstplanen kobles til kommuneplan og HØP</h2>
+          <h2 id="plan-map-title">Trepanel-kart for kommuneplan, strategi og HØP</h2>
         </div>
-        <p class="plan-map-note">Eksempelet bruker faktiske navn fra datafilene. Selve «95 prosent»-målet vises her som illustrasjon, siden teksten ikke finnes i denne checkouten ennå.</p>
+        <p class="plan-map-note">Eksempelet følger skissen din: venstre felt viser kommuneplanstrukturen, midten viser valgt strategi og mål, og høyre felt viser konkrete tiltak som henger sammen med dette sporet.</p>
       </div>
-      <div class="plan-map-grid">
+      <div class="plan-map-workspace">
         <div class="plan-map-column plan-map-column-kommune">
-          <div class="plan-map-column-title">Kommuneplan</div>
-          <div class="plan-map-node plan-map-node-root">Kommuneplanens samfunnsdel 2026-2040</div>
-          <div class="plan-map-path">
-            <div class="plan-map-node">Gode hverdagsliv</div>
-            <div class="plan-map-connector"></div>
-            <div class="plan-map-node">Gode oppvekstvilkår</div>
-            <div class="plan-map-connector"></div>
-            <div class="plan-map-node is-highlighted">Tidlig innsats, helsefremmende og forebyggende arbeid</div>
+          <div class="plan-map-column-title">Kommuneplanen</div>
+          <div class="plan-map-tree">
+            <div class="plan-map-tree-root">Sammen skaper vi den grønne landsbyen</div>
+            <div class="plan-map-tree-group is-open">
+              <div class="plan-map-tree-branch">Areal og utvikling</div>
+            </div>
+            <div class="plan-map-tree-group is-open">
+              <div class="plan-map-tree-branch is-open">Gode hverdagsliv</div>
+              <div class="plan-map-tree-children">
+                <div class="plan-map-tree-leaf">God alderdom</div>
+                <div class="plan-map-tree-leaf">Gode arbeidsplasser</div>
+                <div class="plan-map-tree-leaf">Gode fellesskap</div>
+                <div class="plan-map-tree-leaf is-active">Gode oppvekstvilkår</div>
+                <div class="plan-map-tree-subpath">
+                  <div class="plan-map-tree-subleaf">Delmål 1</div>
+                  <div class="plan-map-tree-subleaf">Delmål 2</div>
+                  <div class="plan-map-node plan-map-node-selected">Tidlig innsats, helsefremmende og forebyggende arbeid</div>
+                  <div class="plan-map-tree-subleaf">Delmål 4</div>
+                </div>
+              </div>
+            </div>
+            <div class="plan-map-tree-group">
+              <div class="plan-map-tree-branch">Kommunen er vi</div>
+            </div>
+            <div class="plan-map-tree-group">
+              <div class="plan-map-tree-branch">Lokalsamfunnet</div>
+            </div>
           </div>
         </div>
 
         <div class="plan-map-column plan-map-column-strategi">
-          <div class="plan-map-column-title">Strategier og temaplaner</div>
-          <button type="button" class="plan-map-strategy-card is-active">
-            <span class="plan-map-strategy-name">Oppvekstplanen</span>
-            <span class="plan-map-strategy-state">hover / fokus</span>
-            <span class="plan-map-strategy-detail">95 prosent av elevene skal få opplæringen innenfor det ordinære tilbudet med nødvendige universelle tilpasninger.</span>
-          </button>
-          <div class="plan-map-related-list">
-            <span class="plan-map-related-pill">Barnehagebruksplan 2026</span>
-            <span class="plan-map-related-pill is-muted">Andre strategier kan ligge her</span>
+          <div class="plan-map-column-title">Strategier / temaplaner</div>
+          <div class="plan-map-panel-title">Oppvekstplanen</div>
+          <div class="plan-map-strategy-list">
+            <div class="plan-map-strategy-item">Delmål 1</div>
+            <div class="plan-map-strategy-item">Delmål 2</div>
+            <div class="plan-map-strategy-item is-active">95 prosent av elevene få opplæringen sin innenfor det ordinære tilbudet med nødvendige universelle tilpasninger.</div>
+            <div class="plan-map-strategy-item">Delmål 4</div>
           </div>
         </div>
 
         <div class="plan-map-column plan-map-column-hop">
           <div class="plan-map-column-title">Handlings- og økonomiplan</div>
-          <div class="plan-map-hop-card">
-            <div class="plan-map-hop-kicker">Eksempel på tiltak</div>
-            <strong>Styrke tidlig innsats i laget rundt barnet</strong>
-            <p>Høyre laget kan vise tiltak, økonomiske prioriteringer eller oppfølgingspunkter som konkret støtter strategimålet.</p>
-          </div>
-          <div class="plan-map-hop-card is-secondary">
-            <div class="plan-map-hop-kicker">Mulig rapportkobling</div>
-            <p>I rapportmodus kan samme spor brukes til å vise status bare når målet faktisk har styringsrelevant oppfølging.</p>
+          <div class="plan-map-panel-title">Handlings- og økonomiplanen 2027-2030</div>
+          <div class="plan-map-hop-stack">
+            <div class="plan-map-hop-card is-linked">
+              <strong>Tiltak 4524</strong>
+              <p>Bla, bla, bla...</p>
+            </div>
+            <div class="plan-map-hop-card is-linked">
+              <strong>Tiltak 5432</strong>
+              <p>Bla, bla, bla...</p>
+            </div>
           </div>
         </div>
+
+        <div class="plan-map-lines" aria-hidden="true">
+          <div class="plan-map-line plan-map-line-left"></div>
+          <div class="plan-map-line plan-map-line-right-top"></div>
+          <div class="plan-map-line plan-map-line-right-bottom"></div>
+          <div class="plan-map-joint plan-map-joint-center"></div>
+          <div class="plan-map-joint plan-map-joint-right"></div>
+        </div>
+
+        <div class="plan-map-mobile-caption">
+          <p>På liten skjerm kan samme kobling vises som tre stablede felt med aktivt spor markert i grønt.</p>
+        </div>
+      </div>
+      <div class="plan-map-footer-note">
+        <p>Dette er en visuell arbeidsprototype. Neste steg vil være å koble midtlaget til faktiske strategidata og høyrelaget til virkelige HØP-tiltak.</p>
       </div>
     </section>
     <div id="innhold"></div>
