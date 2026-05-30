@@ -34,6 +34,7 @@
   let planGoalsData = [];
   let planScrollSpyObserver = null;
   let suppressPlanScrollSpy = false;
+  let pendingPlanContext = null;
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
       entryColumn: "kommune",
@@ -305,6 +306,27 @@
     return currentStrategy.hopItems.find((item) => getNodeKey(item) === planSelection.hopKey) || null;
   }
 
+  function getCurrentPlanId() {
+    const params = new URLSearchParams(location.search);
+    return params.get("id");
+  }
+
+  function getStrategyPlanIdForLeaf(leaf) {
+    if (!leaf) return null;
+    if (leaf.key === "gode-oppvekstvilkar") return OPPVEKSTPLAN_ID;
+    return null;
+  }
+
+  function switchToPlan(planId, contextOverrides = {}) {
+    pendingPlanContext = {
+      planId,
+      context: { ...contextOverrides }
+    };
+    history.pushState(null, "", "?id=" + encodeURIComponent(planId));
+    window.dispatchEvent(new PopStateEvent("popstate"));
+    window.scrollTo(0, 0);
+  }
+
   function slugify(value) {
     return String(value || "")
       .toLowerCase()
@@ -431,19 +453,17 @@
   }
 
   function getLayoutState() {
-    if (planSelection.focusColumn === "hop" && !planSelection.hopKey) {
-      return "hop-entry";
+    if (planSelection.focusColumn === "hop") {
+      return planSelection.hopKey ? "full" : "hop-entry";
     }
-    if (planSelection.focusColumn === "strategi" && !planSelection.strategyKey) {
-      return "strategi-entry";
+    if (planSelection.focusColumn === "strategi") {
+      return planSelection.strategyKey ? "kommune-plus-strategi" : "strategi-entry";
     }
-    if (!planSelection.leafKey) {
-      return "kommune-only";
+    if (planSelection.focusColumn === "full") {
+      if (planSelection.strategyKey) return "full";
+      if (planSelection.leafKey) return "kommune-plus-strategi";
     }
-    if (!planSelection.strategyKey) {
-      return "kommune-plus-strategi";
-    }
-    return "full";
+    return "kommune-only";
   }
 
   function buildPlanGoalLookup() {
@@ -548,6 +568,80 @@
     return button;
   }
 
+  function createRelationPreview(summary, actionLabel, onAction) {
+    const preview = document.createElement("div");
+    preview.className = "plan-map-relation-preview";
+
+    const line = document.createElement("div");
+    line.className = "plan-map-relation-preview-line";
+    preview.appendChild(line);
+
+    const card = document.createElement("div");
+    card.className = "plan-map-relation-preview-card";
+
+    const text = document.createElement("div");
+    text.className = "plan-map-relation-preview-text";
+    text.textContent = summary;
+    card.appendChild(text);
+
+    const action = document.createElement("button");
+    action.type = "button";
+    action.className = "plan-map-relation-preview-action";
+    action.setAttribute("aria-label", actionLabel);
+    action.setAttribute("title", actionLabel);
+    action.innerHTML = "<i class=\"ti ti-chevron-right\" aria-hidden=\"true\"></i>";
+    action.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onAction();
+    });
+    card.appendChild(action);
+
+    preview.appendChild(card);
+    return preview;
+  }
+
+  function createStrategySwitchPreview(section, leaf) {
+    const planId = getStrategyPlanIdForLeaf(leaf);
+    if (!planId || getCurrentPlanId() === planId) return null;
+    const strategyCount = Array.isArray(leaf.strategies) ? leaf.strategies.length : 0;
+    if (!strategyCount) return null;
+
+    return createRelationPreview(
+      `Se ${strategyCount} mål i ${leaf.strategyPlanTitle}`,
+      `Skift til ${leaf.strategyPlanTitle}`,
+      () => {
+        switchToPlan(planId, {
+          entryColumn: "strategi",
+          sectionKey: section.key,
+          leafKey: leaf.key,
+          strategyKey: null,
+          hopKey: null
+        });
+      }
+    );
+  }
+
+  function createHopSwitchPreview(section, leaf, strategy) {
+    if (getCurrentPlanId() === HOP_PLAN_ID) return null;
+    const hopCount = Array.isArray(strategy.hopItems) ? strategy.hopItems.length : 0;
+    if (!hopCount) return null;
+
+    return createRelationPreview(
+      `Se ${hopCount} tiltak i HØP`,
+      "Skift til Handlings- og økonomiplanen",
+      () => {
+        switchToPlan(HOP_PLAN_ID, {
+          entryColumn: "full",
+          sectionKey: section.key,
+          leafKey: leaf.key,
+          strategyKey: strategy.key,
+          hopKey: null
+        });
+      }
+    );
+  }
+
   function getNodeLabel(node) {
     return node.label || node.title || "";
   }
@@ -623,7 +717,16 @@
   function syncPlanContextFromLocation() {
     const params = new URLSearchParams(location.search);
     const planId = params.get("id");
-    const context = planId ? planContextsById[planId] : null;
+    const baseContext = planId ? planContextsById[planId] : null;
+    const pendingContext = pendingPlanContext && pendingPlanContext.planId === planId
+      ? pendingPlanContext.context
+      : null;
+    const context = (baseContext || pendingContext)
+      ? { ...(baseContext || {}), ...(pendingContext || {}) }
+      : null;
+    if (pendingContext) {
+      pendingPlanContext = null;
+    }
     if (!context) return;
     suppressPlanScrollSpy = true;
     planSelection.focusColumn = context.entryColumn || "kommune";
@@ -720,7 +823,19 @@
                 refreshDynamicLeafData();
                 renderPlanMenus();
               });
-              subpath.appendChild(subLeaf);
+
+              if (isSelectedSubgoal) {
+                const relationGroup = document.createElement("div");
+                relationGroup.className = "plan-map-relation-group";
+                relationGroup.appendChild(subLeaf);
+                const preview = createStrategySwitchPreview(section, leaf);
+                if (preview) {
+                  relationGroup.appendChild(preview);
+                }
+                subpath.appendChild(relationGroup);
+              } else {
+                subpath.appendChild(subLeaf);
+              }
             });
 
             children.appendChild(subpath);
@@ -750,17 +865,36 @@
     if (!Array.isArray(leaf.strategies) || leaf.strategies.length === 0) {
       return;
     }
-    renderMenuNodes(planMapStrategyList, leaf.strategies, {
-      selectedKey: activeStrategy ? activeStrategy.key : null,
-      leafClassName: "plan-map-node plan-map-list-node",
-      activeLeafClassName: "plan-map-node plan-map-list-node plan-map-node-selected",
-      childLeafClassName: "plan-map-tree-subleaf",
-      onSelect: (strategy) => {
-        planSelection.strategyKey = getNodeKey(strategy);
-        planSelection.hopKey = null;
-        planSelection.focusColumn = "full";
-        renderPlanMenus();
+    leaf.strategies.forEach((strategy) => {
+      const isActive = !!activeStrategy && activeStrategy.key === strategy.key;
+      const group = document.createElement("section");
+      group.className = "plan-map-tree-group";
+
+      const control = createButton(
+        isActive
+          ? "plan-map-node plan-map-list-node plan-map-node-selected"
+          : "plan-map-tree-subleaf plan-map-strategy-row",
+        getNodeLabel(strategy),
+        () => {
+          planSelection.strategyKey = getNodeKey(strategy);
+          planSelection.hopKey = null;
+          planSelection.focusColumn = "strategi";
+          renderPlanMenus();
+        }
+      );
+      if (isActive) {
+        control.setAttribute("aria-current", "true");
       }
+      group.appendChild(control);
+
+      if (isActive) {
+        const preview = createHopSwitchPreview(currentLeaf.section, leaf, strategy);
+        if (preview) {
+          group.appendChild(preview);
+        }
+      }
+
+      planMapStrategyList.appendChild(group);
     });
   }
 

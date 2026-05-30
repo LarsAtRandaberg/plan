@@ -686,7 +686,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-tree-subpath {
   display: grid;
-  gap: 8px;
+  gap: 10px;
   padding-left: 16px;
   margin-top: 2px;
 }
@@ -705,6 +705,10 @@ body.page-v2[data-mode="rapport"] #menu {
   cursor: pointer;
 }
 
+.page-v2 .plan-map-strategy-row {
+  padding: 2px 0;
+}
+
 .page-v2 .plan-map-tree-meta {
   padding: 4px 0 0 0;
   font-size: 13px;
@@ -715,9 +719,9 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-node,
 .page-v2 .plan-map-hop-card {
   border-radius: 6px;
-  background: rgba(255,255,255,0.92);
+  background: #fff;
   border: 1px solid rgba(16, 25, 38, 0.14);
-  box-shadow: 0 10px 24px rgba(16, 25, 38, 0.04);
+  box-shadow: none;
 }
 
 .page-v2 .plan-map-node {
@@ -734,7 +738,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-list-node {
   position: relative;
-  background: rgba(255,255,255,0.46);
+  background: #fff;
   border-color: rgba(16, 25, 38, 0.08);
   box-shadow: none;
 }
@@ -748,6 +752,94 @@ body.page-v2[data-mode="rapport"] #menu {
   display: block;
   text-align: left;
   cursor: pointer;
+}
+
+.page-v2 .plan-map-relation-group {
+  display: grid;
+  gap: 10px;
+}
+
+.page-v2 .plan-map-relation-preview {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateY(-2px);
+  transition: max-height 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+}
+
+.page-v2 .plan-map-relation-group:hover .plan-map-relation-preview,
+.page-v2 .plan-map-relation-group:focus-within .plan-map-relation-preview,
+.page-v2 .plan-map-tree-group:hover .plan-map-relation-preview,
+.page-v2 .plan-map-tree-group:focus-within .plan-map-relation-preview {
+  max-height: 88px;
+  opacity: 1;
+  overflow: visible;
+  transform: translateY(0);
+}
+
+.page-v2 .plan-map-relation-preview-line {
+  position: relative;
+  width: 24px;
+  height: 1px;
+  margin-left: 2px;
+  background: rgba(67, 114, 77, 0.42);
+}
+
+.page-v2 .plan-map-relation-preview-line::after {
+  content: "";
+  position: absolute;
+  right: -3px;
+  top: 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(67, 114, 77, 0.72);
+  background: #fff;
+  transform: translateY(-50%);
+}
+
+.page-v2 .plan-map-relation-preview-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px 10px 9px 12px;
+  border: 1px solid rgba(67, 114, 77, 0.26);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.page-v2 .plan-map-relation-preview-text {
+  min-width: 0;
+  font-size: 13px;
+  line-height: 1.35;
+  color: rgba(21, 51, 33, 0.84);
+}
+
+.page-v2 .plan-map-relation-preview-action {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border: 0;
+  border-left: 1px solid rgba(67, 114, 77, 0.18);
+  padding-left: 8px;
+  background: transparent;
+  color: rgba(21, 51, 33, 0.82);
+  cursor: pointer;
+}
+
+.page-v2 .plan-map-relation-preview-action:hover,
+.page-v2 .plan-map-relation-preview-action:focus-visible {
+  color: rgba(21, 51, 33, 1);
+  outline: none;
 }
 
 .page-v2 .plan-map-strategy-list {
@@ -780,7 +872,7 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-node.plan-map-list-node.plan-map-node-selected {
   background: rgba(255,255,255,0.94);
   border-color: rgba(16, 25, 38, 0.14);
-  box-shadow: 0 14px 30px rgba(16, 25, 38, 0.05);
+  box-shadow: none;
 }
 
 .page-v2 .plan-map-hop-card strong {
