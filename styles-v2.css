@@ -467,7 +467,7 @@ body.page-v2[data-mode="rapport"] #menu {
   grid-template-columns: repeat(3, minmax(0, var(--plan-column-width)));
   gap: 0;
   border-radius: 0;
-  overflow: hidden;
+  overflow: visible;
   min-height: 560px;
   background: #ffffff;
   border: 0;
@@ -480,7 +480,7 @@ body.page-v2[data-mode="rapport"] #menu {
   min-height: 560px;
   min-width: 0;
   z-index: 2;
-  overflow: hidden;
+  overflow: visible;
   border-right: 1px solid rgba(16, 25, 38, 0.06);
 }
 
@@ -524,7 +524,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-tree {
   display: grid;
-  gap: 16px;
+  gap: 18px;
 }
 
 .page-v2 .plan-map-tree-root {
@@ -536,56 +536,82 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-tree-group {
+  position: relative;
   display: grid;
-  gap: 8px;
+  gap: 10px;
 }
 
 .page-v2 .plan-map-tree-branch {
   position: relative;
   display: block;
   width: 100%;
-  border: 0;
+  border: 1px solid rgba(16, 25, 38, 0.12);
+  border-radius: 10px;
   background: transparent;
   text-align: left;
   font: inherit;
   font-size: 15px;
   font-weight: 600;
   color: rgba(21, 51, 33, 0.82);
-  padding: 0 0 0 16px;
+  padding: 16px 44px 16px 18px;
   margin: 0;
   cursor: pointer;
+  background: #fff;
 }
 
 .page-v2 .plan-map-tree-branch::before {
-  content: "▸";
+  content: "";
   position: absolute;
   left: 0;
-  top: 0;
-  color: rgba(16, 25, 38, 0.38);
-  font-size: 11px;
-  transform: translateY(4px);
-}
-
-.page-v2 .plan-map-tree-branch.is-open::before {
-  content: "▾";
+  top: 14px;
+  bottom: 14px;
+  width: 4px;
+  border-radius: 999px;
+  background: transparent;
 }
 
 .page-v2 .plan-map-tree-branch.is-active {
   color: var(--ink-900);
+  font-weight: 700;
+}
+
+.page-v2 .plan-map-tree-branch::after {
+  content: "›";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  line-height: 1;
+  color: rgba(16, 25, 38, 0.42);
+}
+
+.page-v2 .plan-map-tree-group.is-active > .plan-map-tree-branch {
+  border-color: rgba(16, 25, 38, 0.14);
+}
+
+.page-v2 .plan-map-tree-group.is-active > .plan-map-tree-branch::before {
+  background: rgba(47, 136, 49, 0.94);
+}
+
+.page-v2 .plan-map-tree-group.is-active > .plan-map-tree-branch::after {
+  color: rgba(47, 136, 49, 0.94);
 }
 
 .page-v2 .plan-map-tree-children {
   display: grid;
-  gap: 10px;
-  padding-left: 16px;
+  gap: 12px;
+  padding-left: 0;
 }
 
 .page-v2 .plan-map-tree-leaf {
-  display: inline-block;
-  width: auto;
-  border: 0;
-  background: transparent;
-  padding: 2px 0;
+  position: relative;
+  display: block;
+  width: 100%;
+  border: 1px solid rgba(16, 25, 38, 0.12);
+  border-radius: 10px;
+  background: #fff;
+  padding: 16px 44px 16px 18px;
   text-align: left;
   font: inherit;
   font-size: 15px;
@@ -593,37 +619,72 @@ body.page-v2[data-mode="rapport"] #menu {
   cursor: pointer;
 }
 
+.page-v2 .plan-map-tree-leaf::after {
+  content: "›";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  line-height: 1;
+  color: rgba(16, 25, 38, 0.38);
+}
+
 .page-v2 .plan-map-tree-leaf.is-active {
-  padding: 4px 10px;
-  border-radius: 6px;
-  background: rgba(16, 25, 38, 0.08);
+  padding: 16px 44px 16px 18px;
+  border-radius: 10px;
+  background: #fff;
   color: rgba(16, 25, 38, 0.9);
   font-weight: 700;
+  border-color: rgba(16, 25, 38, 0.14);
+  box-shadow: inset 4px 0 0 rgba(47, 136, 49, 0.94);
+}
+
+.page-v2 .plan-map-tree-leaf.is-active::after {
+  color: rgba(47, 136, 49, 0.94);
 }
 
 .page-v2 .plan-map-tree-subpath {
   display: grid;
-  gap: 10px;
-  padding-left: 16px;
-  margin-top: 2px;
+  gap: 12px;
+  padding-left: 18px;
+  margin-top: 0;
+  overflow: visible;
 }
 
 .page-v2 .plan-map-tree-subleaf {
   display: block;
   width: 100%;
-  border: 0;
-  background: transparent;
-  padding: 0;
+  border: 1px solid rgba(16, 25, 38, 0.10);
+  border-radius: 10px;
+  background: #fff;
+  padding: 18px 18px 18px 18px;
   text-align: left;
   font: inherit;
-  font-size: 13px;
-  line-height: 1.45;
-  color: rgba(21, 51, 33, 0.62);
+  font-size: 14px;
+  line-height: 1.5;
+  color: rgba(21, 51, 33, 0.74);
   cursor: pointer;
 }
 
 .page-v2 .plan-map-strategy-row {
-  padding: 2px 0;
+  position: relative;
+  padding: 16px 44px 16px 18px;
+  border: 1px solid rgba(16, 25, 38, 0.12);
+  border-radius: 10px;
+  background: #fff;
+  color: rgba(21, 51, 33, 0.78);
+}
+
+.page-v2 .plan-map-strategy-row::after {
+  content: "›";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  line-height: 1;
+  color: rgba(16, 25, 38, 0.38);
 }
 
 .page-v2 .plan-map-tree-meta {
@@ -635,10 +696,11 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-empty-state {
   margin: 0;
-  max-width: 20ch;
+  max-width: 24ch;
   font-size: 13px;
   line-height: 1.45;
   color: rgba(21, 51, 33, 0.48);
+  padding: 12px 4px;
 }
 
 .page-v2 .plan-map-node,
@@ -651,11 +713,11 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-node {
   display: block;
-  width: auto;
-  max-width: 205px;
-  padding: 12px 14px;
-  font-size: 13px;
-  line-height: 1.4;
+  width: 100%;
+  max-width: none;
+  padding: 18px 50px 18px 18px;
+  font-size: 14px;
+  line-height: 1.5;
   font-weight: 600;
   color: var(--ink-900);
   text-align: left;
@@ -677,40 +739,55 @@ body.page-v2[data-mode="rapport"] #menu {
   display: block;
   text-align: left;
   cursor: pointer;
+  border-color: rgba(47, 136, 49, 0.86);
+  box-shadow: inset 4px 0 0 rgba(47, 136, 49, 0.94);
+}
+
+.page-v2 .plan-map-node-selected::after {
+  content: "›";
+  position: absolute;
+  right: 18px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 24px;
+  line-height: 1;
+  color: rgba(47, 136, 49, 0.94);
 }
 
 .page-v2 .plan-map-relation-group {
-  display: grid;
-  gap: 10px;
+  position: relative;
+  display: block;
 }
 
 .page-v2 .plan-map-relation-preview {
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr);
+  position: absolute;
+  left: calc(100% + 20px);
+  top: 50%;
+  z-index: 20;
+  display: flex;
   align-items: center;
   gap: 10px;
-  max-height: 0;
+  width: 248px;
   opacity: 0;
-  overflow: hidden;
-  transform: translateY(-2px);
-  transition: max-height 0.18s ease, opacity 0.18s ease, transform 0.18s ease;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(-8px);
+  transition: opacity 0.18s ease, transform 0.18s ease;
 }
 
 .page-v2 .plan-map-relation-group:hover .plan-map-relation-preview,
 .page-v2 .plan-map-relation-group:focus-within .plan-map-relation-preview,
 .page-v2 .plan-map-tree-group:hover .plan-map-relation-preview,
 .page-v2 .plan-map-tree-group:focus-within .plan-map-relation-preview {
-  max-height: 88px;
   opacity: 1;
-  overflow: visible;
-  transform: translateY(0);
+  pointer-events: auto;
+  transform: translateY(-50%) translateX(0);
 }
 
 .page-v2 .plan-map-relation-preview-line {
   position: relative;
-  width: 24px;
+  flex: 0 0 20px;
+  width: 20px;
   height: 1px;
-  margin-left: 2px;
   background: rgba(67, 114, 77, 0.42);
 }
 
@@ -733,7 +810,8 @@ body.page-v2[data-mode="rapport"] #menu {
   justify-content: space-between;
   gap: 10px;
   min-width: 0;
-  padding: 9px 10px 9px 12px;
+  width: 100%;
+  padding: 11px 10px 11px 14px;
   border: 1px solid rgba(67, 114, 77, 0.26);
   border-radius: 6px;
   background: #fff;
@@ -741,7 +819,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-relation-preview-text {
   min-width: 0;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 1.35;
   color: rgba(21, 51, 33, 0.84);
 }
@@ -769,7 +847,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-strategy-list {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   margin-top: 8px;
   position: relative;
   padding-left: 0;
@@ -777,7 +855,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-hop-stack {
   display: grid;
-  gap: 10px;
+  gap: 12px;
   margin-top: 8px;
   position: relative;
   padding-left: 0;
@@ -786,8 +864,8 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-hop-card {
   display: block;
   width: 100%;
-  max-width: 182px;
-  padding: 11px 12px;
+  max-width: none;
+  padding: 16px 18px;
   text-align: left;
   font: inherit;
   cursor: pointer;
@@ -802,7 +880,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-hop-card strong {
   display: block;
-  font-size: 13px;
+  font-size: 14px;
   color: var(--ink-900);
   margin: 0 0 4px;
   letter-spacing: -0.01em;
@@ -812,7 +890,7 @@ body.page-v2[data-mode="rapport"] #menu {
   margin: 0;
   color: rgba(21, 51, 33, 0.72);
   line-height: 1.45;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 .page-v2 .plan-map-mobile-caption {
