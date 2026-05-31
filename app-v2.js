@@ -1124,7 +1124,7 @@
           strategy.children.forEach((childStrategy, childIndex) => {
             const childKey = getNodeKey(childStrategy);
             const isActive = !!activeStrategy && getNodeKey(activeStrategy) === childKey;
-            const isPrimaryTarget = activeStrategy ? isActive : childIndex === 0;
+            const isPrimaryTarget = !!activeStrategy && isActive;
             const control = createButton(
               "plan-map-tree-subleaf plan-map-strategy-row plan-map-link-target"
                 + (isActive ? " plan-map-node-selected" : "")
@@ -1140,6 +1140,7 @@
             if (isActive) {
               control.setAttribute("aria-current", "true");
             }
+            control.dataset.strategyKey = childKey;
             children.appendChild(control);
           });
         } else {
@@ -1203,8 +1204,13 @@
     planMapLinks.innerHTML = "";
     if (!planMapPrototype?.classList.contains("has-child-plan")) return;
 
+    const activeStrategy = getCurrentStrategy();
+    const activeStrategyKey = activeStrategy ? getNodeKey(activeStrategy) : null;
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
-    const targets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
+    const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
+    const targets = activeStrategyKey
+      ? allTargets.filter((target) => target.dataset.strategyKey === activeStrategyKey)
+      : allTargets;
     if (!source || !targets.length) return;
 
     const workspaceRect = planMapWorkspace.getBoundingClientRect();
