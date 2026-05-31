@@ -21,6 +21,8 @@
   const reportContent = document.getElementById("reportContent");
   const reportNavLinks = Array.from(document.querySelectorAll(".report-nav-link"));
   const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
+  const planMapPrototype = document.getElementById("planMapPrototype");
+  const planMapOriginRail = document.getElementById("planMapOriginRail");
   const planMapWorkspace = document.querySelector(".plan-map-workspace");
   const planMapTree = document.getElementById("planMapTree");
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
@@ -29,6 +31,7 @@
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
   const planMapHopList = document.getElementById("planMapHopList");
+  const KOMMUNEPLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
   let planGoalsData = [];
@@ -1101,6 +1104,17 @@
     });
   }
 
+  function syncPlanOriginRail() {
+    if (!planMapOriginRail || !planMapPrototype) return;
+    const currentPlanId = getCurrentPlanId();
+    const showsOriginRail = !!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID;
+    const tooltipLabel = "Gå tilbake til Kommuneplanens samfunnsdel.";
+    planMapOriginRail.hidden = !showsOriginRail;
+    planMapOriginRail.setAttribute("aria-label", tooltipLabel);
+    planMapOriginRail.setAttribute("title", tooltipLabel);
+    planMapPrototype.classList.toggle("has-origin-rail", showsOriginRail);
+  }
+
   function renderPlanMenus() {
     const layoutState = isMobile() ? getLayoutState() : "flat-desktop";
     if (sidebar) {
@@ -1140,6 +1154,7 @@
     renderPlanTree();
     renderStrategyMenu();
     renderHopMenu();
+    syncPlanOriginRail();
   }
 
   function closeSidebar() {
@@ -1244,6 +1259,17 @@
   if (reportSidebarCloseBtn) reportSidebarCloseBtn.addEventListener("click", closeSidebar);
   if (pageOverlay) pageOverlay.addEventListener("click", closeSidebar);
   if (peekButton) peekButton.addEventListener("click", openCurrentMenu);
+  if (planMapOriginRail) {
+    planMapOriginRail.addEventListener("click", () => {
+      switchToPlan(KOMMUNEPLAN_ID, {
+        entryColumn: "kommune",
+        sectionKey: planSelection.sectionKey,
+        leafKey: planSelection.leafKey,
+        strategyKey: null,
+        hopKey: null
+      });
+    });
+  }
 
   reportNavLinks.forEach((link) => {
     link.addEventListener("click", () => {
