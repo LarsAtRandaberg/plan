@@ -1214,10 +1214,14 @@
     const activeStrategy = getCurrentStrategy();
     const activeStrategyKey = activeStrategy ? getNodeKey(activeStrategy) : null;
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
-    const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target.is-visible-link-target"));
-    const targets = activeStrategyKey
+    const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
+    const selectedTarget = planMapWorkspace.querySelector(".plan-map-link-target.plan-map-node-selected");
+    let targets = activeStrategyKey
       ? allTargets.filter((target) => target.dataset.strategyKey === activeStrategyKey)
-      : allTargets;
+      : allTargets.filter((target) => target.classList.contains("is-visible-link-target"));
+    if (activeStrategyKey && !targets.length && selectedTarget) {
+      targets = [selectedTarget];
+    }
     if (!source || !targets.length) return;
 
     const workspaceRect = planMapWorkspace.getBoundingClientRect();

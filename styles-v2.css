@@ -2020,6 +2020,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   display: block !important;
 }
 
+.page-v2 .plan-map-strategy-list.has-selected-strategy
+  .plan-map-link-target.plan-map-node-selected > .plan-map-link-target-node {
+  display: block !important;
+}
+
 .page-v2 .plan-map-tree-subleaf-static,
 .page-v2 .plan-map-tree-subleaf-static:hover,
 .page-v2 .plan-map-tree-subleaf-static:focus-visible {
