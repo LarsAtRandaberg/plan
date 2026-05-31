@@ -1108,10 +1108,12 @@
     if (!planMapOriginRail || !planMapPrototype) return;
     const currentPlanId = getCurrentPlanId();
     const showsOriginRail = !!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID;
+    const planStage = currentPlanId === HOP_PLAN_ID ? "hop" : showsOriginRail ? "strategy" : "kommune";
     const tooltipLabel = "Gå tilbake til Kommuneplanens samfunnsdel.";
     planMapOriginRail.hidden = !showsOriginRail;
     planMapOriginRail.setAttribute("aria-label", tooltipLabel);
     planMapOriginRail.setAttribute("title", tooltipLabel);
+    planMapPrototype.dataset.planStage = planStage;
     planMapPrototype.classList.toggle("has-origin-rail", showsOriginRail);
   }
 
