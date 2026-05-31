@@ -4,7 +4,7 @@
   "year": 2026,
   "source": "data-hop/normalisert/regnskap-2026.json",
   "statementDefinition": "data-hop/oppstillinger/obligatoriske-tabeller-2026.json",
-  "generated": "2026-05-27",
+  "generated": "2026-05-31",
   "tables": [
     {
       "id": "okonomisk-oversikt-drift-5-6",
@@ -39,15 +39,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 249773984.03,
+          "amount": 255207274.03,
           "children": [
             {
               "type": "kostraart",
               "code": "870",
               "name": "Skatt på inntekt og formue",
               "factor": 1,
-              "rawAmount": -249773984.03,
-              "amount": 249773984.03
+              "rawAmount": -255207274.03,
+              "amount": 255207274.03
             }
           ]
         },
@@ -103,15 +103,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 22936945.85,
+          "amount": 23134443.85,
           "children": [
             {
               "type": "kostraart",
               "code": "810",
               "name": "Andre statlige overføringer",
               "factor": 1,
-              "rawAmount": -22936945.85,
-              "amount": 22936945.85
+              "rawAmount": -23134443.85,
+              "amount": 23134443.85
             }
           ]
         },
@@ -122,15 +122,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -5639046.809999999,
+          "amount": 37823622.04,
           "children": [
             {
               "type": "kostraart",
               "code": "700",
               "name": "Refusjon fra staten",
               "factor": 1,
-              "rawAmount": 37953173.37,
-              "amount": -37953173.37
+              "rawAmount": -4525386.630000001,
+              "amount": 4525386.630000001
             },
             {
               "type": "kostraart",
@@ -145,8 +145,8 @@
               "code": "729",
               "name": "Momskomp. inv. innt.",
               "factor": 1,
-              "rawAmount": -9773000.749999998,
-              "amount": 9773000.749999998
+              "rawAmount": -9957773.079999996,
+              "amount": 9957773.079999996
             },
             {
               "type": "kostraart",
@@ -161,16 +161,16 @@
               "code": "750",
               "name": "Refusjon fra kommuner",
               "factor": 1,
-              "rawAmount": -933117,
-              "amount": 933117
+              "rawAmount": -1727613,
+              "amount": 1727613
             },
             {
               "type": "kostraart",
               "code": "770",
               "name": "Refusjon fra andre",
               "factor": 1,
-              "rawAmount": -2983751.51,
-              "amount": 2983751.51
+              "rawAmount": -2988592.0299999993,
+              "amount": 2988592.0299999993
             },
             {
               "type": "kostraart",
@@ -205,15 +205,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 12338819.34,
+          "amount": 12344102.34,
           "children": [
             {
               "type": "kostraart",
               "code": "600",
               "name": "Brukerbetalinger",
               "factor": 1,
-              "rawAmount": -12338819.34,
-              "amount": 12338819.34
+              "rawAmount": -12344102.34,
+              "amount": 12344102.34
             }
           ]
         },
@@ -224,47 +224,47 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 49129603.76,
+          "amount": 49261649.120000005,
           "children": [
             {
               "type": "kostraart",
               "code": "620",
               "name": "Annet salg av varer og tjenester, gebyrer",
               "factor": 1,
-              "rawAmount": -1198260.68,
-              "amount": 1198260.68
+              "rawAmount": -1257942.68,
+              "amount": 1257942.68
             },
             {
               "type": "kostraart",
               "code": "629",
               "name": "Billettinntekter",
               "factor": 1,
-              "rawAmount": -1201429.7,
-              "amount": 1201429.7
+              "rawAmount": -1201979.7,
+              "amount": 1201979.7
             },
             {
               "type": "kostraart",
               "code": "630",
               "name": "Utleie av boliger og lokaler mv. og festeavgifter",
               "factor": 1,
-              "rawAmount": -18554124.950000003,
-              "amount": 18554124.950000003
+              "rawAmount": -18575174.950000003,
+              "amount": 18575174.950000003
             },
             {
               "type": "kostraart",
               "code": "640",
               "name": "Merverdiavgiftspliktige gebyrer",
               "factor": 1,
-              "rawAmount": -27556331.13,
-              "amount": 27556331.13
+              "rawAmount": -27589531.01,
+              "amount": 27589531.01
             },
             {
               "type": "kostraart",
               "code": "650",
               "name": "Annet merverdiavgiftspliktig salg av varer og tjenester",
               "factor": 1,
-              "rawAmount": -619457.2999999999,
-              "amount": 619457.2999999999
+              "rawAmount": -637020.7799999999,
+              "amount": 637020.7799999999
             }
           ]
         },
@@ -275,7 +275,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 535602862.71,
+          "amount": 584833647.9200001,
           "children": []
         },
         {
@@ -411,31 +411,31 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 125742546.24000002,
+          "amount": 129846411.63000003,
           "children": [
             {
               "type": "kostraart",
               "code": "100",
               "name": "Kontormateriell",
               "factor": 1,
-              "rawAmount": 547707.7600000001,
-              "amount": 547707.7600000001
+              "rawAmount": 548632.6600000001,
+              "amount": 548632.6600000001
             },
             {
               "type": "kostraart",
               "code": "105",
               "name": "Undervisningsmateriell",
               "factor": 1,
-              "rawAmount": 727334.9900000002,
-              "amount": 727334.9900000002
+              "rawAmount": 763051.3600000002,
+              "amount": 763051.3600000002
             },
             {
               "type": "kostraart",
               "code": "110",
               "name": "Medisinsk forbruksmateriell",
               "factor": 1,
-              "rawAmount": 576141.59,
-              "amount": 576141.59
+              "rawAmount": 579053.0300000001,
+              "amount": 579053.0300000001
             },
             {
               "type": "kostraart",
@@ -450,56 +450,56 @@
               "code": "115",
               "name": "Matvarer",
               "factor": 1,
-              "rawAmount": 4561981.260000003,
-              "amount": 4561981.260000003
+              "rawAmount": 4627951.250000003,
+              "amount": 4627951.250000003
             },
             {
               "type": "kostraart",
               "code": "120",
               "name": "Samlepost for annet forbruksmateriell, varer og tjenester",
               "factor": 1,
-              "rawAmount": 3668752.2500000014,
-              "amount": 3668752.2500000014
+              "rawAmount": 3727332.0300000007,
+              "amount": 3727332.0300000007
             },
             {
               "type": "kostraart",
               "code": "130",
               "name": "Post, banktjenester, telefon, internett, -bredbånd",
               "factor": 1,
-              "rawAmount": 1125668.8600000003,
-              "amount": 1125668.8600000003
+              "rawAmount": 1143269.51,
+              "amount": 1143269.51
             },
             {
               "type": "kostraart",
               "code": "140",
               "name": "Annonse, reklame, informasjon",
               "factor": 1,
-              "rawAmount": 612267.44,
-              "amount": 612267.44
+              "rawAmount": 612985.0399999999,
+              "amount": 612985.0399999999
             },
             {
               "type": "kostraart",
               "code": "150",
               "name": "Opplæring og kurs",
               "factor": 1,
-              "rawAmount": 768567.5199999999,
-              "amount": 768567.5199999999
+              "rawAmount": 836191.3399999999,
+              "amount": 836191.3399999999
             },
             {
               "type": "kostraart",
               "code": "170",
               "name": "Transport og reise",
               "factor": 1,
-              "rawAmount": 2953642.6499999994,
-              "amount": 2953642.6499999994
+              "rawAmount": 2979714.1899999995,
+              "amount": 2979714.1899999995
             },
             {
               "type": "kostraart",
               "code": "180",
               "name": "Strøm",
               "factor": 1,
-              "rawAmount": 5914938.099999999,
-              "amount": 5914938.099999999
+              "rawAmount": 6043610.099999997,
+              "amount": 6043610.099999997
             },
             {
               "type": "kostraart",
@@ -514,32 +514,32 @@
               "code": "185",
               "name": "Forsikringer, vakthold og sikring",
               "factor": 1,
-              "rawAmount": 4870709.549999999,
-              "amount": 4870709.549999999
+              "rawAmount": 5242522.549999999,
+              "amount": 5242522.549999999
             },
             {
               "type": "kostraart",
               "code": "190",
               "name": "Husleie, leie av lokaler og grunn",
               "factor": 1,
-              "rawAmount": 11003214.33,
-              "amount": 11003214.33
+              "rawAmount": 12880637.33,
+              "amount": 12880637.33
             },
             {
               "type": "kostraart",
               "code": "195",
               "name": "Avgifter, gebyrer, lisenser o.l.",
               "factor": 1,
-              "rawAmount": 16358795.570000002,
-              "amount": 16358795.570000002
+              "rawAmount": 16491317.58,
+              "amount": 16491317.58
             },
             {
               "type": "kostraart",
               "code": "200",
               "name": "Kjøp og finansiell leie av driftsmidler",
               "factor": 1,
-              "rawAmount": 2631293.8699999996,
-              "amount": 2631293.8699999996
+              "rawAmount": 2672413.06,
+              "amount": 2672413.06
             },
             {
               "type": "kostraart",
@@ -570,16 +570,16 @@
               "code": "230",
               "name": "Vedlikehold, påkostninger nybygg og nyanlegg",
               "factor": 1,
-              "rawAmount": 3545833.0999999996,
-              "amount": 3545833.0999999996
+              "rawAmount": 3775912.92,
+              "amount": 3775912.92
             },
             {
               "type": "kostraart",
               "code": "240",
               "name": "Driftsavtaler, reparasjoner og vaktmestertjenester",
               "factor": 1,
-              "rawAmount": 1395403.1300000001,
-              "amount": 1395403.1300000001
+              "rawAmount": 1435729.6800000002,
+              "amount": 1435729.6800000002
             },
             {
               "type": "kostraart",
@@ -594,8 +594,8 @@
               "code": "260",
               "name": "Renhold og vaskeritjenester",
               "factor": 1,
-              "rawAmount": 1168693.9700000002,
-              "amount": 1168693.9700000002
+              "rawAmount": 1188462.4700000002,
+              "amount": 1188462.4700000002
             },
             {
               "type": "kostraart",
@@ -610,8 +610,8 @@
               "code": "272",
               "name": "Andre tjenester",
               "factor": 1,
-              "rawAmount": 2318702.6199999996,
-              "amount": 2318702.6199999996
+              "rawAmount": 2515935.1199999996,
+              "amount": 2515935.1199999996
             },
             {
               "type": "kostraart",
@@ -634,24 +634,24 @@
               "code": "350",
               "name": "Kjøp fra andre kommuner/komm. inst.",
               "factor": 1,
-              "rawAmount": 3820356.92,
-              "amount": 3820356.92
+              "rawAmount": 4460857.92,
+              "amount": 4460857.92
             },
             {
               "type": "kostraart",
               "code": "370",
               "name": "Kjøp fra andre",
               "factor": 1,
-              "rawAmount": 32156105.340000004,
-              "amount": 32156105.340000004
+              "rawAmount": 32269677.070000004,
+              "amount": 32269677.070000004
             },
             {
               "type": "kostraart",
               "code": "380",
               "name": "Kjøp fra andre regnskapsenheter som inngår i KOSTRA konsern",
               "factor": 1,
-              "rawAmount": 19314897.55,
-              "amount": 19314897.55
+              "rawAmount": 19349617.55,
+              "amount": 19349617.55
             }
           ]
         },
@@ -662,7 +662,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 37781872.14,
+          "amount": 37966644.47,
           "children": [
             {
               "type": "kostraart",
@@ -677,8 +677,8 @@
               "code": "429",
               "name": "Merverdiavgift som gir rett til merverdiavgiftskompensasjon",
               "factor": 1,
-              "rawAmount": 9773000.749999998,
-              "amount": 9773000.749999998
+              "rawAmount": 9957773.079999996,
+              "amount": 9957773.079999996
             },
             {
               "type": "kostraart",
@@ -731,7 +731,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 546031470.9899998,
+          "amount": 550320108.7099998,
           "children": []
         },
         {
@@ -741,7 +741,7 @@
           "rowType": "result",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -10428608.279999793,
+          "amount": 34513539.21000028,
           "children": []
         },
         {
@@ -751,15 +751,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 5713250.3,
+          "amount": 6340736.720000001,
           "children": [
             {
               "type": "kostraart",
               "code": "900",
               "name": "Renteinntekter",
               "factor": 1,
-              "rawAmount": -5713250.3,
-              "amount": 5713250.3
+              "rawAmount": -6340736.720000001,
+              "amount": 6340736.720000001
             }
           ]
         },
@@ -816,15 +816,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 19127473.500000004,
+          "amount": 23549086.430000007,
           "children": [
             {
               "type": "kostraart",
               "code": "500",
               "name": "Renteutgifter, provisjoner og andre finansutgifter",
               "factor": 1,
-              "rawAmount": 19127473.500000004,
-              "amount": 19127473.500000004
+              "rawAmount": 23549086.430000007,
+              "amount": 23549086.430000007
             }
           ]
         },
@@ -835,15 +835,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 14917350,
+          "amount": 21249359,
           "children": [
             {
               "type": "kostraart",
               "code": "510",
               "name": "Avdrag på lån",
               "factor": 1,
-              "rawAmount": 14917350,
-              "amount": 14917350
+              "rawAmount": 21249359,
+              "amount": 21249359
             }
           ]
         },
@@ -854,7 +854,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 1398165.4099999992,
+          "amount": 11524300.92000001,
           "children": []
         },
         {
@@ -874,7 +874,7 @@
           "rowType": "result",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -11826773.689999793,
+          "amount": 22989238.290000267,
           "children": []
         },
         {
@@ -884,7 +884,7 @@
           "rowType": "metric",
           "valueType": "percent",
           "canCalculate": true,
-          "amount": -0.022081236889137674,
+          "amount": 0.03930902124349895,
           "children": []
         },
         {
@@ -973,7 +973,7 @@
           "rowType": "result",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -12356773.689999793,
+          "amount": 22459238.290000267,
           "children": []
         }
       ]
@@ -1011,15 +1011,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 249773984.03,
+          "amount": 255207274.03,
           "children": [
             {
               "type": "kostraart",
               "code": "870",
               "name": "Skatt på inntekt og formue",
               "factor": 1,
-              "rawAmount": -249773984.03,
-              "amount": 249773984.03
+              "rawAmount": -255207274.03,
+              "amount": 255207274.03
             }
           ]
         },
@@ -1065,15 +1065,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 22936945.85,
+          "amount": 23134443.85,
           "children": [
             {
               "type": "kostraart",
               "code": "810",
               "name": "Andre statlige overføringer",
               "factor": 1,
-              "rawAmount": -22936945.85,
-              "amount": 22936945.85
+              "rawAmount": -23134443.85,
+              "amount": 23134443.85
             }
           ]
         },
@@ -1084,7 +1084,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 479773486.42,
+          "amount": 485404274.42,
           "children": []
         },
         {
@@ -1134,15 +1134,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 5713250.3,
+          "amount": 6340736.720000001,
           "children": [
             {
               "type": "kostraart",
               "code": "900",
               "name": "Renteinntekter",
               "factor": 1,
-              "rawAmount": -5713250.3,
-              "amount": 5713250.3
+              "rawAmount": -6340736.720000001,
+              "amount": 6340736.720000001
             }
           ]
         },
@@ -1199,15 +1199,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 19127473.500000004,
+          "amount": 23549086.430000007,
           "children": [
             {
               "type": "kostraart",
               "code": "500",
               "name": "Renteutgifter, provisjoner og andre finansutgifter",
               "factor": 1,
-              "rawAmount": 19127473.500000004,
-              "amount": 19127473.500000004
+              "rawAmount": 23549086.430000007,
+              "amount": 23549086.430000007
             }
           ]
         },
@@ -1218,15 +1218,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 14917350,
+          "amount": 21249359,
           "children": [
             {
               "type": "kostraart",
               "code": "510",
               "name": "Avdrag på lån",
               "factor": 1,
-              "rawAmount": 14917350,
-              "amount": 14917350
+              "rawAmount": 21249359,
+              "amount": 21249359
             }
           ]
         },
@@ -1237,7 +1237,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 1403280.9899999993,
+          "amount": 11529416.500000007,
           "children": []
         },
         {
@@ -1365,7 +1365,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 27783739.83,
+          "amount": 28311814.489999995,
           "children": [
             {
               "type": "kostraart",
@@ -1452,16 +1452,16 @@
               "code": "195",
               "name": "Avgifter, gebyrer, lisenser o.l.",
               "factor": 1,
-              "rawAmount": 139498.69,
-              "amount": 139498.69
+              "rawAmount": 140009.07,
+              "amount": 140009.07
             },
             {
               "type": "kostraart",
               "code": "200",
               "name": "Kjøp og finansiell leasing av driftsmidler",
               "factor": 1,
-              "rawAmount": 2193844.75,
-              "amount": 2193844.75
+              "rawAmount": 2213844.75,
+              "amount": 2213844.75
             },
             {
               "type": "kostraart",
@@ -1476,32 +1476,32 @@
               "code": "230",
               "name": "Vedlikehold, påkostning nybygg og nyanlegg",
               "factor": 1,
-              "rawAmount": 16592238.920000002,
-              "amount": 16592238.920000002
+              "rawAmount": 16910406.32,
+              "amount": 16910406.32
             },
             {
               "type": "kostraart",
               "code": "250",
               "name": "Materialer til vedlikehold, påkostning, nybygg, nyanlegg",
               "factor": 1,
-              "rawAmount": 430156.33,
-              "amount": 430156.33
+              "rawAmount": 463548.83,
+              "amount": 463548.83
             },
             {
               "type": "kostraart",
               "code": "272",
               "name": "Andre tjenester",
               "factor": 1,
-              "rawAmount": 1476672.19,
-              "amount": 1476672.19
+              "rawAmount": 1534797.19,
+              "amount": 1534797.19
             },
             {
               "type": "kostraart",
               "code": "429",
               "name": "Merverdiavgift som gir rett til merverdiavgiftskompensasjon",
               "factor": 1,
-              "rawAmount": 3587916.4299999992,
-              "amount": 3587916.4299999992
+              "rawAmount": 3685795.809999999,
+              "amount": 3685795.809999999
             },
             {
               "type": "kostraart",
@@ -1569,7 +1569,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 30883739.83,
+          "amount": 31411814.489999995,
           "children": []
         },
         {
@@ -1579,15 +1579,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 3587916.4299999992,
+          "amount": 3685795.809999999,
           "children": [
             {
               "type": "kostraart",
               "code": "729",
               "name": "Kompensasjon for merverdiavgift ",
               "factor": 1,
-              "rawAmount": -3587916.4299999992,
-              "amount": 3587916.4299999992
+              "rawAmount": -3685795.809999999,
+              "amount": 3685795.809999999
             }
           ]
         },
@@ -1598,7 +1598,7 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 1125300.27,
+          "amount": 1125300.269999999,
           "children": [
             {
               "type": "kostraart",
@@ -1693,7 +1693,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 22044857.799999997,
+          "amount": 22142737.18,
           "children": []
         },
         {
@@ -1732,15 +1732,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 3221124,
+          "amount": 3966197,
           "children": [
             {
               "type": "kostraart",
               "code": "512",
               "name": "Avdrag på lån til videreutlån",
               "factor": 1,
-              "rawAmount": 3221124,
-              "amount": 3221124
+              "rawAmount": 3966197,
+              "amount": 3966197
             }
           ]
         },
@@ -1770,7 +1770,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 47826530.62,
+          "amount": 48571603.62,
           "children": []
         },
         {
@@ -1809,15 +1809,15 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 51819884.4,
+          "amount": 52564957.4,
           "children": [
             {
               "type": "kostraart",
               "code": "950",
               "name": "Bruk av bundne fond",
               "factor": 1,
-              "rawAmount": -51819884.4,
-              "amount": 51819884.4
+              "rawAmount": -52564957.4,
+              "amount": 52564957.4
             }
           ]
         },
@@ -1858,7 +1858,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -49927454.58,
+          "amount": -50672527.58,
           "children": []
         },
         {
@@ -1868,7 +1868,7 @@
           "rowType": "result",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -6737958.07,
+          "amount": -7168153.349999994,
           "children": []
         }
       ]
@@ -2161,12 +2161,12 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 235239374.3,
+          "amount": 274460025.46999997,
           "children": [],
           "balance": {
             "ib": 296732385.26,
-            "endring": -61493010.960000016,
-            "ub": 235239374.3
+            "endring": -22272359.79000002,
+            "ub": 274460025.46999997
           }
         },
         {
@@ -2176,26 +2176,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 51977243.53,
+          "amount": 90404356.83999999,
           "children": [
             {
               "type": "balansekapittel",
               "code": "10",
               "name": "Bankinnskudd og kontanter",
               "factor": 1,
-              "rawAmount": 51977243.53,
-              "amount": 51977243.53,
+              "rawAmount": 90404356.83999999,
+              "amount": 90404356.83999999,
               "balance": {
                 "ib": 49969551.31999999,
-                "endring": 2007692.210000001,
-                "ub": 51977243.53
+                "endring": 40434805.519999996,
+                "ub": 90404356.83999999
               }
             }
           ],
           "balance": {
             "ib": 49969551.31999999,
-            "endring": 2007692.210000001,
-            "ub": 51977243.53
+            "endring": 40434805.519999996,
+            "ub": 90404356.83999999
           }
         },
         {
@@ -2308,19 +2308,19 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 112282927.45000002,
+          "amount": 113076465.31,
           "children": [
             {
               "type": "balansekapittel",
               "code": "13",
               "name": "Kundefordringer",
               "factor": 1,
-              "rawAmount": 10223170.049999999,
-              "amount": 10223170.049999999,
+              "rawAmount": 10734009.219999999,
+              "amount": 10734009.219999999,
               "balance": {
                 "ib": 69692855.42,
-                "endring": -59469685.370000005,
-                "ub": 10223170.049999999
+                "endring": -58958846.2,
+                "ub": 10734009.219999999
               }
             },
             {
@@ -2328,12 +2328,12 @@
               "code": "16",
               "name": "Andre kortsiktige fordringer",
               "factor": 1,
-              "rawAmount": 10687149.759999996,
-              "amount": 10687149.759999996,
+              "rawAmount": 10969848.449999996,
+              "amount": 10969848.449999996,
               "balance": {
                 "ib": 14161829.69,
-                "endring": -3474679.930000007,
-                "ub": 10687149.759999996
+                "endring": -3191981.240000013,
+                "ub": 10969848.449999996
               }
             },
             {
@@ -2352,8 +2352,8 @@
           ],
           "balance": {
             "ib": 175227292.75,
-            "endring": -62944365.30000001,
-            "ub": 112282927.45000002
+            "endring": -62150827.44000001,
+            "ub": 113076465.31
           }
         },
         {
@@ -2363,26 +2363,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 10223170.049999999,
+          "amount": 10734009.219999999,
           "children": [
             {
               "type": "balansekapittel",
               "code": "13",
               "name": "Kundefordringer",
               "factor": 1,
-              "rawAmount": 10223170.049999999,
-              "amount": 10223170.049999999,
+              "rawAmount": 10734009.219999999,
+              "amount": 10734009.219999999,
               "balance": {
                 "ib": 69692855.42,
-                "endring": -59469685.370000005,
-                "ub": 10223170.049999999
+                "endring": -58958846.2,
+                "ub": 10734009.219999999
               }
             }
           ],
           "balance": {
             "ib": 69692855.42,
-            "endring": -59469685.370000005,
-            "ub": 10223170.049999999
+            "endring": -58958846.2,
+            "ub": 10734009.219999999
           }
         },
         {
@@ -2392,26 +2392,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 10687149.759999996,
+          "amount": 10969848.449999996,
           "children": [
             {
               "type": "balansekapittel",
               "code": "16",
               "name": "Andre kortsiktige fordringer",
               "factor": 1,
-              "rawAmount": 10687149.759999996,
-              "amount": 10687149.759999996,
+              "rawAmount": 10969848.449999996,
+              "amount": 10969848.449999996,
               "balance": {
                 "ib": 14161829.69,
-                "endring": -3474679.930000007,
-                "ub": 10687149.759999996
+                "endring": -3191981.240000013,
+                "ub": 10969848.449999996
               }
             }
           ],
           "balance": {
             "ib": 14161829.69,
-            "endring": -3474679.930000007,
-            "ub": 10687149.759999996
+            "endring": -3191981.240000013,
+            "ub": 10969848.449999996
           }
         },
         {
@@ -2450,12 +2450,12 @@
           "rowType": "result",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 3999019159.2200003,
+          "amount": 4038239810.39,
           "children": [],
           "balance": {
             "ib": 4014122004.5600004,
-            "endring": -15102845.340000018,
-            "ub": 3999019159.2200003
+            "endring": 24117805.829999976,
+            "ub": 4038239810.39
           }
         },
         {
@@ -2465,12 +2465,12 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -1095306341.76,
+          "amount": -1101638350.76,
           "children": [],
           "balance": {
             "ib": -1085146413.72,
-            "endring": 10159928.04,
-            "ub": -1095306341.76
+            "endring": 16491937.04,
+            "ub": -1101638350.76
           }
         },
         {
@@ -2622,7 +2622,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 38579094.64,
+          "amount": 39324167.64,
           "children": [
             {
               "type": "balansekapittel",
@@ -2642,12 +2642,12 @@
               "code": "55",
               "name": "Bundne investeringsfond (K)",
               "factor": 1,
-              "rawAmount": 49684802.49,
-              "amount": 49684802.49,
+              "rawAmount": 50429875.49,
+              "amount": 50429875.49,
               "balance": {
                 "ib": -242652.09,
-                "endring": -49927454.58,
-                "ub": 49684802.49
+                "endring": -50672527.58,
+                "ub": 50429875.49
               }
             },
             {
@@ -2666,8 +2666,8 @@
           ],
           "balance": {
             "ib": -11348359.940000001,
-            "endring": -49927454.58,
-            "ub": 38579094.64
+            "endring": -50672527.58,
+            "ub": 39324167.64
           }
         },
         {
@@ -2706,26 +2706,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": 49684802.49,
+          "amount": 50429875.49,
           "children": [
             {
               "type": "balansekapittel",
               "code": "55",
               "name": "Bundne investeringsfond (K)",
               "factor": 1,
-              "rawAmount": 49684802.49,
-              "amount": 49684802.49,
+              "rawAmount": 50429875.49,
+              "amount": 50429875.49,
               "balance": {
                 "ib": -242652.09,
-                "endring": -49927454.58,
-                "ub": 49684802.49
+                "endring": -50672527.58,
+                "ub": 50429875.49
               }
             }
           ],
           "balance": {
             "ib": -242652.09,
-            "endring": -49927454.58,
-            "ub": 49684802.49
+            "endring": -50672527.58,
+            "ub": 50429875.49
           }
         },
         {
@@ -2764,7 +2764,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -1049743943.8,
+          "amount": -1056821025.8,
           "children": [
             {
               "type": "balansekapittel",
@@ -2784,19 +2784,19 @@
               "code": "5990",
               "name": "Kapitalkonto",
               "factor": 1,
-              "rawAmount": -1037992863.8,
-              "amount": -1037992863.8,
+              "rawAmount": -1045069945.8,
+              "amount": -1045069945.8,
               "balance": {
                 "ib": -978435881.18,
-                "endring": 59556982.62,
-                "ub": -1037992863.8
+                "endring": 66634064.62,
+                "ub": -1045069945.8
               }
             }
           ],
           "balance": {
             "ib": -990186961.18,
-            "endring": 59556982.62,
-            "ub": -1049743943.8
+            "endring": 66634064.62,
+            "ub": -1056821025.8
           }
         },
         {
@@ -2806,26 +2806,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -1037992863.8,
+          "amount": -1045069945.8,
           "children": [
             {
               "type": "balansekapittel",
               "code": "5990",
               "name": "Kapitalkonto",
               "factor": 1,
-              "rawAmount": -1037992863.8,
-              "amount": -1037992863.8,
+              "rawAmount": -1045069945.8,
+              "amount": -1045069945.8,
               "balance": {
                 "ib": -978435881.18,
-                "endring": 59556982.62,
-                "ub": -1037992863.8
+                "endring": 66634064.62,
+                "ub": -1045069945.8
               }
             }
           ],
           "balance": {
             "ib": -978435881.18,
-            "endring": 59556982.62,
-            "ub": -1037992863.8
+            "endring": 66634064.62,
+            "ub": -1045069945.8
           }
         },
         {
@@ -2879,12 +2879,12 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -2730757203.3999996,
+          "amount": -2723680121.3999996,
           "children": [],
           "balance": {
             "ib": -2738953650.3999996,
-            "endring": -8196447,
-            "ub": -2730757203.3999996
+            "endring": -15273529,
+            "ub": -2723680121.3999996
           }
         },
         {
@@ -2894,7 +2894,7 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -1351520472.6,
+          "amount": -1344443390.6,
           "children": [
             {
               "type": "balansekapittel",
@@ -2927,19 +2927,19 @@
               "code": "451",
               "name": "Lån i kredittinstitusjon med avdragsprofil 320 Banker",
               "factor": 1,
-              "rawAmount": -813397472.6,
-              "amount": -813397472.6,
+              "rawAmount": -806320390.6,
+              "amount": -806320390.6,
               "balance": {
                 "ib": -821593919.6,
-                "endring": -8196447,
-                "ub": -813397472.6
+                "endring": -15273529,
+                "ub": -806320390.6
               }
             }
           ],
           "balance": {
             "ib": -1359716919.6,
-            "endring": -8196447,
-            "ub": -1351520472.6
+            "endring": -15273529,
+            "ub": -1344443390.6
           }
         },
         {
@@ -2949,26 +2949,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -813397472.6,
+          "amount": -806320390.6,
           "children": [
             {
               "type": "balansekapittel",
               "code": "451",
               "name": "Lån i kredittinstitusjon med avdragsprofil 320 Banker",
               "factor": 1,
-              "rawAmount": -813397472.6,
-              "amount": -813397472.6,
+              "rawAmount": -806320390.6,
+              "amount": -806320390.6,
               "balance": {
                 "ib": -821593919.6,
-                "endring": -8196447,
-                "ub": -813397472.6
+                "endring": -15273529,
+                "ub": -806320390.6
               }
             }
           ],
           "balance": {
             "ib": -821593919.6,
-            "endring": -8196447,
-            "ub": -813397472.6
+            "endring": -15273529,
+            "ub": -806320390.6
           }
         },
         {
@@ -3065,12 +3065,12 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -192053633.09999996,
+          "amount": -197633540.56999996,
           "children": [],
           "balance": {
             "ib": -190021940.06,
-            "endring": 2031693.039999999,
-            "ub": -192053633.09999996
+            "endring": 7611600.509999994,
+            "ub": -197633540.56999996
           }
         },
         {
@@ -3080,19 +3080,19 @@
           "rowType": "sum",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -192053633.09999996,
+          "amount": -197633540.56999996,
           "children": [
             {
               "type": "balansekapittel",
               "code": "32",
               "name": "Annen kortsiktig gjeld",
               "factor": 1,
-              "rawAmount": -173985376.05999997,
-              "amount": -173985376.05999997,
+              "rawAmount": -173965449.62999997,
+              "amount": -173965449.62999997,
               "balance": {
                 "ib": -142095334.84,
-                "endring": 31890041.22,
-                "ub": -173985376.05999997
+                "endring": 31870114.78999999,
+                "ub": -173965449.62999997
               }
             },
             {
@@ -3100,19 +3100,19 @@
               "code": "35",
               "name": "Leverandørgjeld",
               "factor": 1,
-              "rawAmount": -18068257.04,
-              "amount": -18068257.04,
+              "rawAmount": -23668090.94,
+              "amount": -23668090.94,
               "balance": {
                 "ib": -47926605.22,
-                "endring": -29858348.18,
-                "ub": -18068257.04
+                "endring": -24258514.279999997,
+                "ub": -23668090.94
               }
             }
           ],
           "balance": {
             "ib": -190021940.06,
-            "endring": 2031693.039999999,
-            "ub": -192053633.09999996
+            "endring": 7611600.509999994,
+            "ub": -197633540.56999996
           }
         },
         {
@@ -3122,26 +3122,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -18068257.04,
+          "amount": -23668090.94,
           "children": [
             {
               "type": "balansekapittel",
               "code": "35",
               "name": "Leverandørgjeld",
               "factor": 1,
-              "rawAmount": -18068257.04,
-              "amount": -18068257.04,
+              "rawAmount": -23668090.94,
+              "amount": -23668090.94,
               "balance": {
                 "ib": -47926605.22,
-                "endring": -29858348.18,
-                "ub": -18068257.04
+                "endring": -24258514.279999997,
+                "ub": -23668090.94
               }
             }
           ],
           "balance": {
             "ib": -47926605.22,
-            "endring": -29858348.18,
-            "ub": -18068257.04
+            "endring": -24258514.279999997,
+            "ub": -23668090.94
           }
         },
         {
@@ -3181,26 +3181,26 @@
           "rowType": "line",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -173985376.05999997,
+          "amount": -173965449.62999997,
           "children": [
             {
               "type": "balansekapittel",
               "code": "32",
               "name": "Annen kortsiktig gjeld",
               "factor": 1,
-              "rawAmount": -173985376.05999997,
-              "amount": -173985376.05999997,
+              "rawAmount": -173965449.62999997,
+              "amount": -173965449.62999997,
               "balance": {
                 "ib": -142095334.84,
-                "endring": 31890041.22,
-                "ub": -173985376.05999997
+                "endring": 31870114.78999999,
+                "ub": -173965449.62999997
               }
             }
           ],
           "balance": {
             "ib": -142095334.84,
-            "endring": 31890041.22,
-            "ub": -173985376.05999997
+            "endring": 31870114.78999999,
+            "ub": -173965449.62999997
           }
         },
         {
@@ -3225,12 +3225,12 @@
           "rowType": "result",
           "valueType": "amount",
           "canCalculate": true,
-          "amount": -4018117178.2599998,
+          "amount": -4022952012.73,
           "children": [],
           "balance": {
             "ib": -4014122004.18,
-            "endring": 3995174.079999998,
-            "ub": -4018117178.2599998
+            "endring": 8830008.549999993,
+            "ub": -4022952012.73
           }
         },
         {
