@@ -2010,9 +2010,14 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   border-color: var(--green-700);
 }
 
-.page-v2 .plan-map-tree-subpath:has(.plan-map-link-target.plan-map-node-selected)
-  .plan-map-link-target:not(.plan-map-node-selected) > .plan-map-link-target-node {
-  display: none;
+.page-v2 .plan-map-strategy-list.has-selected-strategy
+  .plan-map-link-target:not(.is-visible-link-target) > .plan-map-link-target-node {
+  display: none !important;
+}
+
+.page-v2 .plan-map-strategy-list.has-selected-strategy
+  .plan-map-link-target.is-visible-link-target > .plan-map-link-target-node {
+  display: block !important;
 }
 
 .page-v2 .plan-map-tree-subleaf-static,

@@ -1091,6 +1091,7 @@
     const activeStrategy = getCurrentStrategy();
     planMapStrategyTitle.textContent = leaf.strategyPlanTitle;
     planMapStrategyList.innerHTML = "";
+    planMapStrategyList.classList.toggle("has-selected-strategy", !!activeStrategy);
 
     if (!Array.isArray(leaf.strategies) || leaf.strategies.length === 0) {
       planMapStrategyList.innerHTML = "<p class=\"plan-map-empty-state\">Ingen koblede strategimål for dette delmålet ennå.</p>";
@@ -1124,10 +1125,12 @@
           strategy.children.forEach((childStrategy, childIndex) => {
             const childKey = getNodeKey(childStrategy);
             const isActive = !!activeStrategy && getNodeKey(activeStrategy) === childKey;
+            const shouldShowIndicator = !activeStrategy || isActive;
             const isPrimaryTarget = !!activeStrategy && isActive;
             const control = createButton(
               "plan-map-tree-subleaf plan-map-strategy-row plan-map-link-target"
                 + (isActive ? " plan-map-node-selected" : "")
+                + (shouldShowIndicator ? " is-visible-link-target" : "")
                 + (isPrimaryTarget ? " is-primary-link-target" : ""),
               getNodeLabel(childStrategy),
               () => {
@@ -1211,7 +1214,7 @@
     const activeStrategy = getCurrentStrategy();
     const activeStrategyKey = activeStrategy ? getNodeKey(activeStrategy) : null;
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
-    const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
+    const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target.is-visible-link-target"));
     const targets = activeStrategyKey
       ? allTargets.filter((target) => target.dataset.strategyKey === activeStrategyKey)
       : allTargets;
