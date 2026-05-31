@@ -1590,6 +1590,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   --plan-sidebar-base-width: clamp(140px, 20vw, 260px);
   --plan-sidebar-expand-width: 18px;
   --plan-menu-width: calc(var(--plan-sidebar-base-width) - 24px);
+  --plan-sidebar-child-width: calc(var(--plan-sidebar-base-width) + var(--plan-menu-width) + 32px);
   --plan-goal-icon-space: 58px;
   --plan-goal-hover-icon-space: 40px;
 }
@@ -1600,16 +1601,26 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   overflow: visible;
   z-index: 1000;
   transition:
-    width 240ms ease,
-    min-width 240ms ease,
+    width 800ms ease,
+    min-width 800ms ease,
     left 0.25s,
     right 0.25s,
     box-shadow 0.25s;
 }
 
+.page-v2 .sidebar.has-child-plan {
+  width: var(--plan-sidebar-child-width);
+  min-width: var(--plan-sidebar-child-width);
+}
+
 .page-v2 .sidebar.sidebar-relation-expanded {
   width: calc(var(--plan-sidebar-base-width) + var(--plan-sidebar-expand-width));
   min-width: calc(var(--plan-sidebar-base-width) + var(--plan-sidebar-expand-width));
+}
+
+.page-v2 .sidebar.has-child-plan.sidebar-relation-expanded {
+  width: calc(var(--plan-sidebar-child-width) + var(--plan-sidebar-expand-width));
+  min-width: calc(var(--plan-sidebar-child-width) + var(--plan-sidebar-expand-width));
 }
 
 .page-v2 .plan-map-prototype-sidebar,
@@ -1721,6 +1732,17 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   justify-content: stretch;
 }
 
+.page-v2 .plan-map-prototype.has-child-plan .plan-map-workspace {
+  grid-template-columns: minmax(0, var(--plan-menu-width)) minmax(0, var(--plan-menu-width)) !important;
+  gap: 32px;
+  width: calc(var(--plan-menu-width) + var(--plan-menu-width) + 32px);
+  max-width: calc(var(--plan-menu-width) + var(--plan-menu-width) + 32px);
+  overflow: hidden;
+  transition:
+    width 800ms ease,
+    max-width 800ms ease;
+}
+
 .page-v2 .plan-map-prototype.has-origin-rail .plan-map-workspace {
   width: calc(var(--plan-menu-width) - 26px);
   max-width: calc(var(--plan-menu-width) - 26px);
@@ -1730,6 +1752,12 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 .page-v2 .plan-map-column-strategi,
 .page-v2 .plan-map-column-hop {
   display: none !important;
+}
+
+.page-v2 .plan-map-prototype.has-child-plan[data-plan-stage="strategy"] .plan-map-column-strategi,
+.page-v2 .plan-map-prototype.has-child-plan[data-plan-stage="hop"] .plan-map-column-hop {
+  display: block !important;
+  animation: plan-tree-slide-in 800ms ease both;
 }
 
 .page-v2 .plan-map-prototype.has-origin-rail .plan-map-column-kommune {
@@ -2063,6 +2091,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .page-v2 .sidebar,
   .page-v2 .plan-map-workspace,
   .page-v2 .plan-map-column {
     transition: none;

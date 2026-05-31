@@ -1107,14 +1107,16 @@
   function syncPlanOriginRail() {
     if (!planMapOriginRail || !planMapPrototype) return;
     const currentPlanId = getCurrentPlanId();
-    const showsOriginRail = !!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID;
-    const planStage = currentPlanId === HOP_PLAN_ID ? "hop" : showsOriginRail ? "strategy" : "kommune";
+    const showsChildPlan = !!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID;
+    const planStage = currentPlanId === HOP_PLAN_ID ? "hop" : showsChildPlan ? "strategy" : "kommune";
     const tooltipLabel = "Gå tilbake til Kommuneplanens samfunnsdel.";
-    planMapOriginRail.hidden = !showsOriginRail;
+    planMapOriginRail.hidden = true;
     planMapOriginRail.setAttribute("aria-label", tooltipLabel);
     planMapOriginRail.setAttribute("title", tooltipLabel);
     planMapPrototype.dataset.planStage = planStage;
-    planMapPrototype.classList.toggle("has-origin-rail", showsOriginRail);
+    planMapPrototype.classList.toggle("has-origin-rail", false);
+    planMapPrototype.classList.toggle("has-child-plan", showsChildPlan);
+    sidebar?.classList.toggle("has-child-plan", showsChildPlan);
   }
 
   function renderPlanMenus() {
