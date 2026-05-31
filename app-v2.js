@@ -299,7 +299,13 @@
   function getCurrentStrategy() {
     const currentLeaf = getCurrentLeaf();
     if (!currentLeaf || !planSelection.strategyKey) return null;
-    return currentLeaf.leaf.strategies.find((item) => item.key === planSelection.strategyKey) || null;
+    const strategies = currentLeaf.leaf.strategies || [];
+    for (const strategy of strategies) {
+      if (getNodeKey(strategy) === planSelection.strategyKey) return strategy;
+      const child = strategy.children?.find((item) => getNodeKey(item) === planSelection.strategyKey);
+      if (child) return child;
+    }
+    return null;
   }
 
   function getCurrentHopItem() {
@@ -387,7 +393,10 @@
       planSelection.strategyKey = null;
       return;
     }
-    const hasSelectedStrategy = currentLeaf.leaf.strategies.some((item) => item.key === planSelection.strategyKey);
+    const hasSelectedStrategy = currentLeaf.leaf.strategies.some((item) => (
+      getNodeKey(item) === planSelection.strategyKey
+      || item.children?.some((child) => getNodeKey(child) === planSelection.strategyKey)
+    ));
     if (!hasSelectedStrategy) {
       planSelection.strategyKey = null;
     }
@@ -431,17 +440,53 @@
 
     if (!selectedSubgoalId) {
       oppvekstLeaf.strategies = [];
+      oppvekstLeaf.selectedStrategyBranchKey = null;
+      oppvekstLeaf.selectedStrategySourceGoalKey = null;
       return;
     }
 
-    oppvekstLeaf.strategies = goals
-      .filter((goal) => goal.maalPlan === OPPVEKSTPLAN_ID && goal.maalOverordnet === selectedSubgoalId)
+    const oppvekstGoals = goals.filter((goal) => goal.maalPlan === OPPVEKSTPLAN_ID);
+    const childGoalsByParent = new Map();
+    oppvekstGoals.forEach((goal) => {
+      if (!goal.maalOverordnet) return;
+      const siblings = childGoalsByParent.get(goal.maalOverordnet) || [];
+      siblings.push(goal);
+      childGoalsByParent.set(goal.maalOverordnet, siblings);
+    });
+
+    const linkedBranchIds = new Set(
+      oppvekstGoals
+        .filter((goal) => goal.maalOverordnet === selectedSubgoalId)
+        .map((goal) => goal.maalID)
+    );
+
+    oppvekstLeaf.strategies = oppvekstGoals
+      .filter((goal) => goal.maalType === 701100002)
       .map((goal) => ({
         key: slugify(goal.maalID || goal.maalNavn),
         id: goal.maalID,
         label: goal.maalNavn,
-        hopItems: []
+        isLinkedFromSelectedGoal: linkedBranchIds.has(goal.maalID),
+        children: (childGoalsByParent.get(goal.maalID) || [])
+          .filter((child) => child.maalType === 701100003)
+          .map((child) => ({
+            key: slugify(child.maalID || child.maalNavn),
+            id: child.maalID,
+            label: child.maalNavn,
+            hopItems: []
+          }))
       }));
+
+    const hasSelectedBranch = oppvekstLeaf.strategies.some((strategy) => (
+      getNodeKey(strategy) === oppvekstLeaf.selectedStrategyBranchKey
+    ));
+    if (!hasSelectedBranch || oppvekstLeaf.selectedStrategySourceGoalKey !== oppvekstLeaf.selectedSubgoalKey) {
+      const linkedBranch = oppvekstLeaf.strategies.find((strategy) => strategy.isLinkedFromSelectedGoal);
+      oppvekstLeaf.selectedStrategyBranchKey = linkedBranch
+        ? getNodeKey(linkedBranch)
+        : getNodeKey(oppvekstLeaf.strategies[0]);
+      oppvekstLeaf.selectedStrategySourceGoalKey = oppvekstLeaf.selectedSubgoalKey;
+    }
   }
 
   function refreshDynamicLeafData() {
@@ -1035,33 +1080,67 @@
       return;
     }
     leaf.strategies.forEach((strategy) => {
-      const isActive = !!activeStrategy && activeStrategy.key === strategy.key;
+      const strategyKey = getNodeKey(strategy);
+      const isOpen = strategyKey === leaf.selectedStrategyBranchKey;
       const group = document.createElement("section");
-      group.className = "plan-map-tree-group";
+      group.className = "plan-map-tree-group" + (isOpen ? " is-active" : "");
 
-      const control = createButton(
-        isActive
-          ? "plan-map-node plan-map-list-node plan-map-node-selected"
-          : "plan-map-tree-subleaf plan-map-strategy-row",
+      const branch = createButton(
+        "plan-map-tree-branch" + (isOpen ? " is-open" : ""),
         getNodeLabel(strategy),
         () => {
-          planSelection.strategyKey = isActive ? null : getNodeKey(strategy);
+          leaf.selectedStrategyBranchKey = isOpen ? null : strategyKey;
+          planSelection.strategyKey = null;
           planSelection.hopKey = null;
           planSelection.focusColumn = "strategi";
           renderPlanMenus();
         }
       );
-      if (isActive) {
-        control.setAttribute("aria-current", "true");
-      }
-      group.appendChild(control);
+      branch.setAttribute("aria-expanded", isOpen ? "true" : "false");
+      group.appendChild(branch);
 
-      if (isActive) {
-        const chip = createHopSwitchChip(currentLeaf.section, leaf, strategy);
-        if (chip) {
-          group.appendChild(chip);
-          attachRelationExpansion(group);
+      if (isOpen) {
+        const children = document.createElement("div");
+        children.className = "plan-map-tree-children";
+
+        if (Array.isArray(strategy.children) && strategy.children.length) {
+          strategy.children.forEach((childStrategy) => {
+            const childKey = getNodeKey(childStrategy);
+            const isActive = !!activeStrategy && getNodeKey(activeStrategy) === childKey;
+            const childGroup = document.createElement("div");
+            childGroup.className = "plan-map-relation-group";
+            const control = createButton(
+              isActive
+                ? "plan-map-node plan-map-list-node plan-map-node-selected"
+                : "plan-map-tree-subleaf plan-map-strategy-row",
+              getNodeLabel(childStrategy),
+              () => {
+                planSelection.strategyKey = isActive ? null : childKey;
+                planSelection.hopKey = null;
+                planSelection.focusColumn = "strategi";
+                renderPlanMenus();
+              }
+            );
+            if (isActive) {
+              control.setAttribute("aria-current", "true");
+            }
+            childGroup.appendChild(control);
+
+            if (isActive) {
+              const chip = createHopSwitchChip(currentLeaf.section, leaf, childStrategy);
+              if (chip) {
+                childGroup.appendChild(chip);
+                attachRelationExpansion(childGroup);
+              }
+            }
+
+            children.appendChild(childGroup);
+          });
+        } else {
+          children.innerHTML = "<p class=\"plan-map-empty-state\">Ingen undermål for dette målet ennå.</p>";
         }
+
+        group.appendChild(children);
       }
 
       planMapStrategyList.appendChild(group);
