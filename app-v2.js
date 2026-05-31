@@ -22,7 +22,6 @@
   const reportNavLinks = Array.from(document.querySelectorAll(".report-nav-link"));
   const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
   const planMapPrototype = document.getElementById("planMapPrototype");
-  const planMapOriginRail = document.getElementById("planMapOriginRail");
   const planMapWorkspace = document.querySelector(".plan-map-workspace");
   const planMapTree = document.getElementById("planMapTree");
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
@@ -1104,17 +1103,12 @@
     });
   }
 
-  function syncPlanOriginRail() {
-    if (!planMapOriginRail || !planMapPrototype) return;
+  function syncChildPlanMenu() {
+    if (!planMapPrototype) return;
     const currentPlanId = getCurrentPlanId();
     const showsChildPlan = !!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID;
     const planStage = currentPlanId === HOP_PLAN_ID ? "hop" : showsChildPlan ? "strategy" : "kommune";
-    const tooltipLabel = "Gå tilbake til Kommuneplanens samfunnsdel.";
-    planMapOriginRail.hidden = true;
-    planMapOriginRail.setAttribute("aria-label", tooltipLabel);
-    planMapOriginRail.setAttribute("title", tooltipLabel);
     planMapPrototype.dataset.planStage = planStage;
-    planMapPrototype.classList.toggle("has-origin-rail", false);
     planMapPrototype.classList.toggle("has-child-plan", showsChildPlan);
     sidebar?.classList.toggle("has-child-plan", showsChildPlan);
   }
@@ -1158,7 +1152,7 @@
     renderPlanTree();
     renderStrategyMenu();
     renderHopMenu();
-    syncPlanOriginRail();
+    syncChildPlanMenu();
   }
 
   function closeSidebar() {
@@ -1263,17 +1257,6 @@
   if (reportSidebarCloseBtn) reportSidebarCloseBtn.addEventListener("click", closeSidebar);
   if (pageOverlay) pageOverlay.addEventListener("click", closeSidebar);
   if (peekButton) peekButton.addEventListener("click", openCurrentMenu);
-  if (planMapOriginRail) {
-    planMapOriginRail.addEventListener("click", () => {
-      switchToPlan(KOMMUNEPLAN_ID, {
-        entryColumn: "kommune",
-        sectionKey: planSelection.sectionKey,
-        leafKey: planSelection.leafKey,
-        strategyKey: null,
-        hopKey: null
-      });
-    });
-  }
 
   reportNavLinks.forEach((link) => {
     link.addEventListener("click", () => {

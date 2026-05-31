@@ -1630,12 +1630,6 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   overflow: visible;
 }
 
-.page-v2 .plan-map-prototype {
-  display: flex;
-  align-items: stretch;
-  gap: 8px;
-}
-
 .page-v2 .plan-map-prototype-sidebar {
   position: relative;
   height: 100%;
@@ -1650,78 +1644,6 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 .page-v2 .plan-map-prototype-sidebar::-webkit-scrollbar {
   width: 0;
   height: 0;
-}
-
-.page-v2 .plan-map-origin-rail {
-  position: relative;
-  flex: 0 0 18px;
-  width: 18px;
-  min-height: 400px;
-  border: 0;
-  border-radius: 0;
-  background: rgba(135, 190, 27, 0.14);
-  color: rgba(16, 25, 38, 0.62);
-  cursor: pointer;
-  overflow: visible;
-  padding: 0;
-  transition:
-    background-color 180ms ease,
-    color 180ms ease,
-    flex-basis 180ms ease,
-    width 180ms ease;
-  animation: origin-rail-slide-left 220ms ease both;
-}
-
-.page-v2 .plan-map-origin-rail[hidden] {
-  display: none !important;
-}
-
-.page-v2 .plan-map-origin-rail:hover,
-.page-v2 .plan-map-origin-rail:focus-visible {
-  flex-basis: 26px;
-  width: 26px;
-  background: rgba(135, 190, 27, 0.22);
-  color: var(--green-700);
-  outline: none;
-}
-
-.page-v2 .plan-map-origin-rail-label {
-  position: absolute;
-  left: 50%;
-  top: 16px;
-  transform: translateX(-50%) rotate(180deg);
-  writing-mode: vertical-rl;
-  white-space: nowrap;
-  text-transform: uppercase;
-  font-size: 13px;
-  line-height: 1;
-  letter-spacing: 0.02em;
-}
-
-.page-v2 .plan-map-origin-rail-node {
-  position: absolute;
-  left: 50%;
-  bottom: 12px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 18px;
-  height: 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.82);
-  color: var(--green-700);
-  font-size: 18px;
-  line-height: 1;
-  transform: translateX(-50%);
-  transition:
-    transform 180ms ease,
-    background-color 180ms ease;
-}
-
-.page-v2 .plan-map-origin-rail:hover .plan-map-origin-rail-node,
-.page-v2 .plan-map-origin-rail:focus-visible .plan-map-origin-rail-node {
-  background: #fff;
-  transform: translateX(-50%) scale(1.12);
 }
 
 .page-v2 .plan-map-workspace {
@@ -1743,12 +1665,6 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     max-width 800ms ease;
 }
 
-.page-v2 .plan-map-prototype.has-origin-rail .plan-map-workspace {
-  width: calc(var(--plan-menu-width) - 26px);
-  max-width: calc(var(--plan-menu-width) - 26px);
-  overflow: hidden;
-}
-
 .page-v2 .plan-map-column-strategi,
 .page-v2 .plan-map-column-hop {
   display: none !important;
@@ -1760,31 +1676,10 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   animation: plan-tree-slide-in 800ms ease both;
 }
 
-.page-v2 .plan-map-prototype.has-origin-rail .plan-map-column-kommune {
-  display: none !important;
-}
-
-.page-v2 .plan-map-prototype.has-origin-rail[data-plan-stage="strategy"] .plan-map-column-strategi,
-.page-v2 .plan-map-prototype.has-origin-rail[data-plan-stage="hop"] .plan-map-column-hop {
-  display: block !important;
-  animation: plan-tree-slide-in 220ms ease both;
-}
-
 @keyframes plan-tree-slide-in {
   from {
     opacity: 0;
     transform: translateX(-18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes origin-rail-slide-left {
-  from {
-    opacity: 0;
-    transform: translateX(18px);
   }
   to {
     opacity: 1;
@@ -2095,10 +1990,6 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   .page-v2 .plan-map-workspace,
   .page-v2 .plan-map-column {
     transition: none;
-    animation: none;
-  }
-
-  .page-v2 .plan-map-origin-rail {
     animation: none;
   }
 }
