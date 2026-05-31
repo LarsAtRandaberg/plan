@@ -18,6 +18,13 @@ body.page-v2 {
   --rapport-200: #bfd8f2;
   --rapport-100: #e9f3fb;
   --plan-column-width: 232px;
+  --menu-hover-bg: rgba(135, 190, 27, 0.20);
+  --menu-hover-border: rgba(47, 136, 49, 0.34);
+  --menu-open-bg: rgba(135, 190, 27, 0.04);
+  --menu-open-strong-bg: rgba(135, 190, 27, 0.08);
+  --menu-active-bg: rgba(135, 190, 27, 0.30);
+  --menu-active-border: rgba(47, 136, 49, 0.46);
+  --menu-accent: rgba(47, 136, 49, 0.94);
 }
 
 .page-v2 {
@@ -270,12 +277,16 @@ body.page-v2[data-mode="rapport"] {
 .page-v2 .layout {
   min-height: calc(100vh - 96px);
   margin-top: 0;
+  position: relative;
+  isolation: isolate;
 }
 
 .page-v2 .content {
   order: 3;
   flex: 1;
   min-width: 0;
+  position: relative;
+  z-index: 1;
   background: #ffffff;
   padding: 18px 24px 28px 0;
 }
@@ -292,6 +303,7 @@ body.page-v2[data-mode="rapport"] {
   scrollbar-width: none;
   -ms-overflow-style: none;
   background: transparent;
+  z-index: 200;
 }
 
 .page-v2 .sidebar::-webkit-scrollbar {
@@ -476,12 +488,12 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-column {
   position: relative;
-  padding: 14px 12px;
+  padding: 14px 0 0;
   min-height: 560px;
   min-width: 0;
   z-index: 2;
   overflow: visible;
-  border-right: 1px solid rgba(16, 25, 38, 0.06);
+  border-right: 0;
 }
 
 .page-v2 .plan-map-column-kommune {
@@ -501,16 +513,13 @@ body.page-v2[data-mode="rapport"] #menu {
   box-shadow: none;
 }
 
-.page-v2 .plan-map-column:last-child {
-  border-right: 0;
-}
-
 .page-v2 .plan-map-column-title {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.16em;
   color: rgba(21, 51, 33, 0.45);
   margin-bottom: 10px;
+  padding: 0 18px;
 }
 
 .page-v2 .plan-map-panel-title {
@@ -520,11 +529,14 @@ body.page-v2[data-mode="rapport"] #menu {
   margin: 0 0 12px;
   font-weight: 600;
   max-width: none;
+  padding: 0 18px;
 }
 
 .page-v2 .plan-map-tree {
   display: grid;
-  gap: 18px;
+  gap: 0;
+  align-content: start;
+  grid-auto-rows: max-content;
 }
 
 .page-v2 .plan-map-tree-root {
@@ -538,7 +550,12 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-tree-group {
   position: relative;
   display: grid;
-  gap: 10px;
+  gap: 0;
+  margin: 0;
+}
+
+.page-v2 .plan-map-tree-group + .plan-map-tree-group {
+  margin-top: -1px;
 }
 
 .page-v2 .plan-map-tree-branch {
@@ -546,14 +563,14 @@ body.page-v2[data-mode="rapport"] #menu {
   display: block;
   width: 100%;
   border: 1px solid rgba(16, 25, 38, 0.12);
-  border-radius: 10px;
+  border-radius: 0;
   background: transparent;
   text-align: left;
   font: inherit;
   font-size: 15px;
   font-weight: 600;
   color: rgba(21, 51, 33, 0.82);
-  padding: 16px 44px 16px 18px;
+  padding: 10px 40px 10px 18px;
   margin: 0;
   cursor: pointer;
   background: #fff;
@@ -563,8 +580,8 @@ body.page-v2[data-mode="rapport"] #menu {
   content: "";
   position: absolute;
   left: 0;
-  top: 14px;
-  bottom: 14px;
+  top: 9px;
+  bottom: 9px;
   width: 4px;
   border-radius: 999px;
   background: transparent;
@@ -587,21 +604,64 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-tree-group.is-active > .plan-map-tree-branch {
+  background: #fff;
   border-color: rgba(16, 25, 38, 0.14);
+  color: var(--ink-900);
 }
 
 .page-v2 .plan-map-tree-group.is-active > .plan-map-tree-branch::before {
-  background: rgba(47, 136, 49, 0.94);
+  background: var(--menu-accent);
 }
 
 .page-v2 .plan-map-tree-group.is-active > .plan-map-tree-branch::after {
-  color: rgba(47, 136, 49, 0.94);
+  color: var(--menu-accent);
+}
+
+.page-v2 .plan-map-tree-branch::after {
+  content: "\2304";
+  font-size: 18px;
 }
 
 .page-v2 .plan-map-tree-children {
   display: grid;
-  gap: 12px;
+  gap: 0;
   padding-left: 0;
+  align-content: start;
+  grid-auto-rows: max-content;
+}
+
+.page-v2 .plan-map-tree-group > .plan-map-tree-children {
+  margin-top: -1px;
+}
+
+.page-v2 .plan-map-tree-children > * + * {
+  margin-top: -1px;
+}
+
+.page-v2 .plan-map-tree > .plan-map-tree-group:first-child > .plan-map-tree-branch,
+.page-v2 .plan-map-tree > .plan-map-tree-group:first-child > .plan-map-tree-leaf,
+.page-v2 .plan-map-tree-children > :first-child > .plan-map-tree-branch,
+.page-v2 .plan-map-tree-children > :first-child > .plan-map-tree-leaf,
+.page-v2 .plan-map-tree-subpath > :first-child > .plan-map-tree-subleaf,
+.page-v2 .plan-map-strategy-list > :first-child > .plan-map-strategy-row,
+.page-v2 .plan-map-strategy-list > :first-child > .plan-map-node,
+.page-v2 .plan-map-hop-stack > :first-child > .plan-map-hop-card,
+.page-v2 .plan-map-hop-stack > :first-child > .plan-map-node {
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+}
+
+.page-v2 .plan-map-tree > .plan-map-tree-group:last-child > .plan-map-tree-branch,
+.page-v2 .plan-map-tree > .plan-map-tree-group:last-child > .plan-map-tree-leaf,
+.page-v2 .plan-map-tree-children > :last-child > .plan-map-tree-branch,
+.page-v2 .plan-map-tree-children > :last-child > .plan-map-tree-leaf,
+.page-v2 .plan-map-tree-subpath > :last-child > .plan-map-tree-subleaf,
+.page-v2 .plan-map-strategy-list > :last-child > .plan-map-strategy-row,
+.page-v2 .plan-map-strategy-list > :last-child > .plan-map-node,
+.page-v2 .plan-map-hop-stack > :last-child > .plan-map-hop-card,
+.page-v2 .plan-map-hop-stack > :last-child > .plan-map-node {
+  border-bottom-left-radius: 6px;
+  border-bottom-right-radius: 6px;
 }
 
 .page-v2 .plan-map-tree-leaf {
@@ -609,14 +669,53 @@ body.page-v2[data-mode="rapport"] #menu {
   display: block;
   width: 100%;
   border: 1px solid rgba(16, 25, 38, 0.12);
-  border-radius: 10px;
+  border-radius: 0;
   background: #fff;
-  padding: 16px 44px 16px 18px;
+  padding: 10px 40px 10px 18px;
   text-align: left;
   font: inherit;
   font-size: 15px;
   color: rgba(21, 51, 33, 0.78);
   cursor: pointer;
+}
+
+.page-v2 .plan-map-tree-branch,
+.page-v2 .plan-map-tree-leaf,
+.page-v2 .plan-map-tree-subleaf,
+.page-v2 .plan-map-strategy-row,
+.page-v2 .plan-map-hop-card,
+.page-v2 .plan-map-node {
+  transition: background-color 0.16s ease, border-color 0.16s ease, color 0.16s ease, box-shadow 0.16s ease;
+}
+
+.page-v2 .plan-map-tree-branch:hover,
+.page-v2 .plan-map-tree-branch:focus-visible,
+.page-v2 .plan-map-tree-leaf:hover,
+.page-v2 .plan-map-tree-leaf:focus-visible,
+.page-v2 .plan-map-tree-subleaf:hover,
+.page-v2 .plan-map-tree-subleaf:focus-visible,
+.page-v2 .plan-map-strategy-row:hover,
+.page-v2 .plan-map-strategy-row:focus-visible,
+.page-v2 .plan-map-hop-card:hover,
+.page-v2 .plan-map-hop-card:focus-visible,
+.page-v2 .plan-map-node:hover,
+.page-v2 .plan-map-node:focus-visible {
+  background: var(--menu-hover-bg);
+  border-color: var(--menu-hover-border);
+  color: var(--ink-900);
+  box-shadow: inset 2px 0 0 rgba(47, 136, 49, 0.52);
+  outline: none;
+}
+
+.page-v2 .plan-map-tree-branch:hover::after,
+.page-v2 .plan-map-tree-branch:focus-visible::after,
+.page-v2 .plan-map-tree-leaf:hover::after,
+.page-v2 .plan-map-tree-leaf:focus-visible::after,
+.page-v2 .plan-map-strategy-row:hover::after,
+.page-v2 .plan-map-strategy-row:focus-visible::after,
+.page-v2 .plan-map-node:hover::after,
+.page-v2 .plan-map-node:focus-visible::after {
+  color: var(--menu-accent);
 }
 
 .page-v2 .plan-map-tree-leaf::after {
@@ -631,34 +730,76 @@ body.page-v2[data-mode="rapport"] #menu {
 }
 
 .page-v2 .plan-map-tree-leaf.is-active {
-  padding: 16px 44px 16px 18px;
-  border-radius: 10px;
-  background: #fff;
+  padding: 10px 40px 10px 18px;
+  border-radius: 0;
+  background: var(--menu-active-bg);
   color: rgba(16, 25, 38, 0.9);
   font-weight: 700;
-  border-color: rgba(16, 25, 38, 0.14);
-  box-shadow: inset 4px 0 0 rgba(47, 136, 49, 0.94);
+  border-color: var(--menu-active-border);
+  box-shadow: inset 4px 0 0 var(--menu-accent);
+}
+
+.page-v2 .plan-map-tree-leaf.is-active.has-open-subpath {
+  background: #fff;
+  border-color: var(--menu-hover-border);
+  box-shadow: inset 4px 0 0 var(--menu-accent);
 }
 
 .page-v2 .plan-map-tree-leaf.is-active::after {
-  color: rgba(47, 136, 49, 0.94);
+  color: var(--menu-accent);
+}
+
+.page-v2 .plan-map-tree-branch::after,
+.page-v2 .plan-map-tree-leaf::after {
+  content: "";
+  right: 20px;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  box-sizing: border-box;
+  transform: translateY(-62%) rotate(45deg);
+  font-size: 0;
+  line-height: 0;
+}
+
+.page-v2 .plan-map-tree-branch.is-open::after,
+.page-v2 .plan-map-tree-leaf.is-active::after {
+  transform: translateY(-38%) rotate(-135deg);
 }
 
 .page-v2 .plan-map-tree-subpath {
   display: grid;
-  gap: 12px;
-  padding-left: 18px;
+  gap: 0;
+  padding: 10px 10px 10px 16px;
+  background: var(--menu-open-bg);
+  border-left: 1px solid rgba(47, 136, 49, 0.18);
   margin-top: 0;
   overflow: visible;
+  align-content: start;
+  grid-auto-rows: max-content;
+}
+
+.page-v2 .plan-map-tree-subpath > * + * {
+  margin-top: -1px;
+}
+
+.page-v2 .plan-map-tree-children > .plan-map-tree-leaf {
+  background: var(--menu-open-bg);
+}
+
+.page-v2 .plan-map-tree-subpath > .plan-map-tree-subleaf,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node {
+  background: #fff;
 }
 
 .page-v2 .plan-map-tree-subleaf {
   display: block;
   width: 100%;
   border: 1px solid rgba(16, 25, 38, 0.10);
-  border-radius: 10px;
+  border-radius: 0;
   background: #fff;
-  padding: 18px 18px 18px 18px;
+  padding: 16px 18px;
   text-align: left;
   font: inherit;
   font-size: 14px;
@@ -667,12 +808,16 @@ body.page-v2[data-mode="rapport"] #menu {
   cursor: pointer;
 }
 
+.page-v2 .plan-map-tree-subpath > * + * {
+  margin-top: 6px;
+}
+
 .page-v2 .plan-map-strategy-row {
   position: relative;
   padding: 16px 44px 16px 18px;
   border: 1px solid rgba(16, 25, 38, 0.12);
-  border-radius: 10px;
-  background: #fff;
+  border-radius: 0;
+  background: var(--menu-open-bg);
   color: rgba(21, 51, 33, 0.78);
 }
 
@@ -700,12 +845,12 @@ body.page-v2[data-mode="rapport"] #menu {
   font-size: 13px;
   line-height: 1.45;
   color: rgba(21, 51, 33, 0.48);
-  padding: 12px 4px;
+  padding: 12px 18px;
 }
 
 .page-v2 .plan-map-node,
 .page-v2 .plan-map-hop-card {
-  border-radius: 6px;
+  border-radius: 0;
   background: #fff;
   border: 1px solid rgba(16, 25, 38, 0.14);
   box-shadow: none;
@@ -725,7 +870,7 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-list-node {
   position: relative;
-  background: #fff;
+  background: var(--menu-open-strong-bg);
   border-color: rgba(16, 25, 38, 0.08);
   box-shadow: none;
 }
@@ -739,8 +884,9 @@ body.page-v2[data-mode="rapport"] #menu {
   display: block;
   text-align: left;
   cursor: pointer;
-  border-color: rgba(47, 136, 49, 0.86);
-  box-shadow: inset 4px 0 0 rgba(47, 136, 49, 0.94);
+  background: var(--menu-active-bg);
+  border-color: var(--menu-active-border);
+  box-shadow: inset 4px 0 0 var(--menu-accent);
 }
 
 .page-v2 .plan-map-node-selected::after {
@@ -751,7 +897,7 @@ body.page-v2[data-mode="rapport"] #menu {
   transform: translateY(-50%);
   font-size: 24px;
   line-height: 1;
-  color: rgba(47, 136, 49, 0.94);
+  color: var(--menu-accent);
 }
 
 .page-v2 .plan-map-relation-group {
@@ -813,7 +959,7 @@ body.page-v2[data-mode="rapport"] #menu {
   width: 100%;
   padding: 11px 10px 11px 14px;
   border: 1px solid rgba(67, 114, 77, 0.26);
-  border-radius: 6px;
+  border-radius: 0;
   background: #fff;
 }
 
@@ -847,18 +993,30 @@ body.page-v2[data-mode="rapport"] #menu {
 
 .page-v2 .plan-map-strategy-list {
   display: grid;
-  gap: 12px;
+  gap: 0;
   margin-top: 8px;
   position: relative;
   padding-left: 0;
+  align-content: start;
+  grid-auto-rows: max-content;
+}
+
+.page-v2 .plan-map-strategy-list > * + * {
+  margin-top: -1px;
 }
 
 .page-v2 .plan-map-hop-stack {
   display: grid;
-  gap: 12px;
+  gap: 0;
   margin-top: 8px;
   position: relative;
   padding-left: 0;
+  align-content: start;
+  grid-auto-rows: max-content;
+}
+
+.page-v2 .plan-map-hop-stack > * + * {
+  margin-top: -1px;
 }
 
 .page-v2 .plan-map-hop-card {
@@ -869,13 +1027,14 @@ body.page-v2[data-mode="rapport"] #menu {
   text-align: left;
   font: inherit;
   cursor: pointer;
+  background: var(--menu-open-bg);
 }
 
 .page-v2 .plan-map-hop-card.is-active,
 .page-v2 .plan-map-node.plan-map-list-node.plan-map-node-selected {
-  background: rgba(255,255,255,0.94);
-  border-color: rgba(16, 25, 38, 0.14);
-  box-shadow: none;
+  background: var(--menu-active-bg);
+  border-color: var(--menu-active-border);
+  box-shadow: inset 4px 0 0 var(--menu-accent);
 }
 
 .page-v2 .plan-map-hop-card strong {
@@ -1419,11 +1578,372 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     padding: 16px 18px 0;
   }
 
-  .page-v2 .plan-map-mobile-caption p {
-    margin: 0;
-    font-size: 13px;
-    color: color-mix(in srgb, var(--green-900) 72%, white);
-  }
+.page-v2 .plan-map-mobile-caption p {
+  margin: 0;
+  font-size: 13px;
+  color: color-mix(in srgb, var(--green-900) 72%, white);
+}
+}
+
+/* Minimal tree reset */
+.page-v2 {
+  --plan-sidebar-base-width: clamp(280px, 40vw, 520px);
+  --plan-sidebar-expand-width: 36px;
+  --plan-menu-width: calc(var(--plan-sidebar-base-width) - 48px);
+  --plan-goal-icon-space: 58px;
+  --plan-goal-hover-icon-space: 40px;
+}
+
+.page-v2 .sidebar {
+  width: var(--plan-sidebar-base-width);
+  min-width: var(--plan-sidebar-base-width);
+  overflow: visible;
+  z-index: 1000;
+  transition:
+    width 240ms ease,
+    min-width 240ms ease,
+    left 0.25s,
+    right 0.25s,
+    box-shadow 0.25s;
+}
+
+.page-v2 .sidebar.sidebar-relation-expanded {
+  width: calc(var(--plan-sidebar-base-width) + var(--plan-sidebar-expand-width));
+  min-width: calc(var(--plan-sidebar-base-width) + var(--plan-sidebar-expand-width));
+}
+
+.page-v2 .plan-map-prototype-sidebar,
+.page-v2 .plan-map-prototype {
+  width: 100%;
+  max-width: none;
+  overflow: visible;
+}
+
+.page-v2 .plan-map-prototype-sidebar {
+  position: relative;
+  height: 100%;
+  max-height: none;
+  overflow-y: auto;
+  overflow-x: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  z-index: 1010;
+}
+
+.page-v2 .plan-map-prototype-sidebar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.page-v2 .plan-map-workspace {
+  grid-template-columns: 1fr !important;
+  width: var(--plan-menu-width);
+  max-width: var(--plan-menu-width);
+  margin-right: auto;
+  justify-content: stretch;
+}
+
+.page-v2 .plan-map-column-strategi,
+.page-v2 .plan-map-column-hop {
+  display: none !important;
+}
+
+.page-v2 .plan-map-tree,
+.page-v2 .plan-map-tree-children,
+.page-v2 .plan-map-tree-subpath,
+.page-v2 .plan-map-strategy-list,
+.page-v2 .plan-map-hop-stack {
+  display: block;
+  margin: 0;
+  padding: 0;
+  background: transparent;
+}
+
+.page-v2 .plan-map-tree-group,
+.page-v2 .plan-map-relation-group {
+  display: block;
+  margin: 0;
+}
+
+.page-v2 .plan-map-tree-group + .plan-map-tree-group,
+.page-v2 .plan-map-tree-children > * + *,
+.page-v2 .plan-map-tree-subpath > * + *,
+.page-v2 .plan-map-strategy-list > * + *,
+.page-v2 .plan-map-hop-stack > * + * {
+  margin-top: 2px;
+}
+
+.page-v2 .plan-map-tree-group > .plan-map-tree-children {
+  margin-top: 2px;
+}
+
+.page-v2 .plan-map-tree-subpath {
+  margin-left: 10px;
+  border-left: 0 !important;
+}
+
+.page-v2 .plan-map-tree-branch,
+.page-v2 .plan-map-tree-leaf,
+.page-v2 .plan-map-tree-subleaf,
+.page-v2 .plan-map-strategy-row,
+.page-v2 .plan-map-hop-card,
+.page-v2 .plan-map-node,
+.page-v2 .plan-map-node-selected,
+.page-v2 .plan-map-list-node {
+  width: 100%;
+  max-width: none;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  text-align: left;
+  color: rgba(16, 25, 38, 0.78);
+}
+
+.page-v2 .plan-map-tree-branch,
+.page-v2 .plan-map-tree-leaf,
+.page-v2 .plan-map-strategy-row,
+.page-v2 .plan-map-hop-card,
+.page-v2 .plan-map-node,
+.page-v2 .plan-map-node-selected {
+  position: relative;
+  padding: 8px 0 8px 18px;
+  font-size: 16px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+.page-v2 .plan-map-tree-children > .plan-map-tree-leaf {
+  padding-left: 32px;
+}
+
+.page-v2 .plan-map-tree-subleaf,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node {
+  padding: 8px 0 8px 32px;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 400;
+  box-sizing: border-box;
+  width: calc(100% - var(--plan-goal-icon-space));
+  max-width: calc(100% - var(--plan-goal-icon-space));
+}
+
+.page-v2 .plan-map-tree-branch,
+.page-v2 .plan-map-tree-leaf.has-open-subpath {
+  color: rgba(16, 25, 38, 0.84);
+}
+
+.page-v2 .plan-map-tree-branch::before,
+.page-v2 .plan-map-tree-leaf.has-open-subpath::before,
+.page-v2 .plan-map-tree-children > .plan-map-tree-leaf::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 50%;
+  bottom: auto;
+  width: 7px;
+  height: 7px;
+  border-right: 1.5px solid currentColor;
+  border-bottom: 1.5px solid currentColor;
+  box-sizing: border-box;
+  border-radius: 0;
+  background: none !important;
+  transform: translateY(-50%) rotate(-45deg);
+}
+
+.page-v2 .plan-map-tree-children > .plan-map-tree-leaf::before {
+  left: 16px;
+}
+
+.page-v2 .plan-map-tree-branch.is-open::before,
+.page-v2 .plan-map-tree-leaf.is-active.has-open-subpath::before {
+  transform: translateY(-62%) rotate(45deg);
+}
+
+.page-v2 .plan-map-tree-branch::after,
+.page-v2 .plan-map-tree-leaf::after,
+.page-v2 .plan-map-strategy-row::after,
+.page-v2 .plan-map-node-selected::after {
+  content: none !important;
+  display: none !important;
+}
+
+.page-v2 .plan-map-tree-leaf.is-active,
+.page-v2 .plan-map-tree-leaf.is-active.has-open-subpath,
+.page-v2 .plan-map-tree-branch.is-active,
+.page-v2 .plan-map-node-selected,
+.page-v2 .plan-map-node.plan-map-list-node.plan-map-node-selected {
+  background: transparent !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
+  color: var(--ink-900);
+  font-weight: 600;
+}
+
+.page-v2 .plan-map-tree-subleaf:hover,
+.page-v2 .plan-map-tree-subleaf:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:focus-visible,
+.page-v2 .plan-map-tree-leaf:hover,
+.page-v2 .plan-map-tree-leaf:focus-visible,
+.page-v2 .plan-map-tree-branch:hover,
+.page-v2 .plan-map-tree-branch:focus-visible,
+.page-v2 .plan-map-node:hover,
+.page-v2 .plan-map-node:focus-visible,
+.page-v2 .plan-map-strategy-row:hover,
+.page-v2 .plan-map-strategy-row:focus-visible,
+.page-v2 .plan-map-hop-card:hover,
+.page-v2 .plan-map-hop-card:focus-visible {
+  color: var(--ink-900);
+  outline: none;
+}
+
+.page-v2 .plan-map-tree-subleaf:hover,
+.page-v2 .plan-map-tree-subleaf:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node.plan-map-node-selected {
+  color: var(--green-700);
+}
+
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node.plan-map-node-selected {
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+.page-v2 .plan-map-tree-subleaf-static,
+.page-v2 .plan-map-tree-subleaf-static:hover,
+.page-v2 .plan-map-tree-subleaf-static:focus-visible {
+  display: block;
+  box-sizing: border-box;
+  width: calc(100% - var(--plan-goal-icon-space));
+  max-width: calc(100% - var(--plan-goal-icon-space));
+  padding: 8px 0 8px 32px;
+  font-size: 14px;
+  line-height: 1.45;
+  font-weight: 400;
+  color: rgba(16, 25, 38, 0.72);
+  cursor: default;
+  outline: none;
+}
+
+.page-v2 .plan-map-tree-meta,
+.page-v2 .plan-map-relation-preview {
+  display: none !important;
+}
+
+.page-v2 .plan-map-relation-group {
+  position: relative;
+  display: block;
+  min-height: 40px;
+  overflow: visible;
+}
+
+.page-v2 .plan-map-relation-group > .plan-map-node {
+  display: block;
+  min-width: 0;
+  box-sizing: border-box;
+  width: calc(100% - var(--plan-goal-icon-space));
+  max-width: calc(100% - var(--plan-goal-icon-space));
+  padding-right: 0;
+  transition:
+    width 200ms ease,
+    max-width 200ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    transform 200ms ease,
+    background-color 160ms ease;
+}
+
+.page-v2 .plan-map-relation-group:hover > .plan-map-node,
+.page-v2 .plan-map-relation-group:focus-within > .plan-map-node {
+  width: calc(100% - var(--plan-goal-hover-icon-space));
+  max-width: calc(100% - var(--plan-goal-hover-icon-space));
+  color: var(--green-700);
+  transform: translateX(0);
+}
+
+.page-v2 .plan-map-relation-chip {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(16, 25, 38, 0.82);
+  font: inherit;
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  overflow: visible;
+  transform: translateY(-50%);
+  z-index: 1020;
+  transition:
+    border-color 160ms ease,
+    color 160ms ease,
+    transform 200ms ease;
+}
+
+.page-v2 .plan-map-relation-group:hover .plan-map-relation-chip,
+.page-v2 .plan-map-relation-group:focus-within .plan-map-relation-chip {
+  color: var(--green-700);
+  transform: translateY(-50%) translateX(4px);
+}
+
+.page-v2 .plan-map-relation-chip:hover,
+.page-v2 .plan-map-relation-chip:focus-visible {
+  outline: none;
+  z-index: 1030;
+}
+
+.page-v2 .plan-map-relation-chip-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 22px;
+  width: 22px;
+  height: 22px;
+  font-size: 22px;
+  line-height: 1;
+}
+
+.page-v2 .plan-map-relation-chip-arrow {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  border-top: 2px solid currentColor;
+  border-right: 2px solid currentColor;
+  opacity: 0;
+  transform: translateX(-6px) rotate(45deg);
+  transition:
+    opacity 150ms ease,
+    transform 200ms ease;
+}
+
+.page-v2 .plan-map-relation-group:hover .plan-map-relation-chip-arrow,
+.page-v2 .plan-map-relation-group:focus-within .plan-map-relation-chip-arrow {
+  opacity: 1;
+  transform: translateX(0) rotate(45deg);
+}
+
+.page-v2 .plan-map-hop-card strong,
+.page-v2 .plan-map-hop-card p {
+  display: inline;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+}
+
+.page-v2 .plan-map-hop-card strong::after {
+  content: " ";
 }
 
 @media (prefers-reduced-motion: reduce) {
