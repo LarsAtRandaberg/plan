@@ -23,6 +23,7 @@
   const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
   const planMapPrototype = document.getElementById("planMapPrototype");
   const planMapWorkspace = document.querySelector(".plan-map-workspace");
+  const planMapLinks = document.getElementById("planMapLinks");
   const planMapTree = document.getElementById("planMapTree");
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
   const planMapStrategyClose = document.getElementById("planMapStrategyClose");
@@ -1025,6 +1026,9 @@
               subLeaf.className = isNavigableSubgoal
                 ? (isSelectedSubgoal ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf")
                 : "plan-map-tree-subleaf-static";
+              if (isSelectedSubgoal && isNavigableSubgoal) {
+                subLeaf.classList.add("plan-map-link-source");
+              }
               subLeaf.textContent = goal.label;
               if (isNavigableSubgoal) {
                 subLeaf.addEventListener("click", () => {
@@ -1107,13 +1111,14 @@
         children.className = "plan-map-tree-subpath";
 
         if (Array.isArray(strategy.children) && strategy.children.length) {
-          strategy.children.forEach((childStrategy) => {
+          strategy.children.forEach((childStrategy, childIndex) => {
             const childKey = getNodeKey(childStrategy);
             const isActive = !!activeStrategy && getNodeKey(activeStrategy) === childKey;
+            const isPrimaryTarget = activeStrategy ? isActive : childIndex === 0;
             const control = createButton(
-              isActive
-                ? "plan-map-node plan-map-node-selected"
-                : "plan-map-tree-subleaf plan-map-strategy-row",
+              "plan-map-tree-subleaf plan-map-strategy-row plan-map-link-target"
+                + (isActive ? " plan-map-node-selected" : "")
+                + (isPrimaryTarget ? " is-primary-link-target" : ""),
               getNodeLabel(childStrategy),
               () => {
                 planSelection.strategyKey = isActive ? null : childKey;
@@ -1183,6 +1188,46 @@
     sidebar?.classList.toggle("has-child-plan", showsChildPlan);
   }
 
+  function renderPlanLinkPaths() {
+    if (!planMapLinks || !planMapWorkspace) return;
+    planMapLinks.innerHTML = "";
+    if (!planMapPrototype?.classList.contains("has-child-plan")) return;
+
+    const source = planMapWorkspace.querySelector(".plan-map-link-source");
+    const targets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
+    if (!source || !targets.length) return;
+
+    const workspaceRect = planMapWorkspace.getBoundingClientRect();
+    const sourceRect = source.getBoundingClientRect();
+    const startX = sourceRect.right - workspaceRect.left;
+    const startY = sourceRect.top + (sourceRect.height / 2) - workspaceRect.top;
+    const svgWidth = Math.max(0, Math.ceil(workspaceRect.width));
+    const svgHeight = Math.max(0, Math.ceil(workspaceRect.height));
+    planMapLinks.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+
+    const namespace = "http://www.w3.org/2000/svg";
+    targets.forEach((target) => {
+      const targetRect = target.getBoundingClientRect();
+      const endX = targetRect.left - workspaceRect.left;
+      const endY = targetRect.top + (targetRect.height / 2) - workspaceRect.top;
+      const controlDistance = Math.max(34, (endX - startX) * 0.42);
+      const isPrimary = target.classList.contains("is-primary-link-target")
+        || target.classList.contains("plan-map-node-selected");
+
+      const path = document.createElementNS(namespace, "path");
+      path.setAttribute("d", `M ${startX} ${startY} C ${startX + controlDistance} ${startY}, ${endX - controlDistance} ${endY}, ${endX} ${endY}`);
+      path.setAttribute("class", isPrimary ? "plan-map-link-path is-primary" : "plan-map-link-path");
+      planMapLinks.appendChild(path);
+
+      const circle = document.createElementNS(namespace, "circle");
+      circle.setAttribute("cx", endX);
+      circle.setAttribute("cy", endY);
+      circle.setAttribute("r", "9");
+      circle.setAttribute("class", isPrimary ? "plan-map-link-node is-primary" : "plan-map-link-node");
+      planMapLinks.appendChild(circle);
+    });
+  }
+
   function renderPlanMenus() {
     const layoutState = isMobile() ? getLayoutState() : "flat-desktop";
     if (sidebar) {
@@ -1223,6 +1268,8 @@
     renderStrategyMenu();
     renderHopMenu();
     syncChildPlanMenu();
+    window.requestAnimationFrame(renderPlanLinkPaths);
+    window.setTimeout(renderPlanLinkPaths, 850);
   }
 
   function closeSidebar() {
@@ -1375,6 +1422,7 @@
   window.addEventListener("resize", () => {
     applyModeVisibility(body.dataset.mode === "rapport");
     syncOverlay();
+    window.requestAnimationFrame(renderPlanLinkPaths);
   });
 
   window.addEventListener("popstate", syncPlanContextFromLocation);

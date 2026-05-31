@@ -1694,6 +1694,36 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   justify-content: stretch;
 }
 
+.page-v2 .plan-map-links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.page-v2 .plan-map-link-path {
+  fill: none;
+  stroke: rgba(119, 129, 120, 0.62);
+  stroke-width: 1.4;
+}
+
+.page-v2 .plan-map-link-path.is-primary {
+  stroke: var(--green-700);
+}
+
+.page-v2 .plan-map-link-node {
+  fill: #fff;
+  stroke: rgba(119, 129, 120, 0.74);
+  stroke-width: 2;
+}
+
+.page-v2 .plan-map-link-node.is-primary {
+  stroke: var(--green-700);
+}
+
 .page-v2 .plan-map-prototype.has-child-plan .plan-map-workspace {
   grid-template-columns: minmax(0, var(--plan-menu-width)) minmax(0, var(--plan-menu-width)) !important;
   gap: 32px;
@@ -1714,6 +1744,10 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 .page-v2 .plan-map-prototype.has-child-plan[data-plan-stage="hop"] .plan-map-column-hop {
   display: block !important;
   animation: plan-tree-slide-in 800ms ease both;
+}
+
+.page-v2 .plan-map-prototype.has-child-plan .plan-map-column {
+  z-index: 2;
 }
 
 @keyframes plan-tree-slide-in {
@@ -1896,6 +1930,71 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   font-size: 14px;
   line-height: 1.45;
   font-weight: 400;
+}
+
+.page-v2 .plan-map-link-source,
+.page-v2 .plan-map-link-source.plan-map-node-selected {
+  position: relative;
+  width: calc(100% - 22px);
+  max-width: calc(100% - 22px);
+  padding: 8px 10px;
+  border: 2px solid var(--green-700) !important;
+  border-radius: 5px !important;
+  color: var(--green-700) !important;
+  background: #fff !important;
+  font-weight: 500;
+  z-index: 4;
+}
+
+.page-v2 .plan-map-link-source::after {
+  content: "" !important;
+  position: absolute;
+  right: -11px;
+  top: 50%;
+  display: block !important;
+  width: 17px;
+  height: 17px;
+  border: 2px solid var(--green-700);
+  border-radius: 999px;
+  background: #fff;
+  transform: translateY(-50%);
+}
+
+.page-v2 .plan-map-link-target {
+  position: relative;
+  width: calc(100% - 18px);
+  max-width: calc(100% - 18px);
+  margin-left: 18px;
+  padding: 8px 10px 8px 16px;
+  border: 2px solid rgba(119, 129, 120, 0.64) !important;
+  border-radius: 5px !important;
+  background: #fff !important;
+  color: rgba(16, 25, 38, 0.72);
+  z-index: 4;
+}
+
+.page-v2 .plan-map-link-target::before {
+  content: "";
+  position: absolute;
+  left: -11px;
+  top: 50%;
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(119, 129, 120, 0.74);
+  border-radius: 999px;
+  background: #fff;
+  transform: translateY(-50%);
+}
+
+.page-v2 .plan-map-link-target.is-primary-link-target,
+.page-v2 .plan-map-link-target.plan-map-node-selected {
+  border-color: var(--green-700) !important;
+  color: var(--green-700);
+}
+
+.page-v2 .plan-map-link-target.is-primary-link-target::before,
+.page-v2 .plan-map-link-target.plan-map-node-selected::before {
+  border-color: var(--green-700);
 }
 
 .page-v2 .plan-map-tree-subleaf-static,
