@@ -8,6 +8,7 @@ body.page-v2 {
   --ink-700: #365340;
   --accent-green: #87be1b;
   --accent-green-dark: #005228;
+  --green-700: #2f8831;
   --accent-blue: #0072bb;
   --accent-blue-dark: #003b61;
   --tomato-mark: url("assets/vegetables/tomat-svart.png");
@@ -35,6 +36,7 @@ body.page-v2 {
 body.page-v2[data-mode="rapport"] {
   --green-900: var(--rapport-900);
   --green-800: var(--rapport-800);
+  --green-700: var(--rapport-800);
   --green-600: var(--rapport-600);
   --green-400: var(--rapport-400);
   --green-200: var(--rapport-200);
