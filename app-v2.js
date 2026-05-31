@@ -853,8 +853,8 @@
     if (!planMapStrategyList || !planMapStrategyTitle) return;
     const currentLeaf = getCurrentLeaf();
     if (!currentLeaf) {
-      planMapStrategyTitle.textContent = "";
-      planMapStrategyList.innerHTML = "";
+      planMapStrategyTitle.textContent = "Velg et mål i kommuneplanen";
+      planMapStrategyList.innerHTML = "<p class=\"plan-map-empty-state\">Strategiske mål vises her når du velger et delmål i kommuneplanen.</p>";
       return;
     }
     const { leaf } = currentLeaf;
@@ -863,6 +863,7 @@
     planMapStrategyList.innerHTML = "";
 
     if (!Array.isArray(leaf.strategies) || leaf.strategies.length === 0) {
+      planMapStrategyList.innerHTML = "<p class=\"plan-map-empty-state\">Ingen koblede strategimål for dette delmålet ennå.</p>";
       return;
     }
     leaf.strategies.forEach((strategy) => {
@@ -902,8 +903,8 @@
     if (!planMapHopList || !planMapHopTitle) return;
     const currentLeaf = getCurrentLeaf();
     if (!currentLeaf) {
-      planMapHopTitle.textContent = "";
-      planMapHopList.innerHTML = "";
+      planMapHopTitle.textContent = "Velg et strategimål";
+      planMapHopList.innerHTML = "<p class=\"plan-map-empty-state\">Tiltak i handlings- og økonomiplanen vises her når du velger et strategimål.</p>";
       return;
     }
     const { leaf } = currentLeaf;
@@ -911,10 +912,12 @@
     planMapHopTitle.textContent = leaf.hopPlanTitle;
     planMapHopList.innerHTML = "";
     if (!activeStrategy) {
+      planMapHopList.innerHTML = "<p class=\"plan-map-empty-state\">Velg et strategimål for å se koblede tiltak i HØP.</p>";
       return;
     }
 
     if (!Array.isArray(activeStrategy.hopItems) || activeStrategy.hopItems.length === 0) {
+      planMapHopList.innerHTML = "<p class=\"plan-map-empty-state\">Ingen koblede tiltak for dette strategimålet ennå.</p>";
       return;
     }
     renderMenuNodes(planMapHopList, activeStrategy.hopItems, {
@@ -931,7 +934,7 @@
   }
 
   function renderPlanMenus() {
-    const layoutState = getLayoutState();
+    const layoutState = isMobile() ? getLayoutState() : "flat-desktop";
     if (sidebar) {
       sidebar.dataset.layout = layoutState;
     }
@@ -947,7 +950,9 @@
       "full": { kommune: "open", strategi: "open", hop: "open" }
     };
 
-    const columnStates = columnStatesByLayout[layoutState] || columnStatesByLayout["kommune-only"];
+    const columnStates = isMobile()
+      ? (columnStatesByLayout[layoutState] || columnStatesByLayout["kommune-only"])
+      : { kommune: "open", strategi: "open", hop: "open" };
     const columnMap = {
       kommune: planMapTree ? planMapTree.closest(".plan-map-column") : null,
       strategi: planMapStrategyColumn,

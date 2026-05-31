@@ -284,9 +284,9 @@ body.page-v2[data-mode="rapport"] {
   order: 1;
   top: 76px;
   height: calc(100vh - 76px);
-  width: var(--plan-column-width);
-  min-width: var(--plan-column-width);
-  transition: width 1s ease, min-width 1s ease, left 0.25s, right 0.25s, box-shadow 0.25s;
+  width: calc(var(--plan-column-width) * 3);
+  min-width: calc(var(--plan-column-width) * 3);
+  transition: left 0.25s, right 0.25s, box-shadow 0.25s;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -297,27 +297,6 @@ body.page-v2[data-mode="rapport"] {
 .page-v2 .sidebar::-webkit-scrollbar {
   width: 0;
   height: 0;
-}
-
-.page-v2 .sidebar[data-layout="kommune-only"] {
-  width: var(--plan-column-width);
-  min-width: var(--plan-column-width);
-}
-
-.page-v2 .sidebar[data-layout="kommune-plus-strategi"] {
-  width: calc(var(--plan-column-width) * 2);
-  min-width: calc(var(--plan-column-width) * 2);
-}
-
-.page-v2 .sidebar[data-layout="strategi-entry"],
-.page-v2 .sidebar[data-layout="hop-entry"] {
-  width: calc(var(--plan-column-width) + 34px);
-  min-width: calc(var(--plan-column-width) + 34px);
-}
-
-.page-v2 .sidebar[data-layout="full"] {
-  width: calc(var(--plan-column-width) * 3);
-  min-width: calc(var(--plan-column-width) * 3);
 }
 
 .page-v2 .desktop-mode-rail {
@@ -485,7 +464,7 @@ body.page-v2[data-mode="rapport"] #menu {
 .page-v2 .plan-map-workspace {
   position: relative;
   display: grid;
-  grid-template-columns: var(--plan-column-width) 0 0;
+  grid-template-columns: repeat(3, minmax(0, var(--plan-column-width)));
   gap: 0;
   border-radius: 0;
   overflow: hidden;
@@ -493,27 +472,6 @@ body.page-v2[data-mode="rapport"] #menu {
   background: #ffffff;
   border: 0;
   box-shadow: none;
-  transition: grid-template-columns 1s ease;
-}
-
-.page-v2 .plan-map-workspace[data-layout="kommune-only"] {
-  grid-template-columns: var(--plan-column-width) 0 0;
-}
-
-.page-v2 .plan-map-workspace[data-layout="kommune-plus-strategi"] {
-  grid-template-columns: var(--plan-column-width) var(--plan-column-width) 0;
-}
-
-.page-v2 .plan-map-workspace[data-layout="strategi-entry"] {
-  grid-template-columns: 34px var(--plan-column-width) 0;
-}
-
-.page-v2 .plan-map-workspace[data-layout="hop-entry"] {
-  grid-template-columns: 34px 0 var(--plan-column-width);
-}
-
-.page-v2 .plan-map-workspace[data-layout="full"] {
-  grid-template-columns: var(--plan-column-width) var(--plan-column-width) var(--plan-column-width);
 }
 
 .page-v2 .plan-map-column {
@@ -523,7 +481,7 @@ body.page-v2[data-mode="rapport"] #menu {
   min-width: 0;
   z-index: 2;
   overflow: hidden;
-  transition: transform 1s ease, opacity 1s ease, padding 1s ease, box-shadow 1s ease, background-color 1s ease;
+  border-right: 1px solid rgba(16, 25, 38, 0.06);
 }
 
 .page-v2 .plan-map-column-kommune {
@@ -543,49 +501,8 @@ body.page-v2[data-mode="rapport"] #menu {
   box-shadow: none;
 }
 
-.page-v2 .plan-map-column[data-state="open"] {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
-.page-v2 .plan-map-column[data-state="hidden"] {
-  opacity: 0;
-  transform: scaleX(0.92);
-  padding-left: 0;
-  padding-right: 0;
-  pointer-events: none;
-}
-
-.page-v2 .plan-map-column[data-state="collapsed"] {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 12px 5px 8px;
-}
-
-.page-v2 .plan-map-column[data-state="collapsed"] .plan-map-column-title {
-  writing-mode: vertical-rl;
-  text-orientation: mixed;
-  margin: 0;
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  min-height: 0;
-}
-
-.page-v2 .plan-map-column[data-state="collapsed"] .plan-map-panel-title,
-.page-v2 .plan-map-column[data-state="collapsed"] .plan-map-tree,
-.page-v2 .plan-map-column[data-state="collapsed"] .plan-map-strategy-list,
-.page-v2 .plan-map-column[data-state="collapsed"] .plan-map-hop-stack {
-  display: none;
-}
-
-.page-v2 .plan-map-column[data-state="hidden"] .plan-map-column-title,
-.page-v2 .plan-map-column[data-state="hidden"] .plan-map-panel-title,
-.page-v2 .plan-map-column[data-state="hidden"] .plan-map-tree,
-.page-v2 .plan-map-column[data-state="hidden"] .plan-map-strategy-list,
-.page-v2 .plan-map-column[data-state="hidden"] .plan-map-hop-stack {
-  display: none;
+.page-v2 .plan-map-column:last-child {
+  border-right: 0;
 }
 
 .page-v2 .plan-map-column-title {
@@ -602,7 +519,7 @@ body.page-v2[data-mode="rapport"] #menu {
   color: rgba(21, 51, 33, 0.72);
   margin: 0 0 12px;
   font-weight: 600;
-  max-width: 18ch;
+  max-width: none;
 }
 
 .page-v2 .plan-map-tree {
@@ -714,6 +631,14 @@ body.page-v2[data-mode="rapport"] #menu {
   font-size: 13px;
   line-height: 1.45;
   color: rgba(21, 51, 33, 0.62);
+}
+
+.page-v2 .plan-map-empty-state {
+  margin: 0;
+  max-width: 20ch;
+  font-size: 13px;
+  line-height: 1.45;
+  color: rgba(21, 51, 33, 0.48);
 }
 
 .page-v2 .plan-map-node,
@@ -1388,12 +1313,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   .page-v2 .plan-map-workspace {
     grid-template-columns: 1fr;
     min-height: auto;
-    transition: none;
   }
 
   .page-v2 .plan-map-column {
     min-height: auto;
-    transition: none;
+    border-right: 0;
   }
 
   .page-v2 .plan-map-tree-root {
