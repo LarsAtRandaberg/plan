@@ -522,6 +522,46 @@ body.page-v2[data-mode="rapport"] #menu {
   padding: 0 18px;
 }
 
+.page-v2 .plan-map-column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 0 8px 0 0;
+}
+
+.page-v2 .plan-map-column-header .plan-map-column-title {
+  margin-bottom: 10px;
+  min-width: 0;
+}
+
+.page-v2 .plan-map-column-collapse {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 28px;
+  width: 28px;
+  height: 28px;
+  margin: -7px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(16, 25, 38, 0.58);
+  cursor: pointer;
+  font-size: 19px;
+  line-height: 1;
+  transition: color 160ms ease, background-color 160ms ease, transform 160ms ease;
+}
+
+.page-v2 .plan-map-column-collapse:hover,
+.page-v2 .plan-map-column-collapse:focus-visible {
+  background: rgba(135, 190, 27, 0.14);
+  color: var(--green-700);
+  outline: none;
+  transform: translateX(-2px);
+}
+
 .page-v2 .plan-map-panel-title {
   font-size: 14px;
   line-height: 1.25;

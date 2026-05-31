@@ -25,6 +25,7 @@
   const planMapWorkspace = document.querySelector(".plan-map-workspace");
   const planMapTree = document.getElementById("planMapTree");
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
+  const planMapStrategyClose = document.getElementById("planMapStrategyClose");
   const planMapHopColumn = document.querySelector(".plan-map-column-hop");
   const planMapStrategyTitle = document.getElementById("planMapStrategyTitle");
   const planMapStrategyList = document.getElementById("planMapStrategyList");
@@ -1326,6 +1327,18 @@
   if (reportSidebarCloseBtn) reportSidebarCloseBtn.addEventListener("click", closeSidebar);
   if (pageOverlay) pageOverlay.addEventListener("click", closeSidebar);
   if (peekButton) peekButton.addEventListener("click", openCurrentMenu);
+  if (planMapStrategyClose) {
+    planMapStrategyClose.addEventListener("click", () => {
+      switchToPlan(KOMMUNEPLAN_ID, {
+        entryColumn: "kommune",
+        sectionKey: planSelection.sectionKey,
+        leafKey: planSelection.leafKey,
+        selectedSubgoalKey: getCurrentLeaf()?.leaf.selectedSubgoalKey,
+        strategyKey: null,
+        hopKey: null
+      });
+    });
+  }
 
   reportNavLinks.forEach((link) => {
     link.addEventListener("click", () => {
