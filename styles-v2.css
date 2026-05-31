@@ -1587,9 +1587,9 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 
 /* Minimal tree reset */
 .page-v2 {
-  --plan-sidebar-base-width: clamp(280px, 40vw, 520px);
-  --plan-sidebar-expand-width: 36px;
-  --plan-menu-width: calc(var(--plan-sidebar-base-width) - 48px);
+  --plan-sidebar-base-width: clamp(140px, 20vw, 260px);
+  --plan-sidebar-expand-width: 18px;
+  --plan-menu-width: calc(var(--plan-sidebar-base-width) - 24px);
   --plan-goal-icon-space: 58px;
   --plan-goal-hover-icon-space: 40px;
 }
