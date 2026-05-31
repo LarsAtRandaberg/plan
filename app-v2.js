@@ -1051,7 +1051,7 @@
                   const sourceNode = document.createElement("span");
                   sourceNode.className = "plan-map-link-source-node";
                   sourceNode.setAttribute("aria-hidden", "true");
-                  relationGroup.appendChild(sourceNode);
+                  subLeaf.appendChild(sourceNode);
                 }
                 relationGroup.appendChild(subLeaf);
                 const shouldShowRelationChip = !(isSelectedSubgoal && getCurrentPlanId() !== KOMMUNEPLAN_ID);
@@ -1226,7 +1226,7 @@
 
     const workspaceRect = planMapWorkspace.getBoundingClientRect();
     const sourceRect = source.getBoundingClientRect();
-    const sourceNode = planMapWorkspace.querySelector(".plan-map-link-source-group > .plan-map-link-source-node");
+    const sourceNode = source.querySelector(".plan-map-link-source-node");
     const sourceNodeRect = sourceNode?.getBoundingClientRect();
     const startX = (sourceNodeRect ? sourceNodeRect.left + (sourceNodeRect.width / 2) : sourceRect.right) - workspaceRect.left;
     const startY = (sourceNodeRect ? sourceNodeRect.top + (sourceNodeRect.height / 2) : sourceRect.top + (sourceRect.height / 2)) - workspaceRect.top;
@@ -1239,8 +1239,9 @@
       const targetRect = target.getBoundingClientRect();
       const targetNode = target.querySelector(".plan-map-link-target-node");
       const targetNodeRect = targetNode?.getBoundingClientRect();
-      const endX = (targetNodeRect ? targetNodeRect.left + (targetNodeRect.width / 2) : targetRect.left) - workspaceRect.left;
-      const endY = (targetNodeRect ? targetNodeRect.top + (targetNodeRect.height / 2) : targetRect.top + (targetRect.height / 2)) - workspaceRect.top;
+      const hasVisibleTargetNode = targetNodeRect && targetNodeRect.width > 0 && targetNodeRect.height > 0;
+      const endX = (hasVisibleTargetNode ? targetNodeRect.left + (targetNodeRect.width / 2) : targetRect.left) - workspaceRect.left;
+      const endY = (hasVisibleTargetNode ? targetNodeRect.top + (targetNodeRect.height / 2) : targetRect.top + (targetRect.height / 2)) - workspaceRect.top;
       const controlDistance = Math.max(34, (endX - startX) * 0.42);
       const isPrimary = target.classList.contains("is-primary-link-target")
         || target.classList.contains("plan-map-node-selected");

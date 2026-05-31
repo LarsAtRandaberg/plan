@@ -1989,6 +1989,8 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   position: absolute;
   left: -11px;
   top: 50%;
+  box-sizing: border-box;
+  display: block;
   width: 17px;
   height: 17px;
   border: 2px solid rgba(119, 129, 120, 0.74);
@@ -2023,6 +2025,8 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 .page-v2 .plan-map-strategy-list.has-selected-strategy
   .plan-map-link-target.plan-map-node-selected > .plan-map-link-target-node {
   display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
 }
 
 .page-v2 .plan-map-tree-subleaf-static,
@@ -2100,6 +2104,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   position: absolute;
   right: -11px;
   top: 50%;
+  box-sizing: border-box;
   display: block;
   width: 17px;
   height: 17px;
