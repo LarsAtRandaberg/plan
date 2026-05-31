@@ -1981,7 +1981,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 }
 
 .page-v2 .plan-map-link-target::before {
-  content: "";
+  content: none !important;
+  display: none !important;
+}
+
+.page-v2 .plan-map-link-target-node {
   position: absolute;
   left: -11px;
   top: 50%;
@@ -1991,6 +1995,8 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   border-radius: 999px;
   background: #fff;
   transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 6;
 }
 
 .page-v2 .plan-map-link-target.is-primary-link-target,
@@ -1999,9 +2005,14 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   color: var(--green-700);
 }
 
-.page-v2 .plan-map-link-target.is-primary-link-target::before,
-.page-v2 .plan-map-link-target.plan-map-node-selected::before {
+.page-v2 .plan-map-link-target.is-primary-link-target > .plan-map-link-target-node,
+.page-v2 .plan-map-link-target.plan-map-node-selected > .plan-map-link-target-node {
   border-color: var(--green-700);
+}
+
+.page-v2 .plan-map-tree-subpath:has(.plan-map-link-target.plan-map-node-selected)
+  .plan-map-link-target:not(.plan-map-node-selected) > .plan-map-link-target-node {
+  display: none;
 }
 
 .page-v2 .plan-map-tree-subleaf-static,

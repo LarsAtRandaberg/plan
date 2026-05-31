@@ -1141,6 +1141,10 @@
               control.setAttribute("aria-current", "true");
             }
             control.dataset.strategyKey = childKey;
+            const targetNode = document.createElement("span");
+            targetNode.className = "plan-map-link-target-node";
+            targetNode.setAttribute("aria-hidden", "true");
+            control.appendChild(targetNode);
             children.appendChild(control);
           });
         } else {
