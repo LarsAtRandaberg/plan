@@ -1701,7 +1701,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   height: 100%;
   overflow: visible;
   pointer-events: none;
-  z-index: 1;
+  z-index: 3;
 }
 
 .page-v2 .plan-map-link-path {

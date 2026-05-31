@@ -1214,6 +1214,7 @@
     const activeStrategy = getCurrentStrategy();
     const activeStrategyKey = activeStrategy ? getNodeKey(activeStrategy) : null;
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
+    const sourceNode = planMapWorkspace.querySelector(".plan-map-link-source-node");
     const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
     const selectedTarget = planMapWorkspace.querySelector(".plan-map-link-target.plan-map-node-selected");
     let targets = activeStrategyKey
@@ -1225,8 +1226,8 @@
     if (!source || !targets.length) return;
 
     const workspaceRect = planMapWorkspace.getBoundingClientRect();
-    const sourceRect = source.getBoundingClientRect();
-    const startX = sourceRect.right - workspaceRect.left;
+    const sourceRect = (sourceNode || source).getBoundingClientRect();
+    const startX = sourceRect.left + (sourceRect.width / 2) - workspaceRect.left;
     const startY = sourceRect.top + (sourceRect.height / 2) - workspaceRect.top;
     const svgWidth = Math.max(0, Math.ceil(workspaceRect.width));
     const svgHeight = Math.max(0, Math.ceil(workspaceRect.height));
@@ -1234,8 +1235,9 @@
 
     const namespace = "http://www.w3.org/2000/svg";
     targets.forEach((target) => {
-      const targetRect = target.getBoundingClientRect();
-      const endX = targetRect.left - workspaceRect.left;
+      const targetNode = target.querySelector(".plan-map-link-target-node");
+      const targetRect = (targetNode || target).getBoundingClientRect();
+      const endX = targetRect.left + (targetRect.width / 2) - workspaceRect.left;
       const endY = targetRect.top + (targetRect.height / 2) - workspaceRect.top;
       const controlDistance = Math.max(34, (endX - startX) * 0.42);
       const isPrimary = target.classList.contains("is-primary-link-target")
