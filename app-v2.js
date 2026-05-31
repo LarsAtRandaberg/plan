@@ -1046,8 +1046,14 @@
               if (isNavigableSubgoal) {
                 const relationGroup = document.createElement("div");
                 relationGroup.className = "plan-map-relation-group";
+                if (isSelectedSubgoal) {
+                  relationGroup.classList.add("plan-map-link-source-group");
+                }
                 relationGroup.appendChild(subLeaf);
-                const chip = createStrategySwitchChip(section, leaf, goal, linkedBranchCount);
+                const shouldShowRelationChip = !(isSelectedSubgoal && getCurrentPlanId() !== KOMMUNEPLAN_ID);
+                const chip = shouldShowRelationChip
+                  ? createStrategySwitchChip(section, leaf, goal, linkedBranchCount)
+                  : null;
                 if (chip) {
                   relationGroup.appendChild(chip);
                   attachRelationExpansion(relationGroup);

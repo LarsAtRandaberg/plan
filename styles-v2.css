@@ -1946,6 +1946,13 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   z-index: 4;
 }
 
+.page-v2 .plan-map-link-source-group:hover > .plan-map-link-source,
+.page-v2 .plan-map-link-source-group:focus-within > .plan-map-link-source {
+  width: calc(100% - 22px);
+  max-width: calc(100% - 22px);
+  color: var(--green-700) !important;
+}
+
 .page-v2 .plan-map-link-source::after {
   content: "" !important;
   position: absolute;
