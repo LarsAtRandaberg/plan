@@ -645,6 +645,7 @@
     chip.type = "button";
     chip.className = "plan-map-relation-chip";
     chip.setAttribute("aria-label", actionLabel);
+    chip.setAttribute("title", displayLabel || actionLabel);
     chip.innerHTML = `
       <span class="plan-map-relation-chip-icon" aria-hidden="true"><i class="${iconClass}"></i></span>
       <span class="plan-map-relation-chip-arrow" aria-hidden="true"></span>
@@ -663,10 +664,11 @@
     const targetGoal = goal || leaf.subgoals?.find((item) => item.key === leaf.selectedSubgoalKey) || null;
     const strategyCount = branchCount ?? getLinkedPlanBranchCount(leaf, targetGoal);
     if (!strategyCount) return null;
+    const tooltipLabel = `Gå til ${strategyCount} mål i ${leaf.strategyPlanTitle}.`;
     return createRelationChip(
       strategyCount,
-      `${getCurrentPlanId() === planId ? "Vis" : "Bytt til"} ${strategyCount} mal i ${leaf.strategyPlanTitle}`,
-      `${strategyCount} mal i ${leaf.strategyPlanTitle}`,
+      tooltipLabel,
+      tooltipLabel,
       () => {
         if (targetGoal?.key) {
           leaf.selectedSubgoalKey = targetGoal.key;
