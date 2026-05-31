@@ -1144,6 +1144,7 @@
               control.setAttribute("aria-current", "true");
             }
             control.dataset.strategyKey = childKey;
+            control.dataset.linkTargetKey = childKey;
             const targetNode = document.createElement("span");
             targetNode.className = "plan-map-link-target-node";
             targetNode.setAttribute("aria-hidden", "true");
@@ -1215,16 +1216,20 @@
     const activeStrategyKey = activeStrategy ? getNodeKey(activeStrategy) : null;
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
     const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
-    const selectedTarget = planMapWorkspace.querySelector(".plan-map-link-target.plan-map-node-selected");
-    let targets = activeStrategyKey && selectedTarget
-      ? [selectedTarget]
+    let targets = activeStrategyKey
+      ? allTargets.filter((target) => target.dataset.linkTargetKey === activeStrategyKey)
       : allTargets.filter((target) => target.classList.contains("is-visible-link-target"));
+    if (activeStrategyKey && !targets.length) {
+      targets = allTargets.filter((target) => target.classList.contains("plan-map-node-selected"));
+    }
     if (!source || !targets.length) return;
 
     const workspaceRect = planMapWorkspace.getBoundingClientRect();
     const sourceRect = source.getBoundingClientRect();
-    const startX = sourceRect.right - workspaceRect.left;
-    const startY = sourceRect.top + (sourceRect.height / 2) - workspaceRect.top;
+    const sourceNode = planMapWorkspace.querySelector(".plan-map-link-source-group > .plan-map-link-source-node");
+    const sourceNodeRect = sourceNode?.getBoundingClientRect();
+    const startX = (sourceNodeRect ? sourceNodeRect.left + (sourceNodeRect.width / 2) : sourceRect.right) - workspaceRect.left;
+    const startY = (sourceNodeRect ? sourceNodeRect.top + (sourceNodeRect.height / 2) : sourceRect.top + (sourceRect.height / 2)) - workspaceRect.top;
     const svgWidth = Math.max(0, Math.ceil(workspaceRect.width));
     const svgHeight = Math.max(0, Math.ceil(workspaceRect.height));
     planMapLinks.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
@@ -1232,8 +1237,10 @@
     const namespace = "http://www.w3.org/2000/svg";
     targets.forEach((target) => {
       const targetRect = target.getBoundingClientRect();
-      const endX = targetRect.left - workspaceRect.left;
-      const endY = targetRect.top + (targetRect.height / 2) - workspaceRect.top;
+      const targetNode = target.querySelector(".plan-map-link-target-node");
+      const targetNodeRect = targetNode?.getBoundingClientRect();
+      const endX = (targetNodeRect ? targetNodeRect.left + (targetNodeRect.width / 2) : targetRect.left) - workspaceRect.left;
+      const endY = (targetNodeRect ? targetNodeRect.top + (targetNodeRect.height / 2) : targetRect.top + (targetRect.height / 2)) - workspaceRect.top;
       const controlDistance = Math.max(34, (endX - startX) * 0.42);
       const isPrimary = target.classList.contains("is-primary-link-target")
         || target.classList.contains("plan-map-node-selected");
