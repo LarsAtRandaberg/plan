@@ -310,6 +310,22 @@
     return null;
   }
 
+  function getActiveStrategyTargetKey(leaf = null) {
+    const currentLeaf = leaf || getCurrentLeaf()?.leaf;
+    const selectedKey = planSelection.strategyKey;
+    if (!currentLeaf || !selectedKey || !Array.isArray(currentLeaf.strategies)) return null;
+
+    for (const strategy of currentLeaf.strategies) {
+      const children = Array.isArray(strategy.children) ? strategy.children : [];
+      if (children.length) {
+        if (children.some((child) => getNodeKey(child) === selectedKey)) return selectedKey;
+        continue;
+      }
+      if (getNodeKey(strategy) === selectedKey) return selectedKey;
+    }
+    return null;
+  }
+
   function getCurrentHopItem() {
     const currentStrategy = getCurrentStrategy();
     if (!currentStrategy || !planSelection.hopKey || !Array.isArray(currentStrategy.hopItems)) return null;
@@ -562,14 +578,30 @@
         });
 
         (leaf.strategies || []).forEach((strategy) => {
-          if (!strategy.id) return;
-          lookup.set(strategy.id, {
-            focusColumn: "full",
-            sectionKey: section.key,
-            leafKey: leaf.key,
-            selectedSubgoalKey: leaf.selectedSubgoalKey,
-            strategyKey: strategy.key,
-            hopKey: null
+          const strategyKey = getNodeKey(strategy);
+          if (strategy.id) {
+            lookup.set(strategy.id, {
+              focusColumn: "strategi",
+              sectionKey: section.key,
+              leafKey: leaf.key,
+              selectedSubgoalKey: leaf.selectedSubgoalKey,
+              selectedStrategyBranchKey: strategyKey,
+              strategyKey: null,
+              hopKey: null
+            });
+          }
+
+          (strategy.children || []).forEach((child) => {
+            if (!child.id) return;
+            lookup.set(child.id, {
+              focusColumn: "strategi",
+              sectionKey: section.key,
+              leafKey: leaf.key,
+              selectedSubgoalKey: leaf.selectedSubgoalKey,
+              selectedStrategyBranchKey: strategyKey,
+              strategyKey: getNodeKey(child),
+              hopKey: null
+            });
           });
         });
       });
@@ -585,6 +617,23 @@
     const leaf = getLeafByKey(next.leafKey);
     if (!leaf) return;
 
+    if (
+      !next.strategyKey
+      && next.selectedStrategyBranchKey
+      && planSelection.strategyKey
+      && planSelection.leafKey === next.leafKey
+    ) {
+      const visibleBranch = leaf.strategies.find(
+        (strategy) => getNodeKey(strategy) === next.selectedStrategyBranchKey
+      );
+      const keepsCurrentChild = visibleBranch?.children?.some(
+        (child) => getNodeKey(child) === planSelection.strategyKey
+      );
+      if (keepsCurrentChild) {
+        next.strategyKey = planSelection.strategyKey;
+      }
+    }
+
     const changed =
       planSelection.focusColumn !== next.focusColumn ||
       planSelection.sectionKey !== next.sectionKey ||
@@ -592,6 +641,9 @@
       planSelection.strategyKey !== next.strategyKey;
 
     leaf.selectedSubgoalKey = next.selectedSubgoalKey;
+    if (next.selectedStrategyBranchKey) {
+      leaf.selectedStrategyBranchKey = next.selectedStrategyBranchKey;
+    }
     planSelection.focusColumn = next.focusColumn;
     planSelection.sectionKey = next.sectionKey;
     planSelection.leafKey = next.leafKey;
@@ -1088,10 +1140,10 @@
       return;
     }
     const { leaf } = currentLeaf;
-    const activeStrategy = getCurrentStrategy();
+    const activeTargetKey = getActiveStrategyTargetKey(leaf);
     planMapStrategyTitle.textContent = leaf.strategyPlanTitle;
     planMapStrategyList.innerHTML = "";
-    planMapStrategyList.classList.toggle("has-selected-strategy", !!activeStrategy);
+    planMapStrategyList.classList.toggle("has-selected-strategy", !!activeTargetKey);
 
     if (!Array.isArray(leaf.strategies) || leaf.strategies.length === 0) {
       planMapStrategyList.innerHTML = "<p class=\"plan-map-empty-state\">Ingen koblede strategimål for dette delmålet ennå.</p>";
@@ -1124,9 +1176,9 @@
         if (Array.isArray(strategy.children) && strategy.children.length) {
           strategy.children.forEach((childStrategy, childIndex) => {
             const childKey = getNodeKey(childStrategy);
-            const isActive = !!activeStrategy && getNodeKey(activeStrategy) === childKey;
-            const shouldShowIndicator = !activeStrategy || isActive;
-            const isPrimaryTarget = !!activeStrategy && isActive;
+            const isActive = activeTargetKey === childKey;
+            const shouldShowIndicator = !activeTargetKey || isActive;
+            const isPrimaryTarget = !!activeTargetKey && isActive;
             const control = createButton(
               "plan-map-tree-subleaf plan-map-strategy-row plan-map-link-target"
                 + (isActive ? " plan-map-node-selected" : "")
@@ -1212,8 +1264,7 @@
     planMapLinks.innerHTML = "";
     if (!planMapPrototype?.classList.contains("has-child-plan")) return;
 
-    const activeStrategy = getCurrentStrategy();
-    const activeStrategyKey = activeStrategy ? getNodeKey(activeStrategy) : null;
+    const activeStrategyKey = getActiveStrategyTargetKey();
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
     const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
     let targets = activeStrategyKey
