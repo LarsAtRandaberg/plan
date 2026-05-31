@@ -366,7 +366,9 @@
     if (!leaf || !goal) return 0;
     if (leaf.key === "gode-oppvekstvilkar" && goal.id && planGoalsData.length) {
       return planGoalsData.filter(
-        (item) => item.maalPlan === OPPVEKSTPLAN_ID && item.maalOverordnet === goal.id
+        (item) => item.maalPlan === OPPVEKSTPLAN_ID
+          && item.maalType === 701100002
+          && item.maalOverordnet === goal.id
       ).length;
     }
     if (goal.key === leaf.selectedSubgoalKey && Array.isArray(leaf.strategies)) {
@@ -461,7 +463,7 @@
     );
 
     oppvekstLeaf.strategies = oppvekstGoals
-      .filter((goal) => goal.maalType === 701100002)
+      .filter((goal) => goal.maalType === 701100002 && linkedBranchIds.has(goal.maalID))
       .map((goal) => ({
         key: slugify(goal.maalID || goal.maalNavn),
         id: goal.maalID,
@@ -484,7 +486,7 @@
       const linkedBranch = oppvekstLeaf.strategies.find((strategy) => strategy.isLinkedFromSelectedGoal);
       oppvekstLeaf.selectedStrategyBranchKey = linkedBranch
         ? getNodeKey(linkedBranch)
-        : getNodeKey(oppvekstLeaf.strategies[0]);
+        : null;
       oppvekstLeaf.selectedStrategySourceGoalKey = oppvekstLeaf.selectedSubgoalKey;
     }
   }
