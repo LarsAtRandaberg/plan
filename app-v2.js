@@ -1101,17 +1101,15 @@
 
       if (isOpen) {
         const children = document.createElement("div");
-        children.className = "plan-map-tree-children";
+        children.className = "plan-map-tree-subpath";
 
         if (Array.isArray(strategy.children) && strategy.children.length) {
           strategy.children.forEach((childStrategy) => {
             const childKey = getNodeKey(childStrategy);
             const isActive = !!activeStrategy && getNodeKey(activeStrategy) === childKey;
-            const childGroup = document.createElement("div");
-            childGroup.className = "plan-map-relation-group";
             const control = createButton(
               isActive
-                ? "plan-map-node plan-map-list-node plan-map-node-selected"
+                ? "plan-map-node plan-map-node-selected"
                 : "plan-map-tree-subleaf plan-map-strategy-row",
               getNodeLabel(childStrategy),
               () => {
@@ -1124,17 +1122,7 @@
             if (isActive) {
               control.setAttribute("aria-current", "true");
             }
-            childGroup.appendChild(control);
-
-            if (isActive) {
-              const chip = createHopSwitchChip(currentLeaf.section, leaf, childStrategy);
-              if (chip) {
-                childGroup.appendChild(chip);
-                attachRelationExpansion(childGroup);
-              }
-            }
-
-            children.appendChild(childGroup);
+            children.appendChild(control);
           });
         } else {
           children.innerHTML = "<p class=\"plan-map-empty-state\">Ingen undermål for dette målet ennå.</p>";

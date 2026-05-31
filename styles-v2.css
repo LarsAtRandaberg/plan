@@ -1757,7 +1757,8 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 }
 
 .page-v2 .plan-map-tree-subleaf,
-.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node {
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node,
+.page-v2 .plan-map-tree-subpath > .plan-map-node {
   padding: 8px 0 8px 32px;
   font-size: 14px;
   line-height: 1.45;
@@ -1823,6 +1824,8 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 .page-v2 .plan-map-tree-subleaf:focus-visible,
 .page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:hover,
 .page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-node:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-node:focus-visible,
 .page-v2 .plan-map-tree-leaf:hover,
 .page-v2 .plan-map-tree-leaf:focus-visible,
 .page-v2 .plan-map-tree-branch:hover,
@@ -1841,11 +1844,15 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 .page-v2 .plan-map-tree-subleaf:focus-visible,
 .page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:hover,
 .page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:focus-visible,
-.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node.plan-map-node-selected {
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node.plan-map-node-selected,
+.page-v2 .plan-map-tree-subpath > .plan-map-node:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-node:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-node.plan-map-node-selected {
   color: var(--green-700);
 }
 
-.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node.plan-map-node-selected {
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node.plan-map-node-selected,
+.page-v2 .plan-map-tree-subpath > .plan-map-node.plan-map-node-selected {
   font-size: 14px;
   line-height: 1.45;
   font-weight: 400;
