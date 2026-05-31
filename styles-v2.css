@@ -2064,7 +2064,9 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   width: calc(100% - 22px);
   max-width: calc(100% - 22px);
   padding: 8px 10px;
-  border: 2px solid var(--green-700) !important;
+  border-width: 2px !important;
+  border-style: solid !important;
+  border-color: var(--green-700) !important;
   border-radius: 5px !important;
   background: #fff !important;
   color: var(--green-700) !important;
@@ -2073,19 +2075,24 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   z-index: 4;
 }
 
-.page-v2 .plan-map-relation-group.plan-map-link-source-group > .plan-map-link-source::after {
-  content: "" !important;
+.page-v2 .plan-map-link-source-node {
   position: absolute;
   right: -11px;
   top: 50%;
-  display: block !important;
+  display: block;
   width: 17px;
   height: 17px;
-  border: 2px solid var(--green-700);
+  border: 2px solid var(--green-700) !important;
   border-radius: 999px;
   background: #fff;
   transform: translateY(-50%);
-  z-index: 5;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.page-v2 .plan-map-relation-group.plan-map-link-source-group > .plan-map-link-source::after {
+  content: none !important;
+  display: none !important;
 }
 
 .page-v2 .plan-map-relation-chip {

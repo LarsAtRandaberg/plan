@@ -1048,6 +1048,10 @@
                 relationGroup.className = "plan-map-relation-group";
                 if (isSelectedSubgoal) {
                   relationGroup.classList.add("plan-map-link-source-group");
+                  const sourceNode = document.createElement("span");
+                  sourceNode.className = "plan-map-link-source-node";
+                  sourceNode.setAttribute("aria-hidden", "true");
+                  relationGroup.appendChild(sourceNode);
                 }
                 relationGroup.appendChild(subLeaf);
                 const shouldShowRelationChip = !(isSelectedSubgoal && getCurrentPlanId() !== KOMMUNEPLAN_ID);
