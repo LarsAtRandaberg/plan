@@ -2052,6 +2052,80 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   visibility: visible !important;
 }
 
+.page-v2 .plan-map-hop-source-node,
+.page-v2 .plan-map-hop-link-target-node {
+  position: absolute;
+  top: 50%;
+  box-sizing: border-box;
+  display: block;
+  width: 17px;
+  height: 17px;
+  border: 2px solid rgba(119, 129, 120, 0.74);
+  border-radius: 999px;
+  background: #fff;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 6;
+}
+
+.page-v2 .plan-map-hop-source-node {
+  right: -11px;
+  border-color: var(--green-700);
+}
+
+.page-v2 .plan-map-hop-link-target {
+  position: relative;
+  width: calc(100% - 18px);
+  max-width: calc(100% - 18px);
+  margin-left: 18px;
+  padding: 10px 10px 10px 16px;
+  border: 2px solid rgba(119, 129, 120, 0.64) !important;
+  border-radius: 5px !important;
+  background: #fff !important;
+  color: rgba(16, 25, 38, 0.72);
+  z-index: 4;
+}
+
+.page-v2 .plan-map-hop-link-target-node {
+  left: -11px;
+}
+
+.page-v2 .plan-map-hop-link-target.is-primary-hop-target,
+.page-v2 .plan-map-hop-link-target.plan-map-node-selected {
+  border-color: var(--green-700) !important;
+  color: var(--green-700);
+}
+
+.page-v2 .plan-map-hop-link-target.is-primary-hop-target > .plan-map-hop-link-target-node,
+.page-v2 .plan-map-hop-link-target.plan-map-node-selected > .plan-map-hop-link-target-node {
+  border-color: var(--green-700);
+}
+
+.page-v2 .plan-map-hop-stack.has-selected-hop
+  .plan-map-hop-link-target:not(.is-visible-hop-target) > .plan-map-hop-link-target-node {
+  display: none !important;
+}
+
+.page-v2 .plan-map-hop-stack.has-selected-hop
+  .plan-map-hop-link-target.is-visible-hop-target > .plan-map-hop-link-target-node,
+.page-v2 .plan-map-hop-stack.has-selected-hop
+  .plan-map-hop-link-target.plan-map-node-selected > .plan-map-hop-link-target-node {
+  display: block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.page-v2 .plan-map-prototype.has-hop-plan
+  .plan-map-hop-link-group > .plan-map-relation-chip {
+  display: none !important;
+}
+
+.page-v2 .plan-map-prototype.has-hop-plan
+  .plan-map-hop-link-group > .plan-map-link-target {
+  width: calc(100% - 22px);
+  max-width: calc(100% - 22px);
+}
+
 .page-v2 .plan-map-tree-subleaf-static,
 .page-v2 .plan-map-tree-subleaf-static:hover,
 .page-v2 .plan-map-tree-subleaf-static:focus-visible {

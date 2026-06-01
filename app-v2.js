@@ -1223,6 +1223,12 @@
             targetNode.className = "plan-map-link-target-node";
             targetNode.setAttribute("aria-hidden", "true");
             control.appendChild(targetNode);
+            if (getCurrentPlanId() === HOP_PLAN_ID && isActive) {
+              const hopSourceNode = document.createElement("span");
+              hopSourceNode.className = "plan-map-hop-source-node";
+              hopSourceNode.setAttribute("aria-hidden", "true");
+              control.appendChild(hopSourceNode);
+            }
             const hopChip = createHopSwitchChip(section, leaf, childStrategy);
             if (hopChip) {
               const relationGroup = document.createElement("div");
@@ -1267,17 +1273,34 @@
       planMapHopList.innerHTML = "<p class=\"plan-map-empty-state\">Ingen koblede tiltak for dette strategimålet ennå.</p>";
       return;
     }
-    renderMenuNodes(planMapHopList, activeStrategy.hopItems, {
-      selectedKey: planSelection.hopKey,
-      leafClassName: "plan-map-hop-card plan-map-list-node",
-      activeLeafClassName: "plan-map-hop-card plan-map-list-node is-active",
-      childLeafClassName: "plan-map-tree-subleaf",
-      onSelect: (item) => {
+
+    const activeHopKey = getCurrentHopItem() ? planSelection.hopKey : null;
+    planMapHopList.classList.toggle("has-selected-hop", !!activeHopKey);
+    activeStrategy.hopItems.forEach((item) => {
+      const hopKey = getNodeKey(item);
+      const isActive = activeHopKey === hopKey;
+      const shouldShowIndicator = !activeHopKey || isActive;
+      const control = createButton(
+        "plan-map-hop-card plan-map-list-node plan-map-hop-link-target"
+          + (isActive ? " is-active plan-map-node-selected is-primary-hop-target" : "")
+          + (shouldShowIndicator ? " is-visible-hop-target" : ""),
+        getNodeLabel(item),
+        () => {
         const nextHopKey = getNodeKey(item);
         planSelection.hopKey = planSelection.hopKey === nextHopKey ? null : nextHopKey;
         planSelection.focusColumn = "full";
         renderPlanMenus();
       }
+      );
+      control.dataset.hopKey = hopKey;
+      if (isActive) {
+        control.setAttribute("aria-current", "true");
+      }
+      const hopNode = document.createElement("span");
+      hopNode.className = "plan-map-hop-link-target-node";
+      hopNode.setAttribute("aria-hidden", "true");
+      control.appendChild(hopNode);
+      planMapHopList.appendChild(control);
     });
   }
 
@@ -1299,6 +1322,51 @@
     planMapLinks.innerHTML = "";
     if (!planMapPrototype?.classList.contains("has-child-plan")) return;
 
+    const namespace = "http://www.w3.org/2000/svg";
+    const workspaceRect = planMapWorkspace.getBoundingClientRect();
+    const svgWidth = Math.max(0, Math.ceil(workspaceRect.width));
+    const svgHeight = Math.max(0, Math.ceil(workspaceRect.height));
+    planMapLinks.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+
+    const drawRelations = (source, targets, options = {}) => {
+      if (!source || !targets.length) return;
+      const sourceRect = source.getBoundingClientRect();
+      const sourceNode = options.sourceNodeSelector
+        ? source.querySelector(options.sourceNodeSelector)
+        : null;
+      const sourceNodeRect = sourceNode?.getBoundingClientRect();
+      const startX = (sourceNodeRect ? sourceNodeRect.left + (sourceNodeRect.width / 2) : sourceRect.right) - workspaceRect.left;
+      const startY = (sourceNodeRect ? sourceNodeRect.top + (sourceNodeRect.height / 2) : sourceRect.top + (sourceRect.height / 2)) - workspaceRect.top;
+
+      targets.forEach((target) => {
+        const targetRect = target.getBoundingClientRect();
+        const targetNode = options.targetNodeSelector
+          ? target.querySelector(options.targetNodeSelector)
+          : null;
+        const targetNodeRect = targetNode?.getBoundingClientRect();
+        const hasVisibleTargetNode = targetNodeRect && targetNodeRect.width > 0 && targetNodeRect.height > 0;
+        const endX = (hasVisibleTargetNode ? targetNodeRect.left + (targetNodeRect.width / 2) : targetRect.left) - workspaceRect.left;
+        const endY = (hasVisibleTargetNode ? targetNodeRect.top + (targetNodeRect.height / 2) : targetRect.top + (targetRect.height / 2)) - workspaceRect.top;
+        const controlDistance = Math.max(34, (endX - startX) * 0.42);
+        const isPrimary = options.isPrimary
+          ? options.isPrimary(target)
+          : target.classList.contains("is-primary-link-target")
+            || target.classList.contains("plan-map-node-selected");
+
+        const path = document.createElementNS(namespace, "path");
+        path.setAttribute("d", `M ${startX} ${startY} C ${startX + controlDistance} ${startY}, ${endX - controlDistance} ${endY}, ${endX} ${endY}`);
+        path.setAttribute("class", isPrimary ? "plan-map-link-path is-primary" : "plan-map-link-path");
+        planMapLinks.appendChild(path);
+
+        const circle = document.createElementNS(namespace, "circle");
+        circle.setAttribute("cx", endX);
+        circle.setAttribute("cy", endY);
+        circle.setAttribute("r", "9");
+        circle.setAttribute("class", isPrimary ? "plan-map-link-node is-primary" : "plan-map-link-node");
+        planMapLinks.appendChild(circle);
+      });
+    };
+
     const activeStrategyKey = getActiveStrategyTargetKey();
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
     const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
@@ -1309,41 +1377,24 @@
       targets = allTargets.filter((target) => target.classList.contains("plan-map-node-selected"));
     }
     targets = targets.filter((target) => target.getClientRects().length > 0);
-    if (!source || !targets.length) return;
+    drawRelations(source, targets, {
+      sourceNodeSelector: ".plan-map-link-source-node",
+      targetNodeSelector: ".plan-map-link-target-node"
+    });
 
-    const workspaceRect = planMapWorkspace.getBoundingClientRect();
-    const sourceRect = source.getBoundingClientRect();
-    const sourceNode = source.querySelector(".plan-map-link-source-node");
-    const sourceNodeRect = sourceNode?.getBoundingClientRect();
-    const startX = (sourceNodeRect ? sourceNodeRect.left + (sourceNodeRect.width / 2) : sourceRect.right) - workspaceRect.left;
-    const startY = (sourceNodeRect ? sourceNodeRect.top + (sourceNodeRect.height / 2) : sourceRect.top + (sourceRect.height / 2)) - workspaceRect.top;
-    const svgWidth = Math.max(0, Math.ceil(workspaceRect.width));
-    const svgHeight = Math.max(0, Math.ceil(workspaceRect.height));
-    planMapLinks.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
-
-    const namespace = "http://www.w3.org/2000/svg";
-    targets.forEach((target) => {
-      const targetRect = target.getBoundingClientRect();
-      const targetNode = target.querySelector(".plan-map-link-target-node");
-      const targetNodeRect = targetNode?.getBoundingClientRect();
-      const hasVisibleTargetNode = targetNodeRect && targetNodeRect.width > 0 && targetNodeRect.height > 0;
-      const endX = (hasVisibleTargetNode ? targetNodeRect.left + (targetNodeRect.width / 2) : targetRect.left) - workspaceRect.left;
-      const endY = (hasVisibleTargetNode ? targetNodeRect.top + (targetNodeRect.height / 2) : targetRect.top + (targetRect.height / 2)) - workspaceRect.top;
-      const controlDistance = Math.max(34, (endX - startX) * 0.42);
-      const isPrimary = target.classList.contains("is-primary-link-target")
-        || target.classList.contains("plan-map-node-selected");
-
-      const path = document.createElementNS(namespace, "path");
-      path.setAttribute("d", `M ${startX} ${startY} C ${startX + controlDistance} ${startY}, ${endX - controlDistance} ${endY}, ${endX} ${endY}`);
-      path.setAttribute("class", isPrimary ? "plan-map-link-path is-primary" : "plan-map-link-path");
-      planMapLinks.appendChild(path);
-
-      const circle = document.createElementNS(namespace, "circle");
-      circle.setAttribute("cx", endX);
-      circle.setAttribute("cy", endY);
-      circle.setAttribute("r", "9");
-      circle.setAttribute("class", isPrimary ? "plan-map-link-node is-primary" : "plan-map-link-node");
-      planMapLinks.appendChild(circle);
+    const activeHop = getCurrentHopItem();
+    const activeHopKey = activeHop ? getNodeKey(activeHop) : null;
+    const hopSource = planMapWorkspace.querySelector(".plan-map-link-target.plan-map-node-selected");
+    const hopTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-hop-link-target"));
+    let visibleHopTargets = activeHopKey
+      ? hopTargets.filter((target) => target.dataset.hopKey === activeHopKey)
+      : hopTargets.filter((target) => target.classList.contains("is-visible-hop-target"));
+    visibleHopTargets = visibleHopTargets.filter((target) => target.getClientRects().length > 0);
+    drawRelations(hopSource, visibleHopTargets, {
+      sourceNodeSelector: ".plan-map-hop-source-node",
+      targetNodeSelector: ".plan-map-hop-link-target-node",
+      isPrimary: (target) => target.classList.contains("is-primary-hop-target")
+        || target.classList.contains("plan-map-node-selected")
     });
   }
 
