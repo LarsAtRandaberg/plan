@@ -1633,6 +1633,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   --plan-sidebar-expand-width: 18px;
   --plan-menu-width: calc(var(--plan-sidebar-base-width) - 24px);
   --plan-sidebar-child-width: calc(var(--plan-sidebar-base-width) + var(--plan-menu-width) + 32px);
+  --plan-sidebar-hop-width: calc(var(--plan-sidebar-child-width) + var(--plan-menu-width) + 32px);
   --plan-goal-icon-space: 58px;
   --plan-goal-hover-icon-space: 40px;
 }
@@ -1655,6 +1656,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   min-width: var(--plan-sidebar-child-width);
 }
 
+.page-v2 .sidebar.has-child-plan.has-hop-plan {
+  width: var(--plan-sidebar-hop-width);
+  min-width: var(--plan-sidebar-hop-width);
+}
+
 .page-v2 .sidebar.sidebar-relation-expanded {
   width: calc(var(--plan-sidebar-base-width) + var(--plan-sidebar-expand-width));
   min-width: calc(var(--plan-sidebar-base-width) + var(--plan-sidebar-expand-width));
@@ -1663,6 +1669,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 .page-v2 .sidebar.has-child-plan.sidebar-relation-expanded {
   width: calc(var(--plan-sidebar-child-width) + var(--plan-sidebar-expand-width));
   min-width: calc(var(--plan-sidebar-child-width) + var(--plan-sidebar-expand-width));
+}
+
+.page-v2 .sidebar.has-child-plan.has-hop-plan.sidebar-relation-expanded {
+  width: calc(var(--plan-sidebar-hop-width) + var(--plan-sidebar-expand-width));
+  min-width: calc(var(--plan-sidebar-hop-width) + var(--plan-sidebar-expand-width));
 }
 
 .page-v2 .plan-map-prototype-sidebar,
@@ -1737,12 +1748,22 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     max-width 800ms ease;
 }
 
+.page-v2 .plan-map-prototype.has-child-plan.has-hop-plan .plan-map-workspace {
+  grid-template-columns:
+    minmax(0, var(--plan-menu-width))
+    minmax(0, var(--plan-menu-width))
+    minmax(0, var(--plan-menu-width)) !important;
+  width: calc(var(--plan-menu-width) + var(--plan-menu-width) + var(--plan-menu-width) + 64px);
+  max-width: calc(var(--plan-menu-width) + var(--plan-menu-width) + var(--plan-menu-width) + 64px);
+}
+
 .page-v2 .plan-map-column-strategi,
 .page-v2 .plan-map-column-hop {
   display: none !important;
 }
 
 .page-v2 .plan-map-prototype.has-child-plan[data-plan-stage="strategy"] .plan-map-column-strategi,
+.page-v2 .plan-map-prototype.has-child-plan[data-plan-stage="hop"] .plan-map-column-strategi,
 .page-v2 .plan-map-prototype.has-child-plan[data-plan-stage="hop"] .plan-map-column-hop {
   display: block !important;
   animation: plan-tree-slide-in 800ms ease both;

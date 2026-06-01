@@ -1285,10 +1285,13 @@
     if (!planMapPrototype) return;
     const currentPlanId = getCurrentPlanId();
     const showsChildPlan = !!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID;
+    const showsHopPlan = currentPlanId === HOP_PLAN_ID;
     const planStage = currentPlanId === HOP_PLAN_ID ? "hop" : showsChildPlan ? "strategy" : "kommune";
     planMapPrototype.dataset.planStage = planStage;
     planMapPrototype.classList.toggle("has-child-plan", showsChildPlan);
+    planMapPrototype.classList.toggle("has-hop-plan", showsHopPlan);
     sidebar?.classList.toggle("has-child-plan", showsChildPlan);
+    sidebar?.classList.toggle("has-hop-plan", showsHopPlan);
   }
 
   function renderPlanLinkPaths() {
