@@ -2138,9 +2138,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   max-width: calc(100% - 22px);
 }
 
-.page-v2 .plan-map-tree-subleaf-static,
-.page-v2 .plan-map-tree-subleaf-static:hover,
-.page-v2 .plan-map-tree-subleaf-static:focus-visible {
+.page-v2 .plan-map-tree-subleaf-static {
   display: block;
   box-sizing: border-box;
   width: calc(100% - var(--plan-goal-icon-space));
