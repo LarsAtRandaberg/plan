@@ -800,6 +800,15 @@
     return chip;
   }
 
+  function attachRelationIconToCard(card, iconClass = "ti ti-target-arrow") {
+    if (!card || card.querySelector(".plan-map-card-relation-icon")) return;
+    const icon = document.createElement("span");
+    icon.className = "plan-map-card-relation-icon";
+    icon.setAttribute("aria-hidden", "true");
+    icon.innerHTML = `<i class="${iconClass}"></i>`;
+    card.appendChild(icon);
+  }
+
   function createStrategySwitchChip(section, leaf, goal = null, branchCount = null) {
     const planId = getStrategyPlanIdForLeaf(leaf);
     if (!planId) return null;
@@ -1160,6 +1169,7 @@
                   ? createStrategySwitchChip(section, leaf, goal, linkedBranchCount)
                   : null;
                 if (chip) {
+                  attachRelationIconToCard(subLeaf);
                   relationGroup.appendChild(chip);
                   attachRelationExpansion(relationGroup);
                 }
@@ -1258,6 +1268,7 @@
             }
             const hopChip = createHopSwitchChip(section, leaf, childStrategy);
             if (hopChip) {
+              attachRelationIconToCard(control, "ti ti-list-check");
               const relationGroup = document.createElement("div");
               relationGroup.className = "plan-map-relation-group plan-map-hop-link-group";
               relationGroup.appendChild(control);
