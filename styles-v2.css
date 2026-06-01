@@ -2206,6 +2206,13 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   transform: translateX(0);
 }
 
+.page-v2 .plan-map-relation-group.plan-map-hop-link-group > .plan-map-link-target,
+.page-v2 .plan-map-relation-group.plan-map-hop-link-group:hover > .plan-map-link-target,
+.page-v2 .plan-map-relation-group.plan-map-hop-link-group:focus-within > .plan-map-link-target {
+  width: calc(100% - 22px);
+  max-width: calc(100% - 22px);
+}
+
 .page-v2 .plan-map-relation-group.plan-map-link-source-group > .plan-map-link-source,
 .page-v2 .plan-map-relation-group.plan-map-link-source-group:hover > .plan-map-link-source,
 .page-v2 .plan-map-relation-group.plan-map-link-source-group:focus-within > .plan-map-link-source {
