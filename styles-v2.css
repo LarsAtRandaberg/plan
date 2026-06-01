@@ -2075,8 +2075,31 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     background-color 160ms ease;
 }
 
+.page-v2 .plan-map-relation-group > .plan-map-link-target {
+  display: block;
+  min-width: 0;
+  box-sizing: border-box;
+  width: calc(100% - var(--plan-goal-icon-space));
+  max-width: calc(100% - var(--plan-goal-icon-space));
+  transition:
+    width 200ms ease,
+    max-width 200ms ease,
+    color 160ms ease,
+    border-color 160ms ease,
+    transform 200ms ease,
+    background-color 160ms ease;
+}
+
 .page-v2 .plan-map-relation-group:hover > .plan-map-node,
 .page-v2 .plan-map-relation-group:focus-within > .plan-map-node {
+  width: calc(100% - var(--plan-goal-hover-icon-space));
+  max-width: calc(100% - var(--plan-goal-hover-icon-space));
+  color: var(--green-700);
+  transform: translateX(0);
+}
+
+.page-v2 .plan-map-relation-group:hover > .plan-map-link-target,
+.page-v2 .plan-map-relation-group:focus-within > .plan-map-link-target {
   width: calc(100% - var(--plan-goal-hover-icon-space));
   max-width: calc(100% - var(--plan-goal-hover-icon-space));
   color: var(--green-700);

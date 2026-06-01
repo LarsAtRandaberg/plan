@@ -337,6 +337,10 @@
     return params.get("id");
   }
 
+  function shouldSuspendPlanScrollSpy() {
+    return getCurrentPlanId() === HOP_PLAN_ID && !!getActiveStrategyTargetKey();
+  }
+
   function getStrategyPlanIdForLeaf(leaf) {
     if (!leaf) return null;
     if (leaf.key === "gode-oppvekstvilkar") return OPPVEKSTPLAN_ID;
@@ -349,7 +353,6 @@
       context: { ...contextOverrides }
     };
     history.pushState(null, "", "?id=" + encodeURIComponent(planId));
-    window.dispatchEvent(new PopStateEvent("popstate"));
     window.scrollTo(0, 0);
   }
 
@@ -451,6 +454,19 @@
     });
   }
 
+  function getMockHopItemsForOppvekstStrategy(childGoal) {
+    const childKey = slugify(childGoal.maalID || childGoal.maalNavn);
+    if (childKey !== "6d54f4eb-505b-f111-a826-7c1e52370ef7") return [];
+
+    return [
+      {
+        id: "hop-tidlig-innsats-01",
+        title: "Tidlig innsats i barnehage og skole",
+        description: "Mock: tverrfaglig innsats som styrker universelle tilpasninger og tidlig oppfølging i ordinært tilbud."
+      }
+    ];
+  }
+
   function buildOppvekstStrategiesFromMaal(goals) {
     const oppvekstLeaf = getLeafByKey("gode-oppvekstvilkar");
     if (!oppvekstLeaf) return;
@@ -493,7 +509,7 @@
             key: slugify(child.maalID || child.maalNavn),
             id: child.maalID,
             label: child.maalNavn,
-            hopItems: []
+            hopItems: getMockHopItemsForOppvekstStrategy(child)
           }))
       }));
 
@@ -662,6 +678,7 @@
       planScrollSpyObserver.disconnect();
       planScrollSpyObserver = null;
     }
+    if (shouldSuspendPlanScrollSpy()) return;
 
     const sections = Array.from(document.querySelectorAll("main section[id]"));
     if (!sections.length) return;
@@ -808,16 +825,19 @@
   function createHopSwitchChip(section, leaf, strategy) {
     const hopCount = Array.isArray(strategy.hopItems) ? strategy.hopItems.length : 0;
     if (!hopCount) return null;
+    const hopLabel = `${hopCount} tiltak i HOP`;
+    const hopAction = `${getCurrentPlanId() === HOP_PLAN_ID ? "Vis" : "Gå til"} ${hopCount} tiltak i handlings- og økonomiplanen.`;
+    const strategyKey = getNodeKey(strategy);
     return createRelationChip(
       hopCount,
-      `${getCurrentPlanId() === HOP_PLAN_ID ? "Vis" : "Bytt til"} tiltak i handlings- og okonomiplanen`,
-      `${hopCount} tiltak i HOP`,
+      hopAction,
+      hopLabel,
       () => {
         switchToPlan(HOP_PLAN_ID, {
           entryColumn: "full",
           sectionKey: section.key,
           leafKey: leaf.key,
-          strategyKey: strategy.key,
+          strategyKey,
           hopKey: null
         });
       },
@@ -990,7 +1010,9 @@
     renderPlanMenus();
     window.setTimeout(() => {
       suppressPlanScrollSpy = false;
-      setupPlanScrollSpy();
+      if (!shouldSuspendPlanScrollSpy()) {
+        setupPlanScrollSpy();
+      }
     }, 0);
   }
 
@@ -1139,7 +1161,7 @@
       planMapStrategyList.innerHTML = "<p class=\"plan-map-empty-state\">Strategiske mål vises her når du velger et delmål i kommuneplanen.</p>";
       return;
     }
-    const { leaf } = currentLeaf;
+    const { section, leaf } = currentLeaf;
     const activeTargetKey = getActiveStrategyTargetKey(leaf);
     planMapStrategyTitle.textContent = leaf.strategyPlanTitle;
     planMapStrategyList.innerHTML = "";
@@ -1201,7 +1223,17 @@
             targetNode.className = "plan-map-link-target-node";
             targetNode.setAttribute("aria-hidden", "true");
             control.appendChild(targetNode);
-            children.appendChild(control);
+            const hopChip = createHopSwitchChip(section, leaf, childStrategy);
+            if (hopChip) {
+              const relationGroup = document.createElement("div");
+              relationGroup.className = "plan-map-relation-group plan-map-hop-link-group";
+              relationGroup.appendChild(control);
+              relationGroup.appendChild(hopChip);
+              attachRelationExpansion(relationGroup);
+              children.appendChild(relationGroup);
+            } else {
+              children.appendChild(control);
+            }
           });
         } else {
           children.innerHTML = "<p class=\"plan-map-empty-state\">Ingen undermål for dette målet ennå.</p>";
@@ -1273,6 +1305,7 @@
     if (activeStrategyKey && !targets.length) {
       targets = allTargets.filter((target) => target.classList.contains("plan-map-node-selected"));
     }
+    targets = targets.filter((target) => target.getClientRects().length > 0);
     if (!source || !targets.length) return;
 
     const workspaceRect = planMapWorkspace.getBoundingClientRect();
