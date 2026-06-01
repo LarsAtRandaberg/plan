@@ -1144,7 +1144,7 @@
                   subLeaf.appendChild(sourceNode);
                 }
                 relationGroup.appendChild(subLeaf);
-                const shouldShowRelationChip = !(isSelectedSubgoal && getCurrentPlanId() !== KOMMUNEPLAN_ID);
+                const shouldShowRelationChip = !isSelectedSubgoal;
                 const chip = shouldShowRelationChip
                   ? createStrategySwitchChip(section, leaf, goal, linkedBranchCount)
                   : null;
