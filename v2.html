@@ -98,7 +98,12 @@
         </div>
 
         <div class="plan-map-column plan-map-column-hop">
-          <div class="plan-map-column-title">Handlings- og økonomiplan</div>
+          <div class="plan-map-column-header">
+            <div class="plan-map-column-title">Handlings- og økonomiplan</div>
+            <button type="button" class="plan-map-column-collapse" id="planMapHopClose" aria-label="Lukk HØP-meny" title="Lukk HØP-meny">
+              <i class="ti ti-layout-sidebar-left-collapse" aria-hidden="true"></i>
+            </button>
+          </div>
           <div class="plan-map-panel-title" id="planMapHopTitle">Handlings- og økonomiplanen 2027-2030</div>
           <div class="plan-map-hop-stack" id="planMapHopList"></div>
         </div>
@@ -245,6 +250,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="app.js?v=20260601-no-default-selection"></script>
-<script src="app-v2.js?v=20260601-no-default-selection"></script>
+<script src="app-v2.js?v=20260601-hop-close"></script>
 </body>
 </html>

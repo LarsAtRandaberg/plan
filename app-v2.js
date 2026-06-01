@@ -28,6 +28,7 @@
   const planMapStrategyColumn = document.querySelector(".plan-map-column-strategi");
   const planMapStrategyClose = document.getElementById("planMapStrategyClose");
   const planMapHopColumn = document.querySelector(".plan-map-column-hop");
+  const planMapHopClose = document.getElementById("planMapHopClose");
   const planMapStrategyTitle = document.getElementById("planMapStrategyTitle");
   const planMapStrategyList = document.getElementById("planMapStrategyList");
   const planMapHopTitle = document.getElementById("planMapHopTitle");
@@ -1544,6 +1545,20 @@
         leafKey: planSelection.leafKey,
         selectedSubgoalKey: getCurrentLeaf()?.leaf.selectedSubgoalKey,
         strategyKey: null,
+        hopKey: null
+      });
+    });
+  }
+  if (planMapHopClose) {
+    planMapHopClose.addEventListener("click", () => {
+      const currentLeaf = getCurrentLeaf();
+      const leaf = currentLeaf?.leaf || null;
+      switchToPlan(getStrategyPlanIdForLeaf(leaf) || OPPVEKSTPLAN_ID, {
+        entryColumn: "strategi",
+        sectionKey: currentLeaf?.section.key || null,
+        leafKey: leaf?.key || null,
+        selectedSubgoalKey: leaf?.selectedSubgoalKey || null,
+        strategyKey: planSelection.strategyKey,
         hopKey: null
       });
     });
