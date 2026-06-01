@@ -1324,13 +1324,25 @@
     }
   }
 
-  function navigateToPlan(planId) {
+  function navigateToPlan(planId, anchorId) {
     currentPlanId = planId;
     updateKommuneplanButtonState();
-    history.pushState(null, "", "?id=" + encodeURIComponent(planId));
-    window.scrollTo(0, 0);
+    history.pushState(
+      null,
+      "",
+      "?id=" + encodeURIComponent(planId) + (anchorId ? "#" + anchorId : "")
+    );
+    if (!anchorId) window.scrollTo(0, 0);
     init();
   }
+
+  window.addEventListener("plan:navigate", function(event) {
+    const detail = event.detail || {};
+    const params = new URLSearchParams(location.search);
+    currentPlanId = detail.planId || params.get("id") || DEFAULT_PLAN_ID;
+    updateKommuneplanButtonState();
+    init();
+  });
 
   async function init() {
     try {
