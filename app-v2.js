@@ -76,7 +76,8 @@
           {
             key: "attraktivt-sentrum",
             label: "Attraktivt sentrum",
-            selectedSubgoalKey: "stedsutvikling",
+            selectedSubgoalKey: null,
+            linkedSubgoalKey: "stedsutvikling",
             subgoals: [
               { key: "stedsutvikling", label: "Helhetlig stedsutvikling og bokvalitet" }
             ],
@@ -110,7 +111,8 @@
           {
             key: "god-alderdom",
             label: "God alderdom",
-            selectedSubgoalKey: "aktive-trygge-liv",
+            selectedSubgoalKey: null,
+            linkedSubgoalKey: "aktive-trygge-liv",
             subgoals: [
               { key: "aktive-trygge-liv", label: "Legge til rette for at innbyggerne er aktive, kan bo godt hjemme og opplever økt grad av egenmestring og dermed utsatt hjelpebehov" },
               { key: "aldersvennlige-boliger", label: "Planlegge slik at en tilstrekkelig andel av ny boligmasse i kommunen blir aldersvennlige boliger" },
@@ -134,7 +136,8 @@
           {
             key: "gode-arbeidsplasser",
             label: "Gode arbeidsplasser",
-            selectedSubgoalKey: "inkludering-arbeid",
+            selectedSubgoalKey: null,
+            linkedSubgoalKey: "inkludering-arbeid",
             subgoals: [
               { key: "inkludering-arbeid", label: "Arbeide for inkludering og arbeidsdeltakelse for flere" },
               { key: "tidlig-innsats-unge", label: "Prioritere tidlig innsats og gi unge muligheter" },
@@ -158,7 +161,8 @@
           {
             key: "gode-fellesskap",
             label: "Gode fellesskap",
-            selectedSubgoalKey: "livskvalitet-tilhoerighet",
+            selectedSubgoalKey: null,
+            linkedSubgoalKey: "livskvalitet-tilhoerighet",
             subgoals: [
               { key: "livskvalitet-tilhoerighet", label: "Sammen arbeide for at alle innbyggerne skal oppleve god livskvalitet, tilhørighet, trygghet, inkludering og kan bidra i samfunnet" },
               { key: "idrett-kultur", label: "Legge til rette for et inkluderende og nyskapende idretts- og kulturtilbud som fremmer fellesskap og utvikling og styrker stedsutviklingen" },
@@ -180,7 +184,8 @@
           {
             key: "gode-oppvekstvilkar",
             label: "Gode oppvekstvilkår",
-            selectedSubgoalKey: "tidlig-innsats",
+            selectedSubgoalKey: null,
+            linkedSubgoalKey: "tidlig-innsats",
             subgoals: [
               { key: "bygge-boliger", label: "Bygge boliger og fysiske omgivelser som det er godt og trygt å vokse opp i" },
               { key: "aktiviteter-robusthet", label: "Legge til rette for aktiviteter som fremmer robusthet og sosialt samhold" },
@@ -226,7 +231,8 @@
           {
             key: "god-tjenestekvalitet",
             label: "God tjenestekvalitet",
-            selectedSubgoalKey: "helhetlig-organisasjon",
+            selectedSubgoalKey: null,
+            linkedSubgoalKey: "helhetlig-organisasjon",
             subgoals: [
               { key: "helhetlig-organisasjon", label: "Vi setter felleskapet først og tenker helhetlig." },
               { key: "kompetente-medarbeidere", label: "Vi er et lag av kompetente og engasjerte medarbeidere." },
@@ -256,7 +262,8 @@
           {
             key: "tryggt-naermiljo",
             label: "Trygt nærmiljø",
-            selectedSubgoalKey: "samhandling-beredskap",
+            selectedSubgoalKey: null,
+            linkedSubgoalKey: "samhandling-beredskap",
             subgoals: [
               { key: "samhandling-beredskap", label: "Styrke samhandling og robusthet i lokalsamfunnet." }
             ],
@@ -285,6 +292,19 @@
     strategyKey: null,
     hopKey: null
   };
+
+  function clearPlanMenuSelections() {
+    planMenuModel.sections.forEach((section) => {
+      section.leaves.forEach((leaf) => {
+        leaf.selectedSubgoalKey = null;
+        leaf.selectedStrategyBranchKey = null;
+        leaf.selectedStrategySourceGoalKey = null;
+        if (leaf.key === "gode-oppvekstvilkar") {
+          leaf.strategies = [];
+        }
+      });
+    });
+  }
 
   function isMobile() {
     return window.matchMedia("(max-width: 768px)").matches;
@@ -396,6 +416,9 @@
     if (goal.key === leaf.selectedSubgoalKey && Array.isArray(leaf.strategies)) {
       return leaf.strategies.length;
     }
+    if (goal.key === leaf.linkedSubgoalKey && Array.isArray(leaf.strategies)) {
+      return leaf.strategies.length;
+    }
     return 0;
   }
 
@@ -405,10 +428,16 @@
 
   function ensureSelectableSubgoalSelection(leaf) {
     if (!leaf || !Array.isArray(leaf.subgoals) || !leaf.subgoals.length) return;
+    if (!leaf.selectedSubgoalKey) {
+      leaf.selectedStrategyBranchKey = null;
+      leaf.selectedStrategySourceGoalKey = null;
+      return;
+    }
     const selected = leaf.subgoals.find((goal) => goal.key === leaf.selectedSubgoalKey);
     if (selected && hasLinkedPlanBranch(leaf, selected)) return;
-    const nextSelectable = leaf.subgoals.find((goal) => hasLinkedPlanBranch(leaf, goal));
-    leaf.selectedSubgoalKey = nextSelectable ? nextSelectable.key : null;
+    leaf.selectedSubgoalKey = null;
+    leaf.selectedStrategyBranchKey = null;
+    leaf.selectedStrategySourceGoalKey = null;
   }
 
   function ensureValidStrategySelection() {
@@ -830,6 +859,7 @@
           entryColumn: "full",
           sectionKey: section.key,
           leafKey: leaf.key,
+          selectedSubgoalKey: leaf.selectedSubgoalKey,
           strategyKey,
           hopKey: null
         });
@@ -845,6 +875,7 @@
           entryColumn: "full",
           sectionKey: section.key,
           leafKey: leaf.key,
+          selectedSubgoalKey: leaf.selectedSubgoalKey,
           strategyKey: strategy.key,
           hopKey: null
         });
@@ -867,6 +898,7 @@
           entryColumn: "strategi",
           sectionKey: section.key,
           leafKey: leaf.key,
+          selectedSubgoalKey: leaf.selectedSubgoalKey,
           strategyKey: null,
           hopKey: null
         });
@@ -887,6 +919,7 @@
           entryColumn: "full",
           sectionKey: section.key,
           leafKey: leaf.key,
+          selectedSubgoalKey: leaf.selectedSubgoalKey,
           strategyKey: strategy.key,
           hopKey: null
         });
@@ -981,6 +1014,7 @@
     }
     if (!context) return;
     suppressPlanScrollSpy = true;
+    clearPlanMenuSelections();
     planSelection.focusColumn = context.entryColumn || "kommune";
     planSelection.sectionKey = context.sectionKey;
     planSelection.leafKey = context.leafKey;
