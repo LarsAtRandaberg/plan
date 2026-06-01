@@ -1327,7 +1327,8 @@
   function navigateToPlan(planId) {
     currentPlanId = planId;
     updateKommuneplanButtonState();
-    history.pushState(null, "", "?id=" + encodeURIComponent(planId) + (location.hash || ""));
+    history.pushState(null, "", "?id=" + encodeURIComponent(planId));
+    window.scrollTo(0, 0);
     init();
   }
 

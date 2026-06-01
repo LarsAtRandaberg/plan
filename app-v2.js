@@ -48,20 +48,20 @@
     },
     "e3112baa-7858-f111-bec7-7c1e52370ef7": {
       entryColumn: "strategi",
-      sectionKey: "gode-hverdagsliv",
-      leafKey: "gode-oppvekstvilkar",
+      sectionKey: null,
+      leafKey: null,
       strategyKey: null
     },
     "7df8f7f0-e0e7-f011-8407-000d3add2e1a": {
       entryColumn: "hop",
-      sectionKey: "gode-hverdagsliv",
-      leafKey: "gode-oppvekstvilkar",
+      sectionKey: null,
+      leafKey: null,
       strategyKey: null
     },
     "c18f1e69-6a49-f111-bec7-7c1e52370ef7": {
       entryColumn: "hop",
-      sectionKey: "gode-hverdagsliv",
-      leafKey: "gode-oppvekstvilkar",
+      sectionKey: null,
+      leafKey: null,
       strategyKey: null
     }
   };
@@ -545,16 +545,6 @@
       ensureSelectableSubgoalSelection(getLeafByKey("gode-oppvekstvilkar"));
       buildOppvekstStrategiesFromMaal(planGoalsData);
 
-      const oppvekstLeaf = getLeafByKey("gode-oppvekstvilkar");
-      if (oppvekstLeaf && oppvekstLeaf.strategies.length) {
-        const firstStrategyKey = oppvekstLeaf.strategies[0].key;
-        [HOP_PLAN_ID, "7df8f7f0-e0e7-f011-8407-000d3add2e1a"].forEach((planId) => {
-          if (planContextsById[planId]) {
-            planContextsById[planId].strategyKey = firstStrategyKey;
-          }
-        });
-      }
-
       ensureValidStrategySelection();
       ensureValidHopSelection();
     } catch (error) {
@@ -685,6 +675,13 @@
 
     planScrollSpyObserver = new IntersectionObserver((entries) => {
       if (body.dataset.mode !== "plan" || suppressPlanScrollSpy) return;
+      const hasSelection = !!(
+        planSelection.sectionKey
+        || planSelection.leafKey
+        || planSelection.strategyKey
+        || planSelection.hopKey
+      );
+      if (!hasSelection && !location.hash && window.scrollY < 24) return;
 
       const visible = entries
         .filter((entry) => entry.isIntersecting)
@@ -699,11 +696,6 @@
     }, { rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
 
     sections.forEach((section) => planScrollSpyObserver.observe(section));
-
-    const firstGoalId = getGoalIdFromAnchor(sections[0].id);
-    if (firstGoalId) {
-      applyScrollSpySelection(firstGoalId);
-    }
   }
 
   function createButton(className, label, onClick) {
