@@ -349,9 +349,8 @@
   }
 
   function getCurrentHopItem() {
-    const currentStrategy = getCurrentStrategy();
-    if (!currentStrategy || !planSelection.hopKey || !Array.isArray(currentStrategy.hopItems)) return null;
-    return currentStrategy.hopItems.find((item) => getNodeKey(item) === planSelection.hopKey) || null;
+    if (!planSelection.hopKey) return null;
+    return getCurrentHopItems().find((item) => getNodeKey(item) === planSelection.hopKey) || null;
   }
 
   function getCurrentPlanId() {
@@ -360,7 +359,8 @@
   }
 
   function shouldSuspendPlanScrollSpy() {
-    return getCurrentPlanId() === HOP_PLAN_ID && !!getActiveStrategyTargetKey();
+    return (getCurrentPlanId() === HOP_PLAN_ID && !!getActiveStrategyTargetKey())
+      || isDirectHopSelection();
   }
 
   function getStrategyPlanIdForLeaf(leaf) {
@@ -485,6 +485,46 @@
     return 0;
   }
 
+  function getMockHopItemsForKommuneGoal(leaf, goal) {
+    if (leaf?.key !== "gode-oppvekstvilkar" || goal?.key !== "tidlig-innsats") return [];
+
+    return [
+      {
+        id: "hop-kommune-tidlig-innsats-01",
+        title: "Tidlig innsats i barnehage og skole",
+        description: "Mock: direkte HØP-tiltak koblet til kommuneplanmålet om tidlig innsats."
+      }
+    ];
+  }
+
+  function getDirectHopItemsForGoal(leaf, goal) {
+    return getMockHopItemsForKommuneGoal(leaf, goal);
+  }
+
+  function getSelectedSubgoal(leaf) {
+    if (!leaf?.selectedSubgoalKey || !Array.isArray(leaf.subgoals)) return null;
+    return leaf.subgoals.find((goal) => goal.key === leaf.selectedSubgoalKey) || null;
+  }
+
+  function getCurrentDirectHopItems() {
+    const currentLeaf = getCurrentLeaf();
+    if (!currentLeaf) return [];
+    return getDirectHopItemsForGoal(currentLeaf.leaf, getSelectedSubgoal(currentLeaf.leaf));
+  }
+
+  function isDirectHopSelection() {
+    return planSelection.focusColumn === "hop"
+      && !planSelection.strategyKey
+      && getCurrentDirectHopItems().length > 0;
+  }
+
+  function getCurrentHopItems() {
+    const currentStrategy = getCurrentStrategy();
+    if (currentStrategy && Array.isArray(currentStrategy.hopItems)) return currentStrategy.hopItems;
+    if (isDirectHopSelection()) return getCurrentDirectHopItems();
+    return [];
+  }
+
   function hasLinkedPlanBranch(leaf, goal) {
     return getLinkedPlanBranchCount(leaf, goal) > 0;
   }
@@ -519,12 +559,12 @@
   }
 
   function ensureValidHopSelection() {
-    const currentStrategy = getCurrentStrategy();
-    if (!currentStrategy || !Array.isArray(currentStrategy.hopItems)) {
+    const hopItems = getCurrentHopItems();
+    if (!hopItems.length) {
       planSelection.hopKey = null;
       return;
     }
-    const hasSelectedHop = currentStrategy.hopItems.some((item) => getNodeKey(item) === planSelection.hopKey);
+    const hasSelectedHop = hopItems.some((item) => getNodeKey(item) === planSelection.hopKey);
     if (!hasSelectedHop) {
       planSelection.hopKey = null;
     }
@@ -647,6 +687,7 @@
 
   function getLayoutState() {
     if (planSelection.focusColumn === "hop") {
+      if (isDirectHopSelection()) return "hop-direct-entry";
       return planSelection.hopKey ? "full" : "hop-entry";
     }
     if (planSelection.focusColumn === "strategi") {
@@ -863,6 +904,22 @@
     return chip;
   }
 
+  function createCardActionButton(actionType, actionLabel, iconClass, onAction) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "plan-map-card-action-btn";
+    button.dataset.relationAction = actionType;
+    button.setAttribute("aria-label", actionLabel);
+    button.setAttribute("title", actionLabel);
+    button.innerHTML = `<i class="${iconClass}" aria-hidden="true"></i>`;
+    button.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      onAction();
+    });
+    return button;
+  }
+
   function attachRelationIconToCard(card, iconClass = "ti ti-target-arrow") {
     if (!card || card.querySelector(".plan-map-card-relation-icon")) return;
     const icon = document.createElement("span");
@@ -875,6 +932,19 @@
   function selectKommuneGoalForStrategyPreview(section, leaf, goal) {
     const hasLinkedStrategies = getLinkedPlanBranchCount(leaf, goal) > 0;
     planSelection.focusColumn = hasLinkedStrategies ? "strategi" : "kommune";
+    planSelection.sectionKey = section.key;
+    planSelection.leafKey = leaf.key;
+    leaf.selectedSubgoalKey = goal.key;
+    planSelection.strategyKey = null;
+    planSelection.hopKey = null;
+    refreshDynamicLeafData();
+    renderPlanMenus();
+  }
+
+  function openDirectHopForKommuneGoal(section, leaf, goal) {
+    const hopItems = getDirectHopItemsForGoal(leaf, goal);
+    if (!hopItems.length) return;
+    planSelection.focusColumn = "hop";
     planSelection.sectionKey = section.key;
     planSelection.leafKey = leaf.key;
     leaf.selectedSubgoalKey = goal.key;
@@ -1193,26 +1263,22 @@
 
             leaf.subgoals.forEach((goal) => {
               const linkedBranchCount = getLinkedPlanBranchCount(leaf, goal);
-              const isNavigableSubgoal = linkedBranchCount > 0;
+              const directHopCount = getDirectHopItemsForGoal(leaf, goal).length;
+              const hasRelationActions = linkedBranchCount > 0 || directHopCount > 0;
               const isSelectedSubgoal = goal.key === leaf.selectedSubgoalKey;
-              const subLeaf = document.createElement(isNavigableSubgoal ? "button" : "div");
-              if (isNavigableSubgoal) {
-                subLeaf.type = "button";
-              }
-              subLeaf.className = isNavigableSubgoal
+              const subLeaf = document.createElement("div");
+              subLeaf.className = hasRelationActions
                 ? (isSelectedSubgoal ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf")
                 : "plan-map-tree-subleaf-static";
-              if (isSelectedSubgoal && isNavigableSubgoal) {
+              if (isSelectedSubgoal && hasRelationActions) {
                 subLeaf.classList.add("plan-map-link-source");
               }
-              subLeaf.textContent = goal.label;
-              if (isNavigableSubgoal) {
-                subLeaf.addEventListener("click", () => {
-                  selectKommuneGoalForStrategyPreview(section, leaf, goal);
-                });
-              }
+              const text = document.createElement("span");
+              text.className = "plan-map-card-text";
+              text.textContent = goal.label;
+              subLeaf.appendChild(text);
 
-              if (isNavigableSubgoal) {
+              if (hasRelationActions) {
                 const relationGroup = document.createElement("div");
                 relationGroup.className = "plan-map-relation-group";
                 if (isSelectedSubgoal) {
@@ -1222,16 +1288,29 @@
                   sourceNode.setAttribute("aria-hidden", "true");
                   subLeaf.appendChild(sourceNode);
                 }
-                relationGroup.appendChild(subLeaf);
-                const shouldShowRelationChip = !isSelectedSubgoal;
-                const chip = shouldShowRelationChip
-                  ? createStrategySwitchChip(section, leaf, goal, linkedBranchCount)
-                  : null;
-                if (chip) {
-                  attachRelationIconToCard(subLeaf);
-                  relationGroup.appendChild(chip);
-                  attachRelationExpansion(relationGroup);
+
+                const actionGroup = document.createElement("div");
+                actionGroup.className = "plan-map-card-actions";
+                if (linkedBranchCount) {
+                  const strategyActionLabel = `Vis ${linkedBranchCount} m\u00e5l i ${leaf.strategyPlanTitle}.`;
+                  actionGroup.appendChild(createCardActionButton(
+                    "strategy",
+                    strategyActionLabel,
+                    "ti ti-target-arrow",
+                    () => selectKommuneGoalForStrategyPreview(section, leaf, goal)
+                  ));
                 }
+                if (directHopCount) {
+                  const hopActionLabel = `Vis ${directHopCount} tiltak i handlings- og \u00f8konomiplanen.`;
+                  actionGroup.appendChild(createCardActionButton(
+                    "hop",
+                    hopActionLabel,
+                    "ti ti-list-check",
+                    () => openDirectHopForKommuneGoal(section, leaf, goal)
+                  ));
+                }
+                subLeaf.appendChild(actionGroup);
+                relationGroup.appendChild(subLeaf);
                 subpath.appendChild(relationGroup);
               } else {
                 subpath.appendChild(subLeaf);
@@ -1359,21 +1438,23 @@
     }
     const { leaf } = currentLeaf;
     const activeStrategy = getCurrentStrategy();
+    const usesDirectHop = isDirectHopSelection();
+    const hopItems = activeStrategy?.hopItems || (usesDirectHop ? getCurrentDirectHopItems() : []);
     planMapHopTitle.textContent = leaf.hopPlanTitle;
     planMapHopList.innerHTML = "";
-    if (!activeStrategy) {
+    if (!activeStrategy && !usesDirectHop) {
       planMapHopList.innerHTML = "<p class=\"plan-map-empty-state\">Velg et strategimål for å se koblede tiltak i HØP.</p>";
       return;
     }
 
-    if (!Array.isArray(activeStrategy.hopItems) || activeStrategy.hopItems.length === 0) {
+    if (!Array.isArray(hopItems) || hopItems.length === 0) {
       planMapHopList.innerHTML = "<p class=\"plan-map-empty-state\">Ingen koblede tiltak for dette strategimålet ennå.</p>";
       return;
     }
 
     const activeHopKey = getCurrentHopItem() ? planSelection.hopKey : null;
     planMapHopList.classList.toggle("has-selected-hop", !!activeHopKey);
-    activeStrategy.hopItems.forEach((item) => {
+    hopItems.forEach((item) => {
       const hopKey = getNodeKey(item);
       const isActive = activeHopKey === hopKey;
       const shouldShowIndicator = !activeHopKey || isActive;
@@ -1385,7 +1466,7 @@
         () => {
         const nextHopKey = getNodeKey(item);
         planSelection.hopKey = planSelection.hopKey === nextHopKey ? null : nextHopKey;
-        planSelection.focusColumn = "full";
+        planSelection.focusColumn = usesDirectHop ? "hop" : "full";
         renderPlanMenus();
       }
       );
@@ -1404,18 +1485,27 @@
   function syncChildPlanMenu() {
     if (!planMapPrototype) return;
     const currentPlanId = getCurrentPlanId();
-    const showsHopPlan = currentPlanId === HOP_PLAN_ID;
+    const showsDirectHopPlan = isDirectHopSelection();
+    const showsHopPlan = currentPlanId === HOP_PLAN_ID || showsDirectHopPlan;
     const currentLeaf = getCurrentLeaf()?.leaf || null;
-    const showsStrategyPreview = !!currentLeaf?.selectedSubgoalKey
+    const shouldShowStrategyColumn = !showsDirectHopPlan && (
+      planSelection.focusColumn === "strategi"
+      || planSelection.focusColumn === "full"
+      || (!!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID && currentPlanId !== HOP_PLAN_ID)
+    );
+    const showsStrategyPreview = shouldShowStrategyColumn
+      && !!currentLeaf?.selectedSubgoalKey
       && Array.isArray(currentLeaf.strategies)
       && currentLeaf.strategies.length > 0;
     const showsChildPlan = showsHopPlan || (!!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID) || showsStrategyPreview;
-    const planStage = showsHopPlan ? "hop" : showsChildPlan ? "strategy" : "kommune";
+    const planStage = showsDirectHopPlan ? "hop-direct" : showsHopPlan ? "hop" : showsChildPlan ? "strategy" : "kommune";
     planMapPrototype.dataset.planStage = planStage;
     planMapPrototype.classList.toggle("has-child-plan", showsChildPlan);
     planMapPrototype.classList.toggle("has-hop-plan", showsHopPlan);
+    planMapPrototype.classList.toggle("has-direct-hop-plan", showsDirectHopPlan);
     sidebar?.classList.toggle("has-child-plan", showsChildPlan);
     sidebar?.classList.toggle("has-hop-plan", showsHopPlan);
+    sidebar?.classList.toggle("has-direct-hop-plan", showsDirectHopPlan);
   }
 
   function renderPlanLinkPaths() {
@@ -1468,6 +1558,24 @@
       });
     };
 
+    if (planMapPrototype?.dataset.planStage === "hop-direct") {
+      const directSource = planMapWorkspace.querySelector(".plan-map-link-source");
+      const activeHop = getCurrentHopItem();
+      const activeHopKey = activeHop ? getNodeKey(activeHop) : null;
+      const hopTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-hop-link-target"));
+      let visibleHopTargets = activeHopKey
+        ? hopTargets.filter((target) => target.dataset.hopKey === activeHopKey)
+        : hopTargets.filter((target) => target.classList.contains("is-visible-hop-target"));
+      visibleHopTargets = visibleHopTargets.filter((target) => target.getClientRects().length > 0);
+      drawRelations(directSource, visibleHopTargets, {
+        sourceNodeSelector: ".plan-map-link-source-node",
+        targetNodeSelector: ".plan-map-hop-link-target-node",
+        isPrimary: (target) => target.classList.contains("is-primary-hop-target")
+          || target.classList.contains("plan-map-node-selected")
+      });
+      return;
+    }
+
     const activeStrategyKey = getActiveStrategyTargetKey();
     const source = planMapWorkspace.querySelector(".plan-map-link-source");
     const allTargets = Array.from(planMapWorkspace.querySelectorAll(".plan-map-link-target"));
@@ -1512,6 +1620,7 @@
       "kommune-only": { kommune: "open", strategi: "hidden", hop: "hidden" },
       "kommune-plus-strategi": { kommune: "open", strategi: "open", hop: "hidden" },
       "strategi-entry": { kommune: "collapsed", strategi: "open", hop: "hidden" },
+      "hop-direct-entry": { kommune: "collapsed", strategi: "hidden", hop: "open" },
       "hop-entry": { kommune: "collapsed", strategi: "hidden", hop: "open" },
       "full": { kommune: "open", strategi: "open", hop: "open" }
     };
@@ -1661,6 +1770,17 @@
     planMapHopClose.addEventListener("click", () => {
       const currentLeaf = getCurrentLeaf();
       const leaf = currentLeaf?.leaf || null;
+      if (isDirectHopSelection()) {
+        switchToPlan(KOMMUNEPLAN_ID, {
+          entryColumn: "kommune",
+          sectionKey: currentLeaf?.section.key || null,
+          leafKey: leaf?.key || null,
+          selectedSubgoalKey: null,
+          strategyKey: null,
+          hopKey: null
+        });
+        return;
+      }
       switchToPlan(getStrategyPlanIdForLeaf(leaf) || OPPVEKSTPLAN_ID, {
         entryColumn: "strategi",
         sectionKey: currentLeaf?.section.key || null,
