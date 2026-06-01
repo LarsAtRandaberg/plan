@@ -290,7 +290,7 @@ body.page-v2[data-mode="rapport"] {
   position: relative;
   z-index: 1;
   background: #ffffff;
-  padding: 18px 24px 28px 0;
+  padding: 18px 24px 28px 24px;
 }
 
 .page-v2 .sidebar {
