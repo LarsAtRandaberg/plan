@@ -2127,11 +2127,6 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 }
 
 .page-v2 .plan-map-prototype.has-hop-plan
-  .plan-map-hop-link-group > .plan-map-relation-chip {
-  display: none !important;
-}
-
-.page-v2 .plan-map-prototype.has-hop-plan
   .plan-map-hop-link-group > .plan-map-link-target {
   width: calc(100% - 22px);
   max-width: calc(100% - 22px);
@@ -2464,6 +2459,20 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 
 .page-v2 .plan-map-relation-group:hover .plan-map-relation-chip-arrow,
 .page-v2 .plan-map-relation-group:focus-within .plan-map-relation-chip-arrow {
+  opacity: 1;
+  transform: translateX(0) rotate(45deg);
+}
+
+.page-v2 .plan-map-relation-group.plan-map-hop-link-group:hover .plan-map-relation-chip-arrow,
+.page-v2 .plan-map-relation-group.plan-map-hop-link-group:focus-within .plan-map-relation-chip-arrow {
+  opacity: 1;
+  transform: translateX(0) rotate(45deg);
+}
+
+.page-v2 .plan-map-hop-link-group > .plan-map-link-target:hover + .plan-map-relation-chip .plan-map-relation-chip-arrow,
+.page-v2 .plan-map-hop-link-group > .plan-map-link-target:focus-visible + .plan-map-relation-chip .plan-map-relation-chip-arrow,
+.page-v2 .plan-map-hop-link-group > .plan-map-relation-chip:hover .plan-map-relation-chip-arrow,
+.page-v2 .plan-map-hop-link-group > .plan-map-relation-chip:focus-visible .plan-map-relation-chip-arrow {
   opacity: 1;
   transform: translateX(0) rotate(45deg);
 }

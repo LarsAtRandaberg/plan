@@ -1251,7 +1251,10 @@
               hopSourceNode.setAttribute("aria-hidden", "true");
               control.appendChild(hopSourceNode);
             }
-            const hopChip = createHopSwitchChip(section, leaf, childStrategy);
+            const shouldShowHopChip = !(isActive && getCurrentPlanId() === HOP_PLAN_ID);
+            const hopChip = shouldShowHopChip
+              ? createHopSwitchChip(section, leaf, childStrategy)
+              : null;
             if (hopChip) {
               attachRelationIconToCard(control, "ti ti-list-check");
               const relationGroup = document.createElement("div");
