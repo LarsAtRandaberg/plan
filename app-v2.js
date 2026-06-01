@@ -229,8 +229,9 @@
         label: "Kommunen er vi",
         leaves: [
           {
-            key: "god-tjenestekvalitet",
-            label: "God tjenestekvalitet",
+            key: "gode-tjenester",
+            id: "fb3ab156-7349-f111-bec7-7c1e52370ef7",
+            label: "Gode tjenester gjennom samarbeid, samskaping og god ressursbruk",
             selectedSubgoalKey: null,
             linkedSubgoalKey: "helhetlig-organisasjon",
             subgoals: [
