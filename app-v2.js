@@ -809,6 +809,36 @@
     card.appendChild(icon);
   }
 
+  function openStrategyPlanForGoal(section, leaf, goal) {
+    const planId = getStrategyPlanIdForLeaf(leaf);
+    if (!planId) return false;
+    const targetGoal = goal || leaf.subgoals?.find((item) => item.key === leaf.selectedSubgoalKey) || null;
+    if (targetGoal?.key) {
+      leaf.selectedSubgoalKey = targetGoal.key;
+      refreshDynamicLeafData();
+    }
+    switchToPlan(planId, {
+      entryColumn: "strategi",
+      sectionKey: section.key,
+      leafKey: leaf.key,
+      selectedSubgoalKey: targetGoal?.key || leaf.selectedSubgoalKey,
+      strategyKey: null,
+      hopKey: null
+    });
+    return true;
+  }
+
+  function openHopPlanForStrategy(section, leaf, strategy) {
+    switchToPlan(HOP_PLAN_ID, {
+      entryColumn: "full",
+      sectionKey: section.key,
+      leafKey: leaf.key,
+      selectedSubgoalKey: leaf.selectedSubgoalKey,
+      strategyKey: getNodeKey(strategy),
+      hopKey: null
+    });
+  }
+
   function createStrategySwitchChip(section, leaf, goal = null, branchCount = null) {
     const planId = getStrategyPlanIdForLeaf(leaf);
     if (!planId) return null;
@@ -821,34 +851,7 @@
       tooltipLabel,
       tooltipLabel,
       () => {
-        if (targetGoal?.key) {
-          leaf.selectedSubgoalKey = targetGoal.key;
-          refreshDynamicLeafData();
-        }
-        switchToPlan(planId, {
-          entryColumn: "strategi",
-          sectionKey: section.key,
-          leafKey: leaf.key,
-          selectedSubgoalKey: targetGoal?.key || leaf.selectedSubgoalKey,
-          strategyKey: null,
-          hopKey: null
-        });
-      }
-    );
-    const samePlan = getCurrentPlanId() === planId;
-    const actionVerb = samePlan ? "Vis" : "GÃ¥ til";
-
-    return createRelationChip(
-      strategyCount,
-      `Gå til ${strategyCount} mål i ${leaf.strategyPlanTitle}`,
-      () => {
-        switchToPlan(planId, {
-          entryColumn: "strategi",
-          sectionKey: section.key,
-          leafKey: leaf.key,
-          strategyKey: null,
-          hopKey: null
-        });
+        openStrategyPlanForGoal(section, leaf, targetGoal);
       }
     );
   }
@@ -858,36 +861,12 @@
     if (!hopCount) return null;
     const hopLabel = `${hopCount} tiltak i HOP`;
     const hopAction = `${getCurrentPlanId() === HOP_PLAN_ID ? "Vis" : "Gå til"} ${hopCount} tiltak i handlings- og økonomiplanen.`;
-    const strategyKey = getNodeKey(strategy);
     return createRelationChip(
       hopCount,
       hopAction,
       hopLabel,
       () => {
-        switchToPlan(HOP_PLAN_ID, {
-          entryColumn: "full",
-          sectionKey: section.key,
-          leafKey: leaf.key,
-          selectedSubgoalKey: leaf.selectedSubgoalKey,
-          strategyKey,
-          hopKey: null
-        });
-      },
-      "ti ti-list-check"
-    );
-
-    return createRelationChip(
-      hopCount,
-      "Gå til tiltak i handlings- og økonomiplanen",
-      () => {
-        switchToPlan(HOP_PLAN_ID, {
-          entryColumn: "full",
-          sectionKey: section.key,
-          leafKey: leaf.key,
-          selectedSubgoalKey: leaf.selectedSubgoalKey,
-          strategyKey: strategy.key,
-          hopKey: null
-        });
+        openHopPlanForStrategy(section, leaf, strategy);
       },
       "ti ti-list-check"
     );
@@ -1142,6 +1121,7 @@
               subLeaf.textContent = goal.label;
               if (isNavigableSubgoal) {
                 subLeaf.addEventListener("click", () => {
+                  if (openStrategyPlanForGoal(section, leaf, goal)) return;
                   planSelection.focusColumn = "kommune";
                   planSelection.sectionKey = section.key;
                   planSelection.leafKey = leaf.key;
@@ -1238,6 +1218,7 @@
             const isActive = activeTargetKey === childKey;
             const shouldShowIndicator = !activeTargetKey || isActive;
             const isPrimaryTarget = !!activeTargetKey && isActive;
+            const hasHopPlanLink = Array.isArray(childStrategy.hopItems) && childStrategy.hopItems.length > 0;
             const control = createButton(
               "plan-map-tree-subleaf plan-map-strategy-row plan-map-link-target"
                 + (isActive ? " plan-map-node-selected" : "")
@@ -1245,6 +1226,10 @@
                 + (isPrimaryTarget ? " is-primary-link-target" : ""),
               getNodeLabel(childStrategy),
               () => {
+                if (hasHopPlanLink) {
+                  openHopPlanForStrategy(section, leaf, childStrategy);
+                  return;
+                }
                 planSelection.strategyKey = isActive ? null : childKey;
                 planSelection.hopKey = null;
                 planSelection.focusColumn = "strategi";
