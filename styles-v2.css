@@ -33,6 +33,11 @@ body.page-v2 {
   color: var(--ink-900);
 }
 
+.page-v2 .sidebar::before {
+  content: none;
+  display: none;
+}
+
 body.page-v2[data-mode="rapport"] {
   --green-900: var(--rapport-900);
   --green-800: var(--rapport-800);
