@@ -417,6 +417,56 @@
     return null;
   }
 
+  function getLeafContextByKey(leafKey) {
+    for (const section of planMenuModel.sections) {
+      const leaf = section.leaves.find((item) => item.key === leafKey);
+      if (leaf) return { section, leaf };
+    }
+    return null;
+  }
+
+  function getGoalDataById(planId, goalId) {
+    const normalizedId = slugify(goalId);
+    return planGoalsData.find((goal) => (
+      goal.maalPlan === planId
+      && slugify(goal.maalID) === normalizedId
+    )) || null;
+  }
+
+  function getGoalDataKey(goal) {
+    return slugify(goal?.maalID || goal?.maalNavn);
+  }
+
+  function inferStrategyContextFromHash(planId) {
+    if (planId !== OPPVEKSTPLAN_ID) return null;
+    const goalId = getGoalIdFromAnchor(location.hash.slice(1));
+    if (!goalId || !planGoalsData.length) return null;
+
+    const targetGoal = getGoalDataById(OPPVEKSTPLAN_ID, goalId);
+    if (!targetGoal) return null;
+
+    const branchGoal = targetGoal.maalType === 701100002
+      ? targetGoal
+      : getGoalDataById(OPPVEKSTPLAN_ID, targetGoal.maalOverordnet);
+    if (!branchGoal) return null;
+
+    const leafContext = getLeafContextByKey("gode-oppvekstvilkar");
+    const sourceGoal = leafContext?.leaf.subgoals.find(
+      (goal) => slugify(goal.id) === slugify(branchGoal.maalOverordnet)
+    );
+    if (!leafContext || !sourceGoal) return null;
+
+    return {
+      entryColumn: "strategi",
+      sectionKey: leafContext.section.key,
+      leafKey: leafContext.leaf.key,
+      selectedSubgoalKey: sourceGoal.key,
+      selectedStrategyBranchKey: getGoalDataKey(branchGoal),
+      strategyKey: targetGoal.maalType === 701100003 ? getGoalDataKey(targetGoal) : null,
+      hopKey: null
+    };
+  }
+
   function getLinkedPlanBranchCount(leaf, goal) {
     if (!leaf || !goal) return 0;
     if (leaf.key === "gode-oppvekstvilkar" && goal.id && planGoalsData.length) {
@@ -822,23 +872,16 @@
     card.appendChild(icon);
   }
 
-  function openStrategyPlanForGoal(section, leaf, goal) {
-    const planId = getStrategyPlanIdForLeaf(leaf);
-    if (!planId) return false;
-    const targetGoal = goal || leaf.subgoals?.find((item) => item.key === leaf.selectedSubgoalKey) || null;
-    if (targetGoal?.key) {
-      leaf.selectedSubgoalKey = targetGoal.key;
-      refreshDynamicLeafData();
-    }
-    switchToPlan(planId, {
-      entryColumn: "strategi",
-      sectionKey: section.key,
-      leafKey: leaf.key,
-      selectedSubgoalKey: targetGoal?.key || leaf.selectedSubgoalKey,
-      strategyKey: null,
-      hopKey: null
-    });
-    return true;
+  function selectKommuneGoalForStrategyPreview(section, leaf, goal) {
+    const hasLinkedStrategies = getLinkedPlanBranchCount(leaf, goal) > 0;
+    planSelection.focusColumn = hasLinkedStrategies ? "strategi" : "kommune";
+    planSelection.sectionKey = section.key;
+    planSelection.leafKey = leaf.key;
+    leaf.selectedSubgoalKey = goal.key;
+    planSelection.strategyKey = null;
+    planSelection.hopKey = null;
+    refreshDynamicLeafData();
+    renderPlanMenus();
   }
 
   function openHopPlanForStrategy(section, leaf, strategy) {
@@ -885,7 +928,7 @@
       tooltipLabel,
       tooltipLabel,
       () => {
-        openStrategyPlanForGoal(section, leaf, targetGoal);
+        selectKommuneGoalForStrategyPreview(section, leaf, targetGoal);
       }
     );
   }
@@ -1028,9 +1071,13 @@
     const pendingContext = pendingPlanContext && pendingPlanContext.planId === planId
       ? pendingPlanContext.context
       : null;
-    const context = (baseContext || pendingContext)
+    const inferredContext = inferStrategyContextFromHash(planId);
+    const context = (baseContext || pendingContext || inferredContext)
       ? { ...(baseContext || {}), ...(pendingContext || {}) }
       : null;
+    if (context && inferredContext && !pendingContext) {
+      Object.assign(context, inferredContext);
+    }
     if (pendingContext) {
       pendingPlanContext = null;
     }
@@ -1047,6 +1094,12 @@
       }
     }
     refreshDynamicLeafData();
+    if (context.leafKey && context.selectedStrategyBranchKey) {
+      const leaf = getLeafByKey(context.leafKey);
+      if (leaf) {
+        leaf.selectedStrategyBranchKey = context.selectedStrategyBranchKey;
+      }
+    }
     planSelection.strategyKey = context.strategyKey;
     planSelection.hopKey = null;
     ensureValidStrategySelection();
@@ -1155,15 +1208,7 @@
               subLeaf.textContent = goal.label;
               if (isNavigableSubgoal) {
                 subLeaf.addEventListener("click", () => {
-                  if (openStrategyPlanForGoal(section, leaf, goal)) return;
-                  planSelection.focusColumn = "kommune";
-                  planSelection.sectionKey = section.key;
-                  planSelection.leafKey = leaf.key;
-                  leaf.selectedSubgoalKey = goal.key;
-                  planSelection.strategyKey = null;
-                  planSelection.hopKey = null;
-                  refreshDynamicLeafData();
-                  renderPlanMenus();
+                  selectKommuneGoalForStrategyPreview(section, leaf, goal);
                 });
               }
 
@@ -1359,9 +1404,13 @@
   function syncChildPlanMenu() {
     if (!planMapPrototype) return;
     const currentPlanId = getCurrentPlanId();
-    const showsChildPlan = !!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID;
     const showsHopPlan = currentPlanId === HOP_PLAN_ID;
-    const planStage = currentPlanId === HOP_PLAN_ID ? "hop" : showsChildPlan ? "strategy" : "kommune";
+    const currentLeaf = getCurrentLeaf()?.leaf || null;
+    const showsStrategyPreview = !!currentLeaf?.selectedSubgoalKey
+      && Array.isArray(currentLeaf.strategies)
+      && currentLeaf.strategies.length > 0;
+    const showsChildPlan = showsHopPlan || (!!currentPlanId && currentPlanId !== KOMMUNEPLAN_ID) || showsStrategyPreview;
+    const planStage = showsHopPlan ? "hop" : showsChildPlan ? "strategy" : "kommune";
     planMapPrototype.dataset.planStage = planStage;
     planMapPrototype.classList.toggle("has-child-plan", showsChildPlan);
     planMapPrototype.classList.toggle("has-hop-plan", showsHopPlan);
@@ -1602,7 +1651,7 @@
         entryColumn: "kommune",
         sectionKey: planSelection.sectionKey,
         leafKey: planSelection.leafKey,
-        selectedSubgoalKey: getCurrentLeaf()?.leaf.selectedSubgoalKey,
+        selectedSubgoalKey: null,
         strategyKey: null,
         hopKey: null
       });
