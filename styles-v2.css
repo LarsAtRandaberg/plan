@@ -1645,6 +1645,8 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   --plan-goal-card-border: rgba(119, 129, 120, 0.56);
   --plan-goal-card-hover-border: rgba(47, 136, 49, 0.48);
   --plan-goal-card-radius: 8px;
+  --plan-relation-action-width: 46px;
+  --plan-relation-action-gap: 8px;
 }
 
 .page-v2 .sidebar {
@@ -2217,6 +2219,30 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   max-width: calc(100% - 22px);
 }
 
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group) {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) var(--plan-relation-action-width);
+  column-gap: var(--plan-relation-action-gap);
+  align-items: center;
+}
+
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group) > .plan-map-tree-subleaf,
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group) > .plan-map-node {
+  width: 100%;
+  max-width: 100%;
+}
+
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group) > .plan-map-link-target,
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group):hover > .plan-map-link-target,
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group):focus-within > .plan-map-link-target {
+  width: calc(100% - 18px);
+  max-width: calc(100% - 18px);
+}
+
+.page-v2 .plan-map-prototype.has-hop-plan .plan-map-hop-link-group {
+  display: block;
+}
+
 .page-v2 .plan-map-tree-subpath > .plan-map-tree-subleaf,
 .page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-tree-subleaf,
 .page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node,
@@ -2344,10 +2370,26 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     transform 200ms ease;
 }
 
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group) > .plan-map-relation-chip {
+  position: relative;
+  right: auto;
+  top: auto;
+  grid-column: 2;
+  justify-self: center;
+  width: var(--plan-relation-action-width);
+  gap: 4px;
+  transform: none;
+}
+
 .page-v2 .plan-map-relation-group:hover .plan-map-relation-chip,
 .page-v2 .plan-map-relation-group:focus-within .plan-map-relation-chip {
   color: var(--green-700);
   transform: translateY(-50%) translateX(4px);
+}
+
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group):hover > .plan-map-relation-chip,
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group):focus-within > .plan-map-relation-chip {
+  transform: translateX(2px);
 }
 
 .page-v2 .plan-map-relation-chip:hover,
@@ -2378,6 +2420,14 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   transition:
     opacity 150ms ease,
     transform 200ms ease;
+}
+
+.page-v2 .plan-map-relation-group:not(.plan-map-link-source-group) .plan-map-relation-chip-arrow {
+  width: 10px;
+  height: 10px;
+  border-top-width: 1.5px;
+  border-right-width: 1.5px;
+  transform: translateX(-3px) rotate(45deg);
 }
 
 .page-v2 .plan-map-relation-group:hover .plan-map-relation-chip-arrow,
