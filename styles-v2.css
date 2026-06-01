@@ -1641,6 +1641,10 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   --plan-sidebar-hop-width: calc(var(--plan-sidebar-child-width) + var(--plan-menu-width) + 32px);
   --plan-goal-icon-space: 58px;
   --plan-goal-hover-icon-space: 40px;
+  --plan-goal-card-bg: #fbfcfa;
+  --plan-goal-card-border: rgba(119, 129, 120, 0.56);
+  --plan-goal-card-hover-border: rgba(47, 136, 49, 0.48);
+  --plan-goal-card-radius: 8px;
 }
 
 .page-v2 .sidebar {
@@ -2213,6 +2217,65 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   max-width: calc(100% - 22px);
 }
 
+.page-v2 .plan-map-tree-subpath > .plan-map-tree-subleaf,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-tree-subleaf,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node,
+.page-v2 .plan-map-tree-subpath > .plan-map-node,
+.page-v2 .plan-map-tree-subleaf-static,
+.page-v2 .plan-map-link-target,
+.page-v2 .plan-map-hop-link-target {
+  box-sizing: border-box;
+  display: block;
+  width: calc(100% - 22px);
+  max-width: calc(100% - 22px);
+  padding: 10px 12px;
+  border: 1px solid var(--plan-goal-card-border) !important;
+  border-radius: var(--plan-goal-card-radius) !important;
+  background: var(--plan-goal-card-bg) !important;
+  color: rgba(16, 25, 38, 0.76);
+  font-size: 13px;
+  line-height: 1.45;
+  font-weight: 400;
+}
+
+.page-v2 .plan-map-tree-subpath > .plan-map-tree-subleaf:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-tree-subleaf:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-tree-subleaf:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-tree-subleaf:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-relation-group > .plan-map-node:focus-visible,
+.page-v2 .plan-map-tree-subpath > .plan-map-node:hover,
+.page-v2 .plan-map-tree-subpath > .plan-map-node:focus-visible,
+.page-v2 .plan-map-link-target:hover,
+.page-v2 .plan-map-link-target:focus-visible,
+.page-v2 .plan-map-hop-link-target:hover,
+.page-v2 .plan-map-hop-link-target:focus-visible {
+  border-color: var(--plan-goal-card-hover-border) !important;
+  background: #fff !important;
+}
+
+.page-v2 .plan-map-link-target.is-primary-link-target,
+.page-v2 .plan-map-link-target.plan-map-node-selected,
+.page-v2 .plan-map-hop-link-target.is-primary-hop-target,
+.page-v2 .plan-map-hop-link-target.plan-map-node-selected {
+  border-width: 2px !important;
+  border-color: var(--green-700) !important;
+  background: #fff !important;
+  color: var(--green-700) !important;
+  font-weight: 600 !important;
+}
+
+.page-v2 .plan-map-strategy-list .plan-map-link-target.is-primary-link-target,
+.page-v2 .plan-map-strategy-list .plan-map-link-target.plan-map-node-selected,
+.page-v2 .plan-map-hop-stack .plan-map-hop-link-target.is-primary-hop-target,
+.page-v2 .plan-map-hop-stack .plan-map-hop-link-target.plan-map-node-selected {
+  border-width: 2px !important;
+  border-color: var(--green-700) !important;
+  background: #fff !important;
+  color: var(--green-700) !important;
+  font-weight: 600 !important;
+}
+
 .page-v2 .plan-map-relation-group.plan-map-link-source-group > .plan-map-link-source,
 .page-v2 .plan-map-relation-group.plan-map-link-source-group:hover > .plan-map-link-source,
 .page-v2 .plan-map-relation-group.plan-map-link-source-group:focus-within > .plan-map-link-source {
@@ -2220,11 +2283,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   box-sizing: border-box;
   width: calc(100% - 22px);
   max-width: calc(100% - 22px);
-  padding: 8px 10px;
+  padding: 10px 12px;
   border-width: 2px !important;
   border-style: solid !important;
   border-color: var(--green-700) !important;
-  border-radius: 5px !important;
+  border-radius: var(--plan-goal-card-radius) !important;
   background: #fff !important;
   color: var(--green-700) !important;
   font-weight: 500;
