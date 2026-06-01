@@ -1775,7 +1775,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 }
 
 .page-v2 .plan-map-prototype.has-child-plan .plan-map-column {
-  z-index: auto;
+  z-index: 3;
 }
 
 @keyframes plan-tree-slide-in {
