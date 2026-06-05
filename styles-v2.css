@@ -2299,6 +2299,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   pointer-events: none;
 }
 
+.page-v2 .plan-map-card-relation-icon.is-action {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
 .page-v2 .plan-map-card-text {
   display: block;
   min-width: 0;

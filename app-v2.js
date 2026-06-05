@@ -38,6 +38,13 @@
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
   let planGoalsData = [];
   let planScrollSpyObserver = null;
+  let planScrollSpyRetryTimer = null;
+  let planScrollSpyRetryCount = 0;
+  let planScrollSpyRetryPlanId = null;
+  let planScrollSpyRaf = null;
+  let planScrollSpyScrollBound = false;
+  let planScrollSpySetupTimer = null;
+  let planScrollSpyPollTimer = null;
   let suppressPlanScrollSpy = false;
   let pendingPlanContext = null;
   const planContextsById = {
@@ -291,7 +298,8 @@
     sectionKey: null,
     leafKey: null,
     strategyKey: null,
-    hopKey: null
+    hopKey: null,
+    source: "manual"
   };
 
   function clearPlanMenuSelections() {
@@ -435,6 +443,120 @@
 
   function getGoalDataKey(goal) {
     return slugify(goal?.maalID || goal?.maalNavn);
+  }
+
+  function findSectionByGoalData(goal) {
+    if (!goal) return null;
+    const goalLabel = slugify(goal.maalNavn);
+    return planMenuModel.sections.find((section) => (
+      slugify(section.id) === slugify(goal.maalID)
+      || slugify(section.label) === goalLabel
+    )) || null;
+  }
+
+  function findLeafByGoalData(section, goal) {
+    if (!section || !goal) return null;
+    const goalLabel = slugify(goal.maalNavn);
+    return section.leaves.find((leaf) => (
+      slugify(leaf.id) === slugify(goal.maalID)
+      || slugify(leaf.label) === goalLabel
+    )) || null;
+  }
+
+  function findSubgoalByGoalData(leaf, goal) {
+    if (!leaf || !goal || !Array.isArray(leaf.subgoals)) return null;
+    const goalLabel = slugify(goal.maalNavn);
+    return leaf.subgoals.find((subgoal) => (
+      slugify(subgoal.id) === slugify(goal.maalID)
+      || slugify(subgoal.label) === goalLabel
+    )) || null;
+  }
+
+  function getKommuneScrollSpyContext(goal) {
+    if (!goal) return null;
+    let targetGoal = goal;
+    if (goal.maalType === 701100003) {
+      targetGoal = getGoalDataById(KOMMUNEPLAN_ID, goal.maalOverordnet);
+    }
+    if (!targetGoal || targetGoal.maalType === 701100000) {
+      return {
+        focusColumn: "kommune",
+        sectionKey: null,
+        leafKey: null,
+        selectedSubgoalKey: null,
+        selectedStrategyBranchKey: null,
+        strategyKey: null,
+        hopKey: null
+      };
+    }
+    if (targetGoal.maalType === 701100001) {
+      const section = findSectionByGoalData(targetGoal);
+      if (!section) return null;
+      return {
+        focusColumn: "kommune",
+        sectionKey: section.key,
+        leafKey: null,
+        selectedSubgoalKey: null,
+        selectedStrategyBranchKey: null,
+        strategyKey: null,
+        hopKey: null
+      };
+    }
+    if (targetGoal.maalType === 701100002) {
+      const sectionGoal = getGoalDataById(KOMMUNEPLAN_ID, targetGoal.maalOverordnet);
+      const section = findSectionByGoalData(sectionGoal);
+      const leaf = findLeafByGoalData(section, targetGoal);
+      if (!section || !leaf) return null;
+      return {
+        focusColumn: "kommune",
+        sectionKey: section.key,
+        leafKey: leaf.key,
+        selectedSubgoalKey: null,
+        selectedStrategyBranchKey: null,
+        strategyKey: null,
+        hopKey: null
+      };
+    }
+    return null;
+  }
+
+  function getOppvekstScrollSpyContext(goal) {
+    if (!goal) return null;
+    const branchGoal = goal.maalType === 701100003
+      ? getGoalDataById(OPPVEKSTPLAN_ID, goal.maalOverordnet)
+      : goal;
+    if (!branchGoal || branchGoal.maalType !== 701100002) return null;
+
+    const sourceGoal = getGoalDataById(KOMMUNEPLAN_ID, branchGoal.maalOverordnet);
+    const leafGoal = sourceGoal
+      ? getGoalDataById(KOMMUNEPLAN_ID, sourceGoal.maalOverordnet)
+      : null;
+    const sectionGoal = leafGoal
+      ? getGoalDataById(KOMMUNEPLAN_ID, leafGoal.maalOverordnet)
+      : null;
+    const section = findSectionByGoalData(sectionGoal);
+    const leaf = findLeafByGoalData(section, leafGoal);
+    const sourceSubgoal = findSubgoalByGoalData(leaf, sourceGoal);
+    if (!section || !leaf || !sourceSubgoal) return null;
+
+    return {
+      focusColumn: "strategi",
+      sectionKey: section.key,
+      leafKey: leaf.key,
+      selectedSubgoalKey: sourceSubgoal.key,
+      selectedStrategyBranchKey: getGoalDataKey(branchGoal),
+      strategyKey: null,
+      hopKey: null
+    };
+  }
+
+  function getScrollSpyContextForGoal(goalId) {
+    const planId = getCurrentPlanId();
+    const goal = getGoalDataById(planId, goalId);
+    if (!goal) return null;
+    if (planId === KOMMUNEPLAN_ID) return getKommuneScrollSpyContext(goal);
+    if (planId === OPPVEKSTPLAN_ID) return getOppvekstScrollSpyContext(goal);
+    return null;
   }
 
   function inferStrategyContextFromHash(planId) {
@@ -751,37 +873,32 @@
   }
 
   function applyScrollSpySelection(goalId) {
-    const next = buildPlanGoalLookup().get(goalId);
+    const next = getScrollSpyContextForGoal(goalId);
     if (!next) return;
 
     const leaf = getLeafByKey(next.leafKey);
-    if (!leaf) return;
-
-    if (
-      !next.strategyKey
-      && next.selectedStrategyBranchKey
-      && planSelection.strategyKey
-      && planSelection.leafKey === next.leafKey
-    ) {
-      const visibleBranch = leaf.strategies.find(
-        (strategy) => getNodeKey(strategy) === next.selectedStrategyBranchKey
-      );
-      const keepsCurrentChild = visibleBranch?.children?.some(
-        (child) => getNodeKey(child) === planSelection.strategyKey
-      );
-      if (keepsCurrentChild) {
-        next.strategyKey = planSelection.strategyKey;
-      }
-    }
+    if (next.leafKey && !leaf) return;
 
     const changed =
       planSelection.focusColumn !== next.focusColumn ||
       planSelection.sectionKey !== next.sectionKey ||
       planSelection.leafKey !== next.leafKey ||
-      planSelection.strategyKey !== next.strategyKey;
+      planSelection.strategyKey !== next.strategyKey ||
+      planSelection.hopKey !== next.hopKey ||
+      planSelection.source !== "scroll";
 
-    leaf.selectedSubgoalKey = next.selectedSubgoalKey;
-    if (next.selectedStrategyBranchKey) {
+    planMenuModel.sections.forEach((section) => {
+      section.leaves.forEach((item) => {
+        item.selectedSubgoalKey = null;
+        item.selectedStrategyBranchKey = null;
+        item.selectedStrategySourceGoalKey = null;
+      });
+    });
+
+    if (leaf) {
+      leaf.selectedSubgoalKey = next.selectedSubgoalKey;
+    }
+    if (leaf && next.selectedStrategyBranchKey) {
       leaf.selectedStrategyBranchKey = next.selectedStrategyBranchKey;
     }
     planSelection.focusColumn = next.focusColumn;
@@ -789,6 +906,7 @@
     planSelection.leafKey = next.leafKey;
     planSelection.strategyKey = next.strategyKey;
     planSelection.hopKey = next.hopKey;
+    planSelection.source = "scroll";
 
     refreshDynamicLeafData();
 
@@ -797,18 +915,113 @@
     }
   }
 
+  function getPlanScrollSpySections() {
+    return Array.from(document.querySelectorAll("main section[id]"))
+      .filter((section) => getScrollSpyContextForGoal(getGoalIdFromAnchor(section.id)));
+  }
+
+  function hasManualPlanMenuSelection() {
+    const manualLeaf = planSelection.source === "manual" ? getCurrentLeaf()?.leaf : null;
+    return planSelection.source === "manual" && (
+      planSelection.sectionKey
+      || planSelection.leafKey
+      || planSelection.strategyKey
+      || planSelection.hopKey
+      || manualLeaf?.selectedSubgoalKey
+    );
+  }
+
+  function shouldSkipPlanScrollSpyUpdate() {
+    return body.dataset.mode !== "plan"
+      || suppressPlanScrollSpy
+      || shouldSuspendPlanScrollSpy()
+      || hasManualPlanMenuSelection();
+  }
+
+  function updatePlanScrollSpyFromViewport() {
+    if (shouldSkipPlanScrollSpyUpdate()) return;
+    const hasSelection = !!(
+      planSelection.sectionKey
+      || planSelection.leafKey
+      || planSelection.strategyKey
+      || planSelection.hopKey
+    );
+    if (!hasSelection && !location.hash && window.scrollY < 24) return;
+
+    const sections = getPlanScrollSpySections();
+    if (!sections.length) return;
+    const probeY = Math.max(160, window.innerHeight * 0.5);
+    const measured = sections
+      .map((section) => ({ section, rect: section.getBoundingClientRect() }))
+      .filter((item) => item.rect.bottom > 0 && item.rect.top < window.innerHeight);
+    if (!measured.length) return;
+
+    const passedProbe = measured
+      .filter((item) => item.rect.top <= probeY)
+      .sort((a, b) => b.rect.top - a.rect.top);
+    const active = passedProbe[0] || measured.sort((a, b) => a.rect.top - b.rect.top)[0];
+    const goalId = getGoalIdFromAnchor(active.section.id);
+    if (goalId) applyScrollSpySelection(goalId);
+  }
+
+  function schedulePlanScrollSpyUpdate() {
+    if (planScrollSpyRaf) return;
+    planScrollSpyRaf = window.requestAnimationFrame(() => {
+      planScrollSpyRaf = null;
+      updatePlanScrollSpyFromViewport();
+    });
+  }
+
+  function schedulePlanScrollSpySetup() {
+    if (planScrollSpySetupTimer) {
+      window.clearTimeout(planScrollSpySetupTimer);
+    }
+    planScrollSpySetupTimer = window.setTimeout(() => {
+      planScrollSpySetupTimer = null;
+      planScrollSpyRetryCount = 0;
+      setupPlanScrollSpy();
+    }, 80);
+  }
+
   function setupPlanScrollSpy() {
+    const currentPlanId = getCurrentPlanId();
+    if (planScrollSpyRetryPlanId !== currentPlanId) {
+      planScrollSpyRetryPlanId = currentPlanId;
+      planScrollSpyRetryCount = 0;
+    }
+    if (planScrollSpyRetryTimer) {
+      window.clearTimeout(planScrollSpyRetryTimer);
+      planScrollSpyRetryTimer = null;
+    }
     if (planScrollSpyObserver) {
       planScrollSpyObserver.disconnect();
       planScrollSpyObserver = null;
     }
     if (shouldSuspendPlanScrollSpy()) return;
 
-    const sections = Array.from(document.querySelectorAll("main section[id]"));
-    if (!sections.length) return;
+    const sections = getPlanScrollSpySections();
+    if (!sections.length) {
+      if (planScrollSpyRetryCount < 12) {
+        planScrollSpyRetryCount += 1;
+        planScrollSpyRetryTimer = window.setTimeout(() => {
+          planScrollSpyRetryTimer = null;
+          setupPlanScrollSpy();
+        }, 160);
+      }
+      return;
+    }
 
+    planScrollSpyRetryCount = 0;
+    if (!planScrollSpyScrollBound) {
+      window.addEventListener("scroll", schedulePlanScrollSpyUpdate, { passive: true });
+      planScrollSpyScrollBound = true;
+    }
+    if (!planScrollSpyPollTimer) {
+      planScrollSpyPollTimer = window.setInterval(updatePlanScrollSpyFromViewport, 250);
+    }
+    const visibleSections = new Map();
     planScrollSpyObserver = new IntersectionObserver((entries) => {
-      if (body.dataset.mode !== "plan" || suppressPlanScrollSpy) return;
+      if (shouldSkipPlanScrollSpyUpdate()) return;
       const hasSelection = !!(
         planSelection.sectionKey
         || planSelection.leafKey
@@ -817,7 +1030,15 @@
       );
       if (!hasSelection && !location.hash && window.scrollY < 24) return;
 
-      const visible = entries
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          visibleSections.set(entry.target.id, entry);
+        } else {
+          visibleSections.delete(entry.target.id);
+        }
+      });
+
+      const visible = Array.from(visibleSections.values())
         .filter((entry) => entry.isIntersecting)
         .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
 
@@ -830,6 +1051,7 @@
     }, { rootMargin: "0px 0px -70% 0px", threshold: 0.01 });
 
     sections.forEach((section) => planScrollSpyObserver.observe(section));
+    schedulePlanScrollSpyUpdate();
   }
 
   function createButton(className, label, onClick) {
@@ -920,17 +1142,28 @@
     return button;
   }
 
-  function attachRelationIconToCard(card, iconClass = "ti ti-target-arrow") {
+  function attachRelationIconToCard(card, iconClass = "ti ti-target-arrow", actionLabel = null, onAction = null) {
     if (!card || card.querySelector(".plan-map-card-relation-icon")) return;
     const icon = document.createElement("span");
     icon.className = "plan-map-card-relation-icon";
-    icon.setAttribute("aria-hidden", "true");
+    if (typeof onAction === "function") {
+      icon.classList.add("is-action");
+      icon.setAttribute("title", actionLabel || "");
+      icon.addEventListener("click", (event) => {
+        event.preventDefault();
+        event.stopPropagation();
+        onAction();
+      });
+    } else {
+      icon.setAttribute("aria-hidden", "true");
+    }
     icon.innerHTML = `<i class="${iconClass}"></i>`;
     card.appendChild(icon);
   }
 
   function selectKommuneGoalForStrategyPreview(section, leaf, goal) {
     const hasLinkedStrategies = getLinkedPlanBranchCount(leaf, goal) > 0;
+    planSelection.source = "manual";
     planSelection.focusColumn = hasLinkedStrategies ? "strategi" : "kommune";
     planSelection.sectionKey = section.key;
     planSelection.leafKey = leaf.key;
@@ -944,6 +1177,7 @@
   function openDirectHopForKommuneGoal(section, leaf, goal) {
     const hopItems = getDirectHopItemsForGoal(leaf, goal);
     if (!hopItems.length) return;
+    planSelection.source = "manual";
     planSelection.focusColumn = "hop";
     planSelection.sectionKey = section.key;
     planSelection.leafKey = leaf.key;
@@ -969,12 +1203,14 @@
     const planId = getStrategyPlanIdForLeaf(leaf);
     const strategyKey = getNodeKey(strategy);
     if (!planId) {
+      planSelection.source = "manual";
       planSelection.strategyKey = strategyKey;
       planSelection.hopKey = null;
       planSelection.focusColumn = "strategi";
       renderPlanMenus();
       return;
     }
+    planSelection.source = "manual";
     switchToPlan(planId, {
       entryColumn: "strategi",
       sectionKey: section.key,
@@ -1154,6 +1390,7 @@
     if (!context) return;
     suppressPlanScrollSpy = true;
     clearPlanMenuSelections();
+    planSelection.source = "manual";
     planSelection.focusColumn = context.entryColumn || "kommune";
     planSelection.sectionKey = context.sectionKey;
     planSelection.leafKey = context.leafKey;
@@ -1206,6 +1443,7 @@
         "plan-map-tree-branch" + (section.key === activeSectionKey ? " is-open is-active" : ""),
         section.label,
         () => {
+          planSelection.source = "manual";
           planSelection.focusColumn = "kommune";
           if (planSelection.sectionKey === section.key) {
             planSelection.sectionKey = null;
@@ -1237,6 +1475,7 @@
             + (isActiveLeaf && hasSubgoals ? " has-open-subpath" : ""),
             leaf.label,
             () => {
+              planSelection.source = "manual";
               planSelection.focusColumn = "kommune";
               if (isActiveLeaf) {
                 planSelection.sectionKey = section.key;
@@ -1265,7 +1504,7 @@
               const linkedBranchCount = getLinkedPlanBranchCount(leaf, goal);
               const directHopCount = getDirectHopItemsForGoal(leaf, goal).length;
               const hasRelationActions = linkedBranchCount > 0 || directHopCount > 0;
-              const isSelectedSubgoal = goal.key === leaf.selectedSubgoalKey;
+              const isSelectedSubgoal = planSelection.source !== "scroll" && goal.key === leaf.selectedSubgoalKey;
               const subLeaf = document.createElement("div");
               subLeaf.className = hasRelationActions
                 ? (isSelectedSubgoal ? "plan-map-node plan-map-node-selected" : "plan-map-tree-subleaf")
@@ -1356,6 +1595,7 @@
         "plan-map-tree-branch" + (isOpen ? " is-open" : ""),
         getNodeLabel(strategy),
         () => {
+          planSelection.source = "manual";
           leaf.selectedStrategyBranchKey = isOpen ? null : strategyKey;
           planSelection.strategyKey = null;
           planSelection.hopKey = null;
@@ -1406,7 +1646,14 @@
               ? createHopSwitchChip(section, leaf, childStrategy)
               : null;
             if (hopChip) {
-              attachRelationIconToCard(control, "ti ti-list-check");
+              const hopCount = Array.isArray(childStrategy.hopItems) ? childStrategy.hopItems.length : 0;
+              const hopIconAction = `${getCurrentPlanId() === HOP_PLAN_ID ? "Vis" : "G\u00e5 til"} ${hopCount} tiltak i handlings- og \u00f8konomiplanen.`;
+              attachRelationIconToCard(
+                control,
+                "ti ti-list-check",
+                hopIconAction,
+                () => openHopPlanForStrategy(section, leaf, childStrategy)
+              );
               const relationGroup = document.createElement("div");
               relationGroup.className = "plan-map-relation-group plan-map-hop-link-group";
               relationGroup.appendChild(control);
@@ -1465,6 +1712,7 @@
         getNodeLabel(item),
         () => {
         const nextHopKey = getNodeKey(item);
+        planSelection.source = "manual";
         planSelection.hopKey = planSelection.hopKey === nextHopKey ? null : nextHopKey;
         planSelection.focusColumn = usesDirectHop ? "hop" : "full";
         renderPlanMenus();
@@ -1822,6 +2070,10 @@
   if (reportSidebar) {
     const observer = new MutationObserver(syncOverlay);
     observer.observe(reportSidebar, { attributes: true, attributeFilter: ["class"] });
+  }
+  if (planContent) {
+    const observer = new MutationObserver(schedulePlanScrollSpySetup);
+    observer.observe(planContent, { childList: true, subtree: false });
   }
 
   window.addEventListener("resize", () => {
