@@ -35,7 +35,7 @@
   const planMapHopList = document.getElementById("planMapHopList");
   const KOMMUNEPLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
-  const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
+  const HOP_PLAN_ID = "7df8f7f0-e0e7-f011-8407-000d3add2e1a";
   let planGoalsData = [];
   let planKpiGoalIds = new Set();
   let planScrollSpyObserver = null;
@@ -596,6 +596,44 @@
       strategyKey: targetGoal.maalType === 701100003 ? getGoalDataKey(targetGoal) : null,
       hopKey: null
     };
+  }
+
+  function inferHopContextFromHash(planId) {
+    if (planId !== HOP_PLAN_ID) return null;
+    const hopId = getGoalIdFromAnchor(location.hash.slice(1));
+    const hopKey = slugify(hopId);
+    if (!hopKey) return null;
+
+    const leafContext = getLeafContextByKey("gode-oppvekstvilkar");
+    if (!leafContext) return null;
+
+    if (hopKey === "hop-kommune-tidlig-innsats-01") {
+      return {
+        entryColumn: "hop",
+        sectionKey: leafContext.section.key,
+        leafKey: leafContext.leaf.key,
+        selectedSubgoalKey: "tidlig-innsats",
+        selectedStrategyBranchKey: null,
+        strategyKey: null,
+        hopKey
+      };
+    }
+
+    if (hopKey === "hop-tidlig-innsats-01") {
+      const branchGoal = getGoalDataById(OPPVEKSTPLAN_ID, "96783468-db5c-f111-a826-7c1e52370ef7");
+      const strategyGoal = getGoalDataById(OPPVEKSTPLAN_ID, "6d54f4eb-505b-f111-a826-7c1e52370ef7");
+      return {
+        entryColumn: "full",
+        sectionKey: leafContext.section.key,
+        leafKey: leafContext.leaf.key,
+        selectedSubgoalKey: "tidlig-innsats",
+        selectedStrategyBranchKey: getGoalDataKey(branchGoal),
+        strategyKey: getGoalDataKey(strategyGoal),
+        hopKey
+      };
+    }
+
+    return null;
   }
 
   function getLinkedPlanBranchCount(leaf, goal) {
@@ -1469,7 +1507,7 @@
     const pendingContext = pendingPlanContext && pendingPlanContext.planId === planId
       ? pendingPlanContext.context
       : null;
-    const inferredContext = inferStrategyContextFromHash(planId);
+    const inferredContext = inferStrategyContextFromHash(planId) || inferHopContextFromHash(planId);
     const context = (baseContext || pendingContext || inferredContext)
       ? { ...(baseContext || {}), ...(pendingContext || {}) }
       : null;
@@ -1500,7 +1538,7 @@
       }
     }
     planSelection.strategyKey = context.strategyKey;
-    planSelection.hopKey = null;
+    planSelection.hopKey = context.hopKey || null;
     ensureValidStrategySelection();
     ensureValidHopSelection();
     if (body.dataset.mode === "rapport") {
@@ -1823,12 +1861,26 @@
           + (shouldShowIndicator ? " is-visible-hop-target" : ""),
         getNodeLabel(item),
         () => {
-        const nextHopKey = getNodeKey(item);
-        planSelection.source = "manual";
-        planSelection.hopKey = planSelection.hopKey === nextHopKey ? null : nextHopKey;
-        planSelection.focusColumn = usesDirectHop ? "hop" : "full";
-        renderPlanMenus();
-      }
+          const nextHopKey = getNodeKey(item);
+          const shouldSelectHop = planSelection.hopKey !== nextHopKey;
+          planSelection.source = "manual";
+          planSelection.hopKey = shouldSelectHop ? nextHopKey : null;
+          planSelection.focusColumn = usesDirectHop ? "hop" : "full";
+          if (shouldSelectHop && getCurrentPlanId() === HOP_PLAN_ID) {
+            switchToPlan(HOP_PLAN_ID, {
+              entryColumn: usesDirectHop ? "hop" : "full",
+              sectionKey: currentLeaf.section.key,
+              leafKey: leaf.key,
+              selectedSubgoalKey: leaf.selectedSubgoalKey,
+              selectedStrategyBranchKey: leaf.selectedStrategyBranchKey,
+              strategyKey: planSelection.strategyKey,
+              hopKey: nextHopKey,
+              anchorId: getGoalAnchorId(item)
+            });
+            return;
+          }
+          renderPlanMenus();
+        }
       );
       control.dataset.hopKey = hopKey;
       if (isActive) {

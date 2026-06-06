@@ -570,6 +570,285 @@ section h2 {
 }
 
 /* =========================
+   HOP TILTAK
+   ========================= */
+.hop-detail {
+  max-width: 1180px;
+  margin: 0 auto 32px;
+}
+
+.hop-detail-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 16px;
+  margin-bottom: 18px;
+  border: 0.5px solid rgba(192, 221, 151, 0.78);
+  border-radius: 8px;
+  background: #f6f7df;
+  color: var(--green-900);
+  box-shadow: 0 2px 10px rgba(23, 52, 4, 0.06);
+}
+
+.hop-detail-crumb,
+.hop-detail-actions,
+.hop-detail-actions button,
+.hop-detail-icon-btn {
+  display: inline-flex;
+  align-items: center;
+}
+
+.hop-detail-crumb {
+  min-width: 0;
+  gap: 9px;
+  font-size: 13px;
+}
+
+.hop-detail-crumb strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.hop-detail-actions {
+  flex-shrink: 0;
+  gap: 12px;
+}
+
+.hop-detail-actions button,
+.hop-detail-icon-btn {
+  gap: 6px;
+  border: 0;
+  background: transparent;
+  color: var(--green-900);
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 4px 2px;
+}
+
+.hop-detail-actions button:hover,
+.hop-detail-actions button:focus-visible,
+.hop-detail-icon-btn:hover,
+.hop-detail-icon-btn:focus-visible {
+  color: var(--green-600);
+  outline: none;
+}
+
+.hop-detail-heading {
+  margin-bottom: 14px;
+}
+
+.hop-detail-kicker {
+  color: var(--green-600);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+.hop-detail-heading h2 {
+  margin: 0;
+  color: var(--green-900);
+  font-size: 26px;
+  font-weight: 750;
+  line-height: 1.15;
+}
+
+.hop-detail-heading p {
+  margin: 7px 0 0;
+  color: var(--green-600);
+  font-size: 13px;
+}
+
+.hop-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(240px, 1fr) minmax(300px, 1fr) minmax(280px, 1fr);
+  gap: 14px;
+  align-items: stretch;
+}
+
+.hop-detail-panel {
+  min-height: 186px;
+  border: 0.5px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(23, 52, 4, 0.05);
+  overflow: hidden;
+}
+
+.hop-detail-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 40px;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid var(--line);
+}
+
+.hop-detail-panel-header h3 {
+  margin: 0;
+  color: var(--green-900);
+  font-size: 14px;
+  font-weight: 750;
+}
+
+.hop-detail-properties {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px 20px;
+  margin: 0;
+  padding: 16px;
+}
+
+.hop-detail-properties dt {
+  margin: 0 0 7px;
+  color: var(--green-900);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.hop-detail-properties dd {
+  margin: 0;
+  color: #132414;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.hop-detail-text {
+  margin: 0;
+  padding: 16px;
+  color: #132414;
+  font-size: 13px;
+  line-height: 1.65;
+}
+
+.hop-detail-budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.hop-detail-budget-table th,
+.hop-detail-budget-table td {
+  padding: 12px 16px;
+  border-bottom: 0.5px solid rgba(192, 221, 151, 0.7);
+}
+
+.hop-detail-budget-table th {
+  color: #1e67bd;
+  font-size: 12px;
+  text-align: left;
+}
+
+.hop-detail-budget-table th:last-child,
+.hop-detail-budget-table td:last-child {
+  text-align: right;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.hop-detail-budget-table tfoot th {
+  border-top: 2px solid #cfe0f6;
+  border-bottom: 0;
+  color: var(--green-900);
+  font-size: 13px;
+}
+
+.hop-detail-goal-links {
+  padding: 4px 0;
+}
+
+.hop-detail-goal-link {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(180px, 0.85fr);
+  gap: 14px;
+  padding: 14px 16px;
+  border-bottom: 0.5px solid rgba(192, 221, 151, 0.72);
+}
+
+.hop-detail-goal-link:last-child {
+  border-bottom: 0;
+}
+
+.hop-detail-goal-link-text span {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--green-600);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.hop-detail-goal-link-text strong {
+  display: block;
+  color: #132414;
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.hop-detail-contribution {
+  align-self: center;
+  color: #7a9b15;
+  font-size: 13px;
+  font-weight: 750;
+  line-height: 1.35;
+}
+
+.hop-detail-meter {
+  height: 4px;
+  margin-bottom: 8px;
+  border-radius: 999px;
+  background: #e5e9e1;
+  overflow: hidden;
+}
+
+.hop-detail-meter span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: #b5cd3c;
+}
+
+.hop-detail-tags {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+  padding: 10px;
+}
+
+.hop-detail-tag {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 5px 8px;
+  border: 0.5px solid var(--line);
+  border-radius: 5px;
+  color: #263626;
+  background: #fff;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.hop-detail-tag.is-active {
+  border-color: var(--green-600);
+  background: var(--green-600);
+  color: #fff;
+}
+
+.hop-detail-empty {
+  min-height: 150px;
+  padding: 16px;
+  color: var(--green-600);
+  font-size: 13px;
+}
+
+/* =========================
    FAKTAKART
    ========================= */
 .faktakart {
@@ -1388,6 +1667,39 @@ section h2 {
   .hop-panel {
     padding: 10px;
   }
+
+  .hop-detail {
+    max-width: none;
+  }
+
+  .hop-detail-topbar {
+    display: grid;
+    gap: 10px;
+  }
+
+  .hop-detail-actions {
+    justify-content: flex-start;
+  }
+
+  .hop-detail-heading h2 {
+    font-size: 22px;
+  }
+
+  .hop-detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hop-detail-properties {
+    grid-template-columns: 1fr;
+  }
+
+  .hop-detail-goal-link {
+    grid-template-columns: 1fr;
+  }
+
+  .hop-detail-tags {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
 }
 
 @media (max-width: 460px) {
@@ -1397,5 +1709,19 @@ section h2 {
 
   .faktakart-map {
     height: 270px;
+  }
+
+  .hop-detail-topbar,
+  .hop-detail-panel-header,
+  .hop-detail-properties,
+  .hop-detail-text,
+  .hop-detail-goal-link,
+  .hop-detail-empty {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  .hop-detail-tags {
+    grid-template-columns: 1fr;
   }
 }

@@ -50,6 +50,91 @@
   const params      = new URLSearchParams(location.search);
   const explicitId  = params.get("id");
   let currentPlanId = explicitId || DEFAULT_PLAN_ID;
+  const HOP_PLAN_IDS = new Set([
+    "7df8f7f0-e0e7-f011-8407-000d3add2e1a",
+    "c18f1e69-6a49-f111-bec7-7c1e52370ef7"
+  ]);
+  const HOP_TILTAK_MOCKS = [
+    {
+      id: "hop-tidlig-innsats-01",
+      code: "27-HP-2737",
+      title: "Tidlig innsats i barnehage og skole",
+      year: "2027",
+      status: "Vurderes",
+      treatment: "Politisk vedtak i handlings- og økonomiplanen",
+      category: "Driftstiltak",
+      authority: "Kommunestyret",
+      contact: "Oppvekst og utdanning",
+      createdBy: "Ali Morteza Sarwari",
+      changedBy: "Lars Helge Lassa Vedøy",
+      text: "Randaberg kommune vil i årene framover styrke tidlig innsats i barnehage og skole. Tiltaket skal gi en tydeligere ramme for universelle tilpasninger, felles kompetanseheving og raskere tverrfaglig oppfølging når barn og unge trenger støtte innenfor det ordinære tilbudet.",
+      budget: [
+        { account: "10100 Lønn til prosjekt- og veiledningsressurs", amount: 90000 },
+        { account: "11200 Kompetansetiltak og felles materiell", amount: 35000 },
+        { account: "12700 Kjøp av tjenester og ekstern veiledning", amount: 25000 }
+      ],
+      links: [
+        {
+          label: "Tidlig innsats, helsefremmende og forebyggende arbeid",
+          context: "Kommuneplanens samfunnsdel",
+          score: 82,
+          note: "Dette tiltaket bidrar positivt"
+        },
+        {
+          label: "95 prosent av elevene får opplæringen sin innenfor det ordinære tilbudet med nødvendige universelle tilpasninger.",
+          context: "Oppvekstplanen",
+          score: 92,
+          note: "Dette tiltaket bidrar tydelig positivt"
+        }
+      ],
+      tags: [
+        { label: "#BarnOgUnge", active: true },
+        { label: "#Forebygging", active: true },
+        { label: "#Helsefremmende", active: true },
+        { label: "#TidligInnsats", active: true },
+        { label: "#Livsmestring", active: false },
+        { label: "#Inkludering", active: false },
+        { label: "#Kompetanse", active: false },
+        { label: "#Samhandling", active: false },
+        { label: "#Skole", active: false }
+      ]
+    },
+    {
+      id: "hop-kommune-tidlig-innsats-01",
+      code: "27-HP-2737",
+      title: "Tidlig innsats i barnehage og skole",
+      year: "2027",
+      status: "Vurderes",
+      treatment: "Politisk vedtak i handlings- og økonomiplanen",
+      category: "Driftstiltak",
+      authority: "Kommunestyret",
+      contact: "Oppvekst og utdanning",
+      createdBy: "Ali Morteza Sarwari",
+      changedBy: "Lars Helge Lassa Vedøy",
+      text: "Randaberg kommune vil i årene framover styrke tidlig innsats i barnehage og skole. Tiltaket kobles direkte til kommuneplanmålet og skal gjøre det enklere å prioritere forebyggende innsats før behovet for mer omfattende tiltak oppstår.",
+      budget: [
+        { account: "10100 Lønn til prosjekt- og veiledningsressurs", amount: 90000 },
+        { account: "11200 Kompetansetiltak og felles materiell", amount: 35000 },
+        { account: "12700 Kjøp av tjenester og ekstern veiledning", amount: 25000 }
+      ],
+      links: [
+        {
+          label: "Tidlig innsats, helsefremmende og forebyggende arbeid",
+          context: "Kommuneplanens samfunnsdel",
+          score: 88,
+          note: "Dette tiltaket bidrar tydelig positivt"
+        }
+      ],
+      tags: [
+        { label: "#BarnOgUnge", active: true },
+        { label: "#Forebygging", active: true },
+        { label: "#Helsefremmende", active: true },
+        { label: "#TidligInnsats", active: true },
+        { label: "#Livsmestring", active: false },
+        { label: "#Inkludering", active: false }
+      ]
+    }
+  ];
 
   if (!explicitId) {
     history.replaceState(null, "", "?id=" + encodeURIComponent(DEFAULT_PLAN_ID) + location.hash);
@@ -86,6 +171,224 @@
     destroyKpiCharts();
     menuEl.innerHTML = "";
     contentEl.innerHTML = "";
+  }
+
+  function isHopPlan(planId) {
+    return HOP_PLAN_IDS.has(planId);
+  }
+
+  function formatNok(value) {
+    return new Intl.NumberFormat("nb-NO").format(Number(value || 0));
+  }
+
+  function getHopTiltakAnchorId(tiltak) {
+    return "maal-" + safeId(tiltak.id);
+  }
+
+  function getSelectedHopTiltak() {
+    var hashId = location.hash && location.hash.startsWith("#maal-")
+      ? location.hash.slice(6)
+      : null;
+    return HOP_TILTAK_MOCKS.find(function(item) {
+      return hashId && safeId(item.id) === hashId;
+    }) || HOP_TILTAK_MOCKS[0];
+  }
+
+  function createHopDetailPanel(title, actionLabel, actionIcon) {
+    var panel = document.createElement("article");
+    panel.className = "hop-detail-panel";
+    var header = document.createElement("div");
+    header.className = "hop-detail-panel-header";
+    var heading = document.createElement("h3");
+    heading.textContent = title;
+    header.appendChild(heading);
+    if (actionLabel) {
+      var action = document.createElement("button");
+      action.type = "button";
+      action.className = "hop-detail-icon-btn";
+      action.innerHTML = `<span>${actionLabel}</span><i class="${actionIcon || "ti ti-pencil"}" aria-hidden="true"></i>`;
+      header.appendChild(action);
+    }
+    panel.appendChild(header);
+    return panel;
+  }
+
+  function renderHopProperties(panel, tiltak) {
+    var grid = document.createElement("dl");
+    grid.className = "hop-detail-properties";
+    [
+      ["Budsjettår", tiltak.year],
+      ["Vedtaksmyndighet", tiltak.authority],
+      ["Behandling", tiltak.treatment],
+      ["Kontaktperson", tiltak.contact],
+      ["Vedtaksstatus", tiltak.status],
+      ["Opprettet av", tiltak.createdBy],
+      ["HØP-kategori", tiltak.category],
+      ["Sist endret av", tiltak.changedBy]
+    ].forEach(function(item) {
+      var wrap = document.createElement("div");
+      var dt = document.createElement("dt");
+      var dd = document.createElement("dd");
+      dt.textContent = item[0];
+      dd.textContent = item[1] || "Ikke satt";
+      wrap.appendChild(dt);
+      wrap.appendChild(dd);
+      grid.appendChild(wrap);
+    });
+    panel.appendChild(grid);
+  }
+
+  function renderHopBudget(panel, tiltak) {
+    var table = document.createElement("table");
+    table.className = "hop-detail-budget-table";
+    var thead = document.createElement("thead");
+    thead.innerHTML = "<tr><th>Per konto</th><th>Sum " + tiltak.year + "</th></tr>";
+    table.appendChild(thead);
+    var tbody = document.createElement("tbody");
+    tiltak.budget.forEach(function(row) {
+      var tr = document.createElement("tr");
+      var account = document.createElement("td");
+      var amount = document.createElement("td");
+      account.textContent = row.account;
+      amount.textContent = formatNok(row.amount);
+      tr.appendChild(account);
+      tr.appendChild(amount);
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    var tfoot = document.createElement("tfoot");
+    var total = tiltak.budget.reduce(function(sum, row) { return sum + Number(row.amount || 0); }, 0);
+    tfoot.innerHTML = "<tr><th>Sum</th><th>" + formatNok(total) + "</th></tr>";
+    table.appendChild(tfoot);
+    panel.appendChild(table);
+  }
+
+  function renderHopGoalLinks(panel, tiltak) {
+    var list = document.createElement("div");
+    list.className = "hop-detail-goal-links";
+    tiltak.links.forEach(function(link) {
+      var item = document.createElement("div");
+      item.className = "hop-detail-goal-link";
+      var text = document.createElement("div");
+      text.className = "hop-detail-goal-link-text";
+      var context = document.createElement("span");
+      context.textContent = link.context;
+      var label = document.createElement("strong");
+      label.textContent = link.label;
+      text.appendChild(context);
+      text.appendChild(label);
+      var meter = document.createElement("div");
+      meter.className = "hop-detail-contribution";
+      meter.innerHTML = `
+        <div class="hop-detail-meter" aria-hidden="true"><span style="width:${link.score}%"></span></div>
+        <span>${link.note}</span>
+      `;
+      item.appendChild(text);
+      item.appendChild(meter);
+      list.appendChild(item);
+    });
+    panel.appendChild(list);
+  }
+
+  function renderHopTags(panel, tiltak) {
+    var tags = document.createElement("div");
+    tags.className = "hop-detail-tags";
+    tiltak.tags.forEach(function(tag) {
+      var item = document.createElement("span");
+      item.className = "hop-detail-tag" + (tag.active ? " is-active" : "");
+      item.textContent = tag.label;
+      tags.appendChild(item);
+    });
+    panel.appendChild(tags);
+  }
+
+  function renderHopTiltakMock(plan) {
+    var tiltak = getSelectedHopTiltak();
+    var anchorId = getHopTiltakAnchorId(tiltak);
+
+    menuEl.innerHTML = "";
+    HOP_TILTAK_MOCKS.forEach(function(item) {
+      var node = document.createElement("div");
+      node.className = "node level-1 open";
+      var row = document.createElement("div");
+      row.className = "row level-1";
+      var link = document.createElement("a");
+      link.href = "#" + getHopTiltakAnchorId(item);
+      link.textContent = item.title;
+      if (item.id === tiltak.id) link.classList.add("active");
+      row.appendChild(link);
+      node.appendChild(row);
+      menuEl.appendChild(node);
+    });
+
+    var section = document.createElement("section");
+    section.id = anchorId;
+    section.className = "hop-detail";
+
+    var top = document.createElement("div");
+    top.className = "hop-detail-topbar";
+    var crumb = document.createElement("div");
+    crumb.className = "hop-detail-crumb";
+    crumb.innerHTML = `<span>BudSys</span><i class="ti ti-chevron-right" aria-hidden="true"></i><strong>${tiltak.code} ${tiltak.title}</strong>`;
+    var actions = document.createElement("div");
+    actions.className = "hop-detail-actions";
+    actions.innerHTML = `
+      <button type="button"><span>Rediger</span><i class="ti ti-pencil" aria-hidden="true"></i></button>
+      <button type="button"><span>Tilbake</span><i class="ti ti-arrow-back-up" aria-hidden="true"></i></button>
+    `;
+    top.appendChild(crumb);
+    top.appendChild(actions);
+
+    var heading = document.createElement("div");
+    heading.className = "hop-detail-heading";
+    var kicker = document.createElement("div");
+    kicker.className = "hop-detail-kicker";
+    kicker.textContent = plan?.planNavn || "Handlings- og økonomiplanen";
+    var title = document.createElement("h2");
+    title.textContent = tiltak.title;
+    var meta = document.createElement("p");
+    meta.textContent = tiltak.code + " · " + tiltak.status + " · Budsjettår " + tiltak.year;
+    heading.appendChild(kicker);
+    heading.appendChild(title);
+    heading.appendChild(meta);
+
+    var grid = document.createElement("div");
+    grid.className = "hop-detail-grid";
+
+    var properties = createHopDetailPanel("Tiltakseegenskaper");
+    renderHopProperties(properties, tiltak);
+    grid.appendChild(properties);
+
+    var textPanel = createHopDetailPanel("Tiltakstekst");
+    var text = document.createElement("p");
+    text.className = "hop-detail-text";
+    text.textContent = tiltak.text;
+    textPanel.appendChild(text);
+    grid.appendChild(textPanel);
+
+    var budget = createHopDetailPanel("Budsjett", "Rediger", "ti ti-pencil");
+    renderHopBudget(budget, tiltak);
+    grid.appendChild(budget);
+
+    var links = createHopDetailPanel("Tilknytning mot mål", "Legg til", "ti ti-plus");
+    renderHopGoalLinks(links, tiltak);
+    grid.appendChild(links);
+
+    var tags = createHopDetailPanel("Emneknagger fra planverket");
+    renderHopTags(tags, tiltak);
+    grid.appendChild(tags);
+
+    var messages = createHopDetailPanel("Tiltaksmeldinger", "Skriv", "ti ti-pencil");
+    var empty = document.createElement("div");
+    empty.className = "hop-detail-empty";
+    empty.textContent = "Ingen tiltaksmeldinger registrert.";
+    messages.appendChild(empty);
+    grid.appendChild(messages);
+
+    section.appendChild(top);
+    section.appendChild(heading);
+    section.appendChild(grid);
+    contentEl.appendChild(section);
   }
 
   function ensureSection(goal) {
@@ -1751,6 +2054,16 @@
       titleEl.textContent = plan ? plan.planNavn : "Plan ikke funnet";
 
       var goalsForPlan = goals.filter(function(m) { return m.maalPlan === currentPlanId; });
+      if (isHopPlan(currentPlanId)) {
+        if (heroTittelEl) heroTittelEl.textContent = plan ? plan.planNavn : "Handlings- og økonomiplanen";
+        if (heroMaalCountEl) heroMaalCountEl.textContent = HOP_TILTAK_MOCKS.length;
+        renderHopTiltakMock(plan);
+        setupScrollSpy();
+        if (location.hash) {
+          scrollToAnchor(location.hash.substring(1), "auto");
+        }
+        return true;
+      }
       if (!goalsForPlan.length) { contentEl.innerHTML = "<p>Ingen mål funnet for denne planen.</p>"; return; }
 
       var rootGoal = goalsForPlan.find(function(g) { return !g.maalOverordnet; });
