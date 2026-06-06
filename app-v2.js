@@ -20,7 +20,7 @@
   const planContent = document.getElementById("innhold");
   const reportContent = document.getElementById("reportContent");
   const reportNavLinks = Array.from(document.querySelectorAll(".report-nav-link"));
-  const modeButtons = Array.from(document.querySelectorAll("[data-mode-target]"));
+  const modeButtons = Array.from(document.querySelectorAll(".mode-chip[data-mode-target]"));
   const planMapPrototype = document.getElementById("planMapPrototype");
   const planMapWorkspace = document.querySelector(".plan-map-workspace");
   const planMapLinks = document.getElementById("planMapLinks");
@@ -51,6 +51,7 @@
   let planConnectorIntroTimer = null;
   let planConnectorSettleTimer = null;
   let planConnectorTransitionCleanup = null;
+  let modeTransitionTimer = null;
   let previousPlanConnectorColumnCount = null;
   let pendingPlanConnectorColumnCount = null;
   let suppressPlanScrollSpy = false;
@@ -2255,7 +2256,21 @@
 
   function setMode(mode) {
     const isReport = mode === "rapport";
-    body.dataset.mode = isReport ? "rapport" : "plan";
+    const previousMode = body.dataset.mode || "plan";
+    const nextMode = isReport ? "rapport" : "plan";
+    const shouldAnimate = previousMode !== nextMode && !isMobile();
+
+    if (modeTransitionTimer) window.clearTimeout(modeTransitionTimer);
+    body.classList.remove("is-mode-switching", "mode-switch-plan-to-rapport", "mode-switch-rapport-to-plan");
+    if (shouldAnimate) {
+      body.classList.add("is-mode-switching", `mode-switch-${previousMode}-to-${nextMode}`);
+      modeTransitionTimer = window.setTimeout(() => {
+        body.classList.remove("is-mode-switching", "mode-switch-plan-to-rapport", "mode-switch-rapport-to-plan");
+        modeTransitionTimer = null;
+      }, 460);
+    }
+
+    body.dataset.mode = nextMode;
 
     modeButtons.forEach((button) => {
       const active = button.dataset.modeTarget === body.dataset.mode;

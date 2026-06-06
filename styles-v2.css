@@ -319,34 +319,81 @@ body.page-v2[data-mode="rapport"] {
 }
 
 .page-v2 .desktop-mode-rail {
+  position: sticky;
+  top: 76px;
   display: inline-flex;
-  align-items: center;
-  justify-content: flex-start;
-  align-self: stretch;
-  width: 28px;
+  align-items: flex-start;
+  justify-content: center;
+  align-self: flex-start;
+  width: 10px;
+  height: calc(100vh - 76px);
+  appearance: none;
+  -webkit-appearance: none;
   border: 0;
-  padding: 14px 4px 8px;
+  padding: 0;
   cursor: pointer;
-  transition: width 0.18s ease, background 0.18s ease, color 0.18s ease;
+  overflow: visible;
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
+  z-index: 260;
 }
 
 .page-v2 .desktop-mode-rail:hover {
-  width: 42px;
+  width: 10px;
 }
 
 .page-v2 .desktop-mode-rail-label {
+  position: absolute;
+  top: 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  min-height: 98px;
+  padding: 12px 8px;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(12, 40, 21, 0.08);
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1;
+  white-space: nowrap;
   writing-mode: vertical-rl;
   text-orientation: mixed;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  font-size: 12px;
+  transition: transform 0.18s ease, background 0.18s ease, box-shadow 0.18s ease;
 }
 
 .page-v2 .desktop-mode-rail-plan {
   order: 2;
-  background: #ffffff;
+  background: linear-gradient(180deg, rgba(244, 249, 238, 0.98), rgba(232, 243, 222, 0.98));
   color: var(--accent-green-dark);
-  border-right: 0;
+  border-right: 1px solid rgba(47, 136, 49, 0.2);
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.78), 1px 0 6px rgba(47, 136, 49, 0.06);
+}
+
+.page-v2 .desktop-mode-rail-plan:hover,
+.page-v2 .desktop-mode-rail-plan:focus-visible {
+  transform: translateX(5px);
+  background: linear-gradient(180deg, rgba(244, 249, 238, 1), rgba(226, 241, 214, 1));
+  box-shadow: inset -1px 0 0 rgba(255, 255, 255, 0.86), 2px 0 10px rgba(47, 136, 49, 0.12);
+  outline: none;
+}
+
+.page-v2 .desktop-mode-rail-plan .desktop-mode-rail-label {
+  left: 100%;
+  border: 1px solid rgba(47, 136, 49, 0.2);
+  border-left: 0;
+  border-radius: 0 8px 8px 0;
+  background: linear-gradient(180deg, rgba(244, 249, 238, 0.98), rgba(232, 243, 222, 0.98));
+  color: var(--accent-green-dark);
+  transform: translateX(-2px);
+}
+
+.page-v2 .desktop-mode-rail-plan:hover .desktop-mode-rail-label,
+.page-v2 .desktop-mode-rail-plan:focus-visible .desktop-mode-rail-label {
+  transform: translateX(2px);
+  background: linear-gradient(180deg, rgba(244, 249, 238, 1), rgba(226, 241, 214, 1));
+  box-shadow: 0 6px 18px rgba(47, 136, 49, 0.12);
 }
 
 body.page-v2[data-mode="plan"] .desktop-mode-rail-plan {
@@ -355,9 +402,140 @@ body.page-v2[data-mode="plan"] .desktop-mode-rail-plan {
 
 .page-v2 .desktop-mode-rail-report {
   order: 4;
-  background: linear-gradient(180deg, rgba(239,246,252,0.96), rgba(225,238,249,0.96));
+  background: linear-gradient(180deg, rgba(239, 246, 252, 0.98), rgba(225, 238, 249, 0.98));
   color: var(--accent-blue-dark);
-  border-left: 1px solid rgba(0, 114, 187, 0.08);
+  border-left: 1px solid rgba(0, 114, 187, 0.18);
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.78), -1px 0 6px rgba(0, 114, 187, 0.07);
+}
+
+.page-v2 .desktop-mode-rail-report:hover,
+.page-v2 .desktop-mode-rail-report:focus-visible {
+  transform: translateX(-5px);
+  background: linear-gradient(180deg, rgba(239, 246, 252, 1), rgba(214, 234, 248, 1));
+  box-shadow: inset 1px 0 0 rgba(255, 255, 255, 0.86), -2px 0 10px rgba(0, 114, 187, 0.13);
+  outline: none;
+}
+
+.page-v2 .desktop-mode-rail-report .desktop-mode-rail-label {
+  right: 100%;
+  border: 1px solid rgba(0, 114, 187, 0.18);
+  border-right: 0;
+  border-radius: 8px 0 0 8px;
+  background: linear-gradient(180deg, rgba(239, 246, 252, 0.98), rgba(225, 238, 249, 0.98));
+  color: var(--accent-blue-dark);
+  transform: translateX(2px);
+}
+
+.page-v2 .desktop-mode-rail-report:hover .desktop-mode-rail-label,
+.page-v2 .desktop-mode-rail-report:focus-visible .desktop-mode-rail-label {
+  transform: translateX(-2px);
+  background: linear-gradient(180deg, rgba(239, 246, 252, 1), rgba(214, 234, 248, 1));
+  box-shadow: 0 6px 18px rgba(0, 114, 187, 0.13);
+}
+
+body.page-v2.is-mode-switching .content,
+body.page-v2.is-mode-switching .sidebar,
+body.page-v2.is-mode-switching .report-sidebar,
+body.page-v2.is-mode-switching .desktop-mode-rail {
+  will-change: opacity, transform;
+}
+
+body.page-v2.mode-switch-plan-to-rapport .content {
+  animation: mode-content-from-right 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.page-v2.mode-switch-rapport-to-plan .content {
+  animation: mode-content-from-left 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.page-v2.mode-switch-plan-to-rapport .report-sidebar {
+  animation: mode-sheet-from-right 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.page-v2.mode-switch-rapport-to-plan .sidebar {
+  animation: mode-sheet-from-left 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.page-v2.mode-switch-plan-to-rapport .desktop-mode-rail-plan {
+  animation: mode-tab-from-left 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+body.page-v2.mode-switch-rapport-to-plan .desktop-mode-rail-report {
+  animation: mode-tab-from-right 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes mode-content-from-right {
+  from {
+    opacity: 0.62;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mode-content-from-left {
+  from {
+    opacity: 0.62;
+    transform: translateX(-18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mode-sheet-from-right {
+  from {
+    opacity: 0.7;
+    transform: translateX(34px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mode-sheet-from-left {
+  from {
+    opacity: 0.7;
+    transform: translateX(-34px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mode-tab-from-left {
+  0% {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+  72% {
+    opacity: 1;
+    transform: translateX(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes mode-tab-from-right {
+  0% {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+  72% {
+    opacity: 1;
+    transform: translateX(-5px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }
 
 .page-v2 .report-sidebar {
