@@ -2319,6 +2319,28 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   pointer-events: none;
 }
 
+.page-v2 .plan-map-card-relation-icons {
+  position: absolute;
+  top: 50%;
+  right: 12%;
+  z-index: 8;
+  display: inline-flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  transform: translate(50%, -50%);
+  pointer-events: none;
+}
+
+.page-v2 .plan-map-card-relation-icons .plan-map-card-relation-icon {
+  position: static;
+  top: auto;
+  right: auto;
+  transform: none;
+}
+
 .page-v2 .plan-map-card-relation-icon.is-action {
   cursor: pointer;
   pointer-events: auto;
@@ -2372,6 +2394,11 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 }
 
 .page-v2 .plan-map-card-action-btn[data-relation-action="hop"] {
+  font-size: 18px;
+}
+
+.page-v2 .plan-map-card-action-btn[data-relation-action="kpi"],
+.page-v2 .plan-map-card-relation-icon[data-relation-action="kpi"] {
   font-size: 18px;
 }
 

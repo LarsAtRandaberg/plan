@@ -1,0 +1,52 @@
+{
+  "kpis": [
+    {
+      "id": "ordinaert-opplaeringstilbud-95",
+      "goalId": "6d54f4eb-505b-f111-a826-7c1e52370ef7",
+      "planId": "e3112baa-7858-f111-bec7-7c1e52370ef7",
+      "title": "95 prosent i ordin\u00e6rt tilbud",
+      "subtitle": "Andel elever som ikke f\u00e5r individuelt tilrettelagt oppl\u00e6ring/spesialundervisning",
+      "description": "Beregnet som 100 minus SSB-indikatoren for elever i kommunale og private grunnskoler som f\u00e5r individuelt tilrettelagt oppl\u00e6ring/spesialundervisning.",
+      "target": 95,
+      "unit": "%",
+      "latestYear": "2025",
+      "preferredRegion": "1127",
+      "source": {
+        "label": "SSB Statistikkbanken tabell 12222",
+        "url": "https://www.ssb.no/statbank/table/12222",
+        "table": "12222",
+        "indicator": "KOSandelevspesu0000",
+        "indicatorLabel": "Elever i kommunale og private grunnskoler som f\u00e5r individuelt tilrettelagt oppl\u00e6ring/spesialundervisning (prosent)",
+        "transform": "100 - indikatorverdi",
+        "level": "Elever alle trinn"
+      },
+      "regions": [
+        { "code": "1127", "label": "Randaberg", "sourceLabel": "Randaberg", "group": "municipality", "order": 0 },
+        { "code": "1103", "label": "Stavanger", "sourceLabel": "Stavanger", "group": "municipality", "order": 1 },
+        { "code": "1124", "label": "Sola", "sourceLabel": "Sola", "group": "municipality", "order": 2 },
+        { "code": "1130", "label": "Strand", "sourceLabel": "Strand", "group": "municipality", "order": 3 },
+        { "code": "1108", "label": "Sandnes", "sourceLabel": "Sandnes", "group": "municipality", "order": 4 },
+        { "code": "1121", "label": "Time", "sourceLabel": "Time", "group": "municipality", "order": 5 },
+        { "code": "1120", "label": "Klepp", "sourceLabel": "Klepp", "group": "municipality", "order": 6 },
+        { "code": "1119", "label": "H\u00e5", "sourceLabel": "H\u00e5", "group": "municipality", "order": 7 },
+        { "code": "1122", "label": "Gjesdal", "sourceLabel": "Gjesdal", "group": "municipality", "order": 8 },
+        { "code": "EAK", "label": "Landet", "sourceLabel": "Landet", "group": "country", "order": 9 },
+        { "code": "EKG07", "label": "KOSTRA-gruppe 7", "sourceLabel": "KOSTRA-gruppe 7", "group": "kostra", "order": 10 }
+      ],
+      "years": ["2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025"],
+      "series": {
+        "1127": [93.7, 93.5, 93.6, 94.6, 95.0, 96.0, 96.4, 96.6, 95.9, 96.2, 95.2],
+        "1103": [90.9, 90.5, 90.3, 89.6, 89.9, 90.7, 91.3, 91.7, 92.2, 92.5, 92.5],
+        "1124": [96.2, 95.9, 95.3, 94.8, 94.4, 94.6, 93.8, 94.4, 93.5, 92.9, 92.7],
+        "1130": [89.4, 91.6, 90.9, 90.6, 91.1, 91.7, 91.4, 92.2, 92.8, 91.5, 91.7],
+        "1108": [null, null, null, null, null, 91.9, 91.7, 91.7, 92.9, 93.3, 93.2],
+        "1121": [90.6, 92.8, 93.1, 93.4, 93.6, 93.5, 92.5, 92.2, 91.4, 92.3, 95.2],
+        "1120": [93.4, 93.8, 93.6, 93.7, 94.3, 93.2, 92.4, 92.4, 92.3, 92.9, 93.7],
+        "1119": [93.4, 92.7, 93.4, 93.8, 93.8, 94.2, 93.6, 92.8, 91.0, 90.7, 92.5],
+        "1122": [95.6, 95.6, 93.8, 93.1, 93.3, 93.6, 93.1, 92.9, 92.5, 92.4, 92.5],
+        "EAK": [92.1, 92.2, 92.2, 92.2, 92.3, 92.3, 92.2, 92.2, 92.0, 92.0, 92.4],
+        "EKG07": [92.8, 92.9, 92.9, 92.9, 92.7, 92.7, 92.4, 92.2, 91.9, 92.1, 92.8]
+      }
+    }
+  ]
+}

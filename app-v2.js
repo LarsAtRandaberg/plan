@@ -36,6 +36,8 @@
   const KOMMUNEPLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
+  const KPI_GOAL_IDS = new Set(["6d54f4eb-505b-f111-a826-7c1e52370ef7"]);
+  const KPI_GOAL_KEYS = new Set(["95-prosent"]);
   let planGoalsData = [];
   let planScrollSpyObserver = null;
   let planScrollSpyRetryTimer = null;
@@ -630,6 +632,45 @@
     return getMockHopItemsForKommuneGoal(leaf, goal);
   }
 
+  function hasKpiForGoalId(goalId) {
+    return KPI_GOAL_IDS.has(slugify(goalId));
+  }
+
+  function hasKpiForStrategyGoal(goal) {
+    return hasKpiForGoalId(goal?.id || goal?.maalID)
+      || KPI_GOAL_KEYS.has(goal?.key || "")
+      || KPI_GOAL_KEYS.has(slugify(goal?.label || goal?.maalNavn || ""));
+  }
+
+  function getKpiContextForKommuneGoal(leaf, goal) {
+    if (!leaf || !goal?.id || !planGoalsData.length) return null;
+
+    const branchGoals = planGoalsData.filter((item) => (
+      item.maalPlan === OPPVEKSTPLAN_ID
+      && item.maalType === 701100002
+      && item.maalOverordnet === goal.id
+    ));
+    if (!branchGoals.length) return null;
+
+    const branchIds = new Set(branchGoals.map((item) => item.maalID));
+    const kpiGoal = planGoalsData.find((item) => (
+      item.maalPlan === OPPVEKSTPLAN_ID
+      && item.maalType === 701100003
+      && hasKpiForGoalId(item.maalID)
+      && branchIds.has(item.maalOverordnet)
+    ));
+    if (!kpiGoal) return null;
+
+    const branchGoal = branchGoals.find((item) => item.maalID === kpiGoal.maalOverordnet);
+    if (!branchGoal) return null;
+
+    return {
+      branchKey: getGoalDataKey(branchGoal),
+      strategyKey: getGoalDataKey(kpiGoal),
+      anchorId: "maal-" + slugify(kpiGoal.maalID)
+    };
+  }
+
   function getSelectedSubgoal(leaf) {
     if (!leaf?.selectedSubgoalKey || !Array.isArray(leaf.subgoals)) return null;
     return leaf.subgoals.find((goal) => goal.key === leaf.selectedSubgoalKey) || null;
@@ -1149,10 +1190,18 @@
     return button;
   }
 
-  function attachRelationIconToCard(card, iconClass = "ti ti-target-arrow", actionLabel = null, onAction = null) {
-    if (!card || card.querySelector(".plan-map-card-relation-icon")) return;
+  function attachRelationIconToCard(card, iconClass = "ti ti-target-arrow", actionLabel = null, onAction = null, actionType = iconClass) {
+    if (!card) return;
+    let iconWrap = card.querySelector(".plan-map-card-relation-icons");
+    if (!iconWrap) {
+      iconWrap = document.createElement("span");
+      iconWrap.className = "plan-map-card-relation-icons";
+      card.appendChild(iconWrap);
+    }
+    if (iconWrap.querySelector(`[data-relation-action="${actionType}"]`)) return;
     const icon = document.createElement("span");
     icon.className = "plan-map-card-relation-icon";
+    icon.dataset.relationAction = actionType;
     if (typeof onAction === "function") {
       icon.classList.add("is-action");
       icon.setAttribute("title", actionLabel || "");
@@ -1165,7 +1214,7 @@
       icon.setAttribute("aria-hidden", "true");
     }
     icon.innerHTML = `<i class="${iconClass}"></i>`;
-    card.appendChild(icon);
+    iconWrap.appendChild(icon);
   }
 
   function selectKommuneGoalForStrategyPreview(section, leaf, goal) {
@@ -1203,6 +1252,36 @@
       selectedSubgoalKey: leaf.selectedSubgoalKey,
       strategyKey: getNodeKey(strategy),
       hopKey: null
+    });
+  }
+
+  function openKpiForKommuneGoal(section, leaf, goal) {
+    const kpiContext = getKpiContextForKommuneGoal(leaf, goal);
+    if (!kpiContext) return;
+
+    switchToPlan(OPPVEKSTPLAN_ID, {
+      entryColumn: "strategi",
+      sectionKey: section.key,
+      leafKey: leaf.key,
+      selectedSubgoalKey: goal.key,
+      selectedStrategyBranchKey: kpiContext.branchKey,
+      strategyKey: kpiContext.strategyKey,
+      hopKey: null,
+      anchorId: kpiContext.anchorId
+    });
+  }
+
+  function openKpiForStrategyGoal(section, leaf, branch, strategy) {
+    if (!hasKpiForStrategyGoal(strategy)) return;
+    switchToPlan(OPPVEKSTPLAN_ID, {
+      entryColumn: "strategi",
+      sectionKey: section.key,
+      leafKey: leaf.key,
+      selectedSubgoalKey: leaf.selectedSubgoalKey,
+      selectedStrategyBranchKey: getNodeKey(branch),
+      strategyKey: getNodeKey(strategy),
+      hopKey: null,
+      anchorId: getGoalAnchorId(strategy)
     });
   }
 
@@ -1510,7 +1589,9 @@
             leaf.subgoals.forEach((goal) => {
               const linkedBranchCount = getLinkedPlanBranchCount(leaf, goal);
               const directHopCount = getDirectHopItemsForGoal(leaf, goal).length;
-              const hasRelationActions = linkedBranchCount > 0 || directHopCount > 0;
+              const kpiContext = getKpiContextForKommuneGoal(leaf, goal);
+              const hasKpi = !!kpiContext;
+              const hasRelationActions = linkedBranchCount > 0 || directHopCount > 0 || hasKpi;
               const isSelectedSubgoal = planSelection.source !== "scroll" && goal.key === leaf.selectedSubgoalKey;
               const subLeaf = document.createElement("div");
               subLeaf.className = hasRelationActions
@@ -1553,6 +1634,15 @@
                     hopActionLabel,
                     "ti ti-list-check",
                     () => openDirectHopForKommuneGoal(section, leaf, goal)
+                  ));
+                }
+                if (hasKpi) {
+                  const kpiActionLabel = "Se KPI-er for dette m\u00e5let.";
+                  actionGroup.appendChild(createCardActionButton(
+                    "kpi",
+                    kpiActionLabel,
+                    "ti ti-chart-bar",
+                    () => openKpiForKommuneGoal(section, leaf, goal)
                   ));
                 }
                 subLeaf.appendChild(actionGroup);
@@ -1648,6 +1738,15 @@
               hopSourceNode.setAttribute("aria-hidden", "true");
               control.appendChild(hopSourceNode);
             }
+            if (hasKpiForStrategyGoal(childStrategy)) {
+              attachRelationIconToCard(
+                control,
+                "ti ti-chart-bar",
+                "Se KPI-er for dette m\u00e5let.",
+                () => openKpiForStrategyGoal(section, leaf, strategy, childStrategy),
+                "kpi"
+              );
+            }
             const shouldShowHopChip = !(isActive && getCurrentPlanId() === HOP_PLAN_ID);
             const hopChip = shouldShowHopChip
               ? createHopSwitchChip(section, leaf, childStrategy)
@@ -1659,7 +1758,8 @@
                 control,
                 "ti ti-list-check",
                 hopIconAction,
-                () => openHopPlanForStrategy(section, leaf, childStrategy)
+                () => openHopPlanForStrategy(section, leaf, childStrategy),
+                "hop"
               );
               const relationGroup = document.createElement("div");
               relationGroup.className = "plan-map-relation-group plan-map-hop-link-group";

@@ -916,6 +916,153 @@ section h2 {
 }
 
 /* =========================
+   KPI
+   ========================= */
+.kpi-panel {
+  background: #fff;
+  border: 0.5px solid var(--line);
+  border-radius: 10px;
+  padding: 16px;
+  margin-top: 12px;
+}
+
+.kpi-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 18px;
+  margin-bottom: 14px;
+}
+
+.kpi-kicker {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--green-600);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+
+.kpi-header h3 {
+  margin: 0;
+  color: var(--green-900);
+  font-size: 17px;
+  line-height: 1.25;
+}
+
+.kpi-header p {
+  margin: 6px 0 0;
+  color: var(--green-800);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.kpi-toggle {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 3px;
+  padding: 3px;
+  border: 0.5px solid var(--line);
+  border-radius: 999px;
+  background: #f8faf5;
+}
+
+.kpi-toggle-btn {
+  border: 0;
+  border-radius: 999px;
+  padding: 6px 10px;
+  background: transparent;
+  color: var(--green-800);
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.kpi-toggle-btn:hover,
+.kpi-toggle-btn.is-active {
+  background: var(--green-100);
+  color: var(--green-900);
+}
+
+.kpi-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.kpi-metric {
+  min-width: 0;
+  border: 0.5px solid rgba(192,221,151,0.8);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fbfcfa;
+}
+
+.kpi-metric.is-primary {
+  border-color: rgba(47, 136, 49, 0.32);
+  background: linear-gradient(180deg, rgba(234,243,222,0.72), #fff);
+}
+
+.kpi-metric-label {
+  color: var(--green-600);
+  font-size: 11px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.kpi-metric-value {
+  color: var(--green-900);
+  font-size: 24px;
+  font-weight: 750;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.kpi-metric.is-positive .kpi-metric-value {
+  color: #2f8831;
+}
+
+.kpi-metric.is-negative .kpi-metric-value {
+  color: #a13c1f;
+}
+
+.kpi-metric-meta {
+  margin-top: 8px;
+  color: var(--green-800);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.kpi-chart-frame {
+  position: relative;
+  height: 320px;
+  min-height: 320px;
+  border: 0.5px solid rgba(192,221,151,0.7);
+  border-radius: 8px;
+  padding: 12px;
+  background: #fff;
+}
+
+.kpi-source {
+  margin-top: 10px;
+  color: var(--green-600);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.kpi-source a {
+  color: var(--green-800);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.kpi-source a:hover {
+  text-decoration: underline;
+}
+
+/* =========================
    SØK (desktop)
    ========================= */
 #menu-topnav      { display: none; }
@@ -1206,6 +1353,24 @@ section h2 {
 
   .maalgrep-list {
     grid-template-columns: 1fr;
+  }
+
+  .kpi-header {
+    display: grid;
+    gap: 12px;
+  }
+
+  .kpi-toggle {
+    justify-self: flex-start;
+  }
+
+  .kpi-metrics {
+    grid-template-columns: 1fr;
+  }
+
+  .kpi-chart-frame {
+    height: 280px;
+    min-height: 280px;
   }
 
   .hop-statements-header,

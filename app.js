@@ -3,6 +3,7 @@
   const URL_PLAN    = "data/plan.json";
   const URL_MAAL    = "data/maal.json";
   const URL_INNHOLD = "data/innhold.json";
+  const URL_KPI     = "data/kpi.json";
 
   const topbar          = document.querySelector(".topbar");
   const topnav          = document.getElementById("topnav");
@@ -72,7 +73,20 @@
     return String(text || "").toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "");
   }
 
-  function clearUI() { menuEl.innerHTML = ""; contentEl.innerHTML = ""; }
+  var kpiChartInstances = [];
+
+  function destroyKpiCharts() {
+    kpiChartInstances.forEach(function(chart) {
+      try { chart.destroy(); } catch(e) {}
+    });
+    kpiChartInstances = [];
+  }
+
+  function clearUI() {
+    destroyKpiCharts();
+    menuEl.innerHTML = "";
+    contentEl.innerHTML = "";
+  }
 
   function ensureSection(goal) {
     const anchorId = "maal-" + safeId(goal.maalID);
@@ -1236,6 +1250,345 @@
   }
 
   // =========================
+  // KPI-paneler per maal
+  // =========================
+  function getKpiList(kpiData) {
+    if (Array.isArray(kpiData)) return kpiData;
+    if (kpiData && Array.isArray(kpiData.kpis)) return kpiData.kpis;
+    return [];
+  }
+
+  function formatKpiNumber(value, unit, digits) {
+    if (value === null || value === undefined || Number.isNaN(Number(value))) return "-";
+    var decimals = typeof digits === "number" ? digits : 1;
+    return new Intl.NumberFormat("nb-NO", {
+      minimumFractionDigits: decimals,
+      maximumFractionDigits: decimals
+    }).format(Number(value)) + (unit || "");
+  }
+
+  function getKpiYear(kpi) {
+    var years = Array.isArray(kpi.years) ? kpi.years.map(String) : [];
+    if (!years.length) return null;
+    return kpi.latestYear && years.includes(String(kpi.latestYear))
+      ? String(kpi.latestYear)
+      : years[years.length - 1];
+  }
+
+  function getKpiValue(kpi, regionCode, year) {
+    var years = Array.isArray(kpi.years) ? kpi.years.map(String) : [];
+    var series = kpi.series && kpi.series[regionCode];
+    var index = years.indexOf(String(year));
+    if (!Array.isArray(series) || index < 0) return null;
+    return series[index];
+  }
+
+  function getKpiRegions(kpi) {
+    return (Array.isArray(kpi.regions) ? kpi.regions : [])
+      .slice()
+      .sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+  }
+
+  function getKpiRegion(kpi, code) {
+    return getKpiRegions(kpi).find(function(region) { return region.code === code; }) || null;
+  }
+
+  function makeKpiMetric(label, value, meta, tone) {
+    var card = document.createElement("div");
+    card.className = "kpi-metric" + (tone ? " is-" + tone : "");
+
+    var labelEl = document.createElement("div");
+    labelEl.className = "kpi-metric-label";
+    labelEl.textContent = label;
+
+    var valueEl = document.createElement("div");
+    valueEl.className = "kpi-metric-value";
+    valueEl.textContent = value;
+
+    var metaEl = document.createElement("div");
+    metaEl.className = "kpi-metric-meta";
+    metaEl.textContent = meta || "";
+
+    card.appendChild(labelEl);
+    card.appendChild(valueEl);
+    card.appendChild(metaEl);
+    return card;
+  }
+
+  function getKpiColor(region, preferredCode) {
+    if (region.code === preferredCode) return "#2f8831";
+    if (region.group === "country") return "#0072bb";
+    if (region.group === "kostra") return "#6b7280";
+    return "#9aa69a";
+  }
+
+  function getKpiChartOptions(kpi, isTrend) {
+    var yScale = {
+      suggestedMax: 100,
+      ticks: {
+        color: "#365340",
+        callback: function(value) { return value + (kpi.unit || ""); }
+      },
+      grid: { color: "rgba(0, 82, 40, 0.08)" }
+    };
+    if (isTrend) {
+      yScale.suggestedMin = 88;
+    } else {
+      yScale.min = 50;
+    }
+
+    return {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: isTrend ? "index" : "nearest", intersect: false },
+      plugins: {
+        legend: {
+          position: "bottom",
+          labels: {
+            color: "#365340",
+            boxWidth: 10,
+            boxHeight: 10,
+            usePointStyle: true,
+            font: { size: 11 }
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              var label = context.dataset.label ? context.dataset.label + ": " : "";
+              var value = context.parsed && typeof context.parsed.y === "number"
+                ? context.parsed.y
+                : context.raw;
+              return label + formatKpiNumber(value, kpi.unit, 1);
+            }
+          }
+        }
+      },
+      scales: {
+        y: yScale,
+        x: {
+          ticks: {
+            color: "#365340",
+            maxRotation: isTrend ? 0 : 45,
+            minRotation: 0
+          },
+          grid: { display: false }
+        }
+      }
+    };
+  }
+
+  function buildKpiTrendChart(kpi, canvas) {
+    var years = Array.isArray(kpi.years) ? kpi.years : [];
+    var preferredCode = kpi.preferredRegion || (kpi.regions && kpi.regions[0] && kpi.regions[0].code);
+    var trendCodes = [preferredCode, "EAK", "EKG07"].filter(Boolean);
+    var datasets = trendCodes.map(function(code) {
+      var region = getKpiRegion(kpi, code) || { code: code, label: code };
+      var color = getKpiColor(region, preferredCode);
+      return {
+        label: region.label,
+        data: kpi.series[code] || [],
+        borderColor: color,
+        backgroundColor: color,
+        borderDash: region.group === "kostra" ? [5, 5] : [],
+        borderWidth: code === preferredCode ? 3 : 2,
+        pointRadius: code === preferredCode ? 4 : 2,
+        pointHoverRadius: 5,
+        tension: 0.32,
+        spanGaps: true
+      };
+    });
+    datasets.push({
+      label: "M\u00e5l " + formatKpiNumber(kpi.target, kpi.unit, 0),
+      data: years.map(function() { return kpi.target; }),
+      borderColor: "rgba(47, 136, 49, 0.45)",
+      backgroundColor: "rgba(47, 136, 49, 0.45)",
+      borderDash: [2, 4],
+      pointRadius: 0,
+      borderWidth: 1.5
+    });
+
+    return new window.Chart(canvas, {
+      type: "line",
+      data: { labels: years, datasets: datasets },
+      options: getKpiChartOptions(kpi, true)
+    });
+  }
+
+  function buildKpiComparisonChart(kpi, canvas) {
+    var latestYear = getKpiYear(kpi);
+    var preferredCode = kpi.preferredRegion || (kpi.regions && kpi.regions[0] && kpi.regions[0].code);
+    var comparisonItems = getKpiRegions(kpi)
+      .map(function(region) {
+        return {
+          region: region,
+          value: getKpiValue(kpi, region.code, latestYear)
+        };
+      })
+      .filter(function(item) { return item.value !== null; })
+      .sort(function(a, b) {
+        return b.value - a.value || (a.region.order || 0) - (b.region.order || 0);
+      });
+    var labels = comparisonItems.map(function(item) { return item.region.label; });
+    var values = comparisonItems.map(function(item) { return item.value; });
+    var colors = comparisonItems.map(function(item) { return getKpiColor(item.region, preferredCode); });
+
+    return new window.Chart(canvas, {
+      type: "bar",
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: "Andel i ordin\u00e6rt tilbud " + latestYear,
+            data: values,
+            backgroundColor: colors,
+            borderRadius: 6,
+            maxBarThickness: 38
+          },
+          {
+            type: "line",
+            label: "M\u00e5l " + formatKpiNumber(kpi.target, kpi.unit, 0),
+            data: labels.map(function() { return kpi.target; }),
+            borderColor: "rgba(47, 136, 49, 0.65)",
+            backgroundColor: "rgba(47, 136, 49, 0.65)",
+            borderDash: [2, 4],
+            borderWidth: 2,
+            pointRadius: 0
+          }
+        ]
+      },
+      options: getKpiChartOptions(kpi, false)
+    });
+  }
+
+  function renderKpiPanel(kpi) {
+    var panel = document.createElement("div");
+    panel.className = "kpi-panel";
+    panel.id = "kpi-" + safeId(kpi.goalId || kpi.id);
+
+    var latestYear = getKpiYear(kpi);
+    var preferredCode = kpi.preferredRegion || (kpi.regions && kpi.regions[0] && kpi.regions[0].code);
+    var preferredRegion = getKpiRegion(kpi, preferredCode) || { label: "Randaberg" };
+    var latestValue = getKpiValue(kpi, preferredCode, latestYear);
+    var delta = latestValue !== null && kpi.target !== null && kpi.target !== undefined
+      ? Number((latestValue - Number(kpi.target)).toFixed(1))
+      : null;
+
+    var header = document.createElement("div");
+    header.className = "kpi-header";
+
+    var titleWrap = document.createElement("div");
+    var kicker = document.createElement("div");
+    kicker.className = "kpi-kicker";
+    kicker.textContent = "KPI";
+    var title = document.createElement("h3");
+    title.textContent = kpi.title || "M\u00e5lindikator";
+    var intro = document.createElement("p");
+    intro.textContent = kpi.subtitle || kpi.description || "";
+    titleWrap.appendChild(kicker);
+    titleWrap.appendChild(title);
+    titleWrap.appendChild(intro);
+    header.appendChild(titleWrap);
+
+    var controls = document.createElement("div");
+    controls.className = "kpi-toggle";
+    var compareBtn = document.createElement("button");
+    compareBtn.type = "button";
+    compareBtn.className = "kpi-toggle-btn is-active";
+    compareBtn.dataset.mode = "compare";
+    compareBtn.textContent = "Sammenligning";
+    var trendBtn = document.createElement("button");
+    trendBtn.type = "button";
+    trendBtn.className = "kpi-toggle-btn";
+    trendBtn.dataset.mode = "trend";
+    trendBtn.textContent = "Utvikling";
+    controls.appendChild(compareBtn);
+    controls.appendChild(trendBtn);
+    header.appendChild(controls);
+    panel.appendChild(header);
+
+    var metrics = document.createElement("div");
+    metrics.className = "kpi-metrics";
+    metrics.appendChild(makeKpiMetric(
+      preferredRegion.label + " " + latestYear,
+      formatKpiNumber(latestValue, kpi.unit, 1),
+      kpi.description || "",
+      "primary"
+    ));
+    metrics.appendChild(makeKpiMetric(
+      "M\u00e5lverdi",
+      formatKpiNumber(kpi.target, kpi.unit, 0),
+      "Politisk m\u00e5l for ordin\u00e6rt tilbud",
+      "target"
+    ));
+    metrics.appendChild(makeKpiMetric(
+      "Avvik",
+      (delta === null ? "-" : (delta > 0 ? "+" : "") + formatKpiNumber(delta, " prosentpoeng", 1)),
+      delta === null ? "" : (delta >= 0 ? "Over m\u00e5lstreken" : "Under m\u00e5lstreken"),
+      delta >= 0 ? "positive" : "negative"
+    ));
+    panel.appendChild(metrics);
+
+    var chartFrame = document.createElement("div");
+    chartFrame.className = "kpi-chart-frame";
+    var canvas = document.createElement("canvas");
+    chartFrame.appendChild(canvas);
+    panel.appendChild(chartFrame);
+
+    var source = document.createElement("div");
+    source.className = "kpi-source";
+    if (kpi.source && kpi.source.url) {
+      var sourceLink = document.createElement("a");
+      sourceLink.href = kpi.source.url;
+      sourceLink.target = "_blank";
+      sourceLink.rel = "noopener";
+      sourceLink.textContent = kpi.source.label || "Datakilde";
+      source.appendChild(document.createTextNode("Kilde: "));
+      source.appendChild(sourceLink);
+      source.appendChild(document.createTextNode(". " + (kpi.source.transform || "")));
+    } else {
+      source.textContent = kpi.source && kpi.source.label ? "Kilde: " + kpi.source.label : "";
+    }
+    panel.appendChild(source);
+
+    var activeChart = null;
+    function setChartMode(mode) {
+      controls.querySelectorAll(".kpi-toggle-btn").forEach(function(btn) {
+        var active = btn.dataset.mode === mode;
+        btn.classList.toggle("is-active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+      });
+      if (!window.Chart) {
+        chartFrame.textContent = "Diagrambiblioteket er ikke lastet.";
+        return;
+      }
+      if (activeChart) {
+        activeChart.destroy();
+      }
+      activeChart = mode === "trend"
+        ? buildKpiTrendChart(kpi, canvas)
+        : buildKpiComparisonChart(kpi, canvas);
+      kpiChartInstances.push(activeChart);
+    }
+
+    compareBtn.addEventListener("click", function() { setChartMode("compare"); });
+    trendBtn.addEventListener("click", function() { setChartMode("trend"); });
+    setChartMode("compare");
+
+    return panel;
+  }
+
+  function renderKpiPanels(kpiData, planId) {
+    getKpiList(kpiData)
+      .filter(function(kpi) { return kpi && kpi.planId === planId; })
+      .forEach(function(kpi) {
+        var section = document.getElementById("maal-" + safeId(kpi.goalId));
+        if (!section || section.querySelector(".kpi-panel")) return;
+        section.appendChild(renderKpiPanel(kpi));
+      });
+  }
+
+  // =========================
   // Søk
   // =========================
   var searchData = { plans: [], goals: [], innhold: [] };
@@ -1349,11 +1702,13 @@
       var results = await Promise.all([
         fetch(URL_PLAN,    { cache: "no-store" }).then(function(r) { return r.json(); }),
         fetch(URL_MAAL,    { cache: "no-store" }).then(function(r) { return r.json(); }),
-        fetch(URL_INNHOLD, { cache: "no-store" }).then(function(r) { return r.json(); })
+        fetch(URL_INNHOLD, { cache: "no-store" }).then(function(r) { return r.json(); }),
+        fetch(URL_KPI,     { cache: "no-store" }).then(function(r) { return r.json(); }).catch(function() { return { kpis: [] }; })
       ]);
       var plans   = results[0];
       var goals   = results[1];
       var innhold = results[2];
+      var kpiData = results[3];
 
       buildTopMenu(plans);
       buildSearchIndex(plans, goals, innhold);
@@ -1375,6 +1730,7 @@
       buildTree(goalsForPlan);
       renderInnhold(innhold, currentPlanId);
       renderMaalgrep(goalsForPlan);
+      renderKpiPanels(kpiData, currentPlanId);
       setupScrollSpy();
 
       if (location.hash) {
