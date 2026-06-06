@@ -45,8 +45,15 @@
   let planScrollSpyScrollBound = false;
   let planScrollSpySetupTimer = null;
   let planScrollSpyPollTimer = null;
+  let planConnectorRenderRaf = null;
+  let planConnectorTransitionTimer = null;
+  let planConnectorIntroTimer = null;
+  let planConnectorTransitionCleanup = null;
+  let previousPlanConnectorColumnCount = null;
+  let pendingPlanConnectorColumnCount = null;
   let suppressPlanScrollSpy = false;
   let pendingPlanContext = null;
+  const PLAN_MENU_TRANSITION_MS = 800;
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
       entryColumn: "kommune",
@@ -1734,7 +1741,8 @@
     if (!planMapPrototype) return;
     const currentPlanId = getCurrentPlanId();
     const showsDirectHopPlan = isDirectHopSelection();
-    const showsHopPlan = currentPlanId === HOP_PLAN_ID || showsDirectHopPlan;
+    const blocksHopColumn = planSelection.focusColumn === "strategi";
+    const showsHopPlan = !blocksHopColumn && (currentPlanId === HOP_PLAN_ID || showsDirectHopPlan);
     const currentLeaf = getCurrentLeaf()?.leaf || null;
     const shouldShowStrategyColumn = !showsDirectHopPlan && (
       planSelection.focusColumn === "strategi"
@@ -1756,9 +1764,120 @@
     sidebar?.classList.toggle("has-direct-hop-plan", showsDirectHopPlan);
   }
 
+  function getPlanConnectorColumnCount() {
+    if (!planMapPrototype?.classList.contains("has-child-plan")) return 1;
+    if (
+      planMapPrototype.classList.contains("has-hop-plan")
+      && !planMapPrototype.classList.contains("has-direct-hop-plan")
+    ) {
+      return 3;
+    }
+    return 2;
+  }
+
+  function clearPlanConnectorSchedule() {
+    if (planConnectorRenderRaf) {
+      window.cancelAnimationFrame(planConnectorRenderRaf);
+      planConnectorRenderRaf = null;
+    }
+    if (planConnectorTransitionTimer) {
+      window.clearTimeout(planConnectorTransitionTimer);
+      planConnectorTransitionTimer = null;
+    }
+    if (planConnectorIntroTimer) {
+      window.clearTimeout(planConnectorIntroTimer);
+      planConnectorIntroTimer = null;
+    }
+    if (planConnectorTransitionCleanup) {
+      planConnectorTransitionCleanup();
+      planConnectorTransitionCleanup = null;
+    }
+    pendingPlanConnectorColumnCount = null;
+  }
+
+  function drawPlanLinksWhenReady(options = {}) {
+    if (!planMapPrototype) return;
+    planMapPrototype.classList.remove("is-connector-pending");
+    planMapPrototype.classList.add("is-connector-ready");
+    planMapPrototype.classList.toggle("is-connector-introducing", !!options.animateNodes);
+    if (options.animateNodes) {
+      planConnectorIntroTimer = window.setTimeout(() => {
+        planConnectorIntroTimer = null;
+        planMapPrototype.classList.remove("is-connector-introducing");
+      }, 520);
+    }
+    planConnectorRenderRaf = window.requestAnimationFrame(() => {
+      planConnectorRenderRaf = null;
+      renderPlanLinkPaths();
+    });
+  }
+
+  function schedulePlanLinkPaths(options = {}) {
+    if (!planMapLinks || !planMapWorkspace || !planMapPrototype) return;
+    const currentConnectorColumnCount = getPlanConnectorColumnCount();
+    if (
+      planMapPrototype.classList.contains("is-connector-pending")
+      && !options.defer
+      && pendingPlanConnectorColumnCount === currentConnectorColumnCount
+    ) {
+      return;
+    }
+
+    clearPlanConnectorSchedule();
+
+    if (!planMapPrototype.classList.contains("has-child-plan")) {
+      planMapPrototype.classList.remove("is-connector-pending", "is-connector-ready", "is-connector-introducing");
+      planMapLinks.innerHTML = "";
+      return;
+    }
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!options.defer || reduceMotion) {
+      drawPlanLinksWhenReady();
+      return;
+    }
+
+    planMapLinks.innerHTML = "";
+    pendingPlanConnectorColumnCount = currentConnectorColumnCount;
+    planMapPrototype.classList.add("is-connector-pending");
+    planMapPrototype.classList.remove("is-connector-ready");
+
+    let isFinished = false;
+    const finish = () => {
+      if (isFinished) return;
+      isFinished = true;
+      if (planConnectorTransitionCleanup) {
+        planConnectorTransitionCleanup();
+        planConnectorTransitionCleanup = null;
+      }
+      if (planConnectorTransitionTimer) {
+        window.clearTimeout(planConnectorTransitionTimer);
+        planConnectorTransitionTimer = null;
+      }
+      pendingPlanConnectorColumnCount = null;
+      drawPlanLinksWhenReady({ animateNodes: true });
+    };
+
+    const handleTransitionEnd = (event) => {
+      if (
+        event.target === planMapWorkspace
+        && (event.propertyName === "width" || event.propertyName === "max-width")
+      ) {
+        finish();
+      }
+    };
+
+    planMapWorkspace.addEventListener("transitionend", handleTransitionEnd);
+    planConnectorTransitionCleanup = () => {
+      planMapWorkspace.removeEventListener("transitionend", handleTransitionEnd);
+    };
+    planConnectorTransitionTimer = window.setTimeout(finish, PLAN_MENU_TRANSITION_MS + 90);
+  }
+
   function renderPlanLinkPaths() {
     if (!planMapLinks || !planMapWorkspace) return;
     planMapLinks.innerHTML = "";
+    if (planMapPrototype?.classList.contains("is-connector-pending")) return;
     if (!planMapPrototype?.classList.contains("has-child-plan")) return;
 
     const namespace = "http://www.w3.org/2000/svg";
@@ -1777,7 +1896,7 @@
       const startX = (sourceNodeRect ? sourceNodeRect.left + (sourceNodeRect.width / 2) : sourceRect.right) - workspaceRect.left;
       const startY = (sourceNodeRect ? sourceNodeRect.top + (sourceNodeRect.height / 2) : sourceRect.top + (sourceRect.height / 2)) - workspaceRect.top;
 
-      targets.forEach((target) => {
+      targets.forEach((target, relationIndex) => {
         const targetRect = target.getBoundingClientRect();
         const targetNode = options.targetNodeSelector
           ? target.querySelector(options.targetNodeSelector)
@@ -1795,6 +1914,8 @@
         const path = document.createElementNS(namespace, "path");
         path.setAttribute("d", `M ${startX} ${startY} C ${startX + controlDistance} ${startY}, ${endX - controlDistance} ${endY}, ${endX} ${endY}`);
         path.setAttribute("class", isPrimary ? "plan-map-link-path is-primary" : "plan-map-link-path");
+        path.setAttribute("pathLength", "1");
+        path.style.animationDelay = `${Math.min(relationIndex * 55, 180)}ms`;
         planMapLinks.appendChild(path);
 
         const circle = document.createElementNS(namespace, "circle");
@@ -1802,6 +1923,7 @@
         circle.setAttribute("cy", endY);
         circle.setAttribute("r", "9");
         circle.setAttribute("class", isPrimary ? "plan-map-link-node is-primary" : "plan-map-link-node");
+        circle.style.animationDelay = `${Math.min(relationIndex * 55, 180) + 170}ms`;
         planMapLinks.appendChild(circle);
       });
     };
@@ -1896,8 +2018,12 @@
     renderStrategyMenu();
     renderHopMenu();
     syncChildPlanMenu();
-    window.requestAnimationFrame(renderPlanLinkPaths);
-    window.setTimeout(renderPlanLinkPaths, 850);
+    const nextConnectorColumnCount = getPlanConnectorColumnCount();
+    const shouldDeferConnectorRender = previousPlanConnectorColumnCount !== null
+      && nextConnectorColumnCount !== previousPlanConnectorColumnCount
+      && nextConnectorColumnCount > 1;
+    previousPlanConnectorColumnCount = nextConnectorColumnCount;
+    schedulePlanLinkPaths({ defer: shouldDeferConnectorRender });
   }
 
   function closeSidebar() {
@@ -2079,7 +2205,7 @@
   window.addEventListener("resize", () => {
     applyModeVisibility(body.dataset.mode === "rapport");
     syncOverlay();
-    window.requestAnimationFrame(renderPlanLinkPaths);
+    schedulePlanLinkPaths();
   });
 
   window.addEventListener("popstate", syncPlanContextFromLocation);

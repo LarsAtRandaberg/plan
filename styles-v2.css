@@ -1736,12 +1736,22 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   overflow: visible;
   pointer-events: none;
   z-index: 2;
+  opacity: 1;
+  transition: opacity 160ms ease;
+}
+
+.page-v2 .plan-map-prototype.is-connector-pending .plan-map-links {
+  opacity: 0;
 }
 
 .page-v2 .plan-map-link-path {
   fill: none;
   stroke: rgba(119, 129, 120, 0.62);
   stroke-width: 1.4;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: plan-link-grow 360ms cubic-bezier(0.2, 0.72, 0.24, 1) forwards;
 }
 
 .page-v2 .plan-map-link-path.is-primary {
@@ -1752,10 +1762,45 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   fill: #fff;
   stroke: rgba(119, 129, 120, 0.74);
   stroke-width: 2;
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: plan-link-node-pop 180ms ease-out forwards;
 }
 
 .page-v2 .plan-map-link-node.is-primary {
   stroke: var(--green-700);
+}
+
+@keyframes plan-link-grow {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes plan-link-node-pop {
+  from {
+    opacity: 0;
+    transform: scale(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes plan-link-card-node-pop {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) scale(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) scale(1);
+  }
 }
 
 .page-v2 .plan-map-prototype.has-child-plan .plan-map-workspace {
@@ -2433,6 +2478,33 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   z-index: 6;
 }
 
+.page-v2 .plan-map-prototype.is-connector-pending .plan-map-link-source-node,
+.page-v2 .plan-map-prototype.is-connector-pending .plan-map-link-target-node,
+.page-v2 .plan-map-prototype.is-connector-pending .plan-map-hop-source-node,
+.page-v2 .plan-map-prototype.is-connector-pending .plan-map-hop-link-target-node {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.page-v2 .plan-map-prototype.is-connector-pending
+  .plan-map-strategy-list.has-selected-strategy
+  .plan-map-link-target.plan-map-node-selected
+  > .plan-map-link-target-node,
+.page-v2 .plan-map-prototype.is-connector-pending
+  .plan-map-hop-stack.has-selected-hop
+  .plan-map-hop-link-target.plan-map-node-selected
+  > .plan-map-hop-link-target-node {
+  opacity: 0 !important;
+  visibility: hidden !important;
+}
+
+.page-v2 .plan-map-prototype.is-connector-introducing .plan-map-link-source-node,
+.page-v2 .plan-map-prototype.is-connector-introducing .plan-map-link-target-node,
+.page-v2 .plan-map-prototype.is-connector-introducing .plan-map-hop-source-node,
+.page-v2 .plan-map-prototype.is-connector-introducing .plan-map-hop-link-target-node {
+  animation: plan-link-card-node-pop 180ms ease-out 140ms both;
+}
+
 .page-v2 .plan-map-relation-group.plan-map-link-source-group > .plan-map-link-source::after {
   content: none !important;
   display: none !important;
@@ -2583,5 +2655,26 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   .page-v2 .plan-map-column {
     transition: none;
     animation: none;
+  }
+
+  .page-v2 .plan-map-link-path,
+  .page-v2 .plan-map-link-node,
+  .page-v2 .plan-map-prototype.is-connector-introducing .plan-map-link-source-node,
+  .page-v2 .plan-map-prototype.is-connector-introducing .plan-map-link-target-node,
+  .page-v2 .plan-map-prototype.is-connector-introducing .plan-map-hop-source-node,
+  .page-v2 .plan-map-prototype.is-connector-introducing .plan-map-hop-link-target-node {
+    animation: none;
+  }
+
+  .page-v2 .plan-map-link-path {
+    stroke-dashoffset: 0;
+  }
+
+  .page-v2 .plan-map-link-node,
+  .page-v2 .plan-map-link-source-node,
+  .page-v2 .plan-map-link-target-node,
+  .page-v2 .plan-map-hop-source-node,
+  .page-v2 .plan-map-hop-link-target-node {
+    opacity: 1;
   }
 }
