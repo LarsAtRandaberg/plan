@@ -73,6 +73,25 @@
         { account: "11200 Kompetansetiltak og felles materiell", amount: 35000 },
         { account: "12700 Kjøp av tjenester og ekstern veiledning", amount: 25000 }
       ],
+      allocation: [
+        {
+          label: "Skole",
+          percent: 64,
+          amount: 96000,
+          note: "Veiledningsressurs, felles rutiner og oppfølging i ordinær opplæring."
+        },
+        {
+          label: "Barnehage",
+          percent: 36,
+          amount: 54000,
+          note: "Kompetanseløft og universelle tilpasninger i barnehagemiljøene."
+        }
+      ],
+      followup: [
+        { label: "Oppstart", value: "1. kvartal 2027" },
+        { label: "Rapportering", value: "Tertialvis" },
+        { label: "Ansvar", value: "Oppvekst og utdanning" }
+      ],
       links: [
         {
           label: "Tidlig innsats, helsefremmende og forebyggende arbeid",
@@ -116,6 +135,25 @@
         { account: "10100 Lønn til prosjekt- og veiledningsressurs", amount: 90000 },
         { account: "11200 Kompetansetiltak og felles materiell", amount: 35000 },
         { account: "12700 Kjøp av tjenester og ekstern veiledning", amount: 25000 }
+      ],
+      allocation: [
+        {
+          label: "Skole",
+          percent: 60,
+          amount: 90000,
+          note: "Tidlig oppdagelse, tverrfaglig oppfølging og tilpasset opplæring."
+        },
+        {
+          label: "Barnehage",
+          percent: 40,
+          amount: 60000,
+          note: "Forebyggende arbeid, foreldresamarbeid og styrket overgang til skole."
+        }
+      ],
+      followup: [
+        { label: "Oppstart", value: "1. kvartal 2027" },
+        { label: "Rapportering", value: "Tertialvis" },
+        { label: "Ansvar", value: "Oppvekst og utdanning" }
       ],
       links: [
         {
@@ -181,6 +219,16 @@
     return new Intl.NumberFormat("nb-NO").format(Number(value || 0));
   }
 
+  function clampPercent(value) {
+    return Math.max(0, Math.min(100, Number(value || 0)));
+  }
+
+  function getHopBudgetTotal(tiltak) {
+    return (tiltak.budget || []).reduce(function(sum, row) {
+      return sum + Number(row.amount || 0);
+    }, 0);
+  }
+
   function getHopTiltakAnchorId(tiltak) {
     return "maal-" + safeId(tiltak.id);
   }
@@ -191,7 +239,7 @@
       : null;
     return HOP_TILTAK_MOCKS.find(function(item) {
       return hashId && safeId(item.id) === hashId;
-    }) || HOP_TILTAK_MOCKS[0];
+    }) || null;
   }
 
   function createHopDetailPanel(title, actionLabel, actionIcon) {
@@ -263,6 +311,43 @@
     panel.appendChild(table);
   }
 
+  function renderHopSummary(panel, tiltak) {
+    var body = document.createElement("div");
+    body.className = "hop-detail-summary";
+
+    var textWrap = document.createElement("div");
+    textWrap.className = "hop-detail-summary-text";
+    var label = document.createElement("span");
+    label.textContent = "Kort om tiltaket";
+    var text = document.createElement("p");
+    text.textContent = tiltak.text;
+    textWrap.appendChild(label);
+    textWrap.appendChild(text);
+
+    var facts = document.createElement("div");
+    facts.className = "hop-detail-facts";
+    [
+      ["Status", tiltak.status],
+      ["År", tiltak.year],
+      ["Ramme", formatNok(getHopBudgetTotal(tiltak)) + " kr"],
+      ["Ansvar", tiltak.contact]
+    ].forEach(function(item) {
+      var fact = document.createElement("div");
+      fact.className = "hop-detail-fact";
+      var factLabel = document.createElement("span");
+      var factValue = document.createElement("strong");
+      factLabel.textContent = item[0];
+      factValue.textContent = item[1] || "Ikke satt";
+      fact.appendChild(factLabel);
+      fact.appendChild(factValue);
+      facts.appendChild(fact);
+    });
+
+    body.appendChild(textWrap);
+    body.appendChild(facts);
+    panel.appendChild(body);
+  }
+
   function renderHopGoalLinks(panel, tiltak) {
     var list = document.createElement("div");
     list.className = "hop-detail-goal-links";
@@ -279,15 +364,54 @@
       text.appendChild(label);
       var meter = document.createElement("div");
       meter.className = "hop-detail-contribution";
+      var score = clampPercent(link.score);
       meter.innerHTML = `
-        <div class="hop-detail-meter" aria-hidden="true"><span style="width:${link.score}%"></span></div>
-        <span>${link.note}</span>
+        <div class="hop-detail-contribution-top"><strong>${score}%</strong><span>${link.note}</span></div>
+        <div class="hop-detail-meter" aria-hidden="true"><span style="width:${score}%"></span></div>
       `;
       item.appendChild(text);
       item.appendChild(meter);
       list.appendChild(item);
     });
     panel.appendChild(list);
+  }
+
+  function renderHopAllocation(panel, tiltak) {
+    var allocation = Array.isArray(tiltak.allocation) ? tiltak.allocation : [];
+    var wrap = document.createElement("div");
+    wrap.className = "hop-detail-allocation";
+
+    var bar = document.createElement("div");
+    bar.className = "hop-detail-allocation-bar";
+    allocation.forEach(function(area, index) {
+      var segment = document.createElement("span");
+      segment.className = "hop-detail-allocation-segment hop-detail-allocation-segment-" + (index + 1);
+      segment.style.width = clampPercent(area.percent) + "%";
+      segment.title = area.label + ": " + area.percent + "%";
+      bar.appendChild(segment);
+    });
+    wrap.appendChild(bar);
+
+    allocation.forEach(function(area, index) {
+      var row = document.createElement("div");
+      row.className = "hop-detail-allocation-row";
+      var marker = document.createElement("span");
+      marker.className = "hop-detail-allocation-marker hop-detail-allocation-marker-" + (index + 1);
+      var info = document.createElement("div");
+      info.className = "hop-detail-allocation-info";
+      var heading = document.createElement("div");
+      heading.className = "hop-detail-allocation-heading";
+      heading.innerHTML = `<strong>${area.label}</strong><span>${area.percent}% · ${formatNok(area.amount)} kr</span>`;
+      var note = document.createElement("p");
+      note.textContent = area.note;
+      info.appendChild(heading);
+      info.appendChild(note);
+      row.appendChild(marker);
+      row.appendChild(info);
+      wrap.appendChild(row);
+    });
+
+    panel.appendChild(wrap);
   }
 
   function renderHopTags(panel, tiltak) {
@@ -302,9 +426,55 @@
     panel.appendChild(tags);
   }
 
+  function renderHopFollowup(panel, tiltak) {
+    var wrap = document.createElement("div");
+    wrap.className = "hop-detail-followup";
+    (tiltak.followup || []).forEach(function(item) {
+      var row = document.createElement("div");
+      row.className = "hop-detail-followup-row";
+      var label = document.createElement("span");
+      var value = document.createElement("strong");
+      label.textContent = item.label;
+      value.textContent = item.value;
+      row.appendChild(label);
+      row.appendChild(value);
+      wrap.appendChild(row);
+    });
+    panel.appendChild(wrap);
+  }
+
+  function renderHopTiltakPicker(plan) {
+    var section = document.createElement("section");
+    section.className = "hop-detail hop-detail-picker";
+
+    var panel = createHopDetailPanel("Velg tiltak");
+    panel.classList.add("hop-detail-panel-wide", "hop-detail-panel-picker");
+
+    var body = document.createElement("div");
+    body.className = "hop-detail-picker-body";
+
+    var icon = document.createElement("div");
+    icon.className = "hop-detail-picker-icon";
+    icon.innerHTML = `<i class="ti ti-list-check" aria-hidden="true"></i>`;
+
+    var text = document.createElement("div");
+    text.className = "hop-detail-picker-text";
+    var title = document.createElement("h2");
+    title.textContent = plan?.planNavn || "Handlings- og økonomiplanen";
+    var copy = document.createElement("p");
+    copy.textContent = "Velg et konkret tiltak i HØP-menyen for å åpne tiltakskort, budsjett, målbidrag og fordeling på virksomhetsområder.";
+    text.appendChild(title);
+    text.appendChild(copy);
+
+    body.appendChild(icon);
+    body.appendChild(text);
+    panel.appendChild(body);
+    section.appendChild(panel);
+    contentEl.appendChild(section);
+  }
+
   function renderHopTiltakMock(plan) {
     var tiltak = getSelectedHopTiltak();
-    var anchorId = getHopTiltakAnchorId(tiltak);
 
     menuEl.innerHTML = "";
     HOP_TILTAK_MOCKS.forEach(function(item) {
@@ -315,11 +485,29 @@
       var link = document.createElement("a");
       link.href = "#" + getHopTiltakAnchorId(item);
       link.textContent = item.title;
-      if (item.id === tiltak.id) link.classList.add("active");
+      if (tiltak && item.id === tiltak.id) link.classList.add("active");
+      link.addEventListener("click", function(event) {
+        event.preventDefault();
+        history.pushState(
+          null,
+          "",
+          "?id=" + encodeURIComponent(currentPlanId) + "#" + getHopTiltakAnchorId(item)
+        );
+        init().then(function(ok) {
+          if (ok !== false) scrollToAnchor(getHopTiltakAnchorId(item), "smooth");
+        });
+      });
       row.appendChild(link);
       node.appendChild(row);
       menuEl.appendChild(node);
     });
+
+    if (!tiltak) {
+      renderHopTiltakPicker(plan);
+      return;
+    }
+
+    var anchorId = getHopTiltakAnchorId(tiltak);
 
     var section = document.createElement("section");
     section.id = anchorId;
@@ -329,13 +517,10 @@
     top.className = "hop-detail-topbar";
     var crumb = document.createElement("div");
     crumb.className = "hop-detail-crumb";
-    crumb.innerHTML = `<span>BudSys</span><i class="ti ti-chevron-right" aria-hidden="true"></i><strong>${tiltak.code} ${tiltak.title}</strong>`;
+    crumb.innerHTML = `<span>Handlings- og økonomiplanen</span><i class="ti ti-chevron-right" aria-hidden="true"></i><strong>${tiltak.code} ${tiltak.title}</strong>`;
     var actions = document.createElement("div");
     actions.className = "hop-detail-actions";
-    actions.innerHTML = `
-      <button type="button"><span>Rediger</span><i class="ti ti-pencil" aria-hidden="true"></i></button>
-      <button type="button"><span>Tilbake</span><i class="ti ti-arrow-back-up" aria-hidden="true"></i></button>
-    `;
+    actions.innerHTML = `<span class="hop-detail-status-pill">${tiltak.status}</span>`;
     top.appendChild(crumb);
     top.appendChild(actions);
 
@@ -353,37 +538,33 @@
     heading.appendChild(meta);
 
     var grid = document.createElement("div");
-    grid.className = "hop-detail-grid";
+    grid.className = "hop-detail-grid hop-detail-grid-tiltak";
 
-    var properties = createHopDetailPanel("Tiltakseegenskaper");
-    renderHopProperties(properties, tiltak);
-    grid.appendChild(properties);
-
-    var textPanel = createHopDetailPanel("Tiltakstekst");
-    var text = document.createElement("p");
-    text.className = "hop-detail-text";
-    text.textContent = tiltak.text;
-    textPanel.appendChild(text);
-    grid.appendChild(textPanel);
+    var summary = createHopDetailPanel("Tiltakskort");
+    summary.classList.add("hop-detail-panel-wide", "hop-detail-panel-summary");
+    renderHopSummary(summary, tiltak);
+    grid.appendChild(summary);
 
     var budget = createHopDetailPanel("Budsjett", "Rediger", "ti ti-pencil");
     renderHopBudget(budget, tiltak);
     grid.appendChild(budget);
 
-    var links = createHopDetailPanel("Tilknytning mot mål", "Legg til", "ti ti-plus");
+    var links = createHopDetailPanel("Bidrag til mål");
+    links.classList.add("hop-detail-panel-contribution");
     renderHopGoalLinks(links, tiltak);
     grid.appendChild(links);
 
-    var tags = createHopDetailPanel("Emneknagger fra planverket");
+    var allocation = createHopDetailPanel("Fordeling på virksomhetsområder");
+    renderHopAllocation(allocation, tiltak);
+    grid.appendChild(allocation);
+
+    var followup = createHopDetailPanel("Oppfølging");
+    renderHopFollowup(followup, tiltak);
+    grid.appendChild(followup);
+
+    var tags = createHopDetailPanel("Emner");
     renderHopTags(tags, tiltak);
     grid.appendChild(tags);
-
-    var messages = createHopDetailPanel("Tiltaksmeldinger", "Skriv", "ti ti-pencil");
-    var empty = document.createElement("div");
-    empty.className = "hop-detail-empty";
-    empty.textContent = "Ingen tiltaksmeldinger registrert.";
-    messages.appendChild(empty);
-    grid.appendChild(messages);
 
     section.appendChild(top);
     section.appendChild(heading);

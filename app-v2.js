@@ -1866,7 +1866,7 @@
           planSelection.source = "manual";
           planSelection.hopKey = shouldSelectHop ? nextHopKey : null;
           planSelection.focusColumn = usesDirectHop ? "hop" : "full";
-          if (shouldSelectHop && getCurrentPlanId() === HOP_PLAN_ID) {
+          if (shouldSelectHop) {
             switchToPlan(HOP_PLAN_ID, {
               entryColumn: usesDirectHop ? "hop" : "full",
               sectionKey: currentLeaf.section.key,
@@ -1876,6 +1876,18 @@
               strategyKey: planSelection.strategyKey,
               hopKey: nextHopKey,
               anchorId: getGoalAnchorId(item)
+            });
+            return;
+          }
+          if (getCurrentPlanId() === HOP_PLAN_ID) {
+            switchToPlan(HOP_PLAN_ID, {
+              entryColumn: usesDirectHop ? "hop" : "full",
+              sectionKey: currentLeaf.section.key,
+              leafKey: leaf.key,
+              selectedSubgoalKey: leaf.selectedSubgoalKey,
+              selectedStrategyBranchKey: leaf.selectedStrategyBranchKey,
+              strategyKey: planSelection.strategyKey,
+              hopKey: null
             });
             return;
           }
