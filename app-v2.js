@@ -1917,14 +1917,6 @@
         path.setAttribute("pathLength", "1");
         path.style.animationDelay = `${Math.min(relationIndex * 55, 180)}ms`;
         planMapLinks.appendChild(path);
-
-        const circle = document.createElementNS(namespace, "circle");
-        circle.setAttribute("cx", endX);
-        circle.setAttribute("cy", endY);
-        circle.setAttribute("r", "9");
-        circle.setAttribute("class", isPrimary ? "plan-map-link-node is-primary" : "plan-map-link-node");
-        circle.style.animationDelay = `${Math.min(relationIndex * 55, 180) + 170}ms`;
-        planMapLinks.appendChild(circle);
       });
     };
 

@@ -1758,37 +1758,12 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   stroke: var(--green-700);
 }
 
-.page-v2 .plan-map-link-node {
-  fill: #fff;
-  stroke: rgba(119, 129, 120, 0.74);
-  stroke-width: 2;
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: plan-link-node-pop 180ms ease-out forwards;
-}
-
-.page-v2 .plan-map-link-node.is-primary {
-  stroke: var(--green-700);
-}
-
 @keyframes plan-link-grow {
   from {
     stroke-dashoffset: 1;
   }
   to {
     stroke-dashoffset: 0;
-  }
-}
-
-@keyframes plan-link-node-pop {
-  from {
-    opacity: 0;
-    transform: scale(0.72);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
   }
 }
 
@@ -2658,7 +2633,6 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   }
 
   .page-v2 .plan-map-link-path,
-  .page-v2 .plan-map-link-node,
   .page-v2 .plan-map-prototype.is-connector-introducing .plan-map-link-source-node,
   .page-v2 .plan-map-prototype.is-connector-introducing .plan-map-link-target-node,
   .page-v2 .plan-map-prototype.is-connector-introducing .plan-map-hop-source-node,
@@ -2670,7 +2644,6 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     stroke-dashoffset: 0;
   }
 
-  .page-v2 .plan-map-link-node,
   .page-v2 .plan-map-link-source-node,
   .page-v2 .plan-map-link-target-node,
   .page-v2 .plan-map-hop-source-node,
