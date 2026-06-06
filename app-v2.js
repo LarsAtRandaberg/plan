@@ -36,9 +36,8 @@
   const KOMMUNEPLAN_ID = "063a2e01-35e6-f011-8407-000d3add2e1a";
   const OPPVEKSTPLAN_ID = "e3112baa-7858-f111-bec7-7c1e52370ef7";
   const HOP_PLAN_ID = "c18f1e69-6a49-f111-bec7-7c1e52370ef7";
-  const KPI_GOAL_IDS = new Set(["6d54f4eb-505b-f111-a826-7c1e52370ef7"]);
-  const KPI_GOAL_KEYS = new Set(["95-prosent"]);
   let planGoalsData = [];
+  let planKpiGoalIds = new Set();
   let planScrollSpyObserver = null;
   let planScrollSpyRetryTimer = null;
   let planScrollSpyRetryCount = 0;
@@ -50,6 +49,7 @@
   let planConnectorRenderRaf = null;
   let planConnectorTransitionTimer = null;
   let planConnectorIntroTimer = null;
+  let planConnectorSettleTimer = null;
   let planConnectorTransitionCleanup = null;
   let previousPlanConnectorColumnCount = null;
   let pendingPlanConnectorColumnCount = null;
@@ -601,17 +601,30 @@
   function getLinkedPlanBranchCount(leaf, goal) {
     if (!leaf || !goal) return 0;
     if (leaf.key === "gode-oppvekstvilkar" && goal.id && planGoalsData.length) {
-      return planGoalsData.filter(
+      const linkedBranches = planGoalsData.filter(
         (item) => item.maalPlan === OPPVEKSTPLAN_ID
           && item.maalType === 701100002
           && item.maalOverordnet === goal.id
+      );
+      if (!linkedBranches.length) return 0;
+
+      const linkedBranchIds = new Set(linkedBranches.map((item) => item.maalID));
+      const linkedGoalCount = planGoalsData.filter(
+        (item) => item.maalPlan === OPPVEKSTPLAN_ID
+          && item.maalType === 701100003
+          && linkedBranchIds.has(item.maalOverordnet)
       ).length;
+      return linkedGoalCount || linkedBranches.length;
     }
     if (goal.key === leaf.selectedSubgoalKey && Array.isArray(leaf.strategies)) {
-      return leaf.strategies.length;
+      return leaf.strategies.reduce((count, strategy) => (
+        count + (Array.isArray(strategy.children) && strategy.children.length ? strategy.children.length : 1)
+      ), 0);
     }
     if (goal.key === leaf.linkedSubgoalKey && Array.isArray(leaf.strategies)) {
-      return leaf.strategies.length;
+      return leaf.strategies.reduce((count, strategy) => (
+        count + (Array.isArray(strategy.children) && strategy.children.length ? strategy.children.length : 1)
+      ), 0);
     }
     return 0;
   }
@@ -633,42 +646,16 @@
   }
 
   function hasKpiForGoalId(goalId) {
-    return KPI_GOAL_IDS.has(slugify(goalId));
+    if (!goalId) return false;
+    return planKpiGoalIds.has(slugify(goalId));
+  }
+
+  function hasKpiForKommuneGoal(goal) {
+    return hasKpiForGoalId(goal?.id || goal?.maalID);
   }
 
   function hasKpiForStrategyGoal(goal) {
-    return hasKpiForGoalId(goal?.id || goal?.maalID)
-      || KPI_GOAL_KEYS.has(goal?.key || "")
-      || KPI_GOAL_KEYS.has(slugify(goal?.label || goal?.maalNavn || ""));
-  }
-
-  function getKpiContextForKommuneGoal(leaf, goal) {
-    if (!leaf || !goal?.id || !planGoalsData.length) return null;
-
-    const branchGoals = planGoalsData.filter((item) => (
-      item.maalPlan === OPPVEKSTPLAN_ID
-      && item.maalType === 701100002
-      && item.maalOverordnet === goal.id
-    ));
-    if (!branchGoals.length) return null;
-
-    const branchIds = new Set(branchGoals.map((item) => item.maalID));
-    const kpiGoal = planGoalsData.find((item) => (
-      item.maalPlan === OPPVEKSTPLAN_ID
-      && item.maalType === 701100003
-      && hasKpiForGoalId(item.maalID)
-      && branchIds.has(item.maalOverordnet)
-    ));
-    if (!kpiGoal) return null;
-
-    const branchGoal = branchGoals.find((item) => item.maalID === kpiGoal.maalOverordnet);
-    if (!branchGoal) return null;
-
-    return {
-      branchKey: getGoalDataKey(branchGoal),
-      strategyKey: getGoalDataKey(kpiGoal),
-      anchorId: "maal-" + slugify(kpiGoal.maalID)
-    };
+    return hasKpiForGoalId(goal?.id || goal?.maalID);
   }
 
   function getSelectedSubgoal(leaf) {
@@ -834,6 +821,27 @@
       buildOppvekstStrategiesFromMaal(planGoalsData);
       ensureValidStrategySelection();
       ensureValidHopSelection();
+    }
+  }
+
+  function getKpiList(kpiData) {
+    if (Array.isArray(kpiData)) return kpiData;
+    if (kpiData && Array.isArray(kpiData.kpis)) return kpiData.kpis;
+    return [];
+  }
+
+  async function hydrateKpiModelFromData() {
+    try {
+      const response = await fetch("data/kpi.json", { cache: "no-store" });
+      if (!response.ok) return;
+      const kpis = getKpiList(await response.json());
+      planKpiGoalIds = new Set(
+        kpis
+          .map((kpi) => slugify(kpi?.goalId))
+          .filter(Boolean)
+      );
+    } catch (error) {
+      console.warn("Kunne ikke laste kpi.json for v2-planmenyen", error);
     }
   }
 
@@ -1256,18 +1264,16 @@
   }
 
   function openKpiForKommuneGoal(section, leaf, goal) {
-    const kpiContext = getKpiContextForKommuneGoal(leaf, goal);
-    if (!kpiContext) return;
+    if (!hasKpiForKommuneGoal(goal)) return;
 
-    switchToPlan(OPPVEKSTPLAN_ID, {
-      entryColumn: "strategi",
+    switchToPlan(KOMMUNEPLAN_ID, {
+      entryColumn: "kommune",
       sectionKey: section.key,
       leafKey: leaf.key,
       selectedSubgoalKey: goal.key,
-      selectedStrategyBranchKey: kpiContext.branchKey,
-      strategyKey: kpiContext.strategyKey,
+      strategyKey: null,
       hopKey: null,
-      anchorId: kpiContext.anchorId
+      anchorId: getGoalAnchorId(goal)
     });
   }
 
@@ -1589,8 +1595,7 @@
             leaf.subgoals.forEach((goal) => {
               const linkedBranchCount = getLinkedPlanBranchCount(leaf, goal);
               const directHopCount = getDirectHopItemsForGoal(leaf, goal).length;
-              const kpiContext = getKpiContextForKommuneGoal(leaf, goal);
-              const hasKpi = !!kpiContext;
+              const hasKpi = hasKpiForKommuneGoal(goal);
               const hasRelationActions = linkedBranchCount > 0 || directHopCount > 0 || hasKpi;
               const isSelectedSubgoal = planSelection.source !== "scroll" && goal.key === leaf.selectedSubgoalKey;
               const subLeaf = document.createElement("div");
@@ -1888,11 +1893,32 @@
       window.clearTimeout(planConnectorIntroTimer);
       planConnectorIntroTimer = null;
     }
+    if (planConnectorSettleTimer) {
+      window.clearTimeout(planConnectorSettleTimer);
+      planConnectorSettleTimer = null;
+    }
     if (planConnectorTransitionCleanup) {
       planConnectorTransitionCleanup();
       planConnectorTransitionCleanup = null;
     }
     pendingPlanConnectorColumnCount = null;
+  }
+
+  function scheduleSettledPlanLinkRender(delay = 180) {
+    if (planConnectorSettleTimer) {
+      window.clearTimeout(planConnectorSettleTimer);
+    }
+    planConnectorSettleTimer = window.setTimeout(() => {
+      planConnectorSettleTimer = null;
+      if (planMapPrototype?.classList.contains("is-connector-pending")) return;
+      if (planConnectorRenderRaf) {
+        window.cancelAnimationFrame(planConnectorRenderRaf);
+      }
+      planConnectorRenderRaf = window.requestAnimationFrame(() => {
+        planConnectorRenderRaf = null;
+        renderPlanLinkPaths({ disableAnimation: true });
+      });
+    }, delay);
   }
 
   function drawPlanLinksWhenReady(options = {}) {
@@ -1910,6 +1936,7 @@
       planConnectorRenderRaf = null;
       renderPlanLinkPaths();
     });
+    scheduleSettledPlanLinkRender(options.animateNodes ? 720 : 220);
   }
 
   function schedulePlanLinkPaths(options = {}) {
@@ -1974,11 +2001,14 @@
     planConnectorTransitionTimer = window.setTimeout(finish, PLAN_MENU_TRANSITION_MS + 90);
   }
 
-  function renderPlanLinkPaths() {
+  function renderPlanLinkPaths(renderOptions = {}) {
     if (!planMapLinks || !planMapWorkspace) return;
-    planMapLinks.innerHTML = "";
     if (planMapPrototype?.classList.contains("is-connector-pending")) return;
-    if (!planMapPrototype?.classList.contains("has-child-plan")) return;
+    if (!planMapPrototype?.classList.contains("has-child-plan")) {
+      planMapLinks.innerHTML = "";
+      return;
+    }
+    planMapLinks.innerHTML = "";
 
     const namespace = "http://www.w3.org/2000/svg";
     const workspaceRect = planMapWorkspace.getBoundingClientRect();
@@ -2016,6 +2046,10 @@
         path.setAttribute("class", isPrimary ? "plan-map-link-path is-primary" : "plan-map-link-path");
         path.setAttribute("pathLength", "1");
         path.style.animationDelay = `${Math.min(relationIndex * 55, 180)}ms`;
+        if (renderOptions.disableAnimation) {
+          path.style.animation = "none";
+          path.style.strokeDashoffset = "0";
+        }
         planMapLinks.appendChild(path);
       });
     };
@@ -2304,7 +2338,10 @@
 
   async function init() {
     assignOppvekstSubgoalIds();
-    await hydratePlanModelFromData();
+    await Promise.all([
+      hydratePlanModelFromData(),
+      hydrateKpiModelFromData()
+    ]);
     syncPlanContextFromLocation();
     renderPlanMenus();
     setupPlanScrollSpy();

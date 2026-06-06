@@ -1735,7 +1735,7 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   height: 100%;
   overflow: visible;
   pointer-events: none;
-  z-index: 2;
+  z-index: 5;
   opacity: 1;
   transition: opacity 160ms ease;
 }

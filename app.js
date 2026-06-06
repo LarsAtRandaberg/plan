@@ -1340,7 +1340,7 @@
     return {
       responsive: true,
       maintainAspectRatio: false,
-      interaction: { mode: isTrend ? "index" : "nearest", intersect: false },
+      interaction: { mode: "index", intersect: false },
       plugins: {
         legend: {
           position: "bottom",
@@ -1353,6 +1353,9 @@
           }
         },
         tooltip: {
+          filter: function(context) {
+            return isTrend || context.datasetIndex === 0;
+          },
           callbacks: {
             label: function(context) {
               var label = context.dataset.label ? context.dataset.label + ": " : "";
@@ -1415,6 +1418,29 @@
     });
   }
 
+  function getKpiComparisonValueLabelPlugin(kpi) {
+    return {
+      id: "kpiComparisonValueLabels",
+      afterDatasetsDraw: function(chart) {
+        var meta = chart.getDatasetMeta(0);
+        if (!meta || meta.hidden) return;
+
+        var ctx = chart.ctx;
+        ctx.save();
+        ctx.fillStyle = "#365340";
+        ctx.font = "600 10px system-ui, Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "bottom";
+        meta.data.forEach(function(bar, index) {
+          var value = chart.data.datasets[0].data[index];
+          if (value === null || value === undefined || Number.isNaN(Number(value))) return;
+          ctx.fillText(formatKpiNumber(value, kpi.unit, 1), bar.x, bar.y - 6);
+        });
+        ctx.restore();
+      }
+    };
+  }
+
   function buildKpiComparisonChart(kpi, canvas) {
     var latestYear = getKpiYear(kpi);
     var preferredCode = kpi.preferredRegion || (kpi.regions && kpi.regions[0] && kpi.regions[0].code);
@@ -1457,7 +1483,11 @@
           }
         ]
       },
-      options: getKpiChartOptions(kpi, false)
+      options: {
+        ...getKpiChartOptions(kpi, false),
+        layout: { padding: { top: 18 } }
+      },
+      plugins: [getKpiComparisonValueLabelPlugin(kpi)]
     });
   }
 
