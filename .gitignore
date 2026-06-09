@@ -1,0 +1,20 @@
+# Local editor and OS noise
+.DS_Store
+Thumbs.db
+*.swp
+*.tmp
+
+# Local dependency/build folders, if introduced later
+node_modules/
+dist/
+build/
+.cache/
+
+# Local server and debug output
+*.log
+*.local
+
+# Scratch exports should live outside the repo unless intentionally curated
+*-test.adv.json
+*-scratch*.json
+*-tmp*.json

@@ -1825,6 +1825,10 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
   --plan-goal-card-radius: 8px;
   --plan-relation-action-width: 30px;
   --plan-relation-action-gap: 6px;
+  --plan-focus-active-width: clamp(380px, 34vw, 480px);
+  --plan-focus-collapsed-width: 34px;
+  --plan-focus-gap: 12px;
+  --plan-focus-edge-padding: 20px;
 }
 
 .page-v2 .sidebar {
@@ -2012,6 +2016,173 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
     opacity: 1;
     transform: translateX(0);
   }
+}
+
+.page-v2 .sidebar.is-focus-desktop {
+  width: calc(var(--plan-focus-active-width) + var(--plan-focus-edge-padding));
+  min-width: calc(var(--plan-focus-active-width) + var(--plan-focus-edge-padding));
+}
+
+.page-v2 .sidebar.is-focus-desktop[data-focus-columns="kommune-strategi"],
+.page-v2 .sidebar.is-focus-desktop[data-focus-columns="kommune-hop"] {
+  width: calc(var(--plan-focus-active-width) + var(--plan-focus-collapsed-width) + var(--plan-focus-gap) + var(--plan-focus-edge-padding));
+  min-width: calc(var(--plan-focus-active-width) + var(--plan-focus-collapsed-width) + var(--plan-focus-gap) + var(--plan-focus-edge-padding));
+}
+
+.page-v2 .sidebar.is-focus-desktop[data-focus-columns="kommune-strategi-hop"] {
+  width: calc(var(--plan-focus-active-width) + (var(--plan-focus-collapsed-width) * 2) + (var(--plan-focus-gap) * 2) + var(--plan-focus-edge-padding));
+  min-width: calc(var(--plan-focus-active-width) + (var(--plan-focus-collapsed-width) * 2) + (var(--plan-focus-gap) * 2) + var(--plan-focus-edge-padding));
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-workspace {
+  gap: var(--plan-focus-gap);
+  overflow: visible;
+  transition:
+    width 420ms cubic-bezier(0.22, 1, 0.36, 1),
+    max-width 420ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-workspace {
+  grid-template-columns: minmax(0, var(--plan-focus-active-width)) !important;
+  width: var(--plan-focus-active-width);
+  max-width: var(--plan-focus-active-width);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-columns="kommune-strategi"] .plan-map-workspace,
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-columns="kommune-hop"] .plan-map-workspace {
+  width: calc(var(--plan-focus-active-width) + var(--plan-focus-collapsed-width) + var(--plan-focus-gap));
+  max-width: calc(var(--plan-focus-active-width) + var(--plan-focus-collapsed-width) + var(--plan-focus-gap));
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-columns="kommune-strategi-hop"] .plan-map-workspace {
+  width: calc(var(--plan-focus-active-width) + (var(--plan-focus-collapsed-width) * 2) + (var(--plan-focus-gap) * 2));
+  max-width: calc(var(--plan-focus-active-width) + (var(--plan-focus-collapsed-width) * 2) + (var(--plan-focus-gap) * 2));
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-columns="kommune-strategi"] .plan-map-workspace,
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-columns="kommune-hop"] .plan-map-workspace {
+  grid-template-columns:
+    var(--plan-focus-collapsed-width)
+    minmax(0, var(--plan-focus-active-width)) !important;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-columns="kommune-strategi-hop"] .plan-map-workspace {
+  grid-template-columns:
+    var(--plan-focus-collapsed-width)
+    var(--plan-focus-collapsed-width)
+    minmax(0, var(--plan-focus-active-width)) !important;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column:not(.is-focus-visible) {
+  display: none !important;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-visible {
+  display: block !important;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active {
+  width: var(--plan-focus-active-width);
+  min-width: 0;
+  animation: none !important;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-collapsed {
+  position: relative;
+  width: var(--plan-focus-collapsed-width);
+  min-width: var(--plan-focus-collapsed-width);
+  min-height: 180px;
+  border: 1px solid rgba(47, 136, 49, 0.16);
+  border-radius: 8px;
+  background: linear-gradient(180deg, rgba(244, 249, 238, 0.96), rgba(232, 243, 222, 0.96));
+  box-shadow: 0 4px 14px rgba(23, 52, 4, 0.05);
+  cursor: pointer;
+  overflow: visible;
+  transition:
+    background 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column-hop.is-focus-collapsed {
+  border-color: rgba(0, 114, 187, 0.18);
+  background: linear-gradient(180deg, rgba(239, 246, 252, 0.98), rgba(225, 238, 249, 0.98));
+  box-shadow: 0 4px 14px rgba(0, 114, 187, 0.06);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-collapsed:hover,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-collapsed:focus-visible {
+  background: linear-gradient(180deg, rgba(244, 249, 238, 1), rgba(226, 241, 214, 1));
+  box-shadow: 0 6px 18px rgba(23, 52, 4, 0.09);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column-hop.is-focus-collapsed:hover,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column-hop.is-focus-collapsed:focus-visible {
+  background: linear-gradient(180deg, rgba(239, 246, 252, 1), rgba(214, 234, 248, 1));
+  box-shadow: 0 6px 18px rgba(0, 114, 187, 0.1);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-collapsed > * {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-collapsed::before {
+  content: attr(data-focus-label);
+  position: sticky;
+  top: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 118px;
+  padding: 10px 0;
+  color: var(--accent-green-dark);
+  font-size: 10px;
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  line-height: 1;
+  text-transform: uppercase;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column-hop.is-focus-collapsed::before {
+  color: var(--accent-blue-dark);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-links {
+  opacity: 0;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-column="strategi"] .plan-map-link-target-node::before,
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-column="hop"] .plan-map-hop-link-target-node::before {
+  content: "";
+  position: absolute;
+  right: 100%;
+  top: 50%;
+  width: 30px;
+  border-top: 1.4px solid rgba(119, 129, 120, 0.62);
+  transform: translateY(-50%);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-column="strategi"] .plan-map-link-target.plan-map-node-selected > .plan-map-link-target-node::before,
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-column="hop"] .plan-map-hop-link-target.plan-map-node-selected > .plan-map-hop-link-target-node::before,
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-column="hop"] .plan-map-hop-link-target.is-primary-hop-target > .plan-map-hop-link-target-node::before {
+  border-top-color: var(--green-700);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop[data-focus-column="kommune"] .plan-map-link-source::before {
+  content: "";
+  position: absolute;
+  left: calc(100% + 11px);
+  top: 50%;
+  width: 30px;
+  border-top: 1.4px solid var(--green-700);
+  transform: translateY(-50%);
 }
 
 .page-v2 .plan-map-tree,
@@ -2829,6 +3000,41 @@ body.page-v2[data-mode="rapport"] .desktop-mode-rail-report {
 
 .page-v2 .plan-map-hop-card strong::after {
   content: " ";
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-strategy-list,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-hop-stack {
+  gap: 7px;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-strategy-list > * + *,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-hop-stack > * + * {
+  margin-top: 0;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-tree-subpath > * + * {
+  margin-top: 7px;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-link-target,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-hop-link-target,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-relation-group > .plan-map-link-target,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-relation-group:hover > .plan-map-link-target,
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-relation-group:focus-within > .plan-map-link-target {
+  width: calc(100% - 18px);
+  max-width: calc(100% - 18px);
+  margin-left: 18px;
+  padding: 10px 44px 10px 14px;
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-card-relation-icon {
+  right: 22px;
+  transform: translateY(-50%);
+}
+
+.page-v2 .plan-map-prototype.is-focus-desktop .plan-map-column.is-focus-active .plan-map-card-relation-icons {
+  right: 18px;
+  transform: translateY(-50%);
 }
 
 @media (prefers-reduced-motion: reduce) {

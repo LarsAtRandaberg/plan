@@ -52,11 +52,19 @@
   let planConnectorSettleTimer = null;
   let planConnectorTransitionCleanup = null;
   let modeTransitionTimer = null;
+  let focusedDesktopTimer = null;
+  let focusedDesktopActive = false;
+  let focusedDesktopColumnOverride = null;
+  let focusedDesktopOverrideSignature = null;
   let previousPlanConnectorColumnCount = null;
   let pendingPlanConnectorColumnCount = null;
   let suppressPlanScrollSpy = false;
   let pendingPlanContext = null;
   const PLAN_MENU_TRANSITION_MS = 800;
+  const PLAN_FOCUS_DESKTOP_DELAY_MS = 1800;
+  const PLAN_FOCUS_MIN_CONTENT_WIDTH = 720;
+  const PLAN_FOCUS_COLLAPSED_COLUMN_WIDTH = 34;
+  const PLAN_FOCUS_COLUMN_GAP = 8;
   const planContextsById = {
     "063a2e01-35e6-f011-8407-000d3add2e1a": {
       entryColumn: "kommune",
@@ -1945,6 +1953,208 @@
     return 2;
   }
 
+  function getPlanColumnMap() {
+    return {
+      kommune: planMapTree ? planMapTree.closest(".plan-map-column") : null,
+      strategi: planMapStrategyColumn,
+      hop: planMapHopColumn
+    };
+  }
+
+  function getVisibleFocusedDesktopColumns() {
+    if (!planMapPrototype?.classList.contains("has-child-plan")) return ["kommune"];
+    const stage = planMapPrototype.dataset.planStage || "kommune";
+    if (stage === "hop") return ["kommune", "strategi", "hop"];
+    if (stage === "hop-direct") return ["kommune", "hop"];
+    if (stage === "strategy") return ["kommune", "strategi"];
+    return ["kommune"];
+  }
+
+  function getFocusedDesktopColumnStack(focusedColumn, availableColumns) {
+    if (!focusedColumn || !availableColumns.includes(focusedColumn)) return [];
+    const hierarchy = ["kommune", "strategi", "hop"];
+    const focusedIndex = hierarchy.indexOf(focusedColumn);
+    if (focusedIndex === -1) return [focusedColumn];
+    return hierarchy
+      .slice(0, focusedIndex + 1)
+      .filter((key) => availableColumns.includes(key));
+  }
+
+  function getDefaultFocusedDesktopColumn(visibleColumns) {
+    if (focusedDesktopColumnOverride) {
+      const currentSignature = getFocusedDesktopSelectionSignature();
+      if (
+        focusedDesktopOverrideSignature === currentSignature
+        && visibleColumns.includes(focusedDesktopColumnOverride)
+      ) {
+        return focusedDesktopColumnOverride;
+      }
+      clearFocusedDesktopOverride();
+    }
+    const currentPlanId = getCurrentPlanId();
+    if (visibleColumns.includes("hop") && (
+      planSelection.focusColumn === "hop"
+      || currentPlanId === HOP_PLAN_ID
+      || !!planSelection.hopKey
+    )) {
+      return "hop";
+    }
+    if (visibleColumns.includes("strategi") && (
+      planSelection.focusColumn === "strategi"
+      || planSelection.focusColumn === "full"
+      || currentPlanId === OPPVEKSTPLAN_ID
+      || !!planSelection.strategyKey
+    )) {
+      return "strategi";
+    }
+    return visibleColumns.includes("kommune") ? "kommune" : visibleColumns[0] || "kommune";
+  }
+
+  function getPlanMenuPixelWidth() {
+    const columnMap = getPlanColumnMap();
+    const visibleColumns = getVisibleFocusedDesktopColumns();
+    const measured = visibleColumns
+      .map((key) => columnMap[key]?.getBoundingClientRect().width || 0)
+      .filter((width) => width > 80);
+    if (measured.length) return Math.max(...measured);
+    const treeColumnWidth = columnMap.kommune?.getBoundingClientRect().width || 0;
+    if (treeColumnWidth > 80) return treeColumnWidth;
+    return 208;
+  }
+
+  function getEstimatedFullPlanSidebarWidth() {
+    const visibleCount = getVisibleFocusedDesktopColumns().length;
+    if (visibleCount <= 1) return getPlanMenuPixelWidth();
+    return (getPlanMenuPixelWidth() * visibleCount) + (32 * (visibleCount - 1)) + 24;
+  }
+
+  function shouldUseFocusedDesktopMode() {
+    if (isMobile() || body.dataset.mode === "rapport" || !planMapPrototype?.classList.contains("has-child-plan")) {
+      return false;
+    }
+    const visibleCount = getVisibleFocusedDesktopColumns().length;
+    if (visibleCount <= 1) return false;
+    const viewportWidth = window.innerWidth || document.documentElement.clientWidth || 0;
+    const estimatedSidebarWidth = getEstimatedFullPlanSidebarWidth();
+    const estimatedContentWidth = viewportWidth - estimatedSidebarWidth;
+    return estimatedSidebarWidth > viewportWidth * 0.5
+      || estimatedContentWidth < PLAN_FOCUS_MIN_CONTENT_WIDTH;
+  }
+
+  function clearFocusedDesktopTimer() {
+    if (focusedDesktopTimer) {
+      window.clearTimeout(focusedDesktopTimer);
+      focusedDesktopTimer = null;
+    }
+  }
+
+  function clearFocusedDesktopOverride() {
+    focusedDesktopColumnOverride = null;
+    focusedDesktopOverrideSignature = null;
+  }
+
+  function getFocusedDesktopSelectionSignature() {
+    const currentLeaf = getCurrentLeaf();
+    return [
+      getCurrentPlanId(),
+      planSelection.focusColumn,
+      planSelection.sectionKey,
+      planSelection.leafKey,
+      currentLeaf?.leaf?.selectedSubgoalKey || "",
+      currentLeaf?.leaf?.selectedStrategyBranchKey || "",
+      planSelection.strategyKey,
+      planSelection.hopKey
+    ].join("|");
+  }
+
+  function applyFocusedDesktopState(active) {
+    const availableColumns = getVisibleFocusedDesktopColumns();
+    if (!active) {
+      clearFocusedDesktopOverride();
+    }
+    if (focusedDesktopColumnOverride && !availableColumns.includes(focusedDesktopColumnOverride)) {
+      clearFocusedDesktopOverride();
+    }
+    const focusedColumn = active ? getDefaultFocusedDesktopColumn(availableColumns) : null;
+    const focusColumns = active ? getFocusedDesktopColumnStack(focusedColumn, availableColumns) : [];
+    const focusColumnsKey = focusColumns.join("-");
+    focusedDesktopActive = active;
+
+    planMapPrototype?.classList.toggle("is-focus-desktop", active);
+    sidebar?.classList.toggle("is-focus-desktop", active);
+    if (active && focusedColumn) {
+      planMapPrototype.dataset.focusColumn = focusedColumn;
+      if (sidebar) sidebar.dataset.focusColumn = focusedColumn;
+      planMapPrototype.dataset.focusColumns = focusColumnsKey;
+      if (sidebar) sidebar.dataset.focusColumns = focusColumnsKey;
+    } else {
+      delete planMapPrototype.dataset.focusColumn;
+      if (sidebar) delete sidebar.dataset.focusColumn;
+      delete planMapPrototype.dataset.focusColumns;
+      if (sidebar) delete sidebar.dataset.focusColumns;
+    }
+
+    const labels = {
+      kommune: "Kommuneplan",
+      strategi: "Strategi",
+      hop: "HØP"
+    };
+    Object.entries(getPlanColumnMap()).forEach(([key, column]) => {
+      if (!column) return;
+      const isVisible = active && focusColumns.includes(key);
+      const isActive = active && focusedColumn === key;
+      const isCollapsed = isVisible && !isActive;
+      column.dataset.focusColumn = key;
+      column.dataset.focusLabel = labels[key] || key;
+      column.classList.toggle("is-focus-visible", isVisible);
+      column.classList.toggle("is-focus-active", isActive);
+      column.classList.toggle("is-focus-collapsed", isCollapsed);
+      if (isCollapsed) {
+        column.setAttribute("role", "button");
+        column.setAttribute("tabindex", "0");
+        column.setAttribute("aria-label", `Vis ${labels[key] || key}-menyen`);
+      } else {
+        column.removeAttribute("role");
+        column.removeAttribute("tabindex");
+        column.removeAttribute("aria-label");
+      }
+    });
+  }
+
+  function updateFocusedDesktopState(options = {}) {
+    const shouldFocus = shouldUseFocusedDesktopMode();
+    if (!shouldFocus) {
+      clearFocusedDesktopTimer();
+      clearFocusedDesktopOverride();
+      if (focusedDesktopActive) {
+        applyFocusedDesktopState(false);
+      }
+      return;
+    }
+    if (focusedDesktopActive || options.immediate) {
+      clearFocusedDesktopTimer();
+      applyFocusedDesktopState(true);
+      return;
+    }
+    if (!focusedDesktopTimer) {
+      focusedDesktopTimer = window.setTimeout(() => {
+        focusedDesktopTimer = null;
+        if (!shouldUseFocusedDesktopMode()) return;
+        applyFocusedDesktopState(true);
+        schedulePlanLinkPaths();
+      }, PLAN_FOCUS_DESKTOP_DELAY_MS);
+    }
+  }
+
+  function focusDesktopColumn(columnKey) {
+    if (!getVisibleFocusedDesktopColumns().includes(columnKey)) return;
+    focusedDesktopColumnOverride = columnKey;
+    focusedDesktopOverrideSignature = getFocusedDesktopSelectionSignature();
+    clearFocusedDesktopTimer();
+    applyFocusedDesktopState(true);
+    schedulePlanLinkPaths();
+  }
+
   function clearPlanConnectorSchedule() {
     if (planConnectorRenderRaf) {
       window.cancelAnimationFrame(planConnectorRenderRaf);
@@ -2023,6 +2233,12 @@
       return;
     }
 
+    if (planMapPrototype.classList.contains("is-focus-desktop")) {
+      planMapPrototype.classList.remove("is-connector-pending", "is-connector-ready", "is-connector-introducing");
+      planMapLinks.innerHTML = "";
+      return;
+    }
+
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (!options.defer || reduceMotion) {
       drawPlanLinksWhenReady();
@@ -2070,6 +2286,10 @@
     if (!planMapLinks || !planMapWorkspace) return;
     if (planMapPrototype?.classList.contains("is-connector-pending")) return;
     if (!planMapPrototype?.classList.contains("has-child-plan")) {
+      planMapLinks.innerHTML = "";
+      return;
+    }
+    if (planMapPrototype.classList.contains("is-focus-desktop")) {
       planMapLinks.innerHTML = "";
       return;
     }
@@ -2189,11 +2409,7 @@
     const columnStates = isMobile()
       ? (columnStatesByLayout[layoutState] || columnStatesByLayout["kommune-only"])
       : { kommune: "open", strategi: "open", hop: "open" };
-    const columnMap = {
-      kommune: planMapTree ? planMapTree.closest(".plan-map-column") : null,
-      strategi: planMapStrategyColumn,
-      hop: planMapHopColumn
-    };
+    const columnMap = getPlanColumnMap();
 
     Object.entries(columnMap).forEach(([key, column]) => {
       if (!column) return;
@@ -2209,6 +2425,7 @@
     renderStrategyMenu();
     renderHopMenu();
     syncChildPlanMenu();
+    updateFocusedDesktopState();
     const nextConnectorColumnCount = getPlanConnectorColumnCount();
     const shouldDeferConnectorRender = previousPlanConnectorColumnCount !== null
       && nextConnectorColumnCount !== previousPlanConnectorColumnCount
@@ -2302,6 +2519,12 @@
     }
 
     applyModeVisibility(isReport);
+    if (isReport) {
+      clearFocusedDesktopTimer();
+      applyFocusedDesktopState(false);
+    } else {
+      updateFocusedDesktopState();
+    }
     closeSidebar();
     if (isReport) {
       setActiveReportLink(location.hash || "#rapport-sammendrag");
@@ -2320,6 +2543,21 @@
     if (!rail) return;
     rail.addEventListener("click", () => {
       setMode(rail.dataset.modeTarget);
+    });
+  });
+
+  Object.entries(getPlanColumnMap()).forEach(([columnKey, column]) => {
+    if (!column) return;
+    column.addEventListener("click", (event) => {
+      if (!column.classList.contains("is-focus-collapsed")) return;
+      event.preventDefault();
+      focusDesktopColumn(columnKey);
+    });
+    column.addEventListener("keydown", (event) => {
+      if (!column.classList.contains("is-focus-collapsed")) return;
+      if (event.key !== "Enter" && event.key !== " ") return;
+      event.preventDefault();
+      focusDesktopColumn(columnKey);
     });
   });
 
@@ -2409,6 +2647,7 @@
 
   window.addEventListener("resize", () => {
     applyModeVisibility(body.dataset.mode === "rapport");
+    updateFocusedDesktopState({ immediate: focusedDesktopActive });
     syncOverlay();
     schedulePlanLinkPaths();
   });
