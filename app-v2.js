@@ -57,6 +57,7 @@
   let focusedDesktopColumnOverride = null;
   let focusedDesktopOverrideSignature = null;
   let previousPlanConnectorColumnCount = null;
+  let previousPlanVisibleColumnKeys = null;
   let pendingPlanConnectorColumnCount = null;
   let suppressPlanScrollSpy = false;
   let pendingPlanContext = null;
@@ -1961,13 +1962,17 @@
     };
   }
 
-  function getVisibleFocusedDesktopColumns() {
+  function getCurrentPlanVisibleColumnKeys() {
     if (!planMapPrototype?.classList.contains("has-child-plan")) return ["kommune"];
     const stage = planMapPrototype.dataset.planStage || "kommune";
     if (stage === "hop") return ["kommune", "strategi", "hop"];
     if (stage === "hop-direct") return ["kommune", "hop"];
     if (stage === "strategy") return ["kommune", "strategi"];
     return ["kommune"];
+  }
+
+  function getVisibleFocusedDesktopColumns() {
+    return getCurrentPlanVisibleColumnKeys();
   }
 
   function getFocusedDesktopColumnStack(focusedColumn, availableColumns) {
@@ -2425,6 +2430,18 @@
     renderStrategyMenu();
     renderHopMenu();
     syncChildPlanMenu();
+    const visibleColumnKeys = getCurrentPlanVisibleColumnKeys();
+    const previousVisibleColumnKeys = previousPlanVisibleColumnKeys;
+    const previousVisibleSet = new Set(previousVisibleColumnKeys || []);
+    const visibleSet = new Set(visibleColumnKeys);
+    Object.entries(columnMap).forEach(([key, column]) => {
+      if (!column) return;
+      const isEntering = !!previousVisibleColumnKeys
+        && visibleSet.has(key)
+        && !previousVisibleSet.has(key);
+      column.classList.toggle("is-column-entering", isEntering);
+    });
+    previousPlanVisibleColumnKeys = visibleColumnKeys;
     updateFocusedDesktopState();
     const nextConnectorColumnCount = getPlanConnectorColumnCount();
     const shouldDeferConnectorRender = previousPlanConnectorColumnCount !== null
