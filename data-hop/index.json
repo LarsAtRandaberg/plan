@@ -1,7 +1,7 @@
 {
   "type": "hop-data-index",
   "version": 1,
-  "updated": "2026-06-27",
+  "updated": "2026-07-01",
   "description": "Datakilder for handlings- og okonomiplan i planportalen.",
   "datasets": [
     {
@@ -78,7 +78,7 @@
       "path": "data-hop/regnskap/2026.adv.xlsx",
       "convertedPath": "data-hop/regnskap/2026.adv.json",
       "status": "live-until-2027-05",
-      "rows": 4198,
+      "rows": 4226,
       "amountField": "Totalt",
       "periods": 13
     },
@@ -90,7 +90,7 @@
       "source": "data-hop/regnskap/2026.adv.json",
       "path": "data-hop/normalisert/regnskap-2026.json",
       "status": "generated",
-      "rows": 4198,
+      "rows": 4226,
       "periods": 13
     },
     {
