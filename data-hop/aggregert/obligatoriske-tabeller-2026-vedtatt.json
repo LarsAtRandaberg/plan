@@ -4,7 +4,7 @@
   "year": 2026,
   "source": "data-hop/normalisert/vedtatt-2026.json",
   "statementDefinition": "data-hop/oppstillinger/obligatoriske-tabeller-2026.json",
-  "generated": "2026-07-01",
+  "generated": "2026-07-07",
   "tables": [
     {
       "id": "okonomisk-oversikt-drift-5-6",
