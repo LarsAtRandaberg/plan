@@ -78,7 +78,7 @@
       "path": "data-hop/regnskap/2026.adv.xlsx",
       "convertedPath": "data-hop/regnskap/2026.adv.json",
       "status": "live-until-2027-05",
-      "rows": 4374,
+      "rows": 4375,
       "amountField": "Totalt",
       "periods": 13
     },
@@ -90,7 +90,7 @@
       "source": "data-hop/regnskap/2026.adv.json",
       "path": "data-hop/normalisert/regnskap-2026.json",
       "status": "generated",
-      "rows": 4374,
+      "rows": 4375,
       "periods": 13
     },
     {
